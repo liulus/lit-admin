@@ -20,28 +20,51 @@
  *
  * Copyright 2006 Sun Microsystems, Inc. All rights reserved.
  */
-package javax.persistence;
+package com.lit.dao.annotation;
+
 
 import java.lang.annotation.Target;
 import java.lang.annotation.Retention;
-import static java.lang.annotation.ElementType.FIELD;
-import static java.lang.annotation.ElementType.METHOD;
+import static java.lang.annotation.ElementType.TYPE;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
- * Specifies the primary key property or field of an entity.
+ * This annotation specifies the primary table for the annotated
+ * entity. Additional tables may be specified using {@link SecondaryTable}
+ * or {@link SecondaryTables} annotation.
+ *
+ * <p> If no <code>Table</code> annotation is specified for an entity
+ * class, the default values apply.
  *
  * <pre>
- *   Example:
+ *    Example:
  *
- *   &#064;Id
- *   public Long getId() { return id; }
+ *    &#064;Entity
+ *    &#064;Table(name="CUST", schema="RECORDS")
+ *    public class Customer { ... }
  * </pre>
  *
  * @since Java Persistence 1.0
  */
-@Target({METHOD, FIELD})
+@Target(TYPE)
 @Retention(RUNTIME)
 
-public @interface Id {}
+public @interface Table {
 
+    /**
+     * (Optional) The name of the table.
+     * <p> Defaults to the entity name.
+     */
+    String name() default "";
+
+    /** (Optional) The catalog of the table.
+     * <p> Defaults to the default catalog.
+     */
+    String catalog() default "";
+
+    /** (Optional) The schema of the table.
+     * <p> Defaults to the default schema for user.
+     */
+    String schema() default "";
+
+}

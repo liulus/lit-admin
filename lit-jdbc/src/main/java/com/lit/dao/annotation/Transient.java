@@ -20,51 +20,32 @@
  *
  * Copyright 2006 Sun Microsystems, Inc. All rights reserved.
  */
-package javax.persistence;
-
+package com.lit.dao.annotation;
 
 import java.lang.annotation.Target;
 import java.lang.annotation.Retention;
-import static java.lang.annotation.ElementType.TYPE;
+import static java.lang.annotation.ElementType.METHOD;
+import static java.lang.annotation.ElementType.FIELD;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
- * This annotation specifies the primary table for the annotated
- * entity. Additional tables may be specified using {@link SecondaryTable}
- * or {@link SecondaryTables} annotation.
- *
- * <p> If no <code>Table</code> annotation is specified for an entity
- * class, the default values apply.
+ * This annotation specifies that the property or field is
+ * not persistent. It is used to annotate a property or field
+ * of an entity class, mapped superclass, or embeddable class.
  *
  * <pre>
  *    Example:
- *
  *    &#064;Entity
- *    &#064;Table(name="CUST", schema="RECORDS")
- *    public class Customer { ... }
+ *    public class Employee {
+ *        &#064;Id int id;
+ *        &#064;Transient User currentUser;
+ *        ...
+ *    }
  * </pre>
  *
  * @since Java Persistence 1.0
  */
-@Target(TYPE)
+@Target({METHOD, FIELD})
 @Retention(RUNTIME)
 
-public @interface Table {
-
-    /**
-     * (Optional) The name of the table.
-     * <p> Defaults to the entity name.
-     */
-    String name() default "";
-
-    /** (Optional) The catalog of the table.
-     * <p> Defaults to the default catalog.
-     */
-    String catalog() default "";
-
-    /** (Optional) The schema of the table.
-     * <p> Defaults to the default schema for user.
-     */
-    String schema() default "";
-
-}
+public @interface Transient {}

@@ -2,7 +2,7 @@ package com.lit.dao.transfer;
 
 import com.lit.commons.bean.BeanUtils;
 import com.lit.commons.utils.ClassUtils;
-import javax.persistence.Transient;
+import com.lit.dao.annotation.Transient;
 import com.lit.dao.builder.Criteria;
 import org.apache.commons.lang3.StringUtils;
 

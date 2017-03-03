@@ -18,14 +18,13 @@
  * own identifying information: Portions Copyright [yyyy]
  * [name of copyright owner]
  */
-package javax.persistence;
+package com.lit.dao.annotation;
 
 import java.lang.annotation.Target;
 import java.lang.annotation.Retention;
 import static java.lang.annotation.ElementType.FIELD;
 import static java.lang.annotation.ElementType.METHOD;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
-import static javax.persistence.GenerationType.AUTO;
 
 /**
  * Provides for the specification of generation strategies for
@@ -63,7 +62,7 @@ public @interface GeneratedValue {
      * that the persistence provider must use to
      * generate the annotated entity primary key.
      */
-    GenerationType strategy() default AUTO;
+    GenerationType strategy() default GenerationType.AUTO;
 
     /**
      * (Optional) The name of the primary key generator

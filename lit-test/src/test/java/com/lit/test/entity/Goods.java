@@ -1,6 +1,6 @@
 package com.lit.test.entity;
 
-import javax.persistence.Table;
+import com.lit.dao.annotation.Table;
 
 import java.util.Date;
 import java.util.Objects;

@@ -7,8 +7,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.JdbcUtils;
 
-import javax.persistence.Column;
-import javax.persistence.Transient;
+import com.lit.dao.annotation.Column;
+import com.lit.dao.annotation.Transient;
 import java.beans.PropertyDescriptor;
 import java.lang.reflect.Field;
 import java.sql.ResultSet;

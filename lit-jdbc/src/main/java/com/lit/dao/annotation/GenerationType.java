@@ -18,7 +18,7 @@
  * own identifying information: Portions Copyright [yyyy]
  * [name of copyright owner]
  */
-package javax.persistence;
+package com.lit.dao.annotation;
 
 /**
  * Defines the types of primary key generation.

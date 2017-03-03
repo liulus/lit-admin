@@ -20,7 +20,7 @@
  *
  * Copyright 2006 Sun Microsystems, Inc. All rights reserved.
  */
-package javax.persistence;
+package com.lit.dao.annotation;
 
 import java.lang.annotation.Target;
 import java.lang.annotation.Retention;

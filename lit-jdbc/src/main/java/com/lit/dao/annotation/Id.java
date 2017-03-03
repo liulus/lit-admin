@@ -20,27 +20,22 @@
  *
  * Copyright 2006 Sun Microsystems, Inc. All rights reserved.
  */
-package javax.persistence;
+package com.lit.dao.annotation;
 
 import java.lang.annotation.Target;
 import java.lang.annotation.Retention;
-import static java.lang.annotation.ElementType.METHOD;
 import static java.lang.annotation.ElementType.FIELD;
+import static java.lang.annotation.ElementType.METHOD;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
- * This annotation specifies that the property or field is
- * not persistent. It is used to annotate a property or field
- * of an entity class, mapped superclass, or embeddable class.
+ * Specifies the primary key property or field of an entity.
  *
  * <pre>
- *    Example:
- *    &#064;Entity
- *    public class Employee {
- *        &#064;Id int id;
- *        &#064;Transient User currentUser;
- *        ...
- *    }
+ *   Example:
+ *
+ *   &#064;Id
+ *   public Long getId() { return id; }
  * </pre>
  *
  * @since Java Persistence 1.0
@@ -48,4 +43,5 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Target({METHOD, FIELD})
 @Retention(RUNTIME)
 
-public @interface Transient {}
+public @interface Id {}
+

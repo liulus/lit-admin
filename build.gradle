@@ -1,0 +1,93 @@
+allprojects {
+    group = 'com.lit'
+    version = '1.0-SNAPSHOT'
+
+    apply plugin: 'java'
+    apply plugin: 'maven'
+
+    repositories {
+        mavenLocal()
+        maven { url "http://maven.aliyun.com/nexus/content/groups/public" }
+    }
+
+    ext {
+        installer = install.repositories.mavenInstaller
+        poiVersion = '3.14'
+        servletVersion = '3.1.0'
+        slf4jVersion = '1.7.21'
+        logbackVersion = '1.1.7'
+        thymeleafVersion = '3.0.2.RELEASE'
+        jacksonVersion = '2.8.3'
+        springVersion = '4.3.2.RELEASE'
+        springBootVersion = '1.4.0.RELEASE'
+        mybatisVersion = '3.4.0'
+        hibernateVersion = '4.3.10.Final'
+
+        libs = [
+                'commons-email'          : "org.apache.commons:commons-email:1.4",
+                'commons-lang3'          : "org.apache.commons:commons-lang3:3.4",
+                'commons-collections4'   : "org.apache.commons:commons-collections4:4.1",
+                'commons-io'             : "commons-io:commons-io:2.5",
+                'commons-beanutils'      : "commons-beanutils:commons-beanutils:1.9.3",
+                'commons-fileupload'     : "commons-fileupload:commons-fileupload:1.3.2",
+                'poi'                    : "org.apache.poi:poi:${poiVersion}",
+                'poi-ooxml'              : "org.apache.poi-ooxml:poi:${poiVersion}",
+                'dom4j'                  : "dom4j:dom4j:1.6.1",
+                'jaxen'                  : "jaxen:jaxen:1.1.6",
+                'junit'                  : "junit:junit:4.12",
+                'jsqlparser'             : "com.github.jsqlparser:jsqlparser:0.9.6",
+                'slf4j-api'              : "org.slf4j:slf4j-api:${slf4jVersion}",
+                'slf4j-log4j12'          : "org.slf4j:slf4j-log4j12:${slf4jVersion}",
+                'logback-transfer'       : "ch.qos.logback:logback-transfer:${logbackVersion}",
+                'logback-classic'        : "ch.qos.logback:logback-classic:${logbackVersion}",
+                'servlet-api'            : "javax.servlet:javax.servlet-api:${servletVersion}",
+                'jsp-api'                : "javax.servlet.jsp:javax.servlet.jsp-api:2.3.1",
+                'jstl'                   : "javax.servlet:jstl:1.2",
+                'standard'               : "taglibs:standard:1.1.2",
+                'druid'                  : "com.alibaba:druid:1.0.18",
+                'c3p0'                   : "c3p0:c3p0:0.9.1.2",
+                'mysql'                  : "mysql:mysql-connector-java:5.1.38",
+                'persistence'        : "javax.persistence:persistence-api:1.0",
+                'dexcoder-dal'           : "com.dexcoder:dexcoder-dal-spring:2.3.5",
+                'mybatis-spring'         : "org.mybatis:mybatis-spring:1.3.0",
+                'mybatis'                : "org.mybatis:jaxen:${mybatisVersion}",
+                'hibernate-transfer'     : "org.hibernate:hibernate-transfer:${hibernateVersion}",
+                'hibernate-entitymanager': "org.hibernate:hibernate-entitymanager:${hibernateVersion}",
+                'velocity'               : "org.apache.velocity:velocity:1.7",
+                'thymeleaf'              : "org.thymeleaf:thymeleaf:${thymeleafVersion}",
+                'thymeleaf-spring4'      : "org.thymeleaf:thymeleaf-spring4:${thymeleafVersion}",
+                'jackson-transfer'       : "com.fasterxml.jackson.transfer:jackson-transfer:${jacksonVersion}",
+                'jackson-annotations'    : "com.fasterxml.jackson.transfer:jackson-annotations:${jacksonVersion}",
+                'jackson-databind'       : "com.fasterxml.jackson.transfer:jackson-databind:${jacksonVersion}",
+                'spring-transfer'        : "org.springframework:spring-transfer:${springVersion}",
+                'spring-beans'           : "org.springframework:spring-beans:${springVersion}",
+                'spring-context'         : "org.springframework:spring-context:${springVersion}",
+                'spring-context-support' : "org.springframework:spring-context-support:${springVersion}",
+                'spring-expression'      : "org.springframework:spring-expression:${springVersion}",
+                'spring-jdbc'            : "org.springframework:spring-jdbc:${springVersion}",
+                'spring-tx'              : "org.springframework:spring-tx:${springVersion}",
+                'spring-oxm'             : "org.springframework:spring-oxm:${springVersion}",
+                'spring-orm'             : "org.springframework:spring-orm:${springVersion}",
+                'spring-web'             : "org.springframework:spring-web:${springVersion}",
+                'spring-webmvc'          : "org.springframework:spring-webmvc:${springVersion}",
+                'spring-aop'             : "org.springframework:spring-aop:${springVersion}",
+                'spring-aspects'         : "org.springframework:spring-aspects:${springVersion}",
+                'spring-test'            : "org.springframework:spring-test:${springVersion}",
+                'spring-boot-gradle'     : "org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}",
+                'spring-boot-web'        : "org.springframework.boot:spring-boot-starter-web:${springBootVersion}",
+                'spring-boot-tomcat'     : "org.springframework.boot:spring-boot-starter-tomcat:${springBootVersion}",
+                'spring-boot-test'       : "org.springframework.boot:spring-boot-starter-test:${springBootVersion}"
+        ]
+    }
+
+    dependencies {
+        testCompile libs.'spring-boot-test'
+    }
+
+    tasks.withType(JavaCompile) {
+        sourceCompatibility = 1.7
+        targetCompatibility = 1.7
+        options.encoding = "UTF-8"
+    }
+}
+

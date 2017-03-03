@@ -1,0 +1,8 @@
+dependencies {
+    testCompile project(':lit-jdbc'),
+            libs.('mysql'),
+            libs.('c3p0'),
+            libs.('commons-io'),
+            libs.('slf4j-log4j12')
+
+}

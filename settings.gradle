@@ -1,0 +1,9 @@
+rootProject.name = 'lit'
+include 'lit-commons'
+include 'lit-jdbc'
+include 'lit-quickstart'
+include 'lit-test'
+include 'lit-plugins'
+include 'lit-plugins:lit-dictionary'
+findProject(':lit-plugins:lit-dictionary')?.name = 'lit-dictionary'
+

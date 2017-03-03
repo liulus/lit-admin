@@ -1,0 +1,18 @@
+installer.pom.whenConfigured { pom ->
+    pom.dependencies.each { dep ->
+        println dep
+        if (dep.artifactId != 'slf4j-api' && dep.artifactId != 'commons-lang3') {
+            dep.optional = true
+        }
+    }
+}
+
+dependencies {
+    compile libs.'commons-lang3',
+            libs.'slf4j-api',
+            libs.'spring-jdbc',
+            libs.'spring-context',
+            libs.'spring-aspects',
+            libs.'spring-webmvc',
+            libs.'jsqlparser'
+}

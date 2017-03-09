@@ -17,7 +17,7 @@ public class PageService {
     }
 
     public static void setPager(int pageSize, int pageNum, boolean isCount) {
-        setPager(new Pager(pageSize, pageNum, isCount));
+        LOCAL_PAGER.set(new Pager(pageSize, pageNum, isCount));
     }
 
     /**
@@ -26,7 +26,7 @@ public class PageService {
      * @param pager 分页对象
      */
     public static void setPager(Pager pager) {
-        LOCAL_PAGER.set(pager);
+        setPager(pager.getPageSize(), pager.getPageNum(), pager.isCount());
     }
 
     /**

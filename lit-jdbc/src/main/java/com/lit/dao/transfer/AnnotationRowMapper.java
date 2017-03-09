@@ -1,8 +1,8 @@
 package com.lit.dao.transfer;
 
 import com.lit.commons.bean.BeanUtils;
-import com.lit.commons.utils.ClassUtils;
-import com.lit.commons.utils.NameUtils;
+import com.lit.commons.util.ClassUtils;
+import com.lit.commons.util.NameUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.JdbcUtils;

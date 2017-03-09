@@ -5,13 +5,27 @@ import com.lit.commons.page.PageService;
 import com.lit.commons.page.Pager;
 import com.lit.dao.JdbcDao;
 import com.lit.dao.builder.Criteria;
-import com.lit.dao.builder.SqlResult;
+import com.lit.dao.generator.SequenceGenerator;
+import com.lit.dao.model.SqlResult;
+import com.lit.dao.generator.KeyGenerator;
 import com.lit.dao.transfer.AnnotationRowMapper;
 import com.lit.dao.transfer.CriteriaTransfer;
 import com.lit.dao.transfer.DefaultCriteriaTransfer;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.jdbc.core.ArgumentPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcOperations;
+import org.springframework.jdbc.core.PreparedStatementCreator;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 
 import java.io.Serializable;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -20,34 +34,56 @@ import java.util.Map;
  * Date : 2017-1-7 16:29
  * version $Id: JdbcDaoImpl.java, v 0.1 Exp $
  */
+@Slf4j
+@NoArgsConstructor
 public class JdbcDaoImpl implements JdbcDao {
 
-    private static final CriteriaTransfer DEFAULT_TRANSFER = new DefaultCriteriaTransfer();
+    private static final CriteriaTransfer CRITERIA_TRANSFER = new DefaultCriteriaTransfer();
 
+    @Getter
+    @Setter
     private JdbcOperations jdbcTemplate;
-
-    public JdbcDaoImpl() {
-    }
 
     public JdbcDaoImpl(JdbcOperations jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
 
     @Override
-    public JdbcOperations getJdbcTemplate() {
-        return jdbcTemplate;
-    }
+    public <T, ID extends Serializable> ID insert(T t) {
+        final Criteria criteria = t instanceof Criteria ? ((Criteria) t)
+                : Criteria.insert(t.getClass()).initEntity(t, true);
 
-    public void setJdbcTemplate(JdbcOperations jdbcTemplate) {
-        this.jdbcTemplate = jdbcTemplate;
-    }
+        final SqlResult sqlResult;
 
-    @Override
-    public <ID, T> ID insert(T t) {
-        SqlResult sqlResult = t instanceof Criteria ? ((Criteria) t).build()
-                : Criteria.insert(t.getClass()).initEntity(t, true).build();
-        executeUpdate(sqlResult.getSql(), sqlResult.getParams().toArray());
-        return null;
+        Serializable idValue = null;
+        KeyGenerator keyGenerator = criteria.getKeyGenerator();
+        if (keyGenerator != null) {
+            idValue = !(keyGenerator instanceof SequenceGenerator) ? keyGenerator.generateKey()
+                    : ((SequenceGenerator) keyGenerator).generateSeqKey(criteria.getSequenceName());
+            criteria.into(criteria.getPkName(), idValue);
+        }
+
+        sqlResult = criteria.build();
+        final Object[] args = sqlResult.getParams().toArray();
+        if (criteria.isAutoGenerateKey() && (keyGenerator == null || keyGenerator.isGenerateBySql())) {
+            KeyHolder keyHolder = new GeneratedKeyHolder();
+            log.info("\n sql : {} \nargs : {}\n", sqlResult.getSql(), Arrays.toString(args));
+            jdbcTemplate.update(new PreparedStatementCreator() {
+                @Override
+                public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
+                    PreparedStatement ps = connection.prepareStatement(sqlResult.getSql(), new String[]{criteria.getColumnName(criteria.getPkName())});
+                    ArgumentPreparedStatementSetter apss = new ArgumentPreparedStatementSetter(args);
+                    apss.setValues(ps);
+                    return ps;
+                }
+            }, keyHolder);
+            //noinspection unchecked
+            return (ID) Long.valueOf(keyHolder.getKey().longValue());
+        }
+
+        executeUpdate(sqlResult.getSql(), args);
+        //noinspection unchecked
+        return (ID) idValue;
     }
 
     @Override
@@ -59,7 +95,7 @@ public class JdbcDaoImpl implements JdbcDao {
 
     @Override
     public <T> int deleteByIds(Class<T> clazz, Serializable... ids) {
-        Criteria criteria = Criteria.delete(clazz);
+        Criteria<T> criteria = Criteria.delete(clazz);
         SqlResult sqlResult = criteria.where(criteria.getPkName(), "in", (Object[]) ids).build();
         return executeUpdate(sqlResult.getSql(), sqlResult.getParams().toArray());
     }
@@ -78,27 +114,26 @@ public class JdbcDaoImpl implements JdbcDao {
     }
 
     private int executeUpdate(String sql, Object... args) {
+        log.info("\n sql : {} \nargs : {}\n", sql, Arrays.toString(args));
         return jdbcTemplate.update(sql, args);
     }
 
     @Override
     public <T> T get(Class<T> clazz, Serializable id) {
-        Criteria criteria = Criteria.select(clazz);
+        Criteria<T> criteria = Criteria.select(clazz);
         criteria.where(criteria.getPkName(), id);
         return queryForSingle(criteria);
     }
 
     @Override
-    public <T> T queryForSingle(Class<T> clazz, Object qo) {
-        //noinspection unchecked
-        return queryForSingle(getCriteria(clazz, qo, DEFAULT_TRANSFER));
+    public <T, Qo> T queryForSingle(Class<T> clazz, Qo qo) {
+        return queryForSingle(getCriteria(clazz, qo, CRITERIA_TRANSFER));
     }
 
     @Override
-    public <T> T queryForSingle(Criteria criteria) {
+    public <T> T queryForSingle(Criteria<T> criteria) {
         SqlResult sqlResult = criteria.build();
-        //noinspection unchecked
-        return (T) queryForSingle(criteria.getEntityClass(), sqlResult.getSql(), sqlResult.getParams().toArray());
+        return queryForSingle(criteria.getEntityClass(), sqlResult.getSql(), sqlResult.getParams().toArray());
     }
 
     @Override
@@ -118,9 +153,8 @@ public class JdbcDaoImpl implements JdbcDao {
     }
 
     @Override
-    public <T> List<T> query(Class<T> clazz, Object qo) {
-        //noinspection unchecked
-        return query(clazz, qo, DEFAULT_TRANSFER);
+    public <T, Qo> List<T> query(Class<T> clazz, Qo qo) {
+        return query(getCriteria(clazz, qo, CRITERIA_TRANSFER));
     }
 
     @Override
@@ -129,10 +163,9 @@ public class JdbcDaoImpl implements JdbcDao {
     }
 
     @Override
-    public <T> List<T> query(Criteria criteria) {
+    public <T> List<T> query(Criteria<T> criteria) {
         SqlResult sqlResult = criteria.build();
-        //noinspection unchecked
-        return query((Class<T>) criteria.getEntityClass(), sqlResult.getSql(), sqlResult.getParams().toArray());
+        return query(criteria.getEntityClass(), sqlResult.getSql(), sqlResult.getParams().toArray());
     }
 
     @Override
@@ -141,9 +174,9 @@ public class JdbcDaoImpl implements JdbcDao {
     }
 
     @Override
-    public <T> PageList<T> queryPageList(Class<T> clazz, Pager qo) {
+    public <T, Qo extends Pager> PageList<T> queryPageList(Class<T> clazz, Qo qo) {
         //noinspection unchecked
-        return queryPageList(clazz, qo, DEFAULT_TRANSFER);
+        return queryPageList(clazz, qo, CRITERIA_TRANSFER);
     }
 
     @Override
@@ -158,8 +191,8 @@ public class JdbcDaoImpl implements JdbcDao {
     }
 
     @Override
-    public <T> int count(Class<T> clazz, Object qo) {
-        return count(clazz, qo, DEFAULT_TRANSFER);
+    public <T, Qo> int count(Class<T> clazz, Qo qo) {
+        return count(getCriteria(clazz, qo, CRITERIA_TRANSFER));
     }
 
     @Override
@@ -169,7 +202,7 @@ public class JdbcDaoImpl implements JdbcDao {
 
     @Override
     public int count(Criteria criteria) {
-        SqlResult sqlResult = criteria.build();
+        SqlResult sqlResult = criteria.addFunc("count(*)").build();
         return count(sqlResult.getSql(), sqlResult.getParams().toArray());
     }
 
@@ -179,8 +212,9 @@ public class JdbcDaoImpl implements JdbcDao {
     }
 
 
-    private <Qo> Criteria getCriteria(Class<?> clazz, Qo qo, CriteriaTransfer<Qo> transfer){
-        Criteria criteria = Criteria.select(clazz);
+    private <T, Qo> Criteria<T> getCriteria(Class<T> clazz, Qo qo, CriteriaTransfer transfer) {
+        Criteria<T> criteria = Criteria.select(clazz);
+        //noinspection unchecked
         transfer.transQuery(qo, criteria, clazz);
         return criteria;
     }

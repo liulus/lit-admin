@@ -21,11 +21,10 @@ public interface JdbcDao {
      * 插入一条记录，参数可以是实体，也可以是 Criteria 实例
      *
      * @param t    实体 或  Criteria 实例
-     * @param <ID> 实体的 Id 类型
      * @param <T>  实体 或  Criteria
      * @return 插入记录的 Id
      */
-    <ID, T> ID insert(T t);
+    <T, ID extends Serializable> ID insert(T t);
 
     /**
      * 删除一条记录，参数可以是实体，也可以是 Criteria 实例
@@ -86,7 +85,7 @@ public interface JdbcDao {
      * @param <T>   查询记录对应的实体
      * @return 查询记录对应的实体
      */
-    <T> T queryForSingle(Class<T> clazz, Object qo);
+    <T, Qo> T queryForSingle(Class<T> clazz, Qo qo);
 
     /**
      * 根据 criteria 查询一条记录
@@ -95,7 +94,7 @@ public interface JdbcDao {
      * @param <T>      查询记录对应的实体
      * @return 查询记录对应的实体
      */
-    <T> T queryForSingle(Criteria criteria);
+    <T> T queryForSingle(Criteria<T> criteria);
 
     /**
      * 根据 sql 查询一条记录
@@ -125,7 +124,7 @@ public interface JdbcDao {
      * @param <T>   查询记录对应的实体
      * @return 查询记录对应的实体列表
      */
-    <T> List<T> query(Class<T> clazz, Object qo);
+    <T, Qo> List<T> query(Class<T> clazz, Qo qo);
 
     /**
      * 查询列表
@@ -146,7 +145,7 @@ public interface JdbcDao {
      * @param <T>      查询记录对应的实体
      * @return 查询记录对应的实体列表
      */
-    <T> List<T> query(Criteria criteria);
+    <T> List<T> query(Criteria<T> criteria);
 
     /**
      * 根据 sql 查询列表
@@ -167,7 +166,7 @@ public interface JdbcDao {
      * @param <T>
      * @return
      */
-    <T> PageList<T> queryPageList(Class<T> clazz, Pager qo);
+    <T, Qo extends Pager> PageList<T> queryPageList(Class<T> clazz, Qo qo);
 
     /**
      * 根据 qo 查询带分页信息的列表
@@ -198,7 +197,7 @@ public interface JdbcDao {
      * @param <T>   查询记录对应的实体
      * @return 总记录数
      */
-    <T> int count(Class<T> clazz, Object qo);
+    <T, Qo> int count(Class<T> clazz, Qo qo);
 
     /**
      * 查询总记录数

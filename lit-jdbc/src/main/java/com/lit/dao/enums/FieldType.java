@@ -1,4 +1,4 @@
-package com.lit.dao.builder;
+package com.lit.dao.enums;
 
 /**
  * 拼接sql 时添加的字段的操作类型

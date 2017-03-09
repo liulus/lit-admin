@@ -35,7 +35,9 @@ allprojects {
                 'dom4j'                  : "dom4j:dom4j:1.6.1",
                 'jaxen'                  : "jaxen:jaxen:1.1.6",
                 'junit'                  : "junit:junit:4.12",
+                'jmockdata'              : "com.github.jsonzou:jmockdata:2.0",
                 'jsqlparser'             : "com.github.jsqlparser:jsqlparser:0.9.6",
+                'lombok'                 : "org.projectlombok:lombok:1.16.14",
                 'slf4j-api'              : "org.slf4j:slf4j-api:${slf4jVersion}",
                 'slf4j-log4j12'          : "org.slf4j:slf4j-log4j12:${slf4jVersion}",
                 'logback-transfer'       : "ch.qos.logback:logback-transfer:${logbackVersion}",
@@ -47,7 +49,7 @@ allprojects {
                 'druid'                  : "com.alibaba:druid:1.0.18",
                 'c3p0'                   : "c3p0:c3p0:0.9.1.2",
                 'mysql'                  : "mysql:mysql-connector-java:5.1.38",
-                'persistence'        : "javax.persistence:persistence-api:1.0",
+                'persistence'            : "javax.persistence:persistence-api:1.0",
                 'dexcoder-dal'           : "com.dexcoder:dexcoder-dal-spring:2.3.5",
                 'mybatis-spring'         : "org.mybatis:mybatis-spring:1.3.0",
                 'mybatis'                : "org.mybatis:jaxen:${mybatisVersion}",
@@ -81,6 +83,7 @@ allprojects {
     }
 
     dependencies {
+        compile libs.'lombok'
         testCompile libs.'spring-boot-test'
     }
 

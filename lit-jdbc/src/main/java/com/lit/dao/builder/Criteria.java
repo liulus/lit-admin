@@ -1,17 +1,31 @@
 package com.lit.dao.builder;
 
+import com.lit.commons.util.ClassUtils;
+import com.lit.dao.enums.FieldType;
+import com.lit.dao.enums.GenerationType;
+import com.lit.dao.generator.KeyGenerator;
+import com.lit.dao.generator.SequenceGenerator;
+import com.lit.dao.model.SqlResult;
+import lombok.Getter;
+
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
+
 /**
  * User : liulu
  * Date : 2016-12-3 17:39
  * version $Id: Criteria.java, v 0.1 Exp $
  */
-public class Criteria {
+public class Criteria<T> {
 
-    private Class<?> entityClass;
+    @Getter
+    private Class<T> entityClass;
 
     private SqlBuilder sqlBuilder;
 
-    private Criteria(Class<?> clazz, SqlBuilder sqlBuilder) {
+    private Criteria(Class<T> clazz, SqlBuilder sqlBuilder) {
         this.entityClass = clazz;
         this.sqlBuilder = sqlBuilder;
     }
@@ -22,8 +36,8 @@ public class Criteria {
      * @param clazz
      * @return
      */
-    public static Criteria insert(Class<?> clazz) {
-        return new Criteria(clazz, new InsertBuilder(clazz));
+    public static <T> Criteria<T> insert(Class<T> clazz) {
+        return new Criteria<>(clazz, new InsertBuilder(clazz));
     }
 
     /**
@@ -32,8 +46,8 @@ public class Criteria {
      * @param clazz
      * @return
      */
-    public static Criteria update(Class<?> clazz) {
-        return new Criteria(clazz, new UpdateBuilder(clazz));
+    public static <T> Criteria<T> update(Class<T> clazz) {
+        return new Criteria<>(clazz, new UpdateBuilder(clazz));
     }
 
     /**
@@ -42,8 +56,8 @@ public class Criteria {
      * @param clazz
      * @return
      */
-    public static Criteria delete(Class<?> clazz) {
-        return new Criteria(clazz, new DeleteBuilder(clazz));
+    public static <T> Criteria<T> delete(Class<T> clazz) {
+        return new Criteria<>(clazz, new DeleteBuilder(clazz));
     }
 
     /**
@@ -52,8 +66,8 @@ public class Criteria {
      * @param clazz
      * @return
      */
-    public static Criteria select(Class<?> clazz) {
-        return new Criteria(clazz, new SelectBuilder(clazz));
+    public static <T> Criteria<T> select(Class<T> clazz) {
+        return new Criteria<>(clazz, new SelectBuilder(clazz));
     }
 
     /**
@@ -63,7 +77,7 @@ public class Criteria {
      * @param value
      * @return
      */
-    public Criteria into(String fieldName, Object value) {
+    public Criteria<T> into(String fieldName, Object value) {
         this.sqlBuilder.add(null, fieldName, null, FieldType.INSERT, value);
         return this;
     }
@@ -75,7 +89,7 @@ public class Criteria {
      * @param value
      * @return
      */
-    public Criteria set(String fieldName, Object value) {
+    public Criteria<T> set(String fieldName, Object value) {
         this.sqlBuilder.add(null, fieldName, null, FieldType.UPDATE, value);
         return this;
     }
@@ -86,7 +100,7 @@ public class Criteria {
      * @param fieldNames
      * @return
      */
-    public Criteria include(String... fieldNames) {
+    public Criteria<T> include(String... fieldNames) {
         for (String fieldName : fieldNames) {
             this.sqlBuilder.add(null, fieldName, null, FieldType.INCLUDE);
         }
@@ -99,7 +113,7 @@ public class Criteria {
      * @param fieldNames
      * @return
      */
-    public Criteria exclude(String... fieldNames) {
+    public Criteria<T> exclude(String... fieldNames) {
         for (String fieldName : fieldNames) {
             this.sqlBuilder.add(null, fieldName, null, FieldType.EXCLUDE);
         }
@@ -112,7 +126,7 @@ public class Criteria {
      * @param func 函数 如 count(*), max(age), 括号里的可以是属性名也可以是数据库字段名
      * @return
      */
-    public Criteria addFunc(String func) {
+    public Criteria<T> addFunc(String func) {
         this.sqlBuilder.add(null, func, null, FieldType.FUNC);
         return this;
     }
@@ -125,7 +139,7 @@ public class Criteria {
      * @param value
      * @return
      */
-    public Criteria where(String fieldName, Object value) {
+    public Criteria<T> where(String fieldName, Object value) {
         this.where(fieldName, "=", value);
         return this;
     }
@@ -138,7 +152,7 @@ public class Criteria {
      * @param values
      * @return
      */
-    public Criteria where(String fieldName, String fieldOperator, Object... values) {
+    public Criteria<T> where(String fieldName, String fieldOperator, Object... values) {
         this.sqlBuilder.add("", fieldName, fieldOperator, FieldType.WHERE, values);
         return this;
     }
@@ -150,7 +164,7 @@ public class Criteria {
      * @param value
      * @return
      */
-    public Criteria and(String fieldName, Object value) {
+    public Criteria<T> and(String fieldName, Object value) {
         this.and(fieldName, "=", value);
         return this;
     }
@@ -162,7 +176,7 @@ public class Criteria {
      * @param values
      * @return
      */
-    public Criteria and(String fieldName, String fieldOperator, Object... values) {
+    public Criteria<T> and(String fieldName, String fieldOperator, Object... values) {
         this.sqlBuilder.add("and ", fieldName, fieldOperator, FieldType.WHERE, values);
         return this;
     }
@@ -174,7 +188,7 @@ public class Criteria {
      * @param value
      * @return
      */
-    public Criteria andWithBracket(String fieldName, Object value) {
+    public Criteria<T> andWithBracket(String fieldName, Object value) {
         this.andWithBracket(fieldName, "=", value);
         return this;
     }
@@ -186,7 +200,7 @@ public class Criteria {
      * @param values
      * @return
      */
-    public Criteria andWithBracket(String fieldName, String fieldOperator, Object... values) {
+    public Criteria<T> andWithBracket(String fieldName, String fieldOperator, Object... values) {
         this.sqlBuilder.add("and ( ", fieldName, fieldOperator, FieldType.WHERE, values);
         return this;
     }
@@ -198,7 +212,7 @@ public class Criteria {
      * @param value
      * @return
      */
-    public Criteria or(String fieldName, Object value) {
+    public Criteria<T> or(String fieldName, Object value) {
         this.or(fieldName, "=", value);
         return this;
     }
@@ -210,7 +224,7 @@ public class Criteria {
      * @param values
      * @return
      */
-    public Criteria or(String fieldName, String fieldOperator, Object... values) {
+    public Criteria<T> or(String fieldName, String fieldOperator, Object... values) {
         this.sqlBuilder.add("or ", fieldName, fieldOperator, FieldType.WHERE, values);
         return this;
     }
@@ -222,7 +236,7 @@ public class Criteria {
      * @param value
      * @return
      */
-    public Criteria orWithBracket(String fieldName, Object value) {
+    public Criteria<T> orWithBracket(String fieldName, Object value) {
         this.orWithBracket(fieldName, "=", value);
         return this;
     }
@@ -234,7 +248,7 @@ public class Criteria {
      * @param values
      * @return
      */
-    public Criteria orWithBracket(String fieldName, String fieldOperator, Object... values) {
+    public Criteria<T> orWithBracket(String fieldName, String fieldOperator, Object... values) {
         this.sqlBuilder.add("or ( ", fieldName, fieldOperator, FieldType.WHERE, values);
         return this;
     }
@@ -244,7 +258,7 @@ public class Criteria {
      *
      * @return
      */
-    public Criteria end() {
+    public Criteria<T> end() {
         this.sqlBuilder.add(null, null, null, FieldType.BRACKET_END);
         return this;
     }
@@ -255,7 +269,7 @@ public class Criteria {
      * @param fieldNames
      * @return
      */
-    public Criteria asc(String... fieldNames) {
+    public Criteria<T> asc(String... fieldNames) {
         for (String fieldName : fieldNames) {
             this.sqlBuilder.add(null, fieldName, null, FieldType.ORDER_BY_ASC);
         }
@@ -268,7 +282,7 @@ public class Criteria {
      * @param fieldNames
      * @return
      */
-    public Criteria desc(String... fieldNames) {
+    public Criteria<T> desc(String... fieldNames) {
         for (String fieldName : fieldNames) {
             this.sqlBuilder.add(null, fieldName, null, FieldType.ORDER_BY_DESC);
         }
@@ -286,7 +300,7 @@ public class Criteria {
      * @param isIgnoreNull
      * @return
      */
-    public Criteria initEntity(Object entity, Boolean isIgnoreNull) {
+    public Criteria<T> initEntity(Object entity, Boolean isIgnoreNull) {
         this.sqlBuilder.initEntity(entity, isIgnoreNull);
         return this;
     }
@@ -295,8 +309,38 @@ public class Criteria {
         return this.sqlBuilder.getTableInfo().getPkField();
     }
 
-    public Class<?> getEntityClass() {
-        return this.entityClass;
+    public String getColumnName(String fieldName) {
+        return this.sqlBuilder.getTableInfo().getFieldColumnMap().get(fieldName);
     }
 
+    /**
+     * 主键生成器实例的缓存
+     */
+    private static final Map<String, KeyGenerator> KEY_GENERATOR_CACHE = Collections.synchronizedMap(new HashMap<String, KeyGenerator>());
+
+    private static final SequenceGenerator SEQUENCE_GENERATOR = new SequenceGenerator();
+
+    public KeyGenerator getKeyGenerator() {
+        Class<? extends KeyGenerator> generatorClass = this.sqlBuilder.getTableInfo().getGeneratorClass();
+        if (generatorClass != null) {
+            KeyGenerator keyGenerator = KEY_GENERATOR_CACHE.get(generatorClass.getName());
+            if (keyGenerator == null) {
+                keyGenerator = ClassUtils.newInstance(generatorClass);
+                KEY_GENERATOR_CACHE.put(generatorClass.getName(), keyGenerator);
+            }
+            return keyGenerator;
+        }
+        if (Objects.equals(GenerationType.SEQUENCE, sqlBuilder.getTableInfo().getGenerationType())) {
+            return SEQUENCE_GENERATOR;
+        }
+        return null;
+    }
+
+    public String getSequenceName() {
+        return sqlBuilder.getTableInfo().getSequenceName();
+    }
+
+    public boolean isAutoGenerateKey() {
+        return this.sqlBuilder.getTableInfo().isAutoGenerateKey();
+    }
 }

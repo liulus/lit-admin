@@ -18,7 +18,7 @@
  * own identifying information: Portions Copyright [yyyy]
  * [name of copyright owner]
  */
-package com.lit.dao.annotation;
+package com.lit.dao.enums;
 
 /**
  * Defines the types of primary key generation.

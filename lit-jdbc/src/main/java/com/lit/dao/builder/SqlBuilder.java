@@ -1,5 +1,9 @@
 package com.lit.dao.builder;
 
+import com.lit.dao.enums.FieldType;
+import com.lit.dao.model.SqlResult;
+import com.lit.dao.model.TableInfo;
+
 /**
  * User : liulu
  * Date : 2016-11-23 20:26

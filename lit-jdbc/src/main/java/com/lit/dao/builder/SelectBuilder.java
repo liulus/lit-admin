@@ -1,5 +1,7 @@
 package com.lit.dao.builder;
 
+import com.lit.dao.enums.FieldType;
+import com.lit.dao.model.SqlResult;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
@@ -51,7 +53,10 @@ class SelectBuilder extends AbstractSqlBuilder {
         } else if (fieldType == FieldType.ORDER_BY_ASC || fieldType == FieldType.ORDER_BY_DESC) {
             orderByBuilder.add(logicOperator, fieldName, fieldOperator, fieldType, values);
         } else if (fieldType == FieldType.FUNC) {
-            func.append(StringUtils.isEmpty(func) ? "" : ", ").append(parseFunc(fieldName));
+            String funStr = parseFunc(fieldName);
+            if (func.indexOf(funStr) < 0) {
+                func.append(StringUtils.isEmpty(func) ? "" : ", ").append(funStr);
+            }
         }
     }
 

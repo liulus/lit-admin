@@ -1,4 +1,4 @@
-package com.lit.commons.utils;
+package com.lit.commons.util;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;

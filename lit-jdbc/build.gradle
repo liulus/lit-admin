@@ -1,6 +1,5 @@
 dependencies {
     compile libs.'spring-jdbc',
-            libs.'jsqlparser',
             project(':lit-commons')
 
 }

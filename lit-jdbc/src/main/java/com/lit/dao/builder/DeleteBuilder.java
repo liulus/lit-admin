@@ -1,6 +1,8 @@
 package com.lit.dao.builder;
 
 import com.lit.commons.bean.BeanUtils;
+import com.lit.dao.enums.FieldType;
+import com.lit.dao.model.SqlResult;
 import org.apache.commons.lang3.StringUtils;
 
 /**

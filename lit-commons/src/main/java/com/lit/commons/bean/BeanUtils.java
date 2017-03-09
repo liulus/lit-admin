@@ -1,8 +1,8 @@
 package com.lit.commons.bean;
 
 import com.lit.commons.page.PageList;
-import com.lit.commons.utils.ClassUtils;
-import com.lit.commons.utils.NameUtils;
+import com.lit.commons.util.ClassUtils;
+import com.lit.commons.util.NameUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.beans.PropertyDescriptor;
@@ -204,7 +204,7 @@ public class BeanUtils {
                 continue;
             }
             Object value = invokeReaderMethod(source, targetPd.getName());
-            if (value != null) {
+            if (value != null && (targetPd.getReadMethod() == null || ClassUtils.invokeMethod(targetPd.getReadMethod(), target) == null)) {
                 ClassUtils.invokeMethod(targetPd.getWriteMethod(), target, value);
             }
         }
@@ -246,7 +246,7 @@ public class BeanUtils {
             return Collections.emptyList();
         } else if (sourceList instanceof PageList) {
             PageList sourcePage = (PageList) sourceList;
-            resultList = new PageList<>(sourcePage.getPageSize(), sourcePage.getPageNum(), sourcePage.getRecordCount());
+            resultList = new PageList<>(sourcePage.getPageSize(), sourcePage.getPageNum(), sourcePage.getTotalRecord());
         } else {
             resultList = new ArrayList<>();
         }

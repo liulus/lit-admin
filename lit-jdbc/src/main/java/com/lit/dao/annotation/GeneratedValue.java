@@ -20,6 +20,10 @@
  */
 package com.lit.dao.annotation;
 
+import com.lit.dao.enums.GenerationType;
+import com.lit.dao.generator.EmptyKeyGenerator;
+import com.lit.dao.generator.KeyGenerator;
+
 import java.lang.annotation.Target;
 import java.lang.annotation.Retention;
 import static java.lang.annotation.ElementType.FIELD;
@@ -70,5 +74,5 @@ public @interface GeneratedValue {
      * or {@link TableGenerator} annotation.
      * <p> Defaults to the id generator supplied by persistence provider.
      */
-    String generator() default "";
+    Class<? extends KeyGenerator> generator() default EmptyKeyGenerator.class;
 }

@@ -1,6 +1,6 @@
-package com.lit.test.base;
+package com.lit.test.util;
 
-import com.lit.commons.utils.PropertyUtils;
+import com.lit.commons.util.PropertyUtils;
 import com.lit.dao.JdbcDao;
 import com.lit.dao.impl.JdbcDaoImpl;
 import com.mchange.v2.c3p0.ComboPooledDataSource;

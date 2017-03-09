@@ -1,5 +1,8 @@
 package com.lit.dao.builder;
 
+import com.lit.dao.enums.FieldType;
+import com.lit.dao.model.SqlResult;
+import com.lit.dao.model.TableInfo;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;

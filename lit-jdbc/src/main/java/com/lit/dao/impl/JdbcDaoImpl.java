@@ -5,9 +5,9 @@ import com.lit.commons.page.PageService;
 import com.lit.commons.page.Pager;
 import com.lit.dao.JdbcDao;
 import com.lit.dao.builder.Criteria;
+import com.lit.dao.generator.KeyGenerator;
 import com.lit.dao.generator.SequenceGenerator;
 import com.lit.dao.model.SqlResult;
-import com.lit.dao.generator.KeyGenerator;
 import com.lit.dao.transfer.AnnotationRowMapper;
 import com.lit.dao.transfer.CriteriaTransfer;
 import com.lit.dao.transfer.DefaultCriteriaTransfer;
@@ -15,7 +15,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.ArgumentPreparedStatementSetter;
+import org.springframework.jdbc.core.ConnectionCallback;
 import org.springframework.jdbc.core.JdbcOperations;
 import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -40,6 +43,8 @@ public class JdbcDaoImpl implements JdbcDao {
 
     private static final CriteriaTransfer CRITERIA_TRANSFER = new DefaultCriteriaTransfer();
 
+    private String dbName;
+
     @Getter
     @Setter
     private JdbcOperations jdbcTemplate;
@@ -58,8 +63,8 @@ public class JdbcDaoImpl implements JdbcDao {
         Serializable idValue = null;
         KeyGenerator keyGenerator = criteria.getKeyGenerator();
         if (keyGenerator != null) {
-            idValue = !(keyGenerator instanceof SequenceGenerator) ? keyGenerator.generateKey()
-                    : ((SequenceGenerator) keyGenerator).generateSeqKey(criteria.getSequenceName());
+            idValue = !(keyGenerator instanceof SequenceGenerator) ? keyGenerator.generateKey(getDbName())
+                    : ((SequenceGenerator) keyGenerator).generateSeqKey(getDbName(), criteria.getSequenceName());
             criteria.into(criteria.getPkName(), idValue);
         }
 
@@ -217,6 +222,18 @@ public class JdbcDaoImpl implements JdbcDao {
         //noinspection unchecked
         transfer.transQuery(qo, criteria, clazz);
         return criteria;
+    }
+
+    public String getDbName() {
+        if (StringUtils.isEmpty(dbName)) {
+            dbName = jdbcTemplate.execute(new ConnectionCallback<String>() {
+                @Override
+                public String doInConnection(Connection con) throws SQLException, DataAccessException {
+                    return con.getMetaData().getDatabaseProductName();
+                }
+            }).toUpperCase();
+        }
+        return dbName;
     }
 
 }

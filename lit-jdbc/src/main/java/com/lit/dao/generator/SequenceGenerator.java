@@ -1,5 +1,7 @@
 package com.lit.dao.generator;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.io.Serializable;
 
 /**
@@ -16,11 +18,19 @@ public class SequenceGenerator implements KeyGenerator {
     }
 
     @Override
-    public Serializable generateKey() {
+    public Serializable generateKey(String dbName) {
         return ".nextval";
     }
 
-    public String generateSeqKey(String seqName) {
-        return seqName + ".nextval";
+    public String generateSeqKey(String dbName, String seqName) {
+        seqName = StringUtils.trimToEmpty(seqName);
+        switch (dbName) {
+            case "DB2":
+                return "next value for " + seqName;
+            case "ORACLE":
+                return seqName + ".nextval";
+            default:
+                return "";
+        }
     }
 }

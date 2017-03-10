@@ -2,7 +2,6 @@ package com.lit.dao.builder;
 
 import com.lit.dao.enums.FieldType;
 import com.lit.dao.model.SqlResult;
-import org.springframework.util.CollectionUtils;
 
 import java.util.*;
 
@@ -50,7 +49,7 @@ class UpdateBuilder extends AbstractSqlBuilder {
 
     @Override
     public SqlResult build() {
-        if (CollectionUtils.isEmpty(fieldValueMap)) {
+        if (fieldValueMap == null || fieldValueMap.size() == 0) {
             return SqlResult.EMPTY_RESULT;
         }
 

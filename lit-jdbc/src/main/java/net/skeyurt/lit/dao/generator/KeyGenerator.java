@@ -12,6 +12,6 @@ public interface KeyGenerator {
 
     boolean isGenerateBySql();
 
-    Serializable generateKey(String dbName);
+    Serializable generateKey();
 
 }

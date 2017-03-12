@@ -3,9 +3,9 @@ package net.skeyurt.lit.dao.model;
 import net.skeyurt.lit.commons.bean.BeanUtils;
 import net.skeyurt.lit.commons.util.NameUtils;
 import net.skeyurt.lit.dao.annotation.*;
+import net.skeyurt.lit.dao.annotation.SequenceGenerator;
 import net.skeyurt.lit.dao.enums.GenerationType;
-import net.skeyurt.lit.dao.generator.EmptyKeyGenerator;
-import net.skeyurt.lit.dao.generator.KeyGenerator;
+import net.skeyurt.lit.dao.generator.*;
 import lombok.Getter;
 import org.apache.commons.lang3.StringUtils;
 
@@ -96,6 +96,10 @@ public class TableInfo {
         autoGenerateKey = true;
         if (generated.generator() != EmptyKeyGenerator.class) {
             generatorClass = generated.generator();
+            if (Objects.equals(generatorClass, net.skeyurt.lit.dao.generator.SequenceGenerator.class)) {
+                SequenceGenerator sequenceGenerator = field.getAnnotation(SequenceGenerator.class);
+                sequenceName = sequenceGenerator == null ? "seq_" + tableName : sequenceGenerator.sequenceName();
+            }
             return;
         }
         generationType = generated.strategy();

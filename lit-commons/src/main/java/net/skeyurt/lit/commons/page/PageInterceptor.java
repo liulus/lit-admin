@@ -1,5 +1,6 @@
 package net.skeyurt.lit.commons.page;
 
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -7,7 +8,6 @@ import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.stereotype.Component;
 
 import java.util.*;
 
@@ -18,13 +18,17 @@ import java.util.*;
  */
 @Slf4j
 @Aspect
-@Component
+@NoArgsConstructor
 public class PageInterceptor {
 
     @Setter
     private PageSqlHandler pageSqlHandler;
 
     private String dbName;
+
+    public PageInterceptor (PageSqlHandler pageSqlHandler) {
+        this.pageSqlHandler = pageSqlHandler;
+    }
 
     @Around("execution(* org.springframework.jdbc.core.JdbcOperations.query*(..))")
     public Object doPage(ProceedingJoinPoint pjp) throws Throwable {
@@ -73,7 +77,10 @@ public class PageInterceptor {
     }
 
     public PageSqlHandler getPageSqlHandler() {
-        return pageSqlHandler == null ? new DefaultPageSqlHandler() : pageSqlHandler;
+        if (pageSqlHandler == null) {
+            pageSqlHandler = new DefaultPageSqlHandler();
+        }
+        return pageSqlHandler;
     }
 
 }

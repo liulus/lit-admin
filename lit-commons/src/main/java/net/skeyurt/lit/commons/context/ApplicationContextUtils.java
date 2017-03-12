@@ -1,8 +1,9 @@
-package net.skeyurt.lit.commons.util;
+package net.skeyurt.lit.commons.context;
 
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
 import java.util.Map;
@@ -15,7 +16,11 @@ import java.util.Map;
 @Component
 public class ApplicationContextUtils implements ApplicationContextAware {
 
+    private ApplicationContextUtils(){}
+
     private static ApplicationContext context;
+
+    private static Environment environment;
 
     public static <T> T getBean(Class<T> clazz) {
         return context.getBean(clazz);
@@ -41,12 +46,34 @@ public class ApplicationContextUtils implements ApplicationContextAware {
         return context.getBeansOfType(clazz);
     }
 
+    public static String getProperty (String key) {
+        return environment.getProperty(key);
+    }
+
+    public static String getProperty (String key, String defaultValue) {
+        return environment.getProperty(key, defaultValue);
+    }
+
+    public static <T> T getProperty (String key, Class<T> targetType) {
+        return environment.getProperty(key, targetType);
+    }
+
+    public static <T> T getProperty (String key, Class<T> targetType, T defaultValue) {
+        environment.acceptsProfiles("dev");
+        return environment.getProperty(key, targetType, defaultValue);
+    }
+
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
         context = applicationContext;
+        environment = applicationContext.getEnvironment();
     }
 
-    public ApplicationContext getApplicationContext(){
+    public static ApplicationContext getApplicationContext(){
         return context;
+    }
+
+    public static Environment getEnvironment() {
+        return environment;
     }
 }

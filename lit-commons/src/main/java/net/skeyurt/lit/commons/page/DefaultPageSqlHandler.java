@@ -38,7 +38,10 @@ public class DefaultPageSqlHandler implements PageSqlHandler {
     }
 
     public Dialect getDialect(String dbName) {
-        return dialect == null ? Dialect.valueOf(dbName) : dialect;
+        if (dialect == null) {
+            dialect = Dialect.valueOf(dbName);
+        }
+        return dialect;
     }
 
 

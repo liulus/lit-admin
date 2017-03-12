@@ -1,6 +1,6 @@
 package net.skeyurt.lit.dao.generator;
 
-import org.apache.commons.lang3.StringUtils;
+import net.skeyurt.lit.commons.context.GlobalParam;
 
 import java.io.Serializable;
 
@@ -11,6 +11,7 @@ import java.io.Serializable;
  */
 public class SequenceGenerator implements KeyGenerator {
 
+    private static final ThreadLocal<String> SEQUENCE_NAME = new ThreadLocal<>();
 
     @Override
     public boolean isGenerateBySql() {
@@ -18,12 +19,10 @@ public class SequenceGenerator implements KeyGenerator {
     }
 
     @Override
-    public Serializable generateKey(String dbName) {
-        return ".nextval";
-    }
-
-    public String generateSeqKey(String dbName, String seqName) {
-        seqName = StringUtils.trimToEmpty(seqName);
+    public Serializable generateKey() {
+        String seqName = getSequenceName();
+        removeSequenceName();
+        String dbName = GlobalParam.get("dbName", String.class);
         switch (dbName) {
             case "DB2":
                 return "next value for " + seqName;
@@ -33,4 +32,17 @@ public class SequenceGenerator implements KeyGenerator {
                 return "";
         }
     }
+
+    public static void setSequenceName(String sequenceName) {
+        SEQUENCE_NAME.set(sequenceName);
+    }
+
+    public static String getSequenceName() {
+        return SEQUENCE_NAME.get();
+    }
+
+    public static void removeSequenceName() {
+        SEQUENCE_NAME.remove();
+    }
+
 }

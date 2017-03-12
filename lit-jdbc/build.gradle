@@ -1,5 +1,6 @@
 dependencies {
     compile libs.'spring-jdbc',
             project(':lit-commons')
+    compileOnly libs.'spring-context'
 
 }

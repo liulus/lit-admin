@@ -328,9 +328,13 @@ public class Criteria<T> {
                 keyGenerator = ClassUtils.newInstance(generatorClass);
                 KEY_GENERATOR_CACHE.put(generatorClass.getName(), keyGenerator);
             }
+            if (Objects.equals(generatorClass, SequenceGenerator.class)) {
+                SequenceGenerator.setSequenceName(getSequenceName());
+            }
             return keyGenerator;
         }
         if (Objects.equals(GenerationType.SEQUENCE, sqlBuilder.getTableInfo().getGenerationType())) {
+            SequenceGenerator.setSequenceName(getSequenceName());
             return SEQUENCE_GENERATOR;
         }
         return null;

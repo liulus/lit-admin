@@ -14,7 +14,7 @@ public class EmptyKeyGenerator implements KeyGenerator {
     }
 
     @Override
-    public Serializable generateKey(String dbName) {
+    public Serializable generateKey() {
         return null;
     }
 }

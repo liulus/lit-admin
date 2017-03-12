@@ -6,14 +6,17 @@ ext {
 
     libs = [
             'commons-lang3'         : "org.apache.commons:commons-lang3:3.4",
+            'commons-io'            : "commons-io:commons-io:2.5",
             'junit'                 : "junit:junit:4.12",
             'jmockdata'             : "com.github.jsonzou:jmockdata:2.0",
             'lombok'                : "org.projectlombok:lombok:1.16.14",
             'slf4j-api'             : "org.slf4j:slf4j-api:${slf4jVersion}",
-            'logback-classic'       : "ch.qos.logback:logback-classic:${logbackVersion}",
             'slf4j-log4j12'         : "org.slf4j:slf4j-log4j12:${slf4jVersion}",
+            'jcl-over-slf4j'        : "org.slf4j:jcl-over-slf4j:${slf4jVersion}",
+            'logback-classic'       : "ch.qos.logback:logback-classic:${logbackVersion}",
             'c3p0'                  : "c3p0:c3p0:0.9.1.2",
             'mysql'                 : "mysql:mysql-connector-java:5.1.38",
+            'oracle'                : "com.oracle:ojdbc6:11.2.0.3",
             'spring-context'        : "org.springframework:spring-context:${springVersion}",
             'spring-context-support': "org.springframework:spring-context-support:${springVersion}",
             'spring-jdbc'           : "org.springframework:spring-jdbc:${springVersion}",
@@ -23,12 +26,12 @@ ext {
             'spring-aspects'        : "org.springframework:spring-aspects:${springVersion}",
             'spring-webmvc'         : "org.springframework:spring-webmvc:${springVersion}",
             'spring-test'           : "org.springframework:spring-test:${springVersion}",
-            'spring-boot-test'       : "org.springframework.boot:spring-boot-starter-test:${springBootVersion}"
+            'spring-boot-test'      : "org.springframework.boot:spring-boot-starter-test:${springBootVersion}"
     ]
 }
 
 allprojects {
-    group = 'com.lit'
+    group = 'net.skeyurt.lit'
     version = '1.0-SNAPSHOT'
 
     apply plugin: 'java'

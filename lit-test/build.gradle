@@ -1,9 +1,13 @@
 dependencies {
     testCompile project(':lit-jdbc'),
             libs.'mysql',
+            libs.'oracle',
             libs.'c3p0',
             libs.'lombok',
+            libs.'commons-io',
             libs.'spring-boot-test',
+            libs.'spring-aspects',
+            libs.'jcl-over-slf4j',
             libs.'slf4j-log4j12'
 
 }

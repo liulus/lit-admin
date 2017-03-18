@@ -10,20 +10,20 @@ public interface PageSqlHandler {
     /**
      * 获取分页后的sql
      *
-     * @param sql      查询 sql
      * @param dbName   数据库名
+     * @param sql      查询 sql
      * @param pageSize 每页记录数
      * @param pageNum  当前页
      * @return
      */
-    String getPageSql(String sql, String dbName, int pageSize, int pageNum);
+    String getPageSql(String dbName, String sql, int pageSize, int pageNum);
 
     /**
      * 获取查询总数的sql
      *
-     * @param sql    查询 sql
      * @param dbName 数据库名
+     * @param sql    查询 sql
      * @return
      */
-    String getCountSql(String sql, String dbName);
+    String getCountSql(String dbName, String sql);
 }

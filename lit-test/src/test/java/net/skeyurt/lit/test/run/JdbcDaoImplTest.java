@@ -1,13 +1,21 @@
 package net.skeyurt.lit.test.run;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.extern.slf4j.Slf4j;
+import net.skeyurt.lit.commons.page.PageList;
+import net.skeyurt.lit.commons.page.PageService;
 import net.skeyurt.lit.dao.JdbcDao;
+import net.skeyurt.lit.dao.builder.Criteria;
+import net.skeyurt.lit.dao.transfer.CriteriaTransfer;
 import net.skeyurt.lit.test.base.BaseTest;
 import net.skeyurt.lit.test.bean.Goods;
 import net.skeyurt.lit.test.bean.GoodsVo;
-import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 
 import javax.annotation.Resource;
+import java.io.StringWriter;
+import java.io.Writer;
+import java.util.Arrays;
 import java.util.Date;
 
 /**
@@ -21,8 +29,8 @@ public class JdbcDaoImplTest extends BaseTest {
     @Resource
     private JdbcDao jdbcDao;
 
-    private Goods goods1 = Goods.builder().code("11111111").name("第一个").inventory(10).price(9.98D).createTime(new Date()).delete(false).build();
-    private Goods goods2 = Goods.builder().code("22222222").name("第二个").inventory(20).price(29.98D).createTime(new Date()).delete(false).build();
+    private Goods goods1 = Goods.builder().code("11111111").name("第一个").inventory(10).price(9.98D).gmtCreate(new Date()).delete(false).build();
+    private Goods goods2 = Goods.builder().code("22222222").name("第二个").inventory(20).price(29.98D).gmtCreate(new Date()).delete(false).build();
 
     private GoodsVo goodsVo = GoodsVo.builder().code("694800").delete(false).build();
 
@@ -101,7 +109,8 @@ public class JdbcDaoImplTest extends BaseTest {
 
     @Test
     public void get() throws Exception {
-
+        Goods goods = jdbcDao.get(Goods.class, 1002);
+        log.info("查询实体： {}", goods);
     }
 
     @Test
@@ -112,7 +121,8 @@ public class JdbcDaoImplTest extends BaseTest {
 
     @Test
     public void queryForSingle1() throws Exception {
-
+        Goods goods = jdbcDao.findByProperty(Goods.class, "code", "694800");
+        log.info("\n {}",goods.toString());
     }
 
     @Test
@@ -127,7 +137,24 @@ public class JdbcDaoImplTest extends BaseTest {
 
     @Test
     public void query() throws Exception {
+        GoodsVo goodsVo = GoodsVo.builder().startPrice(9.98D).endPrice(26D).build();
 
+        PageService.setPager(20, 2);
+        PageList<Goods> goodsList = (PageList<Goods>) jdbcDao.query(Goods.class, goodsVo, new CriteriaTransfer<GoodsVo>() {
+            @Override
+            public void transQuery(GoodsVo goodsVo, Criteria criteria, Class<?> entityClass) {
+                criteria.and("price", ">", goodsVo.getStartPrice()).and("price", "<=", goodsVo.getEndPrice());
+            }
+        });
+
+        log.info("pageSize: {}, pageNum: {}, totalRecord: {}", goodsList.getPageSize(), goodsList.getPageNum(), goodsList.getTotalRecord());
+
+        log.info("  \n{} \n {}", Arrays.toString(goodsList.toArray(new Goods[goodsList.size()])), goodsList.size());
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        Writer writer = new StringWriter();
+        objectMapper.writeValue(writer, goodsList);
+        log.info("\n {}", writer.toString());
     }
 
     @Test

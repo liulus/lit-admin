@@ -34,7 +34,11 @@ public class GoodsVo extends Pager implements Serializable {
 
     private Integer inventory;
 
-    private Date createTime;
+    private Date gmtCreate;
+
+    private Double startPrice;
+
+    private Double endPrice;
 
 
 

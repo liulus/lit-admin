@@ -15,14 +15,14 @@ public class DefaultPageSqlHandler implements PageSqlHandler {
     private static final String COUNT = "select count(*) ";
 
     @Override
-    public String getPageSql(String sql, String dbName, int pageSize, int pageNum) {
+    public String getPageSql(String dbName, String sql, int pageSize, int pageNum) {
 
         return getDialect(dbName).getPageSql(sql, pageSize, pageNum);
     }
 
 
     @Override
-    public String getCountSql(String sql, String dbName) {
+    public String getCountSql(String dbName, String sql) {
         if (StringUtils.isEmpty(sql)) {
             return "";
         }

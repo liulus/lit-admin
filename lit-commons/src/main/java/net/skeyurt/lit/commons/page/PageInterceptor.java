@@ -56,7 +56,7 @@ public class PageInterceptor {
 
         List result;
         if (pager.isCount()) {
-            String countSql = getPageSqlHandler().getCountSql(querySql, dbName);
+            String countSql = getPageSqlHandler().getCountSql(dbName, querySql);
             log.info("\n sql : {} \nargs : {}\n", countSql, Arrays.toString(sqlParams));
             Integer totalRecord = target.queryForObject(countSql, sqlParams, Integer.class);
             result = new PageList(pager.getPageSize(), pager.getPageNum(), totalRecord);

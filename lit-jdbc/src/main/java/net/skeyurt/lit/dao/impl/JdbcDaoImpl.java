@@ -124,6 +124,11 @@ public class JdbcDaoImpl implements JdbcDao {
     }
 
     @Override
+    public <T> T findByProperty(Class<T> clazz, String propertyName, Object propertyValue) {
+        return queryForSingle(Criteria.select(clazz).where(propertyName, propertyValue));
+    }
+
+    @Override
     public <T, Qo> T queryForSingle(Class<T> clazz, Qo qo) {
         return queryForSingle(getCriteria(clazz, qo, CRITERIA_TRANSFER));
     }

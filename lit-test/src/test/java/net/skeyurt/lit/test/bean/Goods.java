@@ -27,7 +27,7 @@ public class Goods implements Serializable {
 
     private static final long serialVersionUID = -7915472099544797458L;
 
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @SequenceGenerator(sequenceName = "seq_goods")
     private Long goodsId;
 
@@ -42,5 +42,5 @@ public class Goods implements Serializable {
 
     private Integer inventory;
 
-    private Date createTime;
+    private Date gmtCreate;
 }

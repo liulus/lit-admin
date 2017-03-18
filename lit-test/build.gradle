@@ -7,6 +7,9 @@ dependencies {
             libs.'commons-io',
             libs.'spring-boot-test',
             libs.'spring-aspects',
+            libs.'jackson-annotations',
+            libs.'jackson-core',
+            libs.'jackson-databind',
             libs.'jcl-over-slf4j',
             libs.'slf4j-log4j12'
 

@@ -6,7 +6,7 @@ CREATE TABLE lit_goods (
         price DECIMAL(12,2) COMMENT '价格',
         is_delete SMALLINT COMMENT '是否删除',
         inventory bigint COMMENT '库存',
-        create_Time TIMESTAMP DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+        gmt_Create TIMESTAMP DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
         PRIMARY KEY (goods_Id),
         INDEX idx_code (code)
     )ENGINE=InnoDB AUTO_INCREMENT=1000 DEFAULT CHARSET=utf8 COMMENT='商品表';

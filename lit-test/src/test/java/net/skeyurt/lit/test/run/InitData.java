@@ -29,11 +29,13 @@ public class InitData extends BaseTest {
         InputStream inputStream = getClass().getResourceAsStream("/goods.txt");
         String text = IOUtils.toString(inputStream, "UTF-8");
         String lineFeed = text.contains("\n") ? "\n" : "\r\n";
+        long start = System.currentTimeMillis();
         for (String goodsInfoStr : text.split(lineFeed)) {
             String[] goodsInfo = goodsInfoStr.split("<>");
             Goods goods = Goods.builder().code(goodsInfo[0]).name(goodsInfo[1]).price(Double.valueOf(goodsInfo[2]))
                     .inventory(Double.valueOf(goodsInfo[3]).intValue()).delete(false).build();
             jdbcDao.insert(goods);
         }
+        printUseTime(start);
     }
 }

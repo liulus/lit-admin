@@ -1,6 +1,7 @@
 ext {
     slf4jVersion = '1.7.21'
     logbackVersion = '1.1.7'
+    jacksonVersion = '2.8.3'
     springVersion = '4.3.2.RELEASE'
     springBootVersion = '1.4.0.RELEASE'
 
@@ -17,6 +18,9 @@ ext {
             'c3p0'                  : "c3p0:c3p0:0.9.1.2",
             'mysql'                 : "mysql:mysql-connector-java:5.1.38",
             'oracle'                : "com.oracle:ojdbc6:11.2.0.3",
+            'jackson-core'          : "com.fasterxml.jackson.core:jackson-core:${jacksonVersion}",
+            'jackson-annotations'   : "com.fasterxml.jackson.core:jackson-annotations:${jacksonVersion}",
+            'jackson-databind'      : "com.fasterxml.jackson.core:jackson-databind:${jacksonVersion}",
             'spring-context'        : "org.springframework:spring-context:${springVersion}",
             'spring-context-support': "org.springframework:spring-context-support:${springVersion}",
             'spring-jdbc'           : "org.springframework:spring-jdbc:${springVersion}",

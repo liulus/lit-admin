@@ -78,6 +78,16 @@ public interface JdbcDao {
     <T> T get(Class<T> clazz, Serializable id);
 
     /**
+     * 根据属性查询一条记录
+     * @param clazz 查询记录对应的实体 Class
+     * @param propertyName 属性的名称
+     * @param propertyValue 对应的值
+     * @param <T> 实体类型
+     * @return 实体对象
+     */
+    <T> T findByProperty (Class<T> clazz, String propertyName, Object propertyValue);
+
+    /**
      * 根据查询对象 qo 查询一条记录
      *
      * @param clazz 查询记录对应的实体 Class

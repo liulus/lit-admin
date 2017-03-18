@@ -1,13 +1,13 @@
 package net.skeyurt.lit.dao.builder;
 
 import net.skeyurt.lit.dao.enums.FieldType;
+import net.skeyurt.lit.dao.enums.Operator;
 import net.skeyurt.lit.dao.model.SqlResult;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 
 /**
  * User : liulu
@@ -29,10 +29,6 @@ class SelectBuilder extends AbstractSqlBuilder {
     SelectBuilder(Class<?> clazz) {
         super(clazz);
         whereBuilder = new WhereBuilder(tableInfo);
-        orderByBuilder = new OrderByBuilder(tableInfo);
-        include = new StringBuilder();
-        func = new StringBuilder();
-        // tableInfo的实例只有一份
         defaultFields = new HashMap<>(tableInfo.getFieldColumnMap());
     }
 
@@ -41,22 +37,34 @@ class SelectBuilder extends AbstractSqlBuilder {
     }
 
     @Override
-    public void add(String logicOperator, String fieldName, String fieldOperator, FieldType fieldType, Object... values) {
-        if (fieldType == FieldType.INCLUDE) {
-            String columnName = tableInfo.getFieldColumnMap().get(StringUtils.trim(fieldName));
-            Objects.requireNonNull(columnName, String.format("fieldName [ %s ] not exist!", fieldName));
-            include.append(StringUtils.isEmpty(include) ? "" : ", ").append(columnName);
-        } else if (fieldType == FieldType.EXCLUDE) {
-            defaultFields.remove(fieldName);
-        } else if (fieldType == FieldType.WHERE || fieldType == FieldType.BRACKET_BEGIN || fieldType == FieldType.BRACKET_END) {
-            whereBuilder.add(logicOperator, fieldName, fieldOperator, fieldType, values);
-        } else if (fieldType == FieldType.ORDER_BY_ASC || fieldType == FieldType.ORDER_BY_DESC) {
-            orderByBuilder.add(logicOperator, fieldName, fieldOperator, fieldType, values);
-        } else if (fieldType == FieldType.FUNC) {
-            String funStr = parseFunc(fieldName);
-            if (func.indexOf(funStr) < 0) {
-                func.append(StringUtils.isEmpty(func) ? "" : ", ").append(funStr);
-            }
+    public void add(String logicOperator, String fieldName, Operator fieldOperator, FieldType fieldType, Object... values) {
+        switch (fieldType) {
+            case WHERE:
+            case BRACKET_BEGIN:
+            case BRACKET_END:
+                whereBuilder.add(logicOperator, fieldName, fieldOperator, fieldType, values);
+                break;
+            case INCLUDE:
+                String column = getColumn(fieldName);
+                if (include == null) {
+                    include = new StringBuilder();
+                    include.append(column);
+                } else {
+                    include.append(", ").append(column);
+                }
+                break;
+            case EXCLUDE:
+                defaultFields.remove(StringUtils.trim(fieldName));
+                break;
+            case FUNC:
+                String funStr = parseFunc(fieldName);
+                if (func == null) {
+                    func = new StringBuilder(funStr.length());
+                }
+                if (func.indexOf(funStr) < 0) {
+                    func.append(StringUtils.isEmpty(func) ? "" : ", ").append(funStr);
+                }
+                break;
         }
     }
 
@@ -64,9 +72,8 @@ class SelectBuilder extends AbstractSqlBuilder {
         if (StringUtils.contains(funcStr, '(') && StringUtils.contains(funcStr, ')')) {
             int start = StringUtils.indexOf(funcStr, '(') + 1;
             int end = StringUtils.indexOf(funcStr, ')');
-            String fieldName = StringUtils.trim(StringUtils.substring(funcStr, start, end));
-            String column = tableInfo.getFieldColumnMap().get(fieldName);
-            return StringUtils.isEmpty(column) ? funcStr : StringUtils.substring(funcStr, 0, start) + column + ')';
+            String column = getColumn(StringUtils.substring(funcStr, start, end));
+            return StringUtils.substring(funcStr, 0, start) + column + ')';
         }
         return funcStr;
     }
@@ -82,8 +89,8 @@ class SelectBuilder extends AbstractSqlBuilder {
             sql.append(StringUtils.join(defaultFields.values(), ", "));
         }
         SqlResult whereResult = whereBuilder.build();
-        sql.append(" from ").append(tableInfo.getTableName()).append(" ").append(whereResult.getSql());
-        if (StringUtils.isEmpty(func)) {
+        sql.append(" from ").append(tableInfo.getTableName()).append(whereResult.getSql());
+        if (StringUtils.isEmpty(func) && orderByBuilder != null) {
             SqlResult orderByResult = orderByBuilder.build();
             sql.append(orderByResult.getSql());
         }

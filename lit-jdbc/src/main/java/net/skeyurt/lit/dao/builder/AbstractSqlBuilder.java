@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -21,7 +22,9 @@ abstract class AbstractSqlBuilder implements SqlBuilder {
 
     protected Class<?> entityClass;
 
-    protected Map<String, Object> fieldValueMap;
+    protected Map<String, Object> columnValueMap;
+
+    protected Map<String, Object> nativeValueMap;
 
     AbstractSqlBuilder(Class<?> clazz) {
         this.tableInfo = new TableInfo(clazz);
@@ -38,8 +41,20 @@ abstract class AbstractSqlBuilder implements SqlBuilder {
         for (String fieldName : fieldColumnMap.keySet()) {
             Object obj = BeanUtils.invokeReaderMethod(entity, fieldName);
             if (!isIgnoreNull || obj != null && (!(obj instanceof String) || StringUtils.isNotBlank((String) obj))) {
-                fieldValueMap.put(fieldName, obj);
+                columnValueMap.put(fieldColumnMap.get(fieldName), obj);
             }
+        }
+    }
+
+    protected String getColumn(String fieldName) {
+        fieldName = StringUtils.trim(fieldName);
+        String column = tableInfo.getFieldColumnMap().get(fieldName);
+        return StringUtils.isEmpty(column) ? fieldName : column;
+    }
+
+    protected void initNativeMap() {
+        if (nativeValueMap == null) {
+            nativeValueMap = new HashMap<>();
         }
     }
 

@@ -62,7 +62,7 @@ public class JdbcDaoConfig {
         GlobalParam.put("dbName", jdbcOperations.execute(new ConnectionCallback<String>() {
             @Override
             public String doInConnection(Connection con) throws SQLException, DataAccessException {
-                return con.getMetaData().getDatabaseProductName();
+                return con.getMetaData().getDatabaseProductName().toUpperCase();
             }
         }));
     }

@@ -28,6 +28,10 @@ import java.beans.PropertyVetoException;
 @SuppressWarnings("Duplicates")
 public class SpringConfig {
 
+    private static final String mysql = "mysqlDataSource";
+
+    private static final String oracle = "oracleDataSource";
+
     @Resource
     private Environment env;
 
@@ -67,12 +71,12 @@ public class SpringConfig {
 
 
     @Bean
-    public PlatformTransactionManager transactionManager(@Qualifier("mysqlDataSource") DataSource dataSource) {
+    public PlatformTransactionManager transactionManager(@Qualifier(oracle) DataSource dataSource) {
         return new DataSourceTransactionManager(dataSource);
     }
 
     @Bean
-    public JdbcOperations jdbcOperations(@Qualifier("mysqlDataSource") DataSource dataSource) {
+    public JdbcOperations jdbcOperations(@Qualifier(oracle) DataSource dataSource) {
         return new JdbcTemplate(dataSource);
     }
 

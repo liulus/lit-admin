@@ -3,6 +3,7 @@ package net.skeyurt.lit.dao.builder;
 import net.skeyurt.lit.commons.util.ClassUtils;
 import net.skeyurt.lit.dao.enums.FieldType;
 import net.skeyurt.lit.dao.enums.GenerationType;
+import net.skeyurt.lit.dao.enums.Operator;
 import net.skeyurt.lit.dao.generator.KeyGenerator;
 import net.skeyurt.lit.dao.generator.SequenceGenerator;
 import net.skeyurt.lit.dao.model.SqlResult;
@@ -83,6 +84,18 @@ public class Criteria<T> {
     }
 
     /**
+     * insert into 的属性
+     *
+     * @param fieldName
+     * @param value
+     * @return
+     */
+    public Criteria<T> into(String fieldName, Object value, boolean isNative) {
+        this.sqlBuilder.add(null, fieldName, null, isNative ? FieldType.INSERT_NATIVE : FieldType.INSERT, value);
+        return this;
+    }
+
+    /**
      * update set 的属性
      *
      * @param fieldName
@@ -140,7 +153,7 @@ public class Criteria<T> {
      * @return
      */
     public Criteria<T> where(String fieldName, Object value) {
-        this.where(fieldName, "=", value);
+        this.where(fieldName, Operator.EQ, value);
         return this;
     }
 
@@ -152,7 +165,7 @@ public class Criteria<T> {
      * @param values
      * @return
      */
-    public Criteria<T> where(String fieldName, String fieldOperator, Object... values) {
+    public Criteria<T> where(String fieldName, Operator fieldOperator, Object... values) {
         this.sqlBuilder.add("", fieldName, fieldOperator, FieldType.WHERE, values);
         return this;
     }
@@ -165,7 +178,7 @@ public class Criteria<T> {
      * @return
      */
     public Criteria<T> and(String fieldName, Object value) {
-        this.and(fieldName, "=", value);
+        this.and(fieldName, Operator.EQ, value);
         return this;
     }
 
@@ -176,7 +189,7 @@ public class Criteria<T> {
      * @param values
      * @return
      */
-    public Criteria<T> and(String fieldName, String fieldOperator, Object... values) {
+    public Criteria<T> and(String fieldName, Operator fieldOperator, Object... values) {
         this.sqlBuilder.add("and ", fieldName, fieldOperator, FieldType.WHERE, values);
         return this;
     }
@@ -189,7 +202,7 @@ public class Criteria<T> {
      * @return
      */
     public Criteria<T> andWithBracket(String fieldName, Object value) {
-        this.andWithBracket(fieldName, "=", value);
+        this.andWithBracket(fieldName, Operator.EQ, value);
         return this;
     }
 
@@ -200,7 +213,7 @@ public class Criteria<T> {
      * @param values
      * @return
      */
-    public Criteria<T> andWithBracket(String fieldName, String fieldOperator, Object... values) {
+    public Criteria<T> andWithBracket(String fieldName, Operator fieldOperator, Object... values) {
         this.sqlBuilder.add("and ( ", fieldName, fieldOperator, FieldType.WHERE, values);
         return this;
     }
@@ -213,7 +226,7 @@ public class Criteria<T> {
      * @return
      */
     public Criteria<T> or(String fieldName, Object value) {
-        this.or(fieldName, "=", value);
+        this.or(fieldName, Operator.EQ, value);
         return this;
     }
 
@@ -224,7 +237,7 @@ public class Criteria<T> {
      * @param values
      * @return
      */
-    public Criteria<T> or(String fieldName, String fieldOperator, Object... values) {
+    public Criteria<T> or(String fieldName, Operator fieldOperator, Object... values) {
         this.sqlBuilder.add("or ", fieldName, fieldOperator, FieldType.WHERE, values);
         return this;
     }
@@ -237,7 +250,7 @@ public class Criteria<T> {
      * @return
      */
     public Criteria<T> orWithBracket(String fieldName, Object value) {
-        this.orWithBracket(fieldName, "=", value);
+        this.orWithBracket(fieldName, Operator.EQ, value);
         return this;
     }
 
@@ -248,7 +261,7 @@ public class Criteria<T> {
      * @param values
      * @return
      */
-    public Criteria<T> orWithBracket(String fieldName, String fieldOperator, Object... values) {
+    public Criteria<T> orWithBracket(String fieldName, Operator fieldOperator, Object... values) {
         this.sqlBuilder.add("or ( ", fieldName, fieldOperator, FieldType.WHERE, values);
         return this;
     }

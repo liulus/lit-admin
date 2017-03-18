@@ -27,7 +27,7 @@ public class Goods implements Serializable {
 
     private static final long serialVersionUID = -7915472099544797458L;
 
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @SequenceGenerator(sequenceName = "seq_goods")
     private Long goodsId;
 

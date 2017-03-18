@@ -9,6 +9,7 @@ import net.skeyurt.lit.commons.page.PageService;
 import net.skeyurt.lit.commons.page.Pager;
 import net.skeyurt.lit.dao.JdbcDao;
 import net.skeyurt.lit.dao.builder.Criteria;
+import net.skeyurt.lit.dao.enums.Operator;
 import net.skeyurt.lit.dao.generator.KeyGenerator;
 import net.skeyurt.lit.dao.model.SqlResult;
 import net.skeyurt.lit.dao.transfer.AnnotationRowMapper;
@@ -58,7 +59,7 @@ public class JdbcDaoImpl implements JdbcDao {
         KeyGenerator keyGenerator = criteria.getKeyGenerator();
         if (keyGenerator != null) {
             idValue = keyGenerator.generateKey();
-            criteria.into(criteria.getPkName(), idValue);
+            criteria.into(criteria.getPkName(), idValue, true);
         }
 
         sqlResult = criteria.build();
@@ -94,7 +95,7 @@ public class JdbcDaoImpl implements JdbcDao {
     @Override
     public <T> int deleteByIds(Class<T> clazz, Serializable... ids) {
         Criteria<T> criteria = Criteria.delete(clazz);
-        SqlResult sqlResult = criteria.where(criteria.getPkName(), "in", (Object[]) ids).build();
+        SqlResult sqlResult = criteria.where(criteria.getPkName(), Operator.IN, (Object[]) ids).build();
         return executeUpdate(sqlResult.getSql(), sqlResult.getParams().toArray());
     }
 

@@ -2,6 +2,7 @@ package net.skeyurt.lit.dao.builder;
 
 import net.skeyurt.lit.commons.bean.BeanUtils;
 import net.skeyurt.lit.dao.enums.FieldType;
+import net.skeyurt.lit.dao.enums.Operator;
 import net.skeyurt.lit.dao.model.SqlResult;
 import org.apache.commons.lang3.StringUtils;
 
@@ -21,18 +22,19 @@ class DeleteBuilder extends AbstractSqlBuilder {
 
     @Override
     public void initEntity(Object entity, Boolean isIgnoreNull) {
-        if (entity != null) {
-            Object obj = BeanUtils.invokeReaderMethod(entity, tableInfo.getPkField());
-            if (obj != null && (!(obj instanceof String) || StringUtils.isNotBlank((String) obj))) {
-                whereBuilder.add("and", tableInfo.getPkField(), "=", FieldType.WHERE, obj);
-            } else {
-                throw new NullPointerException("entity ["+entity+"] id is null, can not delete!");
-            }
+        if (entity == null) {
+            return;
+        }
+        Object obj = BeanUtils.invokeReaderMethod(entity, tableInfo.getPkField());
+        if (obj != null && (!(obj instanceof String) || StringUtils.isNotBlank((String) obj))) {
+            whereBuilder.add("and ", tableInfo.getPkField(), Operator.EQ, FieldType.WHERE, obj);
+        } else {
+            throw new NullPointerException("entity [" + entity + "] id is null, can not delete!");
         }
     }
 
     @Override
-    public void add(String logicOperator, String fieldName, String fieldOperator, FieldType fieldType, Object... values) {
+    public void add(String logicOperator, String fieldName, Operator fieldOperator, FieldType fieldType, Object... values) {
         whereBuilder.add(logicOperator, fieldName, fieldOperator, fieldType, values);
     }
 
@@ -41,7 +43,7 @@ class DeleteBuilder extends AbstractSqlBuilder {
         StringBuilder sql = new StringBuilder("delete from ").append(tableInfo.getTableName());
 
         SqlResult whereResult = whereBuilder.build();
-        sql.append(" ").append(whereResult.getSql());
+        sql.append(whereResult.getSql());
         return new SqlResult(sql.toString(), whereResult.getParams());
     }
 

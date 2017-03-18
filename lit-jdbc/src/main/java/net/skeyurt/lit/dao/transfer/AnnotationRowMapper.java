@@ -5,7 +5,6 @@ import net.skeyurt.lit.commons.util.ClassUtils;
 import net.skeyurt.lit.commons.util.NameUtils;
 import net.skeyurt.lit.dao.annotation.Column;
 import net.skeyurt.lit.dao.annotation.Transient;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.JdbcUtils;
 
@@ -57,7 +56,7 @@ public class AnnotationRowMapper<T> implements RowMapper<T> {
 
         ResultSetMetaData rsMetaData = rs.getMetaData();
         for (int i = 1; i <= rsMetaData.getColumnCount(); i++) {
-            String column = StringUtils.trim(JdbcUtils.lookupColumnName(rsMetaData, i));
+            String column = JdbcUtils.lookupColumnName(rsMetaData, i).replaceAll(" ", "").toLowerCase();
             PropertyDescriptor pd = this.mappedFields.get(column);
             if (pd != null) {
                 Object value = JdbcUtils.getResultSetValue(rs, i, pd.getPropertyType());

@@ -97,6 +97,7 @@ public class TableInfo {
         if (generated.generator() != EmptyKeyGenerator.class) {
             generatorClass = generated.generator();
             if (Objects.equals(generatorClass, net.skeyurt.lit.dao.generator.SequenceGenerator.class)) {
+                generationType = GenerationType.SEQUENCE;
                 SequenceGenerator sequenceGenerator = field.getAnnotation(SequenceGenerator.class);
                 sequenceName = sequenceGenerator == null ? "seq_" + tableName : sequenceGenerator.sequenceName();
             }

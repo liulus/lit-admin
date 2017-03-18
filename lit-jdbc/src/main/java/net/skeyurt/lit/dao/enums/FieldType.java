@@ -12,6 +12,8 @@ public enum FieldType {
 
     INSERT,
 
+    INSERT_NATIVE,
+
     UPDATE,
 
     WHERE,

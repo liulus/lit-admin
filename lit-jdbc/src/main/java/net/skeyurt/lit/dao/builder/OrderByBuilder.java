@@ -1,11 +1,10 @@
 package net.skeyurt.lit.dao.builder;
 
 import net.skeyurt.lit.dao.enums.FieldType;
+import net.skeyurt.lit.dao.enums.Operator;
 import net.skeyurt.lit.dao.model.SqlResult;
 import net.skeyurt.lit.dao.model.TableInfo;
 import org.apache.commons.lang3.StringUtils;
-
-import java.util.Objects;
 
 /**
  * User : liulu
@@ -26,9 +25,8 @@ class OrderByBuilder extends AbstractSqlBuilder {
     }
 
     @Override
-    public void add(String logicOperator, String fieldName, String fieldOperator, FieldType fieldType, Object... values) {
-        String columnName = tableInfo.getFieldColumnMap().get(StringUtils.trim(fieldName));
-        Objects.requireNonNull(columnName, String.format("fieldName [ %s ] not exist!", fieldName));
+    public void add(String logicOperator, String fieldName, Operator fieldOperator, FieldType fieldType, Object... values) {
+        String columnName = getColumn(fieldName);
         orderBySql.append(StringUtils.isEmpty(orderBySql) ? " " : ", ").append(columnName);
         if (fieldType == FieldType.ORDER_BY_ASC) {
             orderBySql.append(" asc");
@@ -43,10 +41,5 @@ class OrderByBuilder extends AbstractSqlBuilder {
             return SqlResult.EMPTY_RESULT;
         }
         return new SqlResult("order by" + orderBySql, null);
-    }
-
-    @Override
-    public TableInfo getTableInfo() {
-        return tableInfo;
     }
 }

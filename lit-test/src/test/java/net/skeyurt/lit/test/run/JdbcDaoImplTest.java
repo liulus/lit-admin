@@ -6,11 +6,13 @@ import net.skeyurt.lit.commons.page.PageList;
 import net.skeyurt.lit.commons.page.PageService;
 import net.skeyurt.lit.dao.JdbcDao;
 import net.skeyurt.lit.dao.builder.Criteria;
+import net.skeyurt.lit.dao.enums.Operator;
 import net.skeyurt.lit.dao.transfer.CriteriaTransfer;
 import net.skeyurt.lit.test.base.BaseTest;
 import net.skeyurt.lit.test.bean.Goods;
 import net.skeyurt.lit.test.bean.GoodsVo;
 import org.junit.Test;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.io.StringWriter;
@@ -24,6 +26,7 @@ import java.util.Date;
  * version $Id: JdbcDaoImplTest.java, v 0.1 Exp $
  */
 @Slf4j
+@Transactional
 public class JdbcDaoImplTest extends BaseTest {
 
     @Resource
@@ -68,20 +71,18 @@ public class JdbcDaoImplTest extends BaseTest {
         long id1 = jdbcDao.insert(goods1);
         goods1.setGoodsId(id1);
 
-        Goods goodsId1 = jdbcDao.get(Goods.class, id1);
-        log.info("\n 修改前: {} \n", goodsId1);
+        log.info("\n 修改前: {} \n", goods1);
 
-        goodsId1.setName("名称修改");
-        goodsId1.setPrice(18.88D);
-        goodsId1.setInventory(null);
+        goods1.setName("名称修改");
+        goods1.setPrice(18.88D);
+        goods1.setInventory(null);
 
-        int rows = jdbcDao.update(goodsId1);
+        int rows = jdbcDao.update(goods1);
         log.info("\n 修改了 {} 行数据 \n", rows);
 
-        goodsId1 = jdbcDao.get(Goods.class, id1);
-        log.info("\n 修改后: {} \n", goodsId1);
+        log.info("\n 修改后: {} \n", goods1);
 
-        jdbcDao.delete(goodsId1);
+        jdbcDao.delete(goods1);
 
 
     }
@@ -109,7 +110,7 @@ public class JdbcDaoImplTest extends BaseTest {
 
     @Test
     public void get() throws Exception {
-        Goods goods = jdbcDao.get(Goods.class, 1002);
+        Goods goods = jdbcDao.get(Goods.class, 10002);
         log.info("查询实体： {}", goods);
     }
 
@@ -143,7 +144,7 @@ public class JdbcDaoImplTest extends BaseTest {
         PageList<Goods> goodsList = (PageList<Goods>) jdbcDao.query(Goods.class, goodsVo, new CriteriaTransfer<GoodsVo>() {
             @Override
             public void transQuery(GoodsVo goodsVo, Criteria criteria, Class<?> entityClass) {
-                criteria.and("price", ">", goodsVo.getStartPrice()).and("price", "<=", goodsVo.getEndPrice());
+                criteria.or("price", Operator.GT, goodsVo.getStartPrice()).or("price", Operator.LT, goodsVo.getEndPrice());
             }
         });
 

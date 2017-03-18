@@ -1,6 +1,7 @@
 package net.skeyurt.lit.dao.builder;
 
 import net.skeyurt.lit.dao.enums.FieldType;
+import net.skeyurt.lit.dao.enums.Operator;
 import net.skeyurt.lit.dao.model.SqlResult;
 import net.skeyurt.lit.dao.model.TableInfo;
 
@@ -28,7 +29,7 @@ public interface SqlBuilder {
      * @param fieldType     字段操作类型， 用于区分哪个 builder 进行操作
      * @param values        参数值
      */
-    void add(String logicOperator, String fieldName, String fieldOperator, FieldType fieldType, Object... values);
+    void add(String logicOperator, String fieldName, Operator fieldOperator, FieldType fieldType, Object... values);
 
     /**
      * 构建 sql 结果，包括 sql 语句和参数值
@@ -39,6 +40,7 @@ public interface SqlBuilder {
 
     /**
      * 获取操作对象的表信息
+     *
      * @return
      */
     TableInfo getTableInfo();

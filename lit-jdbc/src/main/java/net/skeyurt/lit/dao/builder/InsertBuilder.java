@@ -26,7 +26,7 @@ class InsertBuilder extends AbstractSqlBuilder {
             initNativeMap();
             nativeValueMap.put(column, null);
         } else if (values.length > 1) {
-            throw new IllegalArgumentException("insert only one args!");
+            throw new IllegalArgumentException("insert 参数个数错误!");
         } else if (fieldType == FieldType.INSERT_NATIVE) {
             initNativeMap();
             nativeValueMap.put(column, values[0]);
@@ -57,6 +57,12 @@ class InsertBuilder extends AbstractSqlBuilder {
 
         sql.deleteCharAt(sql.lastIndexOf(",")).append(")").append(values).deleteCharAt(sql.lastIndexOf(",")).append(")");
         return new SqlResult(sql.toString(), new ArrayList<>(columnValueMap.values()));
+    }
+
+    private void initNativeMap() {
+        if (nativeValueMap == null) {
+            nativeValueMap = new HashMap<>();
+        }
     }
 
 }

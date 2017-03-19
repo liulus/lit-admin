@@ -1,12 +1,11 @@
 package net.skeyurt.lit.dao.builder;
 
-import net.skeyurt.lit.commons.bean.BeanUtils;
-import net.skeyurt.lit.dao.model.TableInfo;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import net.skeyurt.lit.commons.bean.BeanUtils;
+import net.skeyurt.lit.dao.model.TableInfo;
 import org.apache.commons.lang3.StringUtils;
 
-import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -52,10 +51,5 @@ abstract class AbstractSqlBuilder implements SqlBuilder {
         return StringUtils.isEmpty(column) ? fieldName : column;
     }
 
-    protected void initNativeMap() {
-        if (nativeValueMap == null) {
-            nativeValueMap = new HashMap<>();
-        }
-    }
 
 }

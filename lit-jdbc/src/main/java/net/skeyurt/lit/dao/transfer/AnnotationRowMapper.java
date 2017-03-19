@@ -43,7 +43,7 @@ public class AnnotationRowMapper<T> implements RowMapper<T> {
             Column column = field.getAnnotation(Column.class);
             PropertyDescriptor pd = BeanUtils.getPropertyDescriptor(mappedClass, field.getName());
             if (pd != null && pd.getReadMethod() != null && pd.getWriteMethod() != null) {
-                mappedFields.put(column != null ? column.name() : NameUtils.getUnderLineName(field.getName()), pd);
+                mappedFields.put(column != null ? column.name().toLowerCase() : NameUtils.getUnderLineName(field.getName()), pd);
             }
         }
     }

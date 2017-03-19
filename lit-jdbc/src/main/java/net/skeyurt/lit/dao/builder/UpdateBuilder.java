@@ -40,7 +40,7 @@ class UpdateBuilder extends AbstractSqlBuilder {
             if (values == null || values.length == 0 || values[0] == null) {
                 columnValueMap.put(column, null);
             } else if (values.length > 1) {
-                throw new RuntimeException("update only one args!");
+                throw new IllegalArgumentException("update 参数个数错误!");
             } else {
                 columnValueMap.put(column, values[0]);
             }

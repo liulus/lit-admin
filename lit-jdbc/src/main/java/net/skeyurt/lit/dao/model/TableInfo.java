@@ -38,7 +38,7 @@ public class TableInfo {
     private Class<? extends KeyGenerator>         generatorClass;
 
     /** 主键生成类型 */
-    private GenerationType generationType;
+    private GenerationType                        generationType;
 
     /** 如果主键是序列生成, 序列名 */
     private String                                sequenceName;
@@ -57,7 +57,7 @@ public class TableInfo {
      * @param clazz 实体类的 class
      */
     private void initTableInfo(Class<?> clazz) {
-        tableName = clazz.isAnnotationPresent(Table.class) ? ((Table) clazz.getAnnotation(Table.class)).name()
+        tableName = clazz.isAnnotationPresent(Table.class) ? clazz.getAnnotation(Table.class).name()
                 : NameUtils.getUnderLineName(clazz.getSimpleName());
 
         Field[] fields = clazz.getDeclaredFields();
@@ -67,18 +67,20 @@ public class TableInfo {
                 continue;
             }
 
+            String fieldName = field.getName();
             Column column = field.getAnnotation(Column.class);
+            String columnName = column != null ? column.name().toLowerCase() : NameUtils.getUnderLineName(fieldName);
 
             // 主键信息 : 有 @Id 注解的字段，没有默认是 类名+Id
-            if (field.isAnnotationPresent(Id.class) || (StringUtils.equalsIgnoreCase(field.getName(), clazz.getSimpleName() + "Id") && pkField == null)) {
-                pkField = field.getName();
-                pkColumn = column != null ? column.name() : NameUtils.getUnderLineName(field.getName());
+            if (field.isAnnotationPresent(Id.class) || (StringUtils.equalsIgnoreCase(fieldName, clazz.getSimpleName() + "Id") && pkField == null)) {
+                pkField = fieldName;
+                pkColumn = columnName;
                 initAutoKeyInfo(field);
             }
             // 将字段对应的列放到 map 中
-            PropertyDescriptor descriptor = BeanUtils.getPropertyDescriptor(clazz, field.getName());
+            PropertyDescriptor descriptor = BeanUtils.getPropertyDescriptor(clazz, fieldName);
             if (descriptor != null && descriptor.getReadMethod() != null && descriptor.getWriteMethod() != null) {
-                fieldColumnMap.put(field.getName(), column != null ? column.name() : NameUtils.getUnderLineName(field.getName()));
+                fieldColumnMap.put(fieldName, columnName);
             }
         }
     }

@@ -15,6 +15,7 @@ import net.skeyurt.lit.dao.model.SqlResult;
 import net.skeyurt.lit.dao.transfer.AnnotationRowMapper;
 import net.skeyurt.lit.dao.transfer.CriteriaTransfer;
 import net.skeyurt.lit.dao.transfer.DefaultCriteriaTransfer;
+import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.jdbc.core.ArgumentPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcOperations;
 import org.springframework.jdbc.core.PreparedStatementCreator;
@@ -145,8 +146,9 @@ public class JdbcDaoImpl implements JdbcDao {
         List<T> results = query(clazz, sql, args);
         if (results == null || results.size() == 0) {
             return null;
-        } else if (results.size() > 1) {
-            throw new RuntimeException("no unique result for this query!");
+        }
+        if (results.size() > 1) {
+            throw new IncorrectResultSizeDataAccessException(1, results.size() );
         }
         return results.iterator().next();
     }

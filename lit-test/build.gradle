@@ -6,7 +6,6 @@ dependencies {
             libs.'lombok',
             libs.'commons-io',
             libs.'spring-boot-test',
-            libs.'spring-aspects',
             libs.'jackson-annotations',
             libs.'jackson-core',
             libs.'jackson-databind',

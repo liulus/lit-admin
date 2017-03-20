@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Index</title>
+</head>
+<body>
+这是简单的首页
+<p th:text="${dbName}"></p>
+<p th:text="${goodsList.totalRecord}"></p>
+<p th:text="${goodsList.totalPage}"></p>
+<hr>
+
+<table>
+    <tr>
+        <th>序号</th>
+        <th>编码</th>
+        <th>名称</th>
+        <th>价格</th>
+        <th>库存</th>
+    </tr>
+    <tr th:each="goods, goodsStats : ${goodsList}">
+        <td th:text="${goodsStats.count}"></td>
+        <td th:text="${goods.code}"></td>
+        <td th:text="${goods.name}"></td>
+        <td th:text="${goods.price}"></td>
+        <td th:text="${goods.inventory}"></td>
+    </tr>
+
+
+</table>
+
+
+</body>
+</html>

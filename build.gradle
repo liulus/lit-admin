@@ -2,6 +2,7 @@ ext {
     slf4jVersion = '1.7.21'
     logbackVersion = '1.1.7'
     jacksonVersion = '2.8.3'
+    thymeleafVersion = '3.0.2.RELEASE'
     springVersion = '4.3.2.RELEASE'
     springBootVersion = '1.4.0.RELEASE'
 
@@ -18,6 +19,8 @@ ext {
             'c3p0'                  : "c3p0:c3p0:0.9.1.2",
             'mysql'                 : "mysql:mysql-connector-java:5.1.38",
             'oracle'                : "com.oracle:ojdbc6:11.2.0.3",
+            'thymeleaf'             : "org.thymeleaf:thymeleaf:${thymeleafVersion}",
+            'thymeleaf-spring4'     : "org.thymeleaf:thymeleaf-spring4:${thymeleafVersion}",
             'jackson-core'          : "com.fasterxml.jackson.core:jackson-core:${jacksonVersion}",
             'jackson-annotations'   : "com.fasterxml.jackson.core:jackson-annotations:${jacksonVersion}",
             'jackson-databind'      : "com.fasterxml.jackson.core:jackson-databind:${jacksonVersion}",
@@ -30,6 +33,8 @@ ext {
             'spring-aspects'        : "org.springframework:spring-aspects:${springVersion}",
             'spring-webmvc'         : "org.springframework:spring-webmvc:${springVersion}",
             'spring-test'           : "org.springframework:spring-test:${springVersion}",
+            'spring-boot-web'       : "org.springframework.boot:spring-boot-starter-web:${springBootVersion}",
+            'spring-boot-tomcat'    : "org.springframework.boot:spring-boot-starter-tomcat:${springBootVersion}",
             'spring-boot-test'      : "org.springframework.boot:spring-boot-starter-test:${springBootVersion}"
     ]
 }

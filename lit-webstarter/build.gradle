@@ -1,0 +1,22 @@
+apply plugin: 'war'
+
+dependencies {
+
+    compile libs.'jcl-over-slf4j',
+            libs.'slf4j-log4j12',
+            libs.'thymeleaf-spring4',
+            libs.'jackson-databind',
+            libs.'c3p0',
+            libs.'mysql',
+            libs.'oracle',
+            project(':lit-jdbc')
+    compile (libs.'spring-boot-web'){
+        exclude module: 'spring-boot-starter-tomcat'
+        exclude module: 'spring-boot-starter-logging'
+        exclude module: 'hibernate-validator'
+        exclude module : 'jackson-databind'
+    }
+    compile libs.'spring-boot-tomcat'
+
+
+}

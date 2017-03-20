@@ -1,0 +1,15 @@
+c3p0:
+#  jdbcUrl: jdbc:mysql://localhost:3306/imooc
+#  driverClass: com.mysql.jdbc.Driver
+#  user: root
+#  password: 123456
+  jdbcUrl: jdbc:oracle:thin:@localhost:49161:XE
+  driverClass: oracle.jdbc.OracleDriver
+  user: liulu
+  password: 123456
+
+
+spring:
+  thymeleaf:
+    cache: false
+

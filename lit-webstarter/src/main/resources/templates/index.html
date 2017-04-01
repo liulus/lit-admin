@@ -7,8 +7,8 @@
 <body>
 这是简单的首页
 <p th:text="${dbName}"></p>
-<p th:text="${goodsList.totalRecord}"></p>
-<p th:text="${goodsList.totalPage}"></p>
+<p th:text="${goodsList.pageInfo.totalRecord}"></p>
+<p th:text="${goodsList.pageInfo.totalPage}"></p>
 <hr>
 
 <table>

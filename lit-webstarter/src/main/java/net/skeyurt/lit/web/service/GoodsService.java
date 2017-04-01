@@ -1,5 +1,6 @@
 package net.skeyurt.lit.web.service;
 
+import net.skeyurt.lit.commons.exception.AppUnCheckedException;
 import net.skeyurt.lit.dao.JdbcDao;
 import net.skeyurt.lit.dao.builder.Criteria;
 import net.skeyurt.lit.dao.enums.Operator;
@@ -35,4 +36,13 @@ public class GoodsService {
     }
 
 
+    public void testEx() {
+
+//        throw new AppCheckedException("进错方法了");
+
+        throw new AppUnCheckedException();
+//        int i = 5 / 0;
+
+
+    }
 }

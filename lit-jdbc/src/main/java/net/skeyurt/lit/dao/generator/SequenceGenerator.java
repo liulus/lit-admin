@@ -1,7 +1,5 @@
 package net.skeyurt.lit.dao.generator;
 
-import net.skeyurt.lit.commons.context.GlobalParam;
-
 import java.io.Serializable;
 
 /**
@@ -19,10 +17,9 @@ public class SequenceGenerator implements KeyGenerator {
     }
 
     @Override
-    public Serializable generateKey() {
+    public Serializable generateKey(String dbName) {
         String seqName = getSequenceName();
         removeSequenceName();
-        String dbName = GlobalParam.get("dbName", String.class);
         switch (dbName) {
             case "DB2":
                 return "next value for " + seqName;

@@ -1,9 +1,6 @@
 package net.skeyurt.lit.web.vo;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import net.skeyurt.lit.commons.page.Pager;
 
 import java.io.Serializable;

@@ -15,8 +15,11 @@ import net.skeyurt.lit.dao.model.SqlResult;
 import net.skeyurt.lit.dao.transfer.AnnotationRowMapper;
 import net.skeyurt.lit.dao.transfer.CriteriaTransfer;
 import net.skeyurt.lit.dao.transfer.DefaultCriteriaTransfer;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.dao.DataAccessException;
 import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.jdbc.core.ArgumentPreparedStatementSetter;
+import org.springframework.jdbc.core.ConnectionCallback;
 import org.springframework.jdbc.core.JdbcOperations;
 import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -45,6 +48,9 @@ public class JdbcDaoImpl implements JdbcDao {
     @Setter
     private JdbcOperations jdbcTemplate;
 
+    @Setter
+    private String dbName;
+
     public JdbcDaoImpl(JdbcOperations jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
@@ -59,7 +65,7 @@ public class JdbcDaoImpl implements JdbcDao {
         Serializable idValue = null;
         KeyGenerator keyGenerator = criteria.getKeyGenerator();
         if (keyGenerator != null) {
-            idValue = keyGenerator.generateKey();
+            idValue = keyGenerator.generateKey(getDbName());
             criteria.into(criteria.getPkName(), idValue, true);
         }
 
@@ -67,7 +73,7 @@ public class JdbcDaoImpl implements JdbcDao {
         final Object[] args = sqlResult.getParams().toArray();
         if (criteria.isAutoGenerateKey() && (keyGenerator == null || keyGenerator.isGenerateBySql())) {
             KeyHolder keyHolder = new GeneratedKeyHolder();
-            log.info("\n sql : {} \nargs : {}\n", sqlResult.getSql(), Arrays.toString(args));
+            log.info("\nsql : {}  args : {}", sqlResult.getSql(), Arrays.toString(args));
             jdbcTemplate.update(new PreparedStatementCreator() {
                 @Override
                 public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
@@ -114,7 +120,7 @@ public class JdbcDaoImpl implements JdbcDao {
     }
 
     private int executeUpdate(String sql, Object... args) {
-        log.info("\n sql : {} \nargs : {}\n", sql, Arrays.toString(args));
+        log.info("\nsql : {}  args : {}", sql, Arrays.toString(args));
         return jdbcTemplate.update(sql, args);
     }
 
@@ -223,6 +229,18 @@ public class JdbcDaoImpl implements JdbcDao {
         //noinspection unchecked
         transfer.transQuery(qo, criteria, clazz);
         return criteria;
+    }
+
+    private String getDbName() {
+        if (StringUtils.isEmpty(dbName)) {
+            dbName = jdbcTemplate.execute(new ConnectionCallback<String>() {
+                @Override
+                public String doInConnection(Connection con) throws SQLException, DataAccessException {
+                    return con.getMetaData().getDatabaseProductName().toUpperCase();
+                }
+            });
+        }
+        return dbName;
     }
 
 }

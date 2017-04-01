@@ -1,6 +1,7 @@
 package net.skeyurt.lit.commons.page;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.io.Serializable;
@@ -10,6 +11,7 @@ import java.io.Serializable;
  * Date : 2016-10-5 11:03
  */
 @Setter
+@NoArgsConstructor
 public class Pager implements Serializable {
 
     private static final long serialVersionUID = -2502137541842239335L;
@@ -32,9 +34,6 @@ public class Pager implements Serializable {
 
     @Getter
     private String keyWord;
-
-    public Pager() {
-    }
 
     public Pager(int pageSize, int pageNum) {
         this.pageSize = pageSize;

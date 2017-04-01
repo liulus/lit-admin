@@ -2,6 +2,7 @@ package net.skeyurt.lit.test.run;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
+import net.skeyurt.lit.commons.page.PageInfo;
 import net.skeyurt.lit.commons.page.PageList;
 import net.skeyurt.lit.commons.page.PageService;
 import net.skeyurt.lit.dao.JdbcDao;
@@ -148,7 +149,9 @@ public class JdbcDaoImplTest extends BaseTest {
             }
         });
 
-        log.info("pageSize: {}, pageNum: {}, totalRecord: {}", goodsList.getPageSize(), goodsList.getPageNum(), goodsList.getTotalRecord());
+        PageInfo pageInfo = goodsList.getPageInfo();
+
+        log.info("pageSize: {}, pageNum: {}, totalRecord: {}", pageInfo.getPageSize(), pageInfo.getPageNum(), pageInfo.getTotalRecord());
 
         log.info("  \n{} \n {}", Arrays.toString(goodsList.toArray(new Goods[goodsList.size()])), goodsList.size());
 

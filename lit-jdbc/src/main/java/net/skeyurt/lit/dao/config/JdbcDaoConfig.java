@@ -1,6 +1,5 @@
 package net.skeyurt.lit.dao.config;
 
-import net.skeyurt.lit.commons.context.GlobalParam;
 import net.skeyurt.lit.commons.page.PageInterceptor;
 import net.skeyurt.lit.commons.page.PageSqlHandler;
 import net.skeyurt.lit.dao.JdbcDao;
@@ -13,12 +12,8 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.core.env.Environment;
-import org.springframework.dao.DataAccessException;
-import org.springframework.jdbc.core.ConnectionCallback;
 import org.springframework.jdbc.core.JdbcOperations;
 
-import java.sql.Connection;
-import java.sql.SQLException;
 import java.util.Map;
 
 /**
@@ -42,29 +37,16 @@ public class JdbcDaoConfig {
     @Bean
     public JdbcDao jdbcDao(ApplicationContext context, Environment environment) {
 
-        String templateBeanName = environment.getProperty("lit.jdbc.template");
-
-        if (StringUtils.isNotEmpty(templateBeanName)) {
-            JdbcOperations jdbcOperations = (JdbcOperations) context.getBean(templateBeanName);
-            initDbName(jdbcOperations);
-            return new JdbcDaoImpl(jdbcOperations);
-        }
         Map<String, JdbcOperations> jdbcOperationsBeans = context.getBeansOfType(JdbcOperations.class);
-        if (jdbcOperationsBeans != null && jdbcOperationsBeans.size() == 1) {
-            JdbcOperations jdbcOperations = jdbcOperationsBeans.values().iterator().next();
-            initDbName(jdbcOperations);
-            return new JdbcDaoImpl(jdbcOperations);
+        if (jdbcOperationsBeans == null || jdbcOperationsBeans.size() == 0) {
+            return null;
         }
-        return null;
-    }
+        String templateBeanName = environment.getProperty("lit.jdbc.template");
+        JdbcDaoImpl jdbcDao = new JdbcDaoImpl(StringUtils.isEmpty(templateBeanName) ?
+                jdbcOperationsBeans.values().iterator().next() : jdbcOperationsBeans.get(templateBeanName));
+        jdbcDao.setDbName(environment.getProperty("lit.jdbc.dbName"));
 
-    private void initDbName (JdbcOperations jdbcOperations) {
-        GlobalParam.put("dbName", jdbcOperations.execute(new ConnectionCallback<String>() {
-            @Override
-            public String doInConnection(Connection con) throws SQLException, DataAccessException {
-                return con.getMetaData().getDatabaseProductName().toUpperCase();
-            }
-        }));
+        return jdbcDao;
     }
 
 }

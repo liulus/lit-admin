@@ -14,7 +14,7 @@ public class UUIDGenerator implements KeyGenerator {
     }
 
     @Override
-    public String generateKey() {
+    public String generateKey(String dbName) {
         return UUIDUtils.getUUID32();
     }
 }

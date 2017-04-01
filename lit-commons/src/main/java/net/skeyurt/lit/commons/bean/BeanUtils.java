@@ -246,7 +246,7 @@ public class BeanUtils {
             return Collections.emptyList();
         } else if (sourceList instanceof PageList) {
             PageList sourcePage = (PageList) sourceList;
-            resultList = new PageList<>(sourcePage.getPageSize(), sourcePage.getPageNum(), sourcePage.getTotalRecord());
+            resultList = new PageList<>(sourcePage.getPageInfo(), sourcePage.size());
         } else {
             resultList = new ArrayList<>();
         }

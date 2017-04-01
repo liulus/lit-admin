@@ -42,10 +42,11 @@ public class PageInterceptor {
                 sqlParams = (Object[]) obj;
             }
         }
+        String paramStr = Arrays.toString(sqlParams);
 
         Pager pager = PageService.getPager();
         if (pager == null) {
-            log.info("\n sql : {} \nargs : {}\n", querySql, Arrays.toString(sqlParams));
+            log.info("\nsql : {}  args : {}", querySql, paramStr);
             return pjp.proceed();
         }
 
@@ -57,7 +58,7 @@ public class PageInterceptor {
         List result;
         if (pager.isCount()) {
             String countSql = getPageSqlHandler().getCountSql(dbName, querySql);
-            log.info("\n sql : {} \nargs : {}\n", countSql, Arrays.toString(sqlParams));
+            log.info("\nsql : {}  args : {}", countSql, paramStr);
             Integer totalRecord = target.queryForObject(countSql, sqlParams, Integer.class);
             result = new PageList(pager.getPageSize(), pager.getPageNum(), totalRecord);
             if (Objects.equals(totalRecord, 0)) {
@@ -69,7 +70,7 @@ public class PageInterceptor {
 
         args[0] = getPageSqlHandler().getPageSql(dbName, querySql, pager.getPageSize(), pager.getPageNum());
 
-        log.info("\n sql : {} \nargs : {}\n", args[0], Arrays.toString(sqlParams));
+        log.info("\nsql : {}  args : {}", args[0], paramStr);
         //noinspection unchecked
         result.addAll((Collection) pjp.proceed(args));
 

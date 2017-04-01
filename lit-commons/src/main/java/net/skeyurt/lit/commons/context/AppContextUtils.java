@@ -6,6 +6,7 @@ import org.springframework.context.ApplicationContextAware;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
+import java.lang.annotation.Annotation;
 import java.util.Map;
 
 /**
@@ -14,9 +15,9 @@ import java.util.Map;
  * version $Id: ApplicationContextUtils.java, v 0.1 Exp $
  */
 @Component
-public class ApplicationContextUtils implements ApplicationContextAware {
+public class AppContextUtils implements ApplicationContextAware {
 
-    private ApplicationContextUtils(){}
+    private AppContextUtils(){}
 
     private static ApplicationContext context;
 
@@ -46,6 +47,10 @@ public class ApplicationContextUtils implements ApplicationContextAware {
         return context.getBeansOfType(clazz);
     }
 
+    public static Map<String, Object> getBeansWithAnnotation(Class<? extends Annotation> clazz) {
+        return context.getBeansWithAnnotation(clazz);
+    }
+
     public static String getProperty (String key) {
         return environment.getProperty(key);
     }
@@ -59,7 +64,6 @@ public class ApplicationContextUtils implements ApplicationContextAware {
     }
 
     public static <T> T getProperty (String key, Class<T> targetType, T defaultValue) {
-        environment.acceptsProfiles("dev");
         return environment.getProperty(key, targetType, defaultValue);
     }
 

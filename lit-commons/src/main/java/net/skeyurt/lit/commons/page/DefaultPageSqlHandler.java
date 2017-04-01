@@ -28,10 +28,10 @@ public class DefaultPageSqlHandler implements PageSqlHandler {
         }
         sql = sql.toLowerCase().replaceAll(" {2,}+", " ");
 
-        if (sql.contains("order by")) {
-            if (sql.lastIndexOf('?') > sql.indexOf("order by")) {
-                return COUNT + sql.substring(sql.indexOf("from"));
-            }
+        if (sql.contains("distinct")) {
+            return COUNT + "from ( " + sql + " )";
+        }
+        if (sql.contains("order by") && sql.lastIndexOf('?') < sql.indexOf("order by")) {
             return COUNT + sql.substring(sql.indexOf("from"), sql.indexOf("order by"));
         }
         return COUNT + sql.substring(sql.indexOf("from"));

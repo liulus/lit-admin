@@ -21,6 +21,12 @@ public class InitData extends BaseTest {
     @Resource
     private JdbcDao jdbcDao;
 
+
+    @Test
+    public void test () {
+        System.out.println("sss");
+    }
+
     @Test
     @Transactional
     @Rollback(value = false)

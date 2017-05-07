@@ -6,15 +6,19 @@ dependencies {
             libs.'slf4j-log4j12',
             libs.'thymeleaf-spring4',
             libs.'jackson-databind',
+            libs.'commons-io',
             libs.'c3p0',
             libs.'mysql',
             libs.'oracle',
-            project(':lit-jdbc')
+            project(':lit-plugins:lit-dictionary')
     compile (libs.'spring-boot-web'){
         exclude module: 'spring-boot-starter-tomcat'
         exclude module: 'spring-boot-starter-logging'
         exclude module: 'hibernate-validator'
         exclude module : 'jackson-databind'
+    }
+    compile (libs.'commons-fileupload',){
+        exclude module: 'commons-io'
     }
     compile libs.'spring-boot-tomcat'
 

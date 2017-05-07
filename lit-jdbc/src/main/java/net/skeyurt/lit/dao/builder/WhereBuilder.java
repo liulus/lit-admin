@@ -47,7 +47,7 @@ class WhereBuilder extends AbstractSqlBuilder {
             whereSql.deleteCharAt(whereSql.lastIndexOf(",")).append(") ");
         } else if (values == null || values.length == 0 || values[0] == null) {
             whereSql.append(logicOperator).append(columnName).append(" is null ");
-        }else {
+        } else {
             whereSql.append(logicOperator).append(columnName).append(fieldOperator.getValue()).append("? ");
             this.params.add(values[0]);
         }

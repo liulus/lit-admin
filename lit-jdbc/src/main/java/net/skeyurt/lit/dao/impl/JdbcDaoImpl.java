@@ -14,7 +14,7 @@ import net.skeyurt.lit.dao.generator.KeyGenerator;
 import net.skeyurt.lit.dao.model.SqlResult;
 import net.skeyurt.lit.dao.transfer.AnnotationRowMapper;
 import net.skeyurt.lit.dao.transfer.CriteriaTransfer;
-import net.skeyurt.lit.dao.transfer.DefaultCriteriaTransfer;
+import net.skeyurt.lit.dao.transfer.CriteriaTransferFactory;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.IncorrectResultSizeDataAccessException;
@@ -41,8 +41,6 @@ import java.util.Map;
 @Slf4j
 @NoArgsConstructor
 public class JdbcDaoImpl implements JdbcDao {
-
-    private static final CriteriaTransfer CRITERIA_TRANSFER = new DefaultCriteriaTransfer();
 
     @Getter
     @Setter
@@ -138,7 +136,7 @@ public class JdbcDaoImpl implements JdbcDao {
 
     @Override
     public <T, Qo> T queryForSingle(Class<T> clazz, Qo qo) {
-        return queryForSingle(getCriteria(clazz, qo, CRITERIA_TRANSFER));
+        return queryForSingle(getCriteria(clazz, qo, CriteriaTransferFactory.createTransfer(qo)));
     }
 
     @Override
@@ -166,7 +164,7 @@ public class JdbcDaoImpl implements JdbcDao {
 
     @Override
     public <T, Qo> List<T> query(Class<T> clazz, Qo qo) {
-        return query(getCriteria(clazz, qo, CRITERIA_TRANSFER));
+        return query(getCriteria(clazz, qo, CriteriaTransferFactory.createTransfer(qo)));
     }
 
     @Override
@@ -187,8 +185,7 @@ public class JdbcDaoImpl implements JdbcDao {
 
     @Override
     public <T, Qo extends Pager> PageList<T> queryPageList(Class<T> clazz, Qo qo) {
-        //noinspection unchecked
-        return queryPageList(clazz, qo, CRITERIA_TRANSFER);
+        return queryPageList(clazz, qo, CriteriaTransferFactory.createTransfer(qo));
     }
 
     @Override
@@ -204,7 +201,7 @@ public class JdbcDaoImpl implements JdbcDao {
 
     @Override
     public <T, Qo> int count(Class<T> clazz, Qo qo) {
-        return count(getCriteria(clazz, qo, CRITERIA_TRANSFER));
+        return count(getCriteria(clazz, qo, CriteriaTransferFactory.createTransfer(qo)));
     }
 
     @Override
@@ -224,9 +221,8 @@ public class JdbcDaoImpl implements JdbcDao {
     }
 
 
-    private <T, Qo> Criteria<T> getCriteria(Class<T> clazz, Qo qo, CriteriaTransfer transfer) {
+    private <T, Qo> Criteria<T> getCriteria(Class<T> clazz, Qo qo, CriteriaTransfer<Qo> transfer) {
         Criteria<T> criteria = Criteria.select(clazz);
-        //noinspection unchecked
         transfer.transQuery(qo, criteria, clazz);
         return criteria;
     }

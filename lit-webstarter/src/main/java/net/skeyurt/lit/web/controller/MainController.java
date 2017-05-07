@@ -9,6 +9,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.annotation.Resource;
@@ -38,7 +39,7 @@ public class MainController {
     @RequestMapping("/index")
     public String index(GoodsVo vo, Model model) {
 
-        model.addAttribute("goodsList", goodsService.queryPageList(vo));
+//        model.addAttribute("goodsList", goodsService.queryPageList(vo));
 
         PageInfo pageInfo = null;
         for (Object o : model.asMap().values()) {
@@ -52,7 +53,16 @@ public class MainController {
             model.addAttribute("pageInfo", pageInfo);
         }
 
-        return "index";
+//        return "index";
+        return "fileupload";
+    }
+
+    @RequestMapping("/upload")
+    public String upload(GoodsVo vo, MultipartFile fileDemo, Model model) {
+
+
+
+        return "";
     }
 
     @RequestMapping("/test")

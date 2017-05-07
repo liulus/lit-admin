@@ -1,0 +1,7 @@
+config:
+  f1: aaa
+  f2: bbb
+
+test:
+  t1: ccc
+  t2: ddd

@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head th:insert="commons::head-css(~{::title/text()}, ~{::link})">
+    <title>字典管理</title>
+
+    <!--<link rel="stylesheet" th:href="@{/libs/bootstrap/3.3.7/css/bootstrap.css}"/>-->
+</head>
+<body>
+<!-- 固定头部 -->
+<th:block th:replace="~{commons::header-nav}"/>
+<!-- 左侧菜单 -->
+<th:block th:replace="~{commons::left-menu}"/>
+
+<!-- 主页面 -->
+<div class="main col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2">
+    <div class="row">
+        <ol class="breadcrumb">
+            <li><a href="#"><i class="glyphicon glyphicon-home"></i></a></li>
+            <li class="active">系统管理</li>
+            <li class="active">字典管理</li>
+        </ol>
+    </div>
+
+    <h1 class="page-header">Dashboard</h1>
+
+</div>
+
+
+<th:block th:replace="~{commons::bottom-js}"/>
+</body>
+</html>

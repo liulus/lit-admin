@@ -1,12 +1,11 @@
 package net.skeyurt.lit.commons.util;
 
+import net.skeyurt.lit.commons.exception.AppUnCheckedException;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.*;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Properties;
+import java.net.URL;
+import java.util.*;
 
 /**
  * User : liulu
@@ -17,12 +16,50 @@ public class PropertyUtils {
     /**
      * 属性文件后缀
      */
-    private static final String        PRO_SUFFIX = ".properties";
+    private static final String PRO_SUFFIX = ".properties";
 
     /**
      * 配置文件保存map
      */
-    private static Map<String, String> propMap    = new HashMap<String, String>();
+    private static Map<String, String> propMap = new HashMap<String, String>();
+
+
+    static {
+        try {
+            loadResources();
+        } catch (IOException e) {
+            throw new AppUnCheckedException(e);
+        }
+    }
+
+    private static void loadResources() throws IOException {
+        Enumeration<URL> resources = ClassLoader.getSystemResources("");
+        while (resources.hasMoreElements()) {
+            String path = resources.nextElement().getPath();
+            File file = new File(path);
+            if (file.isDirectory()) {
+                File[] files = file.listFiles(new FileFilter() {
+                    @Override
+                    public boolean accept(File pathname) {
+                        System.out.println(pathname.getPath() + "====" + pathname.getName());
+                        return StringUtils.endsWith(pathname.getName(), PRO_SUFFIX);
+                    }
+                });
+
+
+            }
+        }
+    }
+
+
+    public static void main(String[] args) throws IOException {
+
+
+        StringBuilder builder = new StringBuilder("and234");
+        System.out.println(builder.indexOf("and"));
+
+    }
+
 
     /**
      * 加载资源文件

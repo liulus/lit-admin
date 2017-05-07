@@ -1,0 +1,11 @@
+subprojects{
+    dependencies {
+        compile libs.'spring-webmvc',
+                libs.'thymeleaf-spring4',
+                libs.'jackson-databind',
+                project(':lit-jdbc')
+
+
+    }
+}
+

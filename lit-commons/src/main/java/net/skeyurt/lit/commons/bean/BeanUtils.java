@@ -64,11 +64,7 @@ public class BeanUtils {
                             NameUtils.getCamelName(propertyName, delimiter)
                             : propertyName.toLowerCase();
                 }
-                PropertyDescriptor targetPd = getPropertyDescriptor(beanClass, propertyName);
-                Method writeMethod;
-                if (targetPd != null && (writeMethod = targetPd.getWriteMethod()) != null) {
-                    ClassUtils.invokeMethod(writeMethod, bean, value);
-                }
+                invokeWriteMethod(bean, propertyName, value);
             }
         }
         return bean;
@@ -109,10 +105,10 @@ public class BeanUtils {
      */
     public static <T> List<T> mapToBean(List<Map<String, Object>> mapList, Class<T> beanClass, Character delimiter) {
 
-        List<T> beanList = new ArrayList<>(mapList == null ? 0 : mapList.size());
         if (mapList == null) {
-            return beanList;
+            return null;
         }
+        List<T> beanList = new ArrayList<>(mapList.size());
         for (Map<String, Object> map : mapList) {
             T t = mapToBean(map, beanClass, delimiter);
             beanList.add(t);
@@ -308,10 +304,11 @@ public class BeanUtils {
             return;
         }
         PropertyDescriptor pd = getPropertyDescriptor(bean.getClass(), propertyName);
-        if (pd == null) {
+        Method writeMethod;
+        if (pd == null || (writeMethod = pd.getWriteMethod()) == null) {
             return;
         }
-        ClassUtils.invokeMethod(pd.getWriteMethod(), bean, values);
+        ClassUtils.invokeMethod(writeMethod, bean, values);
     }
 
 }

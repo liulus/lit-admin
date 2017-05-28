@@ -42,8 +42,6 @@ public class AppUnCheckedExceptionResolver implements HandlerExceptionResolver {
                 map.put(ResultConst.CODE, errorCode);
             }
             errorMsg = StringUtils.isEmpty(e.getMessage()) ? errorMsg : e.getMessage();
-        } else if (e instanceof AppUnCheckedException) {
-            errorMsg = StringUtils.isEmpty(e.getMessage()) ? errorMsg : e.getMessage();
         }
         HttpStatus status = getStatus(request);
         map.put(ResultConst.SUCCESS, false);

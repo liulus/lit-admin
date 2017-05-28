@@ -15,8 +15,15 @@ public class DictionaryTransfer implements CriteriaTransfer<DictionaryQo> {
 
     @Override
     public void transQuery(DictionaryQo qo, Criteria criteria, Class<?> entityClass) {
+
+        if (StringUtils.isNotEmpty(qo.getKeyWord())) {
+            criteria.andWithBracket("dictKey", Operator.LIKE, qo.getBlurKeyWord());
+            criteria.or("dictValue", Operator.LIKE, qo.getBlurKeyWord());
+            criteria.or("memo", Operator.LIKE, qo.getBlurKeyWord()).end();
+        }
+
         if (StringUtils.isNotBlank(qo.getDictKey())) {
-            criteria.and("dictKey", Operator.LIKE, "%" + qo.getDictKey() + "%");
+            criteria.and("dictKey",  qo.getDictKey());
         }
         if (StringUtils.isNotBlank(qo.getDictValue())) {
             criteria.and("dictValue", Operator.LIKE, "%" + qo.getDictValue() + "%");
@@ -26,7 +33,10 @@ public class DictionaryTransfer implements CriteriaTransfer<DictionaryQo> {
         }
         if (qo.getDictLevel() != null) {
             criteria.and("dictLevel", qo.getDictLevel());
+        } else {
+            criteria.and("parentId", qo.getParentId());
         }
+
         criteria.asc("orderNum");
     }
 }

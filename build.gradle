@@ -6,6 +6,11 @@ ext {
     springVersion = '4.3.2.RELEASE'
     springBootVersion = '1.4.0.RELEASE'
 
+
+    bootstrapVersion = '3.3.7'
+    fontAwesomeVersion = '4.7.0'
+    jqueryVersion = '3.2.0'
+
     libs = [
             'commons-lang3'         : "org.apache.commons:commons-lang3:3.4",
             'commons-io'            : "commons-io:commons-io:2.5",
@@ -38,7 +43,11 @@ ext {
             'spring-test'           : "org.springframework:spring-test:${springVersion}",
             'spring-boot-web'       : "org.springframework.boot:spring-boot-starter-web:${springBootVersion}",
             'spring-boot-tomcat'    : "org.springframework.boot:spring-boot-starter-tomcat:${springBootVersion}",
-            'spring-boot-test'      : "org.springframework.boot:spring-boot-starter-test:${springBootVersion}"
+            'spring-boot-test'      : "org.springframework.boot:spring-boot-starter-test:${springBootVersion}",
+
+            'bootstrap'             : "org.webjars:bootstrap:${bootstrapVersion}",
+            'font-awesome'          : "org.webjars:font-awesome:${fontAwesomeVersion}",
+            'jquery'                : "org.webjars:jquery:${jqueryVersion}"
     ]
 }
 

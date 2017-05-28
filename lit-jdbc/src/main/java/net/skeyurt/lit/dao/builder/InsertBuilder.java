@@ -38,7 +38,7 @@ class InsertBuilder extends AbstractSqlBuilder {
     @Override
     public SqlResult build() {
 
-        if (columnValueMap == null || columnValueMap.size() == 0 || nativeValueMap == null) {
+        if (columnValueMap == null || columnValueMap.size() == 0 ) {
             return SqlResult.EMPTY_RESULT;
         }
         StringBuilder sql = new StringBuilder("insert into ").append(tableInfo.getTableName()).append(" ( ");

@@ -220,6 +220,12 @@ public class JdbcDaoImpl implements JdbcDao {
         return jdbcTemplate.queryForObject(sql, args, int.class);
     }
 
+    @Override
+    public <T> T queryForObject(Criteria criteria, Class<T> clazz) {
+        SqlResult sqlResult = criteria.build();
+        return jdbcTemplate.queryForObject(sqlResult.getSql(), sqlResult.getParams().toArray(), clazz);
+    }
+
 
     private <T, Qo> Criteria<T> getCriteria(Class<T> clazz, Qo qo, CriteriaTransfer<Qo> transfer) {
         Criteria<T> criteria = Criteria.select(clazz);

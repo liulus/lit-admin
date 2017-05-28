@@ -1,6 +1,8 @@
 package net.skeyurt.lit.dictionary.service.impl;
 
+import net.skeyurt.lit.commons.exception.AppCheckedException;
 import net.skeyurt.lit.dao.JdbcDao;
+import net.skeyurt.lit.dictionary.dao.DictionaryDao;
 import net.skeyurt.lit.dictionary.entity.Dictionary;
 import net.skeyurt.lit.dictionary.qo.DictionaryQo;
 import net.skeyurt.lit.dictionary.service.DictionaryService;
@@ -20,16 +22,42 @@ public class DictionaryServiceImpl implements DictionaryService {
     @Resource
     private JdbcDao jdbcDao;
 
+    @Resource
+    private DictionaryDao dictionaryDao;
+
     @Override
     public List<Dictionary> queryPageList(DictionaryQo qo) {
-        // 查询根级 字典数据
-        qo.setDictLevel(1);
         return jdbcDao.queryPageList(Dictionary.class, qo);
     }
 
     @Override
     public void add(Dictionary dictionary) {
 
+        DictionaryQo qo = new DictionaryQo();
+        qo.setDictKey(dictionary.getDictKey());
+
+        Dictionary dict = jdbcDao.queryForSingle(Dictionary.class, qo);
+        if (dict != null) {
+            throw new AppCheckedException("字典Key已经存在!");
+        }
+
+        if (dictionary.getParentId() == null) {
+            dictionary.setDictLevel(1);
+        } else {
+            Dictionary parentDict = jdbcDao.get(Dictionary.class, dictionary.getParentId());
+            if (parentDict == null) {
+                throw new AppCheckedException("父字典信息丢失!");
+            }
+            dictionary.setDictLevel(parentDict.getDictLevel() + 1);
+        }
+
+        if (dictionary.getSystem() == null) {
+            dictionary.setSystem(false);
+        }
+
+        int maxOrder = dictionaryDao.queryMaxOrder(dictionary.getParentId());
+        dictionary.setOrderNum(maxOrder + 1);
+        jdbcDao.insert(dictionary);
     }
 
     @Override

@@ -46,6 +46,10 @@ public class Pager implements Serializable {
         this.count = count;
     }
 
+    public String getBlurKeyWord() {
+        return "%" + keyWord + "%";
+    }
+
     public int getOffset() {
         return getPageSize() * (getPageNum() - 1);
     }

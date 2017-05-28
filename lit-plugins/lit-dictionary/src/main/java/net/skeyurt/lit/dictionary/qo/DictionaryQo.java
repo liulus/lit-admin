@@ -24,5 +24,9 @@ public class DictionaryQo extends Pager {
 
     private Integer dictLevel;
 
+    private Long parentId;
+
+    private Boolean system;
+
     private Boolean queryRoot;
 }

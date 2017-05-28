@@ -18,6 +18,7 @@ import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import org.springframework.web.servlet.view.ContentNegotiatingViewResolver;
 import org.springframework.web.servlet.view.json.MappingJackson2JsonView;
 import org.thymeleaf.spring4.view.ThymeleafViewResolver;
@@ -33,13 +34,13 @@ import java.util.Collections;
  */
 @EnableLitJdbc
 @Configuration
-public class SpringConfig extends WebMvcConfigurationSupport {
+public class SpringConfig extends WebMvcConfigurerAdapter {
 
     @Autowired
     private C3p0ConfigProperty c3p0ConfigProperty;
 
-//    @Bean
-    public DataSource oracleDataSource() throws PropertyVetoException {
+    @Bean
+    public DataSource dataSource() throws PropertyVetoException {
 
         ComboPooledDataSource source = new ComboPooledDataSource();
         source.setJdbcUrl(c3p0ConfigProperty.getJdbcUrl());
@@ -57,23 +58,13 @@ public class SpringConfig extends WebMvcConfigurationSupport {
         return source;
     }
 
-//    @Bean
+    @Bean
     public PlatformTransactionManager transactionManager(DataSource dataSource) {
         return new DataSourceTransactionManager(dataSource);
     }
 
-    @Bean
-    public CommonsMultipartResolver commonsMultipartResolver() {
-        return new CommonsMultipartResolver();
-    }
-
     @Override
-    protected void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("/**").addResourceLocations("classpath:/static/");
-    }
-
-    @Override
-    protected void addInterceptors(InterceptorRegistry registry) {
+    public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(new ModelResultHandlerInterceptor()).addPathPatterns("/**");
     }
 

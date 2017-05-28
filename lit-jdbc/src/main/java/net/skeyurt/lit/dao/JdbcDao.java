@@ -239,6 +239,15 @@ public interface JdbcDao {
 
     int count(String sql, Object... args);
 
+    /**
+     * 根据 Criteria 查询指定 对象
+     * @param criteria
+     * @param clazz
+     * @param <T>
+     * @return
+     */
+    <T> T queryForObject(Criteria criteria, Class<T> clazz);
+
 
     /**
      * @return JdbcOperations

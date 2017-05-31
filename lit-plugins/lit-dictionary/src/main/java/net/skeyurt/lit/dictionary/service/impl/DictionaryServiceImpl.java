@@ -35,6 +35,7 @@ public class DictionaryServiceImpl implements DictionaryService {
 
         DictionaryQo qo = new DictionaryQo();
         qo.setDictKey(dictionary.getDictKey());
+        qo.setParentId(dictionary.getParentId());
 
         Dictionary dict = jdbcDao.queryForSingle(Dictionary.class, qo);
         if (dict != null) {

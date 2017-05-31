@@ -3,7 +3,6 @@ package net.skeyurt.lit.dao.model;
 import net.skeyurt.lit.commons.bean.BeanUtils;
 import net.skeyurt.lit.commons.util.NameUtils;
 import net.skeyurt.lit.dao.annotation.*;
-import net.skeyurt.lit.dao.annotation.SequenceGenerator;
 import net.skeyurt.lit.dao.enums.GenerationType;
 import net.skeyurt.lit.dao.generator.*;
 import lombok.Getter;
@@ -22,29 +21,45 @@ import java.util.Objects;
 @Getter
 public class TableInfo {
 
-    /** 表名 */
-    private String                                tableName;
+    /**
+     * 表名
+     */
+    private String tableName;
 
-    /** 主键属性名 */
-    private String                                pkField;
+    /**
+     * 主键属性名
+     */
+    private String pkField;
 
-    /** 主键对应的列名 */
-    private String                                pkColumn;
+    /**
+     * 主键对应的列名
+     */
+    private String pkColumn;
 
-    /** 主键是否需要生成 */
-    private boolean                               autoGenerateKey;
+    /**
+     * 主键是否需要生成
+     */
+    private boolean autoGenerateKey;
 
-    /** 主键生成器 */
-    private Class<? extends KeyGenerator>         generatorClass;
+    /**
+     * 主键生成器
+     */
+    private Class<? extends KeyGenerator> generatorClass;
 
-    /** 主键生成类型 */
-    private GenerationType                        generationType;
+    /**
+     * 主键生成类型
+     */
+    private GenerationType generationType;
 
-    /** 如果主键是序列生成, 序列名 */
-    private String                                sequenceName;
+    /**
+     * 如果主键是序列生成, 序列名
+     */
+    private String sequenceName;
 
-    /** 属性名和字段名映射关系的 map */
-    private Map<String, String>                   fieldColumnMap;
+    /**
+     * 属性名和字段名映射关系的 map
+     */
+    private Map<String, String> fieldColumnMap;
 
     public TableInfo(Class<?> clazz) {
         fieldColumnMap = new HashMap<>();
@@ -98,17 +113,15 @@ public class TableInfo {
         autoGenerateKey = true;
         if (generated.generator() != EmptyKeyGenerator.class) {
             generatorClass = generated.generator();
-            if (Objects.equals(generatorClass, net.skeyurt.lit.dao.generator.SequenceGenerator.class)) {
+            if (Objects.equals(generatorClass, SequenceGenerator.class)) {
                 generationType = GenerationType.SEQUENCE;
-                SequenceGenerator sequenceGenerator = field.getAnnotation(SequenceGenerator.class);
-                sequenceName = sequenceGenerator == null ? "seq_" + tableName : sequenceGenerator.sequenceName();
+                sequenceName = StringUtils.isEmpty(generated.sequenceName()) ? "seq_" + tableName : generated.sequenceName();
             }
             return;
         }
         generationType = generated.strategy();
         if (Objects.equals(generationType, GenerationType.SEQUENCE)) {
-            SequenceGenerator sequenceGenerator = field.getAnnotation(SequenceGenerator.class);
-            sequenceName = sequenceGenerator == null ? "seq_" + tableName : sequenceGenerator.sequenceName();
+            sequenceName = StringUtils.isEmpty(generated.sequenceName()) ? "seq_" + tableName : generated.sequenceName();
         }
     }
 

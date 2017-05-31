@@ -17,21 +17,21 @@ public class CriteriaTransferFactory {
     private CriteriaTransferFactory() {
     }
 
-    private static final CriteriaTransfer DEFAULT_TRANSFER = new DefaultCriteriaTransfer();
+    private static final QueryTransfer DEFAULT_TRANSFER = new DefaultQueryTransfer();
 
-    private static final Map<Class<?>, CriteriaTransfer> TRANSFER_MAP = Collections.synchronizedMap(new WeakHashMap<Class<?>, CriteriaTransfer>());
+    private static final Map<Class<?>, QueryTransfer> TRANSFER_MAP = Collections.synchronizedMap(new WeakHashMap<Class<?>, QueryTransfer>());
 
 
-    public static <T> CriteriaTransfer<T> createTransfer(T qo) {
+    public static <T> QueryTransfer<T> createTransfer(T qo) {
         Class<?> qoClass = qo.getClass();
         TransferClass transferClass = qoClass.getAnnotation(TransferClass.class);
         if (transferClass == null) {
             return DEFAULT_TRANSFER;
         }
 
-        CriteriaTransfer<T> transfer = TRANSFER_MAP.get(qoClass);
+        QueryTransfer<T> transfer = TRANSFER_MAP.get(qoClass);
         if (transfer == null) {
-            Class<? extends CriteriaTransfer> clz = transferClass.value();
+            Class<? extends QueryTransfer> clz = transferClass.value();
             transfer = ClassUtils.newInstance(clz);
             TRANSFER_MAP.put(qoClass, transfer);
         }

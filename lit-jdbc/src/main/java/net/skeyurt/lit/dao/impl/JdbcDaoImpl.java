@@ -8,12 +8,13 @@ import net.skeyurt.lit.commons.page.PageList;
 import net.skeyurt.lit.commons.page.PageService;
 import net.skeyurt.lit.commons.page.Pager;
 import net.skeyurt.lit.dao.JdbcDao;
-import net.skeyurt.lit.dao.builder.Criteria;
+import net.skeyurt.lit.dao.builder.*;
 import net.skeyurt.lit.dao.enums.Operator;
 import net.skeyurt.lit.dao.generator.KeyGenerator;
+import net.skeyurt.lit.dao.generator.SequenceGenerator;
 import net.skeyurt.lit.dao.model.SqlResult;
 import net.skeyurt.lit.dao.transfer.AnnotationRowMapper;
-import net.skeyurt.lit.dao.transfer.CriteriaTransfer;
+import net.skeyurt.lit.dao.transfer.QueryTransfer;
 import net.skeyurt.lit.dao.transfer.CriteriaTransferFactory;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.dao.DataAccessException;
@@ -55,27 +56,32 @@ public class JdbcDaoImpl implements JdbcDao {
 
     @Override
     public <T, ID extends Serializable> ID insert(T t) {
-        final Criteria criteria = t instanceof Criteria ? ((Criteria) t)
-                : Criteria.insert(t.getClass()).initEntity(t, true);
 
-        final SqlResult sqlResult;
+        final SqlInsert insert = t instanceof SqlInsert ? ((SqlInsert) t) : SQL.insert(t.getClass()).initEntity(t);
 
         Serializable idValue = null;
-        KeyGenerator keyGenerator = criteria.getKeyGenerator();
-        if (keyGenerator != null) {
-            idValue = keyGenerator.generateKey(getDbName());
-            criteria.into(criteria.getPkName(), idValue, true);
+        KeyGenerator generator = insert.getKeyGenerator();
+        if (generator != null) {
+            insert.field(insert.getPkName());
+            if (generator instanceof SequenceGenerator) {
+                idValue = ((SequenceGenerator) generator).generateKey(getDbName(), insert.getSequenceName());
+                insert.nativeValues(String.valueOf(idValue));
+            } else {
+                idValue = generator.generateKey(getDbName());
+                insert.values(idValue);
+            }
         }
 
-        sqlResult = criteria.build();
+        final SqlResult sqlResult = insert.build();
         final Object[] args = sqlResult.getParams().toArray();
-        if (criteria.isAutoGenerateKey() && (keyGenerator == null || keyGenerator.isGenerateBySql())) {
+
+        if (insert.isAutoGenerateKey() && (generator == null || generator.isGenerateBySql())) {
             KeyHolder keyHolder = new GeneratedKeyHolder();
             log.info("\nsql : {}  args : {}", sqlResult.getSql(), Arrays.toString(args));
             jdbcTemplate.update(new PreparedStatementCreator() {
                 @Override
                 public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
-                    PreparedStatement ps = connection.prepareStatement(sqlResult.getSql(), new String[]{criteria.getColumnName(criteria.getPkName())});
+                    PreparedStatement ps = connection.prepareStatement(sqlResult.getSql(), new String[]{insert.getColumn(insert.getPkName())});
                     ArgumentPreparedStatementSetter apss = new ArgumentPreparedStatementSetter(args);
                     apss.setValues(ps);
                     return ps;
@@ -92,15 +98,15 @@ public class JdbcDaoImpl implements JdbcDao {
 
     @Override
     public <T> int delete(T t) {
-        SqlResult sqlResult = t instanceof Criteria ? ((Criteria) t).build()
-                : Criteria.delete(t.getClass()).initEntity(t, true).build();
+        SqlResult sqlResult = t instanceof SqlDelete ? ((SqlDelete) t).build()
+                : SQL.delete(t.getClass()).initEntity(t).build();
         return executeUpdate(sqlResult.getSql(), sqlResult.getParams().toArray());
     }
 
     @Override
     public <T> int deleteByIds(Class<T> clazz, Serializable... ids) {
-        Criteria<T> criteria = Criteria.delete(clazz);
-        SqlResult sqlResult = criteria.where(criteria.getPkName(), Operator.IN, (Object[]) ids).build();
+        SqlDelete delete = SQL.delete(clazz);
+        SqlResult sqlResult = delete.where(delete.getPkName(), Operator.IN, (Object[]) ids).build();
         return executeUpdate(sqlResult.getSql(), sqlResult.getParams().toArray());
     }
 
@@ -111,8 +117,8 @@ public class JdbcDaoImpl implements JdbcDao {
 
     @Override
     public <T> int update(T t, boolean isIgnoreNull) {
-        SqlResult sqlResult = t instanceof Criteria ? ((Criteria) t).build()
-                : Criteria.update(t.getClass()).initEntity(t, isIgnoreNull).build();
+        SqlResult sqlResult = t instanceof SqlUpdate ? ((SqlUpdate) t).build()
+                : SQL.update(t.getClass()).initEntity(t, isIgnoreNull).build();
 
         return executeUpdate(sqlResult.getSql(), sqlResult.getParams().toArray());
     }
@@ -124,25 +130,25 @@ public class JdbcDaoImpl implements JdbcDao {
 
     @Override
     public <T> T get(Class<T> clazz, Serializable id) {
-        Criteria<T> criteria = Criteria.select(clazz);
-        criteria.where(criteria.getPkName(), id);
-        return queryForSingle(criteria);
+        SqlSelect<T> select = SQL.select(clazz);
+        select.where(select.getPkName(), id);
+        return queryForSingle(select);
     }
 
     @Override
     public <T> T findByProperty(Class<T> clazz, String propertyName, Object propertyValue) {
-        return queryForSingle(Criteria.select(clazz).where(propertyName, propertyValue));
+        return queryForSingle(SQL.select(clazz).where(propertyName, propertyValue));
     }
 
     @Override
     public <T, Qo> T queryForSingle(Class<T> clazz, Qo qo) {
-        return queryForSingle(getCriteria(clazz, qo, CriteriaTransferFactory.createTransfer(qo)));
+        return queryForSingle(getSelect(clazz, qo, CriteriaTransferFactory.createTransfer(qo)));
     }
 
     @Override
-    public <T> T queryForSingle(Criteria<T> criteria) {
-        SqlResult sqlResult = criteria.build();
-        return queryForSingle(criteria.getEntityClass(), sqlResult.getSql(), sqlResult.getParams().toArray());
+    public <T> T queryForSingle(SqlSelect<T> select) {
+        SqlResult sqlResult = select.build();
+        return queryForSingle(select.getEntityClass(), sqlResult.getSql(), sqlResult.getParams().toArray());
     }
 
     @Override
@@ -152,7 +158,7 @@ public class JdbcDaoImpl implements JdbcDao {
             return null;
         }
         if (results.size() > 1) {
-            throw new IncorrectResultSizeDataAccessException(1, results.size() );
+            throw new IncorrectResultSizeDataAccessException(1, results.size());
         }
         return results.iterator().next();
     }
@@ -164,18 +170,18 @@ public class JdbcDaoImpl implements JdbcDao {
 
     @Override
     public <T, Qo> List<T> query(Class<T> clazz, Qo qo) {
-        return query(getCriteria(clazz, qo, CriteriaTransferFactory.createTransfer(qo)));
+        return query(getSelect(clazz, qo, CriteriaTransferFactory.createTransfer(qo)));
     }
 
     @Override
-    public <T, Qo> List<T> query(Class<T> clazz, Qo qo, CriteriaTransfer<Qo> transfer) {
-        return query(getCriteria(clazz, qo, transfer));
+    public <T, Qo> List<T> query(Class<T> clazz, Qo qo, QueryTransfer<Qo> transfer) {
+        return query(getSelect(clazz, qo, transfer));
     }
 
     @Override
-    public <T> List<T> query(Criteria<T> criteria) {
-        SqlResult sqlResult = criteria.build();
-        return query(criteria.getEntityClass(), sqlResult.getSql(), sqlResult.getParams().toArray());
+    public <T> List<T> query(SqlSelect<T> select) {
+        SqlResult sqlResult = select.build();
+        return query(select.getEntityClass(), sqlResult.getSql(), sqlResult.getParams().toArray());
     }
 
     @Override
@@ -189,7 +195,7 @@ public class JdbcDaoImpl implements JdbcDao {
     }
 
     @Override
-    public <T, Qo extends Pager> PageList<T> queryPageList(Class<T> clazz, Qo qo, CriteriaTransfer<Qo> transfer) {
+    public <T, Qo extends Pager> PageList<T> queryPageList(Class<T> clazz, Qo qo, QueryTransfer<Qo> transfer) {
         PageService.setPager(qo);
         return (PageList<T>) query(clazz, qo, transfer);
     }
@@ -201,17 +207,17 @@ public class JdbcDaoImpl implements JdbcDao {
 
     @Override
     public <T, Qo> int count(Class<T> clazz, Qo qo) {
-        return count(getCriteria(clazz, qo, CriteriaTransferFactory.createTransfer(qo)));
+        return count(getSelect(clazz, qo, CriteriaTransferFactory.createTransfer(qo)));
     }
 
     @Override
-    public <T, Qo> int count(Class<T> clazz, Qo qo, CriteriaTransfer<Qo> transfer) {
-        return count(getCriteria(clazz, qo, transfer));
+    public <T, Qo> int count(Class<T> clazz, Qo qo, QueryTransfer<Qo> transfer) {
+        return count(getSelect(clazz, qo, transfer));
     }
 
     @Override
-    public int count(Criteria criteria) {
-        SqlResult sqlResult = criteria.addFunc("count(*)").build();
+    public int count(SqlSelect select) {
+        SqlResult sqlResult = select.addFunc("count").build();
         return count(sqlResult.getSql(), sqlResult.getParams().toArray());
     }
 
@@ -221,16 +227,16 @@ public class JdbcDaoImpl implements JdbcDao {
     }
 
     @Override
-    public <T> T queryForObject(Criteria criteria, Class<T> clazz) {
-        SqlResult sqlResult = criteria.build();
+    public <T> T queryForObject(SqlSelect select, Class<T> clazz) {
+        SqlResult sqlResult = select.build();
         return jdbcTemplate.queryForObject(sqlResult.getSql(), sqlResult.getParams().toArray(), clazz);
     }
 
 
-    private <T, Qo> Criteria<T> getCriteria(Class<T> clazz, Qo qo, CriteriaTransfer<Qo> transfer) {
-        Criteria<T> criteria = Criteria.select(clazz);
-        transfer.transQuery(qo, criteria, clazz);
-        return criteria;
+    private <T, Qo> SqlSelect<T> getSelect(Class<T> clazz, Qo qo, QueryTransfer<Qo> transfer) {
+        SqlSelect<T> select = SQL.select(clazz);
+        transfer.transQuery(qo, select, clazz);
+        return select;
     }
 
     private String getDbName() {

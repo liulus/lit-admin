@@ -6,9 +6,9 @@ import net.skeyurt.lit.commons.page.PageInfo;
 import net.skeyurt.lit.commons.page.PageList;
 import net.skeyurt.lit.commons.page.PageService;
 import net.skeyurt.lit.dao.JdbcDao;
-import net.skeyurt.lit.dao.builder.Criteria;
+import net.skeyurt.lit.dao.builder.SqlSelect;
 import net.skeyurt.lit.dao.enums.Operator;
-import net.skeyurt.lit.dao.transfer.CriteriaTransfer;
+import net.skeyurt.lit.dao.transfer.QueryTransfer;
 import net.skeyurt.lit.test.base.BaseTest;
 import net.skeyurt.lit.test.bean.Goods;
 import net.skeyurt.lit.test.bean.GoodsVo;
@@ -142,10 +142,10 @@ public class JdbcDaoImplTest extends BaseTest {
         GoodsVo goodsVo = GoodsVo.builder().startPrice(9.98D).endPrice(26D).build();
 
         PageService.setPager(20, 2);
-        PageList<Goods> goodsList = (PageList<Goods>) jdbcDao.query(Goods.class, goodsVo, new CriteriaTransfer<GoodsVo>() {
+        PageList<Goods> goodsList = (PageList<Goods>) jdbcDao.query(Goods.class, goodsVo, new QueryTransfer<GoodsVo>() {
             @Override
-            public void transQuery(GoodsVo goodsVo, Criteria criteria, Class<?> entityClass) {
-                criteria.or("price", Operator.GT, goodsVo.getStartPrice()).or("price", Operator.LT, goodsVo.getEndPrice());
+            public void transQuery(GoodsVo goodsVo, SqlSelect select, Class<?> entityClass) {
+                select.or("price", Operator.GT, goodsVo.getStartPrice()).or("price", Operator.LT, goodsVo.getEndPrice());
             }
         });
 

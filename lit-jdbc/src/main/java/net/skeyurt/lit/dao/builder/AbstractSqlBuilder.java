@@ -1,12 +1,13 @@
 package net.skeyurt.lit.dao.builder;
 
-import lombok.Getter;
 import lombok.NoArgsConstructor;
-import net.skeyurt.lit.commons.bean.BeanUtils;
+import net.sf.jsqlparser.expression.Expression;
+import net.sf.jsqlparser.expression.JdbcParameter;
 import net.skeyurt.lit.dao.model.TableInfo;
 import org.apache.commons.lang3.StringUtils;
 
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * User : liulu
@@ -16,39 +17,24 @@ import java.util.Map;
 @NoArgsConstructor
 abstract class AbstractSqlBuilder implements SqlBuilder {
 
-    @Getter
+    protected static final Expression PARAM_EXPR = new JdbcParameter();
+
     protected TableInfo tableInfo;
 
-    protected Class<?> entityClass;
-
-    protected Map<String, Object> columnValueMap;
-
-    protected Map<String, Object> nativeValueMap;
+    protected List<Object> params = new ArrayList<>();
 
     AbstractSqlBuilder(Class<?> clazz) {
         this.tableInfo = new TableInfo(clazz);
-        this.entityClass = clazz;
     }
 
-    @Override
-    public void initEntity(Object entity, Boolean isIgnoreNull) {
-        if (entity == null) {
-            return;
-        }
-        Map<String, String> fieldColumnMap = tableInfo.getFieldColumnMap();
-
-        for (String fieldName : fieldColumnMap.keySet()) {
-            Object obj = BeanUtils.invokeReaderMethod(entity, fieldName);
-            if (!isIgnoreNull || obj != null && (!(obj instanceof String) || StringUtils.isNotBlank((String) obj))) {
-                columnValueMap.put(fieldColumnMap.get(fieldName), obj);
-            }
-        }
-    }
-
-    protected String getColumn(String fieldName) {
+    public String getColumn(String fieldName) {
         fieldName = StringUtils.trim(fieldName);
         String column = tableInfo.getFieldColumnMap().get(fieldName);
         return StringUtils.isEmpty(column) ? fieldName : column;
+    }
+
+    public String getPkName () {
+        return tableInfo.getPkField();
     }
 
 

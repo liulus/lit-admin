@@ -24,6 +24,7 @@ ext {
             'slf4j-log4j12'         : "org.slf4j:slf4j-log4j12:${slf4jVersion}",
             'jcl-over-slf4j'        : "org.slf4j:jcl-over-slf4j:${slf4jVersion}",
             'logback-classic'       : "ch.qos.logback:logback-classic:${logbackVersion}",
+            'jsqlparser'            : "com.github.jsqlparser:jsqlparser:0.9.6",
             'c3p0'                  : "c3p0:c3p0:0.9.1.2",
             'mysql'                 : "mysql:mysql-connector-java:5.1.38",
             'oracle'                : "com.oracle:ojdbc6:11.2.0.3",

@@ -2,6 +2,7 @@ dependencies {
     compile libs.'spring-jdbc' + '@jar',
             libs.'spring-tx' + '@jar',
             libs.'spring-aspects',
+            libs.'jsqlparser',
             project(':lit-commons')
     compileOnly libs.'spring-context'
 

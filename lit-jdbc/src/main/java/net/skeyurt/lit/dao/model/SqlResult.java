@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -28,4 +29,8 @@ public class SqlResult {
         this.params = params;
     }
 
+    @Override
+    public String toString() {
+        return "sql: " + sql + "\nparams: " + Arrays.toString(params.toArray());
+    }
 }

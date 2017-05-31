@@ -1,6 +1,6 @@
 package net.skeyurt.lit.dao.annotation;
 
-import net.skeyurt.lit.dao.transfer.CriteriaTransfer;
+import net.skeyurt.lit.dao.transfer.QueryTransfer;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
@@ -17,5 +17,5 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Retention(RUNTIME)
 public @interface TransferClass {
 
-    Class<? extends CriteriaTransfer> value();
+    Class<? extends QueryTransfer> value();
 }

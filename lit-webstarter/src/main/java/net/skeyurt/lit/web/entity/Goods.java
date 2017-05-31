@@ -6,7 +6,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import net.skeyurt.lit.dao.annotation.Column;
 import net.skeyurt.lit.dao.annotation.GeneratedValue;
-import net.skeyurt.lit.dao.annotation.SequenceGenerator;
 import net.skeyurt.lit.dao.annotation.Table;
 import net.skeyurt.lit.dao.enums.GenerationType;
 
@@ -28,7 +27,6 @@ public class Goods implements Serializable {
     private static final long serialVersionUID = -7915472099544797458L;
 
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    @SequenceGenerator(sequenceName = "seq_goods")
     private Long goodsId;
 
     private String code;

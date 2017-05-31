@@ -15,15 +15,15 @@ public enum Operator implements EnumAware {
 
     EQ("equal", " = "),
 
-    NE("not equal", " != "),
+    NOT_EQ("not equal", " != "),
 
     LT("less than", " < "),
 
     GT("grater than", " > "),
 
-    LE("less than or equal", " <= "),
+    LTEQ("less than or equal", " <= "),
 
-    GE("grater than or equal", " >= "),
+    GTEQ("grater than or equal", " >= "),
 
     LIKE("like", " like "),
 
@@ -33,9 +33,9 @@ public enum Operator implements EnumAware {
 
     NOT_IN("not in", " not in "),
 
-    IS_NULL("is null", " is null "),
+    NULL("is null", " is null "),
 
-    IS_NOT_NULL("is not null", " is not null "),
+    NOT_NULL("is not null", " is not null "),
     ;
 
 

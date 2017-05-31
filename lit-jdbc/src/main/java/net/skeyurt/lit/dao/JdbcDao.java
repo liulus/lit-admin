@@ -2,8 +2,8 @@ package net.skeyurt.lit.dao;
 
 import net.skeyurt.lit.commons.page.PageList;
 import net.skeyurt.lit.commons.page.Pager;
-import net.skeyurt.lit.dao.builder.Criteria;
-import net.skeyurt.lit.dao.transfer.CriteriaTransfer;
+import net.skeyurt.lit.dao.builder.SqlSelect;
+import net.skeyurt.lit.dao.transfer.QueryTransfer;
 import org.springframework.jdbc.core.JdbcOperations;
 
 import java.io.Serializable;
@@ -18,20 +18,20 @@ import java.util.Map;
 public interface JdbcDao {
 
     /**
-     * 插入一条记录，参数可以是实体，也可以是 Criteria 实例
+     * 插入一条记录，参数可以是实体，也可以是 SqlInsert 实例
      *
-     * @param t    实体 或  Criteria 实例
-     * @param <T>  实体 或  Criteria
+     * @param t   实体 或  SqlInsert 实例
+     * @param <T> 实体 或  SqlInsert
      * @return 插入记录的 Id
      */
     <T, ID extends Serializable> ID insert(T t);
 
     /**
-     * 删除一条记录，参数可以是实体，也可以是 Criteria 实例
+     * 删除一条记录，参数可以是实体，也可以是 SqlDelete 实例
      * 若参数是实体，是根据实体的 Id 删除记录，须保证实体的 Id 不为空，
      *
-     * @param t   实体 或  Criteria 实例
-     * @param <T> 实体 或  Criteria
+     * @param t   实体 或  SqlDelete 实例
+     * @param <T> 实体 或  SqlDelete
      * @return 数据库实际受影响的记录数
      */
     <T> int delete(T t);
@@ -47,22 +47,22 @@ public interface JdbcDao {
     <T> int deleteByIds(Class<T> clazz, Serializable... ids);
 
     /**
-     * 更新一条记录，参数可以是实体，也可以是 Criteria 实例
+     * 更新一条记录，参数可以是实体，也可以是 SqlUpdate 实例
      * 若参数是实体，是根据实体的 Id 更新记录，须保证实体的 Id 不为空，会忽略实体中的空属性（实体中值为空的属性不会更新到数据库）
      *
-     * @param t   实体 或  Criteria 实例
-     * @param <T> 实体 或  Criteria
+     * @param t   实体 或  SqlUpdate 实例
+     * @param <T> 实体 或  SqlUpdate
      * @return 数据库实际受影响的记录数
      */
     <T> int update(T t);
 
     /**
-     * 更新一条记录，参数可以是实体，也可以是 Criteria 实例
+     * 更新一条记录，参数可以是实体，也可以是 SqlUpdate 实例
      * 若参数是实体，是根据实体的 Id 更新记录，须保证实体的 Id 不为空
      *
-     * @param t            实体 或  Criteria 实例
+     * @param t            实体 或  SqlUpdate 实例
      * @param isIgnoreNull 是否忽略实体中的空属性（true: 不更新空值属性；false: 更新空值属性）
-     * @param <T>          实体 或  Criteria
+     * @param <T>          实体 或  SqlUpdate
      * @return 数据库实际受影响的记录数
      */
     <T> int update(T t, boolean isIgnoreNull);
@@ -79,13 +79,14 @@ public interface JdbcDao {
 
     /**
      * 根据属性查询一条记录
-     * @param clazz 查询记录对应的实体 Class
-     * @param propertyName 属性的名称
+     *
+     * @param clazz         查询记录对应的实体 Class
+     * @param propertyName  属性的名称
      * @param propertyValue 对应的值
-     * @param <T> 实体类型
+     * @param <T>           实体类型
      * @return 实体对象
      */
-    <T> T findByProperty (Class<T> clazz, String propertyName, Object propertyValue);
+    <T> T findByProperty(Class<T> clazz, String propertyName, Object propertyValue);
 
     /**
      * 根据查询对象 qo 查询一条记录
@@ -98,13 +99,13 @@ public interface JdbcDao {
     <T, Qo> T queryForSingle(Class<T> clazz, Qo qo);
 
     /**
-     * 根据 criteria 查询一条记录
+     * 根据 SqlSelect 查询一条记录
      *
-     * @param criteria Criteria 实例
-     * @param <T>      查询记录对应的实体
+     * @param <T>    查询记录对应的实体
+     * @param select SqlSelect 实例
      * @return 查询记录对应的实体
      */
-    <T> T queryForSingle(Criteria<T> criteria);
+    <T> T queryForSingle(SqlSelect<T> select);
 
     /**
      * 根据 sql 查询一条记录
@@ -146,16 +147,16 @@ public interface JdbcDao {
      * @param <Qo>
      * @return
      */
-    <T, Qo> List<T> query(Class<T> clazz, Qo qo, CriteriaTransfer<Qo> transfer);
+    <T, Qo> List<T> query(Class<T> clazz, Qo qo, QueryTransfer<Qo> transfer);
 
     /**
-     * 根据 criteria 查询列表
+     * 根据 SqlSelect 查询列表
      *
-     * @param criteria Criteria 实例
-     * @param <T>      查询记录对应的实体
+     * @param select SqlSelect 实例
+     * @param <T>    查询记录对应的实体
      * @return 查询记录对应的实体列表
      */
-    <T> List<T> query(Criteria<T> criteria);
+    <T> List<T> query(SqlSelect<T> select);
 
     /**
      * 根据 sql 查询列表
@@ -188,7 +189,7 @@ public interface JdbcDao {
      * @param <Qo>
      * @return
      */
-    <T, Qo extends Pager> PageList<T> queryPageList(Class<T> clazz, Qo qo, CriteriaTransfer<Qo> transfer);
+    <T, Qo extends Pager> PageList<T> queryPageList(Class<T> clazz, Qo qo, QueryTransfer<Qo> transfer);
 
     /**
      * 根据 sql 查询列表
@@ -219,15 +220,15 @@ public interface JdbcDao {
      * @param <Qo>
      * @return
      */
-    <T, Qo> int count(Class<T> clazz, Qo qo, CriteriaTransfer<Qo> transfer);
+    <T, Qo> int count(Class<T> clazz, Qo qo, QueryTransfer<Qo> transfer);
 
     /**
-     * 根据 criteria 查询总记录数
+     * 根据 SqlSelect 查询总记录数
      *
-     * @param criteria Criteria
+     * @param select Criteria
      * @return 总记录数
      */
-    int count(Criteria criteria);
+    int count(SqlSelect select);
 
     /**
      * 根据 sql 查询总记录数
@@ -241,12 +242,13 @@ public interface JdbcDao {
 
     /**
      * 根据 Criteria 查询指定 对象
-     * @param criteria
+     *
+     * @param select
      * @param clazz
      * @param <T>
      * @return
      */
-    <T> T queryForObject(Criteria criteria, Class<T> clazz);
+    <T> T queryForObject(SqlSelect select, Class<T> clazz);
 
 
     /**

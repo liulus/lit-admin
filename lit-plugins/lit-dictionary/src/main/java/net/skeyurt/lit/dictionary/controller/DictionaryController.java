@@ -7,7 +7,6 @@ import net.skeyurt.lit.dictionary.qo.DictionaryQo;
 import net.skeyurt.lit.dictionary.service.DictionaryService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.annotation.Resource;
@@ -25,8 +24,8 @@ public class DictionaryController {
     @Resource
     private DictionaryService dictionaryService;
 
-    @RequestMapping({"/list/{parentId}", ""})
-    public String list(DictionaryQo qo,@PathVariable String  parentId, Model model) {
+    @RequestMapping({"/list", ""})
+    public String list(DictionaryQo qo, Model model) {
 
         model.addAttribute(ResultConst.RESULT, dictionaryService.queryPageList(qo));
         return "dictionary_list";

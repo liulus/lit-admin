@@ -4,10 +4,10 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import net.skeyurt.lit.dao.annotation.Column;
-import net.skeyurt.lit.dao.annotation.GeneratedValue;
-import net.skeyurt.lit.dao.annotation.Table;
-import net.skeyurt.lit.dao.enums.GenerationType;
+import net.skeyurt.lit.jdbc.annotation.Column;
+import net.skeyurt.lit.jdbc.annotation.GeneratedValue;
+import net.skeyurt.lit.jdbc.annotation.Table;
+import net.skeyurt.lit.jdbc.enums.GenerationType;
 
 import java.io.Serializable;
 import java.util.Date;

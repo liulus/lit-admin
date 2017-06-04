@@ -1,10 +1,7 @@
 package net.skeyurt.lit.web.service;
 
 import net.skeyurt.lit.commons.exception.AppUnCheckedException;
-import net.skeyurt.lit.dao.JdbcDao;
-import net.skeyurt.lit.dao.builder.SqlSelect;
-import net.skeyurt.lit.dao.enums.Operator;
-import net.skeyurt.lit.dao.transfer.QueryTransfer;
+import net.skeyurt.lit.jdbc.JdbcTools;
 import net.skeyurt.lit.web.entity.Goods;
 import net.skeyurt.lit.web.vo.GoodsVo;
 import org.springframework.stereotype.Service;
@@ -21,18 +18,12 @@ import java.util.List;
 public class GoodsService {
 
     @Resource
-    private JdbcDao jdbcDao;
+    private JdbcTools jdbcTools;
 
     public List<Goods> queryPageList(GoodsVo vo) {
         vo.setStartPrice(19.98D);
         vo.setEndPrice(99.98D);
-        return jdbcDao.queryPageList(Goods.class, vo, new QueryTransfer<GoodsVo>() {
-            @Override
-            public void transQuery(GoodsVo vo, SqlSelect select, Class<?> entityClass) {
-                select.and("price", Operator.GT, vo.getStartPrice());
-                select.and("price", Operator.LT, vo.getEndPrice());
-            }
-        });
+        return jdbcTools.query(Goods.class, vo);
     }
 
 

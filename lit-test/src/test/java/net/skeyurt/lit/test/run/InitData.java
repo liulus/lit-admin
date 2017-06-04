@@ -1,6 +1,6 @@
 package net.skeyurt.lit.test.run;
 
-import net.skeyurt.lit.dao.JdbcDao;
+import net.skeyurt.lit.jdbc.JdbcTools;
 import net.skeyurt.lit.test.base.BaseTest;
 import net.skeyurt.lit.test.bean.Goods;
 import org.apache.commons.io.IOUtils;
@@ -19,7 +19,7 @@ import java.io.InputStream;
 public class InitData extends BaseTest {
 
     @Resource
-    private JdbcDao jdbcDao;
+    private JdbcTools jdbcTools;
 
 
     @Test
@@ -40,7 +40,7 @@ public class InitData extends BaseTest {
             String[] goodsInfo = goodsInfoStr.split("<>");
             Goods goods = Goods.builder().code(goodsInfo[0]).name(goodsInfo[1]).price(Double.valueOf(goodsInfo[2]))
                     .inventory(Double.valueOf(goodsInfo[3]).intValue()).delete(false).build();
-            jdbcDao.insert(goods);
+            jdbcTools.insert(goods);
         }
         printUseTime(start);
     }

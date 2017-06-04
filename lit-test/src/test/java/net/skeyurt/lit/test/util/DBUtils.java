@@ -1,9 +1,10 @@
 package net.skeyurt.lit.test.util;
 
 import net.skeyurt.lit.commons.util.PropertyUtils;
-import net.skeyurt.lit.dao.JdbcDao;
-import net.skeyurt.lit.dao.impl.JdbcDaoImpl;
+//import net.skeyurt.lit.jdbc.impl.JdbcDaoImpl;
 import com.mchange.v2.c3p0.ComboPooledDataSource;
+import net.skeyurt.lit.jdbc.JdbcTools;
+import net.skeyurt.lit.jdbc.spring.JdbcTemplateToolsImpl;
 import org.springframework.jdbc.core.JdbcOperations;
 import org.springframework.jdbc.core.JdbcTemplate;
 
@@ -17,17 +18,17 @@ import java.beans.PropertyVetoException;
  */
 public class DBUtils {
 
-    private static JdbcDao jdbcDao;
+    private static JdbcTools jdbcTools;
 
     private static JdbcOperations jdbcTemplate;
 
     private static DataSource dataSource;
 
-    public static JdbcDao getJdbcDao() throws PropertyVetoException {
-        if (jdbcDao == null) {
-            jdbcDao = new JdbcDaoImpl(getJdbcOperations());
+    public static JdbcTools getJdbcDao() throws PropertyVetoException {
+        if (jdbcTools == null) {
+            jdbcTools = new JdbcTemplateToolsImpl(getJdbcOperations());
         }
-        return jdbcDao;
+        return jdbcTools;
     }
 
     public static JdbcOperations getJdbcOperations() throws PropertyVetoException {

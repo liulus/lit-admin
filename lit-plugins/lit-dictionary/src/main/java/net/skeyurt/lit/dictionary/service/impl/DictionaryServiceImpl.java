@@ -1,11 +1,11 @@
 package net.skeyurt.lit.dictionary.service.impl;
 
 import net.skeyurt.lit.commons.exception.AppCheckedException;
-import net.skeyurt.lit.dao.JdbcDao;
 import net.skeyurt.lit.dictionary.dao.DictionaryDao;
 import net.skeyurt.lit.dictionary.entity.Dictionary;
 import net.skeyurt.lit.dictionary.qo.DictionaryQo;
 import net.skeyurt.lit.dictionary.service.DictionaryService;
+import net.skeyurt.lit.jdbc.JdbcTools;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -20,14 +20,14 @@ import java.util.List;
 public class DictionaryServiceImpl implements DictionaryService {
 
     @Resource
-    private JdbcDao jdbcDao;
+    private JdbcTools jdbcTools;
 
     @Resource
     private DictionaryDao dictionaryDao;
 
     @Override
     public List<Dictionary> queryPageList(DictionaryQo qo) {
-        return jdbcDao.queryPageList(Dictionary.class, qo);
+        return jdbcTools.queryPageList(Dictionary.class, qo);
     }
 
     @Override
@@ -37,7 +37,7 @@ public class DictionaryServiceImpl implements DictionaryService {
         qo.setDictKey(dictionary.getDictKey());
         qo.setParentId(dictionary.getParentId());
 
-        Dictionary dict = jdbcDao.queryForSingle(Dictionary.class, qo);
+        Dictionary dict = jdbcTools.queryForSingle(Dictionary.class, qo);
         if (dict != null) {
             throw new AppCheckedException("字典Key已经存在!");
         }
@@ -45,7 +45,7 @@ public class DictionaryServiceImpl implements DictionaryService {
         if (dictionary.getParentId() == null) {
             dictionary.setDictLevel(1);
         } else {
-            Dictionary parentDict = jdbcDao.get(Dictionary.class, dictionary.getParentId());
+            Dictionary parentDict = jdbcTools.get(Dictionary.class, dictionary.getParentId());
             if (parentDict == null) {
                 throw new AppCheckedException("父字典信息丢失!");
             }
@@ -58,7 +58,7 @@ public class DictionaryServiceImpl implements DictionaryService {
 
         int maxOrder = dictionaryDao.queryMaxOrder(dictionary.getParentId());
         dictionary.setOrderNum(maxOrder + 1);
-        jdbcDao.insert(dictionary);
+        jdbcTools.insert(dictionary);
     }
 
     @Override

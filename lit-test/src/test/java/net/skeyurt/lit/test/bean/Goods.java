@@ -1,9 +1,9 @@
 package net.skeyurt.lit.test.bean;
 
-import net.skeyurt.lit.dao.annotation.Column;
-import net.skeyurt.lit.dao.annotation.GeneratedValue;
-import net.skeyurt.lit.dao.annotation.Table;
-import net.skeyurt.lit.dao.enums.GenerationType;
+import net.skeyurt.lit.jdbc.annotation.Column;
+import net.skeyurt.lit.jdbc.annotation.GeneratedValue;
+import net.skeyurt.lit.jdbc.annotation.Table;
+import net.skeyurt.lit.jdbc.enums.GenerationType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -42,11 +42,11 @@ public class Goods implements Serializable {
 
     private Date gmtCreate;
 
-    private String aaa1;private String aaa6;private String aaa11;private String aaa16;private String aaa21;private String aaa26;
-    private String aaa2;private String aaa7;private String aaa12;private String aaa17;private String aaa22;private String aaa27;
-    private String aaa3;private String aaa8;private String aaa13;private String aaa18;private String aaa23;private String aaa28;
-    private String aaa4;private String aaa9;private String aaa14;private String aaa19;private String aaa24;private String aaa29;
-    private String aaa5;private String aaa10;private String aaa15;private String aaa20;private String aaa25;private String aaa30;
+//    private String aaa1;private String aaa6;private String aaa11;private String aaa16;private String aaa21;private String aaa26;
+//    private String aaa2;private String aaa7;private String aaa12;private String aaa17;private String aaa22;private String aaa27;
+//    private String aaa3;private String aaa8;private String aaa13;private String aaa18;private String aaa23;private String aaa28;
+//    private String aaa4;private String aaa9;private String aaa14;private String aaa19;private String aaa24;private String aaa29;
+//    private String aaa5;private String aaa10;private String aaa15;private String aaa20;private String aaa25;private String aaa30;
 
 
 

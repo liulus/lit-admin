@@ -1,9 +1,8 @@
 package net.skeyurt.lit.dictionary.entity;
 
 import lombok.Data;
-import net.skeyurt.lit.dao.annotation.*;
-import net.skeyurt.lit.dao.enums.GenerationType;
-import net.skeyurt.lit.dictionary.qo.qct.DictionaryTransfer;
+import net.skeyurt.lit.jdbc.annotation.*;
+import net.skeyurt.lit.jdbc.enums.GenerationType;
 
 import java.io.Serializable;
 
@@ -14,7 +13,6 @@ import java.io.Serializable;
  */
 @Data
 @Table(name = "lit_dictionary")
-@TransferClass(DictionaryTransfer.class)
 public class Dictionary implements Serializable {
 
     private static final long serialVersionUID = -8733548251351142793L;

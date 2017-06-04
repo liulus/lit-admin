@@ -1,10 +1,8 @@
 package net.skeyurt.lit.dictionary.dao.impl;
 
-import net.skeyurt.lit.dao.JdbcDao;
-import net.skeyurt.lit.dao.builder.SQL;
-import net.skeyurt.lit.dao.builder.SqlSelect;
 import net.skeyurt.lit.dictionary.dao.DictionaryDao;
 import net.skeyurt.lit.dictionary.entity.Dictionary;
+import net.skeyurt.lit.jdbc.JdbcTools;
 import org.springframework.stereotype.Repository;
 
 import javax.annotation.Resource;
@@ -18,12 +16,12 @@ import javax.annotation.Resource;
 public class DictionaryDaoImpl implements DictionaryDao {
 
     @Resource
-    private JdbcDao jdbcDao;
+    private JdbcTools jdbcTools;
 
     @Override
     public int queryMaxOrder(Long parentId) {
-        SqlSelect<Dictionary> select = SQL.select(Dictionary.class).addFunc("max(orderNum)").where("parentId", parentId);
-        Integer maxOrder = jdbcDao.queryForObject(select, int.class);
+        Integer maxOrder = jdbcTools.createSelect(Dictionary.class).addFunc("max", "orderNum")
+                .where("parentId", parentId).objResult(int.class);
         return maxOrder == null ? 0 : maxOrder;
     }
 }

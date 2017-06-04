@@ -71,23 +71,26 @@ public class AppCheckedExceptionHandler {
 
         log.debug("start:[class={}, method={}, beginTime={}]", targetClass, targetMethod, beginTime);
 
-        Object result = null;
+        Object result;
         try {
             result = pjp.proceed();
-        } catch (AppCheckedException checkedException) {
+        } catch (Throwable throwable) {
             if (ai.get() > 1) {
-                throw checkedException;
+                throw throwable;
             }
             AppExceptionTransactionAspectSupport.rollBack();
-            RunResultHolder.addError(checkedException);
-            result = getDefaultValue(signature);
-            if (log.isDebugEnabled()) {
-                log.debug(String.format("checked exception: [method=%s#%s], [errorCode=%s,errorMsg=%s], [args=%s]",
-                        targetClass, targetMethod, checkedException.getErrorCode(), checkedException.getErrorMsg(), argsToString(pjp)), checkedException);
+
+            if (throwable instanceof AppCheckedException) {
+                RunResultHolder.addError((AppCheckedException) throwable);
+                log.warn("checked exception: [method={}#{}], errorCode={} errorMsg={}], [args={}]",
+                        targetClass, targetMethod, ((AppCheckedException) throwable).getErrorCode(), throwable.getMessage(), argsToString(pjp));
             } else {
-                log.warn("checked exception: [method={}#{}], [errorCode={},errorMsg={}], [args={}]",
-                        targetClass, targetMethod, checkedException.getErrorCode(), checkedException.getErrorMsg(), argsToString(pjp));
+                RunResultHolder.addError("系统未知异常");
+                log.warn(String.format("checked exception: [method=%s#%s], [errorMsg=%s], [args=%s]",
+                        targetClass, targetMethod, throwable.getMessage(), argsToString(pjp)), throwable);
             }
+
+            result = getDefaultValue(signature);
         } finally {
             methodHierarchy.remove();
         }

@@ -15,7 +15,7 @@ class DeleteImpl extends AbstractCondition<Delete> implements Delete {
     private net.sf.jsqlparser.statement.delete.Delete delete = new net.sf.jsqlparser.statement.delete.Delete();
 
 
-    public DeleteImpl(Class<?> clazz) {
+    DeleteImpl(Class<?> clazz) {
         super(clazz);
         delete.setTable(new Table(tableInfo.getTableName()));
     }
@@ -23,19 +23,20 @@ class DeleteImpl extends AbstractCondition<Delete> implements Delete {
     @Override
     public DeleteImpl initEntity(Object entity) {
         if (entity == null) {
-            throw new NullPointerException("entity is null, can not createDelete!");
+            throw new NullPointerException("entity is null, can not delete!");
         }
         Object obj = BeanUtils.invokeReaderMethod(entity, tableInfo.getPkField());
         if (obj != null && (!(obj instanceof String) || StringUtils.isNotBlank((String) obj))) {
             where(tableInfo.getPkField(), obj);
         } else {
-            throw new NullPointerException("entity [" + entity + "] id is null, can not createDelete!");
+            throw new NullPointerException("entity [" + entity + "] id is null, can not delete!");
         }
         return this;
     }
 
     @Override
     public int execute() {
+        delete.setWhere(where);
         return (int) executor.execute(new StatementContext(delete.toString(), params, StatementContext.StatementType.DELETE));
     }
 }

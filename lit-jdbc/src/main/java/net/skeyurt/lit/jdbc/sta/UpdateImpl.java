@@ -25,7 +25,7 @@ class UpdateImpl extends AbstractCondition<Update> implements Update{
 
     private List<Expression> values = new ArrayList<>();
 
-    public UpdateImpl(Class<?> clazz) {
+    UpdateImpl(Class<?> clazz) {
         super(clazz);
         update.setTables(Collections.singletonList(new Table(tableInfo.getTableName())));
         update.setColumns(columns);
@@ -55,9 +55,18 @@ class UpdateImpl extends AbstractCondition<Update> implements Update{
         if (entity == null) {
             return this;
         }
+        Object key = BeanUtils.invokeReaderMethod(entity, tableInfo.getPkField());
+        if (key == null) {
+            throw new NullPointerException("entity [" + entity + "] id is null, can not update!");
+        }
+
         Map<String, String> fieldColumnMap = tableInfo.getFieldColumnMap();
 
         for (Map.Entry<String, String> entry : fieldColumnMap.entrySet()) {
+            if (StringUtils.equals(tableInfo.getPkField(), entry.getKey())) {
+                continue;
+            }
+
             Object obj = BeanUtils.invokeReaderMethod(entity, entry.getKey());
             if (!isIgnoreNull || obj != null && (!(obj instanceof String) || StringUtils.isNotBlank((String) obj))) {
                 columns.add(new Column(entry.getValue()));
@@ -65,12 +74,14 @@ class UpdateImpl extends AbstractCondition<Update> implements Update{
                 params.add(obj);
             }
         }
+        id(key);
 
         return this;
     }
 
     @Override
     public int execute() {
+        update.setWhere(where);
         return (int) executor.execute(new StatementContext(update.toString(), params, StatementContext.StatementType.UPDATE));
     }
 }

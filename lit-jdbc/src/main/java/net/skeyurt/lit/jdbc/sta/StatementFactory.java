@@ -25,13 +25,13 @@ public class StatementFactory {
     public static Delete createDelete(Class<?> clazz, StatementExecutor executor, StatementPageHandler pageHandler, String dbName) {
         DeleteImpl delete = new DeleteImpl(clazz);
         initStatement(delete, executor, pageHandler, dbName);
-        return new DeleteImpl(clazz);
+        return delete;
     }
 
     public static Update createUpdate(Class<?> clazz, StatementExecutor executor, StatementPageHandler pageHandler, String dbName) {
         UpdateImpl update = new UpdateImpl(clazz);
         initStatement(update, executor, pageHandler, dbName);
-        return new UpdateImpl(clazz);
+        return update;
     }
 
     private static void initStatement(AbstractStatement statement, StatementExecutor executor, StatementPageHandler pageHandler, String dbName) {

@@ -155,7 +155,12 @@ class SelectImpl<T> extends AbstractCondition<Select<T>> implements Select<T> {
     @Override
     public int count() {
         processSelect();
-        return (int) executor.execute(new StatementContext(select.toString(), params, StatementContext.StatementType.SELECT_OBJECT, int.class));
+        plainSelect.setOrderByElements(null);
+        plainSelect.setSelectItems(getCountFuncItem());
+        int count = (int) executor.execute(new StatementContext(select.toString(), params, StatementContext.StatementType.SELECT_OBJECT, int.class));
+        plainSelect.setOrderByElements(orderBy);
+        plainSelect.setSelectItems(selectItems);
+        return count;
     }
 
     @Override
@@ -185,7 +190,6 @@ class SelectImpl<T> extends AbstractCondition<Select<T>> implements Select<T> {
         processSelect();
         PageList<T> result;
         if (queryCount) {
-            PlainSelect plainSelect = (PlainSelect) select.getSelectBody();
             plainSelect.setOrderByElements(null);
             plainSelect.setSelectItems(getCountFuncItem());
             String countSql = pageHandler.getCountSql(dbName, plainSelect);

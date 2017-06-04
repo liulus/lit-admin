@@ -61,16 +61,16 @@ public class JdbcTemplateExecutor extends AbstractStatementExecutor {
 
     @Override
     public int delete(StatementContext context) {
-        return executeUpdate(context.getSql(), context.getParams());
+        return executeUpdate(context.getSql(), context.getParams().toArray());
     }
 
     @Override
     public int update(StatementContext context) {
-        return executeUpdate(context.getSql(), context.getParams());
+        return executeUpdate(context.getSql(), context.getParams().toArray());
     }
 
     private int executeUpdate(String sql, Object... args) {
-        log.info("\nsta : {}  args : {}", sql, Arrays.toString(args));
+        log.info("\nsql : {}  args : {}", sql, Arrays.toString(args));
         return jdbcTemplate.update(sql, args);
     }
 
@@ -88,11 +88,17 @@ public class JdbcTemplateExecutor extends AbstractStatementExecutor {
 
     @Override
     public Object selectList(StatementContext context) {
-        return jdbcTemplate.query(context.getSql(), context.getParams().toArray(), new AnnotationRowMapper<>(context.getRequireType()));
+        String sql = context.getSql();
+        Object[] args = context.getParams().toArray();
+        log.info("\nsql : {}  args : {}", sql, Arrays.toString(args));
+        return jdbcTemplate.query(sql, args, new AnnotationRowMapper<>(context.getRequireType()));
     }
 
     @Override
     public Object selectObject(StatementContext context) {
-        return jdbcTemplate.queryForObject(context.getSql(), context.getParams().toArray(), context.getRequireType());
+        String sql = context.getSql();
+        Object[] args = context.getParams().toArray();
+        log.info("\nsql : {}  args : {}", sql, Arrays.toString(args));
+        return jdbcTemplate.queryForObject(sql, args, context.getRequireType());
     }
 }

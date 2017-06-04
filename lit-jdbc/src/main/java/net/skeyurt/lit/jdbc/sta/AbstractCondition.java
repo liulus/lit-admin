@@ -40,142 +40,66 @@ public abstract class AbstractCondition<T extends Condition<T>> extends Abstract
         return and(tableInfo.getPkField(), operator, values);
     }
 
-    /**
-     * 添加 where 条件，默认操作符 =
-     *
-     * @param fieldName 属性名
-     * @param value     值
-     * @return
-     */
     @Override
     public T where(String fieldName, Object value) {
         addExpr(fieldName, Operator.EQ, true, false, value);
         return (T) this;
     }
 
-    /**
-     * 添加 where 条件
-     *
-     * @param fieldName
-     * @param operator
-     * @param values
-     * @return
-     */
     @Override
     public T where(String fieldName, Operator operator, Object... values) {
         addExpr(fieldName, operator, true, false, values);
         return (T) this;
     }
 
-    /**
-     * 添加 and 条件，默认操作符 =
-     *
-     * @param fieldName
-     * @param value
-     * @return
-     */
     @Override
     public T and(String fieldName, Object value) {
         this.and(fieldName, Operator.EQ, value);
         return (T) this;
     }
 
-    /**
-     * 添加 and 条件，
-     *
-     * @param fieldName
-     * @param values
-     * @return
-     */
     @Override
     public T and(String fieldName, Operator operator, Object... values) {
         addExpr(fieldName, operator, true, false, values);
         return (T) this;
     }
 
-    /**
-     * 添加带 括号 的 and 条件， 默认操作符 =
-     *
-     * @param fieldName
-     * @param value
-     * @return
-     */
     @Override
     public T andWithBracket(String fieldName, Object value) {
         this.andWithBracket(fieldName, Operator.EQ, value);
         return (T) this;
     }
 
-    /**
-     * 添加 括号 的 and 条件，
-     *
-     * @param fieldName
-     * @param values
-     * @return
-     */
     @Override
     public T andWithBracket(String fieldName, Operator operator, Object... values) {
         addExpr(fieldName, operator, true, true, values);
         return (T) this;
     }
 
-    /**
-     * 添加 or 条件，默认操作符 =
-     *
-     * @param fieldName
-     * @param value
-     * @return
-     */
     @Override
     public T or(String fieldName, Object value) {
         this.or(fieldName, Operator.EQ, value);
         return (T) this;
     }
 
-    /**
-     * 添加 or 条件，
-     *
-     * @param fieldName
-     * @param values
-     * @return
-     */
     @Override
     public T or(String fieldName, Operator operator, Object... values) {
         addExpr(fieldName, operator, false, false, values);
         return (T) this;
     }
 
-    /**
-     * 添加带 括号 的 or 条件， 默认操作符 =
-     *
-     * @param fieldName
-     * @param value
-     * @return
-     */
     @Override
     public T orWithBracket(String fieldName, Object value) {
         this.orWithBracket(fieldName, Operator.EQ, value);
         return (T) this;
     }
 
-    /**
-     * 添加 括号 的 or 条件，
-     *
-     * @param fieldName
-     * @param values
-     * @return
-     */
     @Override
     public T orWithBracket(String fieldName, Operator operator, Object... values) {
         addExpr(fieldName, operator, false, true, values);
         return (T) this;
     }
 
-    /**
-     * 添加 where 条件中的结束 括号
-     *
-     * @return
-     */
     @Override
     public T end() {
         if (where != null) {

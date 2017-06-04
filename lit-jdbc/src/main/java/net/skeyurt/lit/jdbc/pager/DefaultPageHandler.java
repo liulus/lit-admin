@@ -27,6 +27,6 @@ public class DefaultPageHandler implements StatementPageHandler {
 
     @Override
     public String getCountSql(String dbName, PlainSelect select) {
-        return null;
+        return select.toString();
     }
 }

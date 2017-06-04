@@ -1,5 +1,8 @@
 package net.skeyurt.lit.jdbc.annotation;
 
+import net.skeyurt.lit.jdbc.config.JdbcToolsConfig;
+import org.springframework.context.annotation.Import;
+
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
@@ -13,7 +16,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
  */
 @Target(TYPE)
 @Retention(RUNTIME)
-//@Import(JdbcDaoConfig.class)
+@Import(JdbcToolsConfig.class)
 public @interface EnableLitJdbc {
 
 }

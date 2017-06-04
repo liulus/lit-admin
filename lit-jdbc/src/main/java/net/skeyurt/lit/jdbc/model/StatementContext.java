@@ -16,16 +16,34 @@ import java.util.List;
 @NoArgsConstructor
 public class StatementContext {
 
+    /**
+     * 主键信息
+     */
     private String pkColumn;
 
+    /**
+     * 主键是否数据库生成
+     */
     private boolean generateKeyByDb;
 
+    /**
+     * 语句操作类型
+     */
     private StatementType statementType;
 
+    /**
+     * sql语句
+     */
     private String sql;
 
+    /**
+     * 语句对应的参数
+     */
     private List<Object> params;
 
+    /**
+     * 返回的类型
+     */
     private Class<?> requireType;
 
     public StatementContext(String sql, List<Object> params, StatementType type) {
@@ -34,7 +52,7 @@ public class StatementContext {
         this.statementType = type;
     }
 
-    public StatementContext(String sql, List<Object> params, StatementType type,Class<?> requireType) {
+    public StatementContext(String sql, List<Object> params, StatementType type, Class<?> requireType) {
         this.sql = sql;
         this.params = params;
         this.statementType = type;

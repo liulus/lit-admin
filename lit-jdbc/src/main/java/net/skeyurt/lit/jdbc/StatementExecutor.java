@@ -10,6 +10,12 @@ import net.skeyurt.lit.jdbc.model.StatementContext;
 public interface StatementExecutor {
 
 
+    /**
+     * 执行语句
+     *
+     * @param context 执行语句需要的内容
+     * @return 查询结果
+     */
     Object execute(StatementContext context);
 
 

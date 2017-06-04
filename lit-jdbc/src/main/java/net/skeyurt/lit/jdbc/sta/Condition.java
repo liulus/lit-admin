@@ -11,6 +11,11 @@ interface Condition<T extends Condition<T>> extends Statement {
 
     T id(Object value);
 
+    /**
+     * @param operator 操作符
+     * @param values   值
+     * @return Statement本身
+     */
     T id(Operator operator, Object... values);
 
     /**
@@ -18,99 +23,105 @@ interface Condition<T extends Condition<T>> extends Statement {
      *
      * @param fieldName 属性名
      * @param value     值
-     * @return
+     * @return Statement本身
      */
     T where(String fieldName, Object value);
 
     /**
      * 添加 where 条件
      *
-     * @param fieldName
-     * @param operator
-     * @param values
-     * @return
+     * @param fieldName 属性名
+     * @param operator  操作符
+     * @param values    值
+     * @return Statement本身
      */
     T where(String fieldName, Operator operator, Object... values);
 
     /**
      * 添加 and 条件，默认操作符 =
      *
-     * @param fieldName
-     * @param value
-     * @return
+     * @param fieldName 属性名
+     * @param value     值
+     * @return Statement本身
      */
     T and(String fieldName, Object value);
 
     /**
      * 添加 and 条件，
      *
-     * @param fieldName
-     * @param values
-     * @return
+     * @param fieldName 属性名
+     * @param values    值
+     * @return Statement本身
      */
     T and(String fieldName, Operator operator, Object... values);
 
     /**
      * 添加带 括号 的 and 条件， 默认操作符 =
      *
-     * @param fieldName
-     * @param value
-     * @return
+     * @param fieldName 属性名
+     * @param value     值
+     * @return Statement本身
      */
     T andWithBracket(String fieldName, Object value);
 
     /**
      * 添加 括号 的 and 条件，
      *
-     * @param fieldName
-     * @param values
-     * @return
+     * @param fieldName 属性名
+     * @param values    值
+     * @return Statement本身
      */
     T andWithBracket(String fieldName, Operator operator, Object... values);
 
     /**
      * 添加 or 条件，默认操作符 =
      *
-     * @param fieldName
-     * @param value
-     * @return
+     * @param fieldName 属性名
+     * @param value     值
+     * @return Statement本身
      */
     T or(String fieldName, Object value);
 
     /**
      * 添加 or 条件，
      *
-     * @param fieldName
-     * @param values
-     * @return
+     * @param fieldName 属性名
+     * @param values    值
+     * @return Statement本身
      */
     T or(String fieldName, Operator operator, Object... values);
 
     /**
      * 添加带 括号 的 or 条件， 默认操作符 =
      *
-     * @param fieldName
-     * @param value
-     * @return
+     * @param fieldName 属性名
+     * @param value     值
+     * @return Statement本身
      */
     T orWithBracket(String fieldName, Object value);
 
     /**
      * 添加 括号 的 or 条件，
      *
-     * @param fieldName
-     * @param values
-     * @return
+     * @param fieldName 属性名
+     * @param values    值
+     * @return Statement本身
      */
     T orWithBracket(String fieldName, Operator operator, Object... values);
 
     /**
      * 添加 where 条件中的结束 括号
      *
-     * @return
+     * @return Statement本身
      */
     T end();
 
+    /**
+     * 将bean 中不为空的属性作为查询条件
+     *
+     * @param bean 查询对象
+     * @return Statement本身
+     */
     T conditionBean(Object bean);
 
 

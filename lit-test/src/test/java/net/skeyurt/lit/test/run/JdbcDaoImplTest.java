@@ -1,7 +1,10 @@
 package net.skeyurt.lit.test.run;
 
 import lombok.extern.slf4j.Slf4j;
+import net.skeyurt.lit.commons.page.PageList;
 import net.skeyurt.lit.jdbc.JdbcTools;
+import net.skeyurt.lit.jdbc.enums.Operator;
+import net.skeyurt.lit.jdbc.sta.Select;
 import net.skeyurt.lit.test.base.BaseTest;
 import net.skeyurt.lit.test.bean.Goods;
 import net.skeyurt.lit.test.bean.GoodsVo;
@@ -9,9 +12,6 @@ import org.junit.Test;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
-import java.io.StringWriter;
-import java.io.Writer;
-import java.util.Arrays;
 import java.util.Date;
 
 /**
@@ -74,6 +74,7 @@ public class JdbcDaoImplTest extends BaseTest {
         int rows = jdbcTools.update(goods1);
         log.info("\n 修改了 {} 行数据 \n", rows);
 
+        goods1 = jdbcTools.get(Goods.class, id1);
         log.info("\n 修改后: {} \n", goods1);
 
         jdbcTools.delete(goods1);
@@ -122,6 +123,13 @@ public class JdbcDaoImplTest extends BaseTest {
 
     @Test
     public void queryForSingle2() throws Exception {
+        Select<Goods> select = jdbcTools.createSelect(Goods.class);
+
+        select.where("price", Operator.GT, 19.8D).desc("code");
+
+        PageList<Goods> goodss = select.pageList(20, 1);
+        System.out.println(goodss.getPageInfo());
+
 
     }
 

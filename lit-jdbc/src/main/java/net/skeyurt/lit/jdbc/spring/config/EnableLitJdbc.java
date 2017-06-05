@@ -1,6 +1,5 @@
-package net.skeyurt.lit.jdbc.annotation;
+package net.skeyurt.lit.jdbc.spring.config;
 
-import net.skeyurt.lit.jdbc.config.JdbcToolsConfig;
 import org.springframework.context.annotation.Import;
 
 import java.lang.annotation.Retention;

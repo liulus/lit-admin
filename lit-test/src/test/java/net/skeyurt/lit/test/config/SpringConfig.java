@@ -1,7 +1,7 @@
 package net.skeyurt.lit.test.config;
 
 import com.mchange.v2.c3p0.ComboPooledDataSource;
-import net.skeyurt.lit.jdbc.annotation.EnableLitJdbc;
+import net.skeyurt.lit.jdbc.spring.config.EnableLitJdbc;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

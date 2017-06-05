@@ -3,8 +3,8 @@ ext {
     logbackVersion = '1.1.7'
     jacksonVersion = '2.8.3'
     thymeleafVersion = '3.0.2.RELEASE'
-    springVersion = '4.3.2.RELEASE'
-    springBootVersion = '1.4.0.RELEASE'
+    springVersion = '4.3.7.RELEASE'
+    springBootVersion = '1.5.2.RELEASE'
 
 
     bootstrapVersion = '3.3.7'

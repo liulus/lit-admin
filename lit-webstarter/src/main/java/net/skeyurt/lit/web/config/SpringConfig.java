@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mchange.v2.c3p0.ComboPooledDataSource;
 import net.skeyurt.lit.commons.mvc.ModelResultHandlerInterceptor;
-import net.skeyurt.lit.jdbc.annotation.EnableLitJdbc;
+import net.skeyurt.lit.jdbc.spring.config.EnableLitJdbc;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

@@ -1,5 +1,6 @@
-package net.skeyurt.lit.jdbc.config;
+package net.skeyurt.lit.jdbc.spring.config;
 
+import net.skeyurt.lit.commons.condition.ConditionalOnMissingBean;
 import net.skeyurt.lit.jdbc.JdbcTools;
 import net.skeyurt.lit.jdbc.spring.JdbcTemplateToolsImpl;
 import org.apache.commons.lang3.StringUtils;
@@ -24,6 +25,7 @@ public class JdbcToolsConfig {
 
 
     @Bean
+    @ConditionalOnMissingBean(JdbcTools.class)
     public JdbcTools jdbcTools(ApplicationContext context, Environment environment) {
 
         JdbcTemplateToolsImpl templateTools = new JdbcTemplateToolsImpl();

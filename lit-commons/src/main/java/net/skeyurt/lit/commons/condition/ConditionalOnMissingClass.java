@@ -1,5 +1,5 @@
 /*
- * Copyright 2012-2015 the original author or authors.
+ * Copyright 2012-2016 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,28 +21,21 @@ import org.springframework.context.annotation.Conditional;
 import java.lang.annotation.*;
 
 /**
- * {@link Conditional} that only matches when the specified classes are on the classpath.
+ * {@link Conditional} that only matches when the specified classes are not on the
+ * classpath.
  *
- * @author Phillip Webb
+ * @author Dave Syer
  */
 @Target({ ElementType.TYPE, ElementType.METHOD })
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 @Conditional(OnClassCondition.class)
-public @interface ConditionalOnClass {
+public @interface ConditionalOnMissingClass {
 
 	/**
-	 * The classes that must be present. Since this annotation parsed by loading class
-	 * bytecode it is safe to specify classes here that may ultimately not be on the
-	 * classpath.
-	 * @return the classes that must be present
+	 * The names of the classes that must not be present.
+	 * @return the names of the classes that must not be present
 	 */
-	Class<?>[] value() default {};
-
-	/**
-	 * The classes names that must be present.
-	 * @return the class names that must be present.
-	 */
-	String[] name() default {};
+	String[] value() default {};
 
 }

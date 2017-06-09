@@ -3,6 +3,7 @@ package net.skeyurt.lit.jdbc.spring;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
+import net.skeyurt.lit.commons.util.ClassUtils;
 import net.skeyurt.lit.jdbc.AbstractStatementExecutor;
 import net.skeyurt.lit.jdbc.model.StatementContext;
 import org.springframework.dao.IncorrectResultSizeDataAccessException;
@@ -27,10 +28,13 @@ import java.util.List;
 @Slf4j
 public class JdbcTemplateExecutor extends AbstractStatementExecutor {
 
+    private static final Class<?>[] SINGLE_CLASS_ARRAY = new Class<?>[]{Number.class, String.class};
+
+
     @Setter
     private JdbcOperations jdbcTemplate;
 
-    public JdbcTemplateExecutor(JdbcOperations jdbcOperations){
+    public JdbcTemplateExecutor(JdbcOperations jdbcOperations) {
         this.jdbcTemplate = jdbcOperations;
     }
 
@@ -91,14 +95,17 @@ public class JdbcTemplateExecutor extends AbstractStatementExecutor {
         String sql = context.getSql();
         Object[] args = context.getParams().toArray();
         log.info("\nsql : {}  args : {}", sql, Arrays.toString(args));
+        if (ClassUtils.isPrimitiveOrWrapper(context.getRequireType())) {
+            return jdbcTemplate.queryForList(sql, args, context.getRequireType());
+        }
+
+        for (Class<?> clazz : SINGLE_CLASS_ARRAY) {
+            if (clazz.isAssignableFrom(context.getRequireType())) {
+                return jdbcTemplate.queryForList(sql, args, context.getRequireType());
+            }
+        }
+
         return jdbcTemplate.query(sql, args, new AnnotationRowMapper<>(context.getRequireType()));
     }
 
-    @Override
-    public Object selectObject(StatementContext context) {
-        String sql = context.getSql();
-        Object[] args = context.getParams().toArray();
-        log.info("\nsql : {}  args : {}", sql, Arrays.toString(args));
-        return jdbcTemplate.queryForObject(sql, args, context.getRequireType());
-    }
 }

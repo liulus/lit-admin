@@ -153,35 +153,7 @@ public abstract class AbstractCondition<T extends Condition<T>> extends Abstract
             return isNullExpression;
         }
 
-        BinaryExpression expr = null;
-        switch (operator) {
-            case EQ:
-                expr = new EqualsTo();
-                break;
-            case NOT_EQ:
-                expr = new NotEqualsTo();
-                break;
-            case LT:
-                expr = new MinorThan();
-                break;
-            case GT:
-                expr = new GreaterThan();
-                break;
-            case LTEQ:
-                expr = new MinorThanEquals();
-                break;
-            case GTEQ:
-                expr = new GreaterThanEquals();
-                break;
-            case LIKE:
-                expr = new LikeExpression();
-                break;
-            case NOT_LIKE:
-                LikeExpression likeExpression = new LikeExpression();
-                likeExpression.setNot(true);
-                expr = likeExpression;
-                break;
-        }
+        BinaryExpression expr = getBinaryExpression(operator);
         if (expr != null) {
             expr.setLeftExpression(column);
             expr.setRightExpression(PARAM_EXPR);
@@ -201,6 +173,30 @@ public abstract class AbstractCondition<T extends Condition<T>> extends Abstract
             inExpression.setNot(true);
         }
         return inExpression;
+    }
+
+    protected BinaryExpression getBinaryExpression(Operator operator) {
+        switch (operator) {
+            case EQ:
+                return new EqualsTo();
+            case NOT_EQ:
+                return new NotEqualsTo();
+            case LT:
+                return new MinorThan();
+            case GT:
+                return new GreaterThan();
+            case LTEQ:
+                return new MinorThanEquals();
+            case GTEQ:
+                return new GreaterThanEquals();
+            case LIKE:
+                return new LikeExpression();
+            case NOT_LIKE:
+                LikeExpression likeExpression = new LikeExpression();
+                likeExpression.setNot(true);
+                return likeExpression;
+        }
+        return null;
     }
 
 

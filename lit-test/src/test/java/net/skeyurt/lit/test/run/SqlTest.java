@@ -19,7 +19,9 @@ public class SqlTest {
         JdbcTemplateToolsImpl jdbcTools = new JdbcTemplateToolsImpl(new JdbcTemplate());
         jdbcTools.setDbName("ORACLE");
 
-        Object execute = jdbcTools.createInsert(Goods.class).field("code", "price").values("822", 19.3D).execute();
+//        Object execute = jdbcTools.createInsert(Goods.class).field("code", "price").values("822", 19.3D).execute();
+
+        jdbcTools.createSelect(Goods.class).addFunc("max", "price").alias("max_price").tableAlias("g").single();
 
 
     }

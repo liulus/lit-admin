@@ -1,7 +1,7 @@
 package net.skeyurt.lit.jdbc.sta;
 
-import net.skeyurt.lit.commons.page.PageList;
-import net.skeyurt.lit.commons.page.Pager;
+import net.skeyurt.lit.jdbc.enums.JoinType;
+import net.skeyurt.lit.jdbc.enums.Operator;
 
 import java.util.List;
 
@@ -28,7 +28,7 @@ public interface Select<T> extends Condition<Select<T>> {
      */
     Select<T> exclude(String... fieldNames);
 
-    Select<T> addField(String... fieldNames);
+    Select<T> addField(Class<?> tableClass, String... fieldNames);
 
     Select<T> addFunc(String funcName);
 
@@ -46,6 +46,23 @@ public interface Select<T> extends Condition<Select<T>> {
      * @return
      */
     Select<T> addFunc(String funcName, boolean distinct, boolean allColumns, String... fieldNames);
+
+    Select<T> alias(String... alias);
+
+    Select<T> tableAlias(String alias);
+
+    <E> Select<T> join(Class<E> tableClass);
+
+    <E> Select<T> simpleJoin(Class<E> tableClass);
+
+    <E> Select<T> join(JoinType joinType, Class<E> tableClass);
+
+    Select<T> on(Class<?> table1, String field1, Operator operator, Class<?> table2, String field2);
+
+    Select<T> joinCondition(Class<?> table1, String field1, Operator operator, Class<?> table2, String field2);
+
+    Select<T> groupBy(String... fields);
+
 
     /**
      * 添加升序排列属性
@@ -78,33 +95,31 @@ public interface Select<T> extends Condition<Select<T>> {
     T single();
 
     /**
+     * 查询单条记录
+     *
+     * @return 指定类型
+     */
+    <E> E single(Class<E> clazz);
+
+    /**
      * 查询列表
      *
      * @return 实体列表
      */
     List<T> list();
 
-    PageList<T> pageList(Pager pager);
-
-    PageList<T> pageList(int pageSize, int pageNum);
-
     /**
-     * 分页查询列表
+     * 查询列表
      *
-     * @param pageSize   每页多少条
-     * @param pageNum    第几页
-     * @param queryCount 是否查 count
-     * @return
+     * @return 指定类型列表
      */
-    PageList<T> pageList(int pageSize, int pageNum, boolean queryCount);
+    <E> List<E> list(Class<E> clazz);
 
-    /**
-     * 查询指定类型
-     *
-     * @param clazz 指定类型的 class
-     * @param <E>   对象类型
-     * @return 制定的类型
-     */
-    <E> E objResult(Class<E> clazz);
+    Select<T> pageNum(int pageNum);
+
+    Select<T> pageSize(int pageSize);
+
+    Select<T> count(boolean queryCount);
+
 
 }

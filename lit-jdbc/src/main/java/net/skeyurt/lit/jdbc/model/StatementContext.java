@@ -66,7 +66,6 @@ public class StatementContext {
         UPDATE,
         SELECT_SINGLE,
         SELECT_LIST,
-        SELECT_OBJECT;
     }
 
 }

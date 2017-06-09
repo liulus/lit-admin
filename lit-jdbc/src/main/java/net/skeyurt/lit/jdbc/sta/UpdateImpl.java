@@ -19,14 +19,17 @@ import java.util.Map;
  */
 class UpdateImpl extends AbstractCondition<Update> implements Update{
 
-    private net.sf.jsqlparser.statement.update.Update update = new net.sf.jsqlparser.statement.update.Update();
+    private net.sf.jsqlparser.statement.update.Update update;
 
-    private List<Column> columns = new ArrayList<>();
+    private List<Column> columns;
 
-    private List<Expression> values = new ArrayList<>();
+    private List<Expression> values;
 
     UpdateImpl(Class<?> clazz) {
         super(clazz);
+        update = new net.sf.jsqlparser.statement.update.Update();
+        columns = new ArrayList<>();
+        values = new ArrayList<>();
         update.setTables(Collections.singletonList(new Table(tableInfo.getTableName())));
         update.setColumns(columns);
         update.setExpressions(values);
@@ -41,7 +44,7 @@ class UpdateImpl extends AbstractCondition<Update> implements Update{
     }
 
     @Override
-    public UpdateImpl values(Object... values) {
+    public Update values(Object... values) {
         for (Object value : values) {
             this.values.add(PARAM_EXPR);
             params.add(value);
@@ -51,7 +54,7 @@ class UpdateImpl extends AbstractCondition<Update> implements Update{
 
 
     @Override
-    public UpdateImpl initEntity(Object entity, boolean isIgnoreNull) {
+    public Update initEntity(Object entity, boolean isIgnoreNull) {
         if (entity == null) {
             return this;
         }

@@ -24,7 +24,7 @@ import java.util.*;
  */
 class InsertImpl extends AbstractStatement implements Insert {
 
-    private net.sf.jsqlparser.statement.insert.Insert insert = new net.sf.jsqlparser.statement.insert.Insert();
+    private net.sf.jsqlparser.statement.insert.Insert insert;
 
     private List<Column> columns = new ArrayList<>();
 
@@ -33,6 +33,7 @@ class InsertImpl extends AbstractStatement implements Insert {
 
     InsertImpl(Class<?> clazz) {
         super(clazz);
+        insert = new net.sf.jsqlparser.statement.insert.Insert();
         insert.setTable(new Table(tableInfo.getTableName()));
         insert.setColumns(columns);
         insert.setItemsList(new ExpressionList(values));

@@ -12,11 +12,12 @@ import org.apache.commons.lang3.StringUtils;
  */
 class DeleteImpl extends AbstractCondition<Delete> implements Delete {
 
-    private net.sf.jsqlparser.statement.delete.Delete delete = new net.sf.jsqlparser.statement.delete.Delete();
+    private net.sf.jsqlparser.statement.delete.Delete delete;
 
 
     DeleteImpl(Class<?> clazz) {
         super(clazz);
+        delete = new net.sf.jsqlparser.statement.delete.Delete();
         delete.setTable(new Table(tableInfo.getTableName()));
     }
 

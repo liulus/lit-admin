@@ -24,8 +24,6 @@ public abstract class AbstractStatementExecutor implements StatementExecutor {
                 return selectSingle(context);
             case SELECT_LIST:
                 return selectList(context);
-            case SELECT_OBJECT:
-                return selectObject(context);
         }
 
 
@@ -41,9 +39,6 @@ public abstract class AbstractStatementExecutor implements StatementExecutor {
     public abstract  Object selectSingle (StatementContext context);
 
     public abstract  Object selectList (StatementContext context);
-
-    public abstract  Object selectObject (StatementContext context);
-
 
 
 }

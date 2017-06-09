@@ -79,12 +79,13 @@ public abstract class AbstractJdbcTools implements JdbcTools {
 
     @Override
     public <T, Qo extends Pager> PageList<T> queryPageList(Class<T> clazz, Qo qo) {
-        return createSelect(clazz).conditionBean(qo).pageList(qo);
+        return (PageList<T>) createSelect(clazz).conditionBean(qo)
+                .pageNum(qo.getPageNum()).pageSize(qo.getPageSize()).count(qo.isCount()).list();
     }
 
     @Override
     public <T, Qo> int count(Class<T> clazz, Qo qo) {
-        return createSelect(clazz).addFunc("count").conditionBean(qo).count();
+        return createSelect(clazz).conditionBean(qo).count();
     }
 
     public <T> Select<T> createSelect(Class<T> clazz) {

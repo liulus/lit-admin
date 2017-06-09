@@ -127,7 +127,7 @@ public class JdbcDaoImplTest extends BaseTest {
 
         select.where("price", Operator.GT, 19.8D).desc("code");
 
-        PageList<Goods> goodss = select.pageList(20, 1);
+        PageList<Goods> goodss = (PageList<Goods>) select.pageNum(1).pageSize(20).list();
         System.out.println(goodss.getPageInfo());
 
 

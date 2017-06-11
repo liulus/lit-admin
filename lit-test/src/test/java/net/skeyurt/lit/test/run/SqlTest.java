@@ -1,7 +1,9 @@
 package net.skeyurt.lit.test.run;
 
+import net.skeyurt.lit.jdbc.enums.Operator;
 import net.skeyurt.lit.jdbc.spring.JdbcTemplateToolsImpl;
 import net.skeyurt.lit.test.bean.Goods;
+import net.skeyurt.lit.test.bean.GoodsVo;
 import org.junit.Test;
 import org.springframework.jdbc.core.JdbcTemplate;
 
@@ -21,7 +23,16 @@ public class SqlTest {
 
 //        Object execute = jdbcTools.createInsert(Goods.class).field("code", "price").values("822", 19.3D).execute();
 
-        jdbcTools.createSelect(Goods.class).addFunc("max", "price").alias("max_price").tableAlias("g").single();
+        jdbcTools.createSelect(Goods.class).tableAlias("g")
+                .join(GoodsVo.class).tableAlias("gv")
+                .on(Goods.class, "code", Operator.EQ, GoodsVo.class, "code")
+                .addFunc("max", "price")
+                .alias("maxPrice")
+                .joinCondition(Goods.class, "code", Operator.EQ, GoodsVo.class, "code")
+                .groupBy("code")
+                .having("maxPrice", Operator.GTEQ, 19.98D)
+                .asc("goodsId")
+                .single();
 
 
     }

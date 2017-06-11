@@ -1,6 +1,5 @@
 package net.skeyurt.lit.jdbc.sta;
 
-import net.sf.jsqlparser.schema.Table;
 import net.skeyurt.lit.commons.bean.BeanUtils;
 import net.skeyurt.lit.jdbc.model.StatementContext;
 import org.apache.commons.lang3.StringUtils;
@@ -18,7 +17,7 @@ class DeleteImpl extends AbstractCondition<Delete> implements Delete {
     DeleteImpl(Class<?> clazz) {
         super(clazz);
         delete = new net.sf.jsqlparser.statement.delete.Delete();
-        delete.setTable(new Table(tableInfo.getTableName()));
+        delete.setTable(table);
     }
 
     @Override
@@ -26,9 +25,9 @@ class DeleteImpl extends AbstractCondition<Delete> implements Delete {
         if (entity == null) {
             throw new NullPointerException("entity is null, can not delete!");
         }
-        Object obj = BeanUtils.invokeReaderMethod(entity, tableInfo.getPkField());
-        if (obj != null && (!(obj instanceof String) || StringUtils.isNotBlank((String) obj))) {
-            where(tableInfo.getPkField(), obj);
+        Object key = BeanUtils.invokeReaderMethod(entity, tableInfo.getPkField());
+        if (key != null && (!(key instanceof String) || StringUtils.isNotBlank((String) key))) {
+            idCondition(key);
         } else {
             throw new NullPointerException("entity [" + entity + "] id is null, can not delete!");
         }

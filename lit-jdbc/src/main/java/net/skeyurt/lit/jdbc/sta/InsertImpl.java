@@ -4,7 +4,6 @@ import net.sf.jsqlparser.expression.Expression;
 import net.sf.jsqlparser.expression.HexValue;
 import net.sf.jsqlparser.expression.operators.relational.ExpressionList;
 import net.sf.jsqlparser.schema.Column;
-import net.sf.jsqlparser.schema.Table;
 import net.skeyurt.lit.commons.bean.BeanUtils;
 import net.skeyurt.lit.commons.util.ClassUtils;
 import net.skeyurt.lit.jdbc.enums.GenerationType;
@@ -34,7 +33,7 @@ class InsertImpl extends AbstractStatement implements Insert {
     InsertImpl(Class<?> clazz) {
         super(clazz);
         insert = new net.sf.jsqlparser.statement.insert.Insert();
-        insert.setTable(new Table(tableInfo.getTableName()));
+        insert.setTable(table);
         insert.setColumns(columns);
         insert.setItemsList(new ExpressionList(values));
     }
@@ -42,7 +41,7 @@ class InsertImpl extends AbstractStatement implements Insert {
     @Override
     public Insert field(String... fieldNames) {
         for (String fieldName : fieldNames) {
-            columns.add(new Column(getColumn(fieldName)));
+            columns.add(new Column(table, getColumn(fieldName)));
         }
         return this;
     }

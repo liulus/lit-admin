@@ -44,7 +44,7 @@ public abstract class AbstractJdbcTools implements JdbcTools {
 
     @Override
     public <T> int deleteByIds(Class<T> clazz, Serializable... ids) {
-        return createDelete(clazz).id(Operator.IN, (Object[]) ids).execute();
+        return createDelete(clazz).idCondition(Operator.IN, (Object[]) ids).execute();
     }
 
     @Override
@@ -59,7 +59,7 @@ public abstract class AbstractJdbcTools implements JdbcTools {
 
     @Override
     public <T> T get(Class<T> clazz, Serializable id) {
-        return createSelect(clazz).id(id).single();
+        return createSelect(clazz).idCondition(id).single();
     }
 
     @Override
@@ -69,23 +69,23 @@ public abstract class AbstractJdbcTools implements JdbcTools {
 
     @Override
     public <T, Qo> T queryForSingle(Class<T> clazz, Qo qo) {
-        return createSelect(clazz).conditionBean(qo).single();
+        return createSelect(clazz).beanCondition(qo).single();
     }
 
     @Override
     public <T, Qo> List<T> query(Class<T> clazz, Qo qo) {
-        return createSelect(clazz).conditionBean(qo).list();
+        return createSelect(clazz).beanCondition(qo).list();
     }
 
     @Override
     public <T, Qo extends Pager> PageList<T> queryPageList(Class<T> clazz, Qo qo) {
-        return (PageList<T>) createSelect(clazz).conditionBean(qo)
-                .pageNum(qo.getPageNum()).pageSize(qo.getPageSize()).count(qo.isCount()).list();
+        return (PageList<T>) createSelect(clazz).beanCondition(qo)
+                .page(qo.getPageNum(),qo.getPageSize(),qo.isCount()).list();
     }
 
     @Override
     public <T, Qo> int count(Class<T> clazz, Qo qo) {
-        return createSelect(clazz).conditionBean(qo).count();
+        return createSelect(clazz).beanCondition(qo).count();
     }
 
     public <T> Select<T> createSelect(Class<T> clazz) {

@@ -9,14 +9,14 @@ import net.skeyurt.lit.jdbc.enums.Operator;
  */
 interface Condition<T extends Condition<T>> extends Statement {
 
-    T id(Object value);
+    T idCondition(Object value);
 
     /**
      * @param operator 操作符
      * @param values   值
      * @return Statement本身
      */
-    T id(Operator operator, Object... values);
+    T idCondition(Operator operator, Object... values);
 
     /**
      * 添加 where 条件，默认操作符 =
@@ -122,7 +122,7 @@ interface Condition<T extends Condition<T>> extends Statement {
      * @param bean 查询对象
      * @return Statement本身
      */
-    T conditionBean(Object bean);
+    T beanCondition(Object bean);
 
 
 }

@@ -1,5 +1,6 @@
 package net.skeyurt.lit.jdbc.sta;
 
+import net.skeyurt.lit.commons.page.Pager;
 import net.skeyurt.lit.jdbc.enums.JoinType;
 import net.skeyurt.lit.jdbc.enums.Operator;
 
@@ -28,41 +29,158 @@ public interface Select<T> extends Condition<Select<T>> {
      */
     Select<T> exclude(String... fieldNames);
 
+    /**
+     * 多表联合查询要增加的字段
+     *
+     * @param tableClass 要关联表对应的实体
+     * @param fieldNames 实体中的属性
+     * @return Select
+     */
     Select<T> addField(Class<?> tableClass, String... fieldNames);
 
     Select<T> addFunc(String funcName);
 
     Select<T> addFunc(String funcName, String... fieldNames);
 
-    Select<T> addFunc(String funcName, boolean distinct, String... fieldNames);
-
     /**
-     * Select 语句中添加函数，目前只支持合计函数（Aggregate functions）暂时不支持 group by 语句
+     * Select 语句中添加函数，目前只支持合计函数（Aggregate functions）
      *
      * @param funcName   函数名，如：max，count
      * @param distinct   是否去重
-     * @param allColumns 是否是全部字段
      * @param fieldNames 函数执行的列
-     * @return
+     * @return Select
      */
-    Select<T> addFunc(String funcName, boolean distinct, boolean allColumns, String... fieldNames);
+    Select<T> addFunc(String funcName, boolean distinct, String... fieldNames);
 
+    /**
+     * 设置字段别名
+     *
+     * @param alias 别名
+     * @return Select
+     */
     Select<T> alias(String... alias);
 
+    /**
+     * 设置表别名
+     *
+     * @param alias 别名
+     * @return Select
+     */
     Select<T> tableAlias(String alias);
 
+    /**
+     * 添加join
+     *
+     * @param tableClass join 表对应的实体
+     * @param <E>
+     * @return Select
+     */
     <E> Select<T> join(Class<E> tableClass);
 
+    /**
+     * 添加简单join 只是将表名列在 from 后 没有 on 条件
+     *
+     * @param tableClass join 表对应的实体
+     * @param <E>
+     * @return Select
+     */
     <E> Select<T> simpleJoin(Class<E> tableClass);
 
+    /**
+     * 添加join, 并指定 join 类型
+     *
+     * @param tableClass join 表对应的实体
+     * @param <E>
+     * @return Select
+     */
     <E> Select<T> join(JoinType joinType, Class<E> tableClass);
 
+    /**
+     * join 语句的 on 条件, simpleJoin 方法不生效
+     *
+     * @param table1   on 条件的表1
+     * @param field1   on 条件的表1中的属性
+     * @param operator 操作符
+     * @param table2   on 条件的表2
+     * @param field2   on 条件的表2中的属性
+     * @return Select
+     */
     Select<T> on(Class<?> table1, String field1, Operator operator, Class<?> table2, String field2);
 
+    /**
+     * join 语句的条件, 只有simpleJoin 生效
+     *
+     * @param table1   join 条件的表1
+     * @param field1   join 条件的表1中的属性
+     * @param operator 操作符
+     * @param table2   join 条件的表2
+     * @param field2   join 条件的表2中的属性
+     * @return Select
+     */
     Select<T> joinCondition(Class<?> table1, String field1, Operator operator, Class<?> table2, String field2);
 
+    /**
+     * 添加 group by 的字段
+     *
+     * @param fields 字段
+     * @return Select
+     */
     Select<T> groupBy(String... fields);
 
+    /**
+     * 添加 having 条件 默认操作符 =
+     *
+     * @param fieldName 字段名
+     * @param value     值
+     * @return Select
+     */
+    Select<T> having(String fieldName, Object value);
+
+    /**
+     * 添加 having 条件
+     *
+     * @param fieldName 属性名
+     * @param operator  操作符
+     * @param values    值
+     * @return Select
+     */
+    Select<T> having(String fieldName, Operator operator, Object... values);
+
+    /**
+     * 添加 having and 条件，默认操作符 =
+     *
+     * @param fieldName 属性名
+     * @param value     值
+     * @return Select
+     */
+    Select<T> havingAnd(String fieldName, Object value);
+
+    /**
+     * 添加 having and 条件，
+     *
+     * @param fieldName 属性名
+     * @param values    值
+     * @return Select
+     */
+    Select<T> havingAnd(String fieldName, Operator operator, Object... values);
+
+    /**
+     * 添加 having or 条件，默认操作符 =
+     *
+     * @param fieldName 属性名
+     * @param value     值
+     * @return Select
+     */
+    Select<T> havingOr(String fieldName, Object value);
+
+    /**
+     * 添加 having or 条件，
+     *
+     * @param fieldName 属性名
+     * @param values    值
+     * @return Select
+     */
+    Select<T> havingOr(String fieldName, Operator operator, Object... values);
 
     /**
      * 添加升序排列属性
@@ -115,11 +233,11 @@ public interface Select<T> extends Condition<Select<T>> {
      */
     <E> List<E> list(Class<E> clazz);
 
-    Select<T> pageNum(int pageNum);
+    Select<T> page(Pager pager);
 
-    Select<T> pageSize(int pageSize);
+    Select<T> page(int pageNum, int pageSize);
 
-    Select<T> count(boolean queryCount);
+    Select<T> page(int pageNum, int pageSize, boolean queryCont);
 
 
 }

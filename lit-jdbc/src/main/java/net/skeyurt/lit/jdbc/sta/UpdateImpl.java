@@ -2,7 +2,6 @@ package net.skeyurt.lit.jdbc.sta;
 
 import net.sf.jsqlparser.expression.Expression;
 import net.sf.jsqlparser.schema.Column;
-import net.sf.jsqlparser.schema.Table;
 import net.skeyurt.lit.commons.bean.BeanUtils;
 import net.skeyurt.lit.jdbc.model.StatementContext;
 import org.apache.commons.lang3.StringUtils;
@@ -30,7 +29,7 @@ class UpdateImpl extends AbstractCondition<Update> implements Update{
         update = new net.sf.jsqlparser.statement.update.Update();
         columns = new ArrayList<>();
         values = new ArrayList<>();
-        update.setTables(Collections.singletonList(new Table(tableInfo.getTableName())));
+        update.setTables(Collections.singletonList(table));
         update.setColumns(columns);
         update.setExpressions(values);
     }
@@ -38,7 +37,7 @@ class UpdateImpl extends AbstractCondition<Update> implements Update{
     @Override
     public Update set(String... fieldNames) {
         for (String fieldName : fieldNames) {
-            columns.add(new Column(getColumn(fieldName)));
+            columns.add(new Column(table, getColumn(fieldName)));
         }
         return this;
     }
@@ -77,7 +76,7 @@ class UpdateImpl extends AbstractCondition<Update> implements Update{
                 params.add(obj);
             }
         }
-        id(key);
+        idCondition(key);
 
         return this;
     }

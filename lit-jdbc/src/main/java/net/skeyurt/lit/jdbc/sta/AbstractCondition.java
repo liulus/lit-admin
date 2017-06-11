@@ -31,12 +31,12 @@ public abstract class AbstractCondition<T extends Condition<T>> extends Abstract
     }
 
     @Override
-    public T id(Object value) {
-        return id(Operator.EQ, value);
+    public T idCondition(Object value) {
+        return idCondition(Operator.EQ, value);
     }
 
     @Override
-    public T id(Operator operator, Object... values) {
+    public T idCondition(Operator operator, Object... values) {
         return and(tableInfo.getPkField(), operator, values);
     }
 
@@ -109,7 +109,7 @@ public abstract class AbstractCondition<T extends Condition<T>> extends Abstract
     }
 
     @Override
-    public T conditionBean(Object bean) {
+    public T beanCondition(Object bean) {
         for (String field : tableInfo.getFieldColumnMap().keySet()) {
             Object value = BeanUtils.invokeReaderMethod(bean, field);
             if (value != null && (!(value instanceof String) || StringUtils.isNotBlank((String) value))) {
@@ -131,18 +131,16 @@ public abstract class AbstractCondition<T extends Condition<T>> extends Abstract
                     isAnd ? new AndExpression(where, expression) :
                             new OrExpression(where, expression);
         }
-
     }
 
 
-    private Expression getExpression(String fieldName, Operator operator, Object... values) {
+    protected Expression getExpression(String fieldName, Operator operator, Object... values) {
 
         if (StringUtils.isEmpty(fieldName)) {
             return null;
         }
 
-        String columnName = getColumn(fieldName);
-        Column column = new Column(columnName);
+        Column column = new Column(table, getColumn(fieldName));
 
         if (values == null || values.length == 0 || values[0] == null) {
             IsNullExpression isNullExpression = new IsNullExpression();

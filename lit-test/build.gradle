@@ -3,6 +3,7 @@ dependencies {
             libs.'mysql',
             libs.'oracle',
             libs.'c3p0',
+            libs.'druid',
             libs.'lombok',
             libs.'commons-io',
             libs.'spring-boot-test',
@@ -12,5 +13,9 @@ dependencies {
             libs.'jackson-databind',
             libs.'jcl-over-slf4j',
             libs.'slf4j-log4j12'
+
+    compile (project(':lit-plugins:lit-dictionary')){
+        exclude module: 'spring-webmvc'
+    }
 
 }

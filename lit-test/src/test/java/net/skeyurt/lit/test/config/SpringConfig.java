@@ -2,7 +2,6 @@ package net.skeyurt.lit.test.config;
 
 import com.mchange.v2.c3p0.ComboPooledDataSource;
 import net.skeyurt.lit.jdbc.spring.config.EnableLitJdbc;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
@@ -28,9 +27,7 @@ import java.beans.PropertyVetoException;
 @SuppressWarnings("Duplicates")
 public class SpringConfig {
 
-    private static final String mysql = "mysqlDataSource";
-
-    private static final String oracle = "oracleDataSource";
+    private static final String DB = "mysql.";
 
     @Resource
     private Environment env;
@@ -39,10 +36,10 @@ public class SpringConfig {
     public DataSource mysqlDataSource() throws PropertyVetoException {
 
         ComboPooledDataSource source = new ComboPooledDataSource();
-        source.setJdbcUrl(env.getProperty("mysql.url"));
-        source.setDriverClass(env.getProperty("mysql.driver"));
-        source.setUser(env.getProperty("mysql.user"));
-        source.setPassword(env.getProperty("mysql.password"));
+        source.setJdbcUrl(env.getProperty(DB + "url"));
+        source.setDriverClass(env.getProperty(DB + "driver"));
+        source.setUser(env.getProperty(DB + "user"));
+        source.setPassword(env.getProperty(DB + "password"));
         source.setMinPoolSize(Integer.valueOf(env.getProperty("pool.minPoolSize")));
         source.setMaxPoolSize(Integer.valueOf(env.getProperty("pool.maxPoolSize")));
         source.setAutoCommitOnClose(false);
@@ -53,30 +50,12 @@ public class SpringConfig {
     }
 
     @Bean
-    public DataSource oracleDataSource() throws PropertyVetoException {
-
-        ComboPooledDataSource source = new ComboPooledDataSource();
-        source.setJdbcUrl(env.getProperty("oracle.url"));
-        source.setDriverClass(env.getProperty("oracle.driver"));
-        source.setUser(env.getProperty("oracle.user"));
-        source.setPassword(env.getProperty("oracle.password"));
-        source.setMinPoolSize(Integer.valueOf(env.getProperty("pool.minPoolSize")));
-        source.setMaxPoolSize(Integer.valueOf(env.getProperty("pool.maxPoolSize")));
-        source.setAutoCommitOnClose(false);
-        source.setCheckoutTimeout(Integer.valueOf(env.getProperty("pool.checkoutTimeout")));
-        source.setAcquireRetryAttempts(2);
-
-        return source;
-    }
-
-
-    @Bean
-    public PlatformTransactionManager transactionManager(@Qualifier(oracle) DataSource dataSource) {
+    public PlatformTransactionManager transactionManager(DataSource dataSource) {
         return new DataSourceTransactionManager(dataSource);
     }
 
     @Bean
-    public JdbcOperations jdbcOperations(@Qualifier(oracle) DataSource dataSource) {
+    public JdbcOperations jdbcOperations(DataSource dataSource) {
         return new JdbcTemplate(dataSource);
     }
 

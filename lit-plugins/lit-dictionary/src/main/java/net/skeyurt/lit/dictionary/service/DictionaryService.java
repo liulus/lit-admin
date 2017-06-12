@@ -35,5 +35,9 @@ public interface DictionaryService {
      */
     void update(Dictionary dictionary);
 
+    Dictionary findRootByKey(String key);
+
+//    Dictionary findByKeys(String... keys);
+
 
 }

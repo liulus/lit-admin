@@ -58,11 +58,16 @@ public class DictionaryServiceImpl implements DictionaryService {
 
         int maxOrder = dictionaryDao.queryMaxOrder(dictionary.getParentId());
         dictionary.setOrderNum(maxOrder + 1);
-        jdbcTools.insert(dictionary);
+        dictionary.setDictId((Long) jdbcTools.insert(dictionary));
     }
 
     @Override
     public void update(Dictionary dictionary) {
 
+    }
+
+    @Override
+    public Dictionary findRootByKey(String key) {
+        return jdbcTools.createSelect(Dictionary.class).where("dictKey", key).and("parentId", null).single();
     }
 }

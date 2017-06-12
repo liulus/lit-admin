@@ -26,10 +26,10 @@ public class JdbcDaoImplTest extends BaseTest {
     @Resource
     private JdbcTools jdbcTools;
 
-    private Goods goods1 = Goods.builder().code("11111111").name("第一个").inventory(10).price(9.98D).gmtCreate(new Date()).delete(false).build();
-    private Goods goods2 = Goods.builder().code("22222222").name("第二个").inventory(20).price(29.98D).gmtCreate(new Date()).delete(false).build();
+    private Goods goods1 = Goods.builder().code("11111111").name("第一个").inventory(10).price(9.98D).gmtCreate(new Date()).build();
+    private Goods goods2 = Goods.builder().code("22222222").name("第二个").inventory(20).price(29.98D).gmtCreate(new Date()).build();
 
-    private GoodsVo goodsVo = GoodsVo.builder().code("694800").delete(false).build();
+    private GoodsVo goodsVo = GoodsVo.builder().code("694800").build();
 
     @Test
     public void insert() throws Exception {

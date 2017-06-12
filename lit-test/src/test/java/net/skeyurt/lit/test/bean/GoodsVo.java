@@ -26,11 +26,27 @@ public class GoodsVo extends Pager implements Serializable {
 
     private String code;
 
+    private String barCode;
+
+    private String specification;
+
+    private String unit;
+
+    private String category;
+
+    private String categoryName;
+
+    private String purchaserCode;
+
+    private String supplierCode;
+
+    private String supplierName;
+
+    private String supplierAddr;
+
     private String name;
 
     private Double price;
-
-    private Boolean delete;
 
     private Integer inventory;
 

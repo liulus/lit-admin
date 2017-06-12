@@ -189,8 +189,9 @@ class SelectImpl<T> extends AbstractCondition<Select<T>> implements Select<T> {
     @Override
     public Select<T> alias(String... alias) {
         int size = selectItems.size();
-        for (int i = size - alias.length; i < size; i++) {
-            ((SelectExpressionItem) selectItems.get(i)).setAlias(new Alias(alias[i]));
+        int start = size - alias.length;
+        for (int i = start; i < size; i++) {
+            ((SelectExpressionItem) selectItems.get(i)).setAlias(new Alias(alias[i - start]));
         }
         return this;
     }

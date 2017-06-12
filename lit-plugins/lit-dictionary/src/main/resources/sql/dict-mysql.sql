@@ -8,7 +8,7 @@ CREATE TABLE lit_dictionary
     dict_level TINYINT unsigned COMMENT '字典层级',
     memo VARCHAR(512) COMMENT '备注',
     is_system TINYINT COMMENT '是否系统字典数据',
-    parent_id INT unsigned,
+    parent_id INT unsigned COMMENT '上级字典Id',
     CONSTRAINT fk_pid_did FOREIGN KEY (parent_id) REFERENCES lit_dictionary (dict_id)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='字典表';
 

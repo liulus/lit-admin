@@ -2,6 +2,7 @@ ext {
     slf4jVersion = '1.7.21'
     logbackVersion = '1.1.7'
     jacksonVersion = '2.8.3'
+    druidVersion = '1.0.29'
     thymeleafVersion = '3.0.2.RELEASE'
     springVersion = '4.3.7.RELEASE'
     springBootVersion = '1.5.2.RELEASE'
@@ -26,6 +27,7 @@ ext {
             'logback-classic'       : "ch.qos.logback:logback-classic:${logbackVersion}",
             'jsqlparser'            : "com.github.jsqlparser:jsqlparser:0.9.6",
             'c3p0'                  : "c3p0:c3p0:0.9.1.2",
+            'druid'                 : "com.alibaba:druid:${druidVersion}",
             'mysql'                 : "mysql:mysql-connector-java:5.1.38",
             'oracle'                : "com.oracle:ojdbc6:11.2.0.3",
             'thymeleaf'             : "org.thymeleaf:thymeleaf:${thymeleafVersion}",

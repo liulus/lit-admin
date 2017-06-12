@@ -41,11 +41,12 @@ public class DBUtils {
     public static DataSource getDataSource() throws PropertyVetoException {
         if (dataSource == null) {
             String config = "config";
+            String db = "mysql.";
             ComboPooledDataSource source = new ComboPooledDataSource();
-            source.setJdbcUrl(PropertyUtils.getProperty(config, "db.url"));
-            source.setDriverClass(PropertyUtils.getProperty(config, "db.driver"));
-            source.setUser(PropertyUtils.getProperty(config, "db.user"));
-            source.setPassword(PropertyUtils.getProperty(config, "db.password"));
+            source.setJdbcUrl(PropertyUtils.getProperty(config, db + "url"));
+            source.setDriverClass(PropertyUtils.getProperty(config, db + "driver"));
+            source.setUser(PropertyUtils.getProperty(config, db + "user"));
+            source.setPassword(PropertyUtils.getProperty(config, db + "password"));
             source.setMinPoolSize(Integer.valueOf(PropertyUtils.getProperty(config, "pool.minPoolSize")));
             source.setMaxPoolSize(Integer.valueOf(PropertyUtils.getProperty(config, "pool.maxPoolSize")));
             source.setAutoCommitOnClose(false);

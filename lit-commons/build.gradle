@@ -4,6 +4,6 @@ dependencies {
 
     compileOnly libs.'spring-jdbc',
             libs.'spring-context',
-            libs.'spring-aspects',
+            libs.'jackson-databind',
             libs.'spring-webmvc'
 }

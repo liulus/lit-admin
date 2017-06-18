@@ -15,6 +15,8 @@ public interface ResultConst {
 
     String RESULT = "result";
 
+    String URL = "url";
+
     String PAGE_INFO = "pageInfo";
 
     String MASSAGE = "message";

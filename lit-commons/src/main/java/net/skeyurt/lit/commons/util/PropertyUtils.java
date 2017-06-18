@@ -1,6 +1,5 @@
 package net.skeyurt.lit.commons.util;
 
-import net.skeyurt.lit.commons.exception.AppUnCheckedException;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.*;
@@ -28,7 +27,7 @@ public class PropertyUtils {
         try {
             loadResources();
         } catch (IOException e) {
-            throw new AppUnCheckedException(e);
+//            throw new AppUnCheckedException(e);
         }
     }
 

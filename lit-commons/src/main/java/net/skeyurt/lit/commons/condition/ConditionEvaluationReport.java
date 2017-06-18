@@ -37,7 +37,7 @@ import java.util.Map.Entry;
  */
 public final class ConditionEvaluationReport {
 
-	private static final String BEAN_NAME = "autoConfigurationReport";
+	private static final String BEAN_NAME = "autoConfigurationReportBean";
 
 	private static final AncestorsMatchedCondition ANCESTOR_CONDITION = new AncestorsMatchedCondition();
 

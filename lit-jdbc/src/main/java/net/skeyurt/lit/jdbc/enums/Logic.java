@@ -7,11 +7,11 @@ import net.skeyurt.lit.commons.util.EnumAware;
 /**
  * User : liulu
  * Date : 2017/3/18 13:19
- * version $Id: Operator.java, v 0.1 Exp $
+ * version $Id: Logic.java, v 0.1 Exp $
  */
 @Getter
 @AllArgsConstructor
-public enum Operator implements EnumAware {
+public enum Logic implements EnumAware {
 
     EQ("equal", " = "),
 

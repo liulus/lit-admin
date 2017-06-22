@@ -3,7 +3,7 @@ package net.skeyurt.lit.jdbc;
 import lombok.Setter;
 import net.skeyurt.lit.commons.page.PageList;
 import net.skeyurt.lit.commons.page.Pager;
-import net.skeyurt.lit.jdbc.enums.Operator;
+import net.skeyurt.lit.jdbc.enums.Logic;
 import net.skeyurt.lit.jdbc.pager.DefaultPageHandler;
 import net.skeyurt.lit.jdbc.pager.StatementPageHandler;
 import net.skeyurt.lit.jdbc.sta.*;
@@ -44,7 +44,7 @@ public abstract class AbstractJdbcTools implements JdbcTools {
 
     @Override
     public <T> int deleteByIds(Class<T> clazz, Serializable... ids) {
-        return createDelete(clazz).idCondition(Operator.IN, (Object[]) ids).execute();
+        return createDelete(clazz).idCondition(Logic.IN, (Object[]) ids).execute();
     }
 
     @Override

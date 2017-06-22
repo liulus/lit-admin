@@ -7,7 +7,7 @@ import net.sf.jsqlparser.expression.operators.conditional.OrExpression;
 import net.sf.jsqlparser.expression.operators.relational.*;
 import net.sf.jsqlparser.schema.Column;
 import net.skeyurt.lit.commons.bean.BeanUtils;
-import net.skeyurt.lit.jdbc.enums.Operator;
+import net.skeyurt.lit.jdbc.enums.Logic;
 import net.skeyurt.lit.jdbc.spi.expr.LeftParenthesis;
 import net.skeyurt.lit.jdbc.spi.expr.RightParenthesis;
 import org.apache.commons.lang3.StringUtils;
@@ -32,71 +32,71 @@ public abstract class AbstractCondition<T extends Condition<T>> extends Abstract
 
     @Override
     public T idCondition(Object value) {
-        return idCondition(Operator.EQ, value);
+        return idCondition(Logic.EQ, value);
     }
 
     @Override
-    public T idCondition(Operator operator, Object... values) {
-        return and(tableInfo.getPkField(), operator, values);
+    public T idCondition(Logic logic, Object... values) {
+        return and(tableInfo.getPkField(), logic, values);
     }
 
     @Override
     public T where(String fieldName, Object value) {
-        addExpr(fieldName, Operator.EQ, true, false, value);
+        addExpr(fieldName, Logic.EQ, true, false, value);
         return (T) this;
     }
 
     @Override
-    public T where(String fieldName, Operator operator, Object... values) {
-        addExpr(fieldName, operator, true, false, values);
+    public T where(String fieldName, Logic logic, Object... values) {
+        addExpr(fieldName, logic, true, false, values);
         return (T) this;
     }
 
     @Override
     public T and(String fieldName, Object value) {
-        this.and(fieldName, Operator.EQ, value);
+        this.and(fieldName, Logic.EQ, value);
         return (T) this;
     }
 
     @Override
-    public T and(String fieldName, Operator operator, Object... values) {
-        addExpr(fieldName, operator, true, false, values);
+    public T and(String fieldName, Logic logic, Object... values) {
+        addExpr(fieldName, logic, true, false, values);
         return (T) this;
     }
 
     @Override
     public T andWithBracket(String fieldName, Object value) {
-        this.andWithBracket(fieldName, Operator.EQ, value);
+        this.andWithBracket(fieldName, Logic.EQ, value);
         return (T) this;
     }
 
     @Override
-    public T andWithBracket(String fieldName, Operator operator, Object... values) {
-        addExpr(fieldName, operator, true, true, values);
+    public T andWithBracket(String fieldName, Logic logic, Object... values) {
+        addExpr(fieldName, logic, true, true, values);
         return (T) this;
     }
 
     @Override
     public T or(String fieldName, Object value) {
-        this.or(fieldName, Operator.EQ, value);
+        this.or(fieldName, Logic.EQ, value);
         return (T) this;
     }
 
     @Override
-    public T or(String fieldName, Operator operator, Object... values) {
-        addExpr(fieldName, operator, false, false, values);
+    public T or(String fieldName, Logic logic, Object... values) {
+        addExpr(fieldName, logic, false, false, values);
         return (T) this;
     }
 
     @Override
     public T orWithBracket(String fieldName, Object value) {
-        this.orWithBracket(fieldName, Operator.EQ, value);
+        this.orWithBracket(fieldName, Logic.EQ, value);
         return (T) this;
     }
 
     @Override
-    public T orWithBracket(String fieldName, Operator operator, Object... values) {
-        addExpr(fieldName, operator, false, true, values);
+    public T orWithBracket(String fieldName, Logic logic, Object... values) {
+        addExpr(fieldName, logic, false, true, values);
         return (T) this;
     }
 
@@ -121,8 +121,8 @@ public abstract class AbstractCondition<T extends Condition<T>> extends Abstract
     }
 
 
-    private void addExpr(String fieldName, Operator operator, boolean isAnd, boolean useBracket, Object... values) {
-        Expression expression = getExpression(fieldName, operator, values);
+    private void addExpr(String fieldName, Logic logic, boolean isAnd, boolean useBracket, Object... values) {
+        Expression expression = getExpression(fieldName, logic, values);
         if (expression != null) {
             if (useBracket) {
                 expression = new LeftParenthesis(expression);
@@ -134,7 +134,7 @@ public abstract class AbstractCondition<T extends Condition<T>> extends Abstract
     }
 
 
-    protected Expression getExpression(String fieldName, Operator operator, Object... values) {
+    protected Expression getExpression(String fieldName, Logic logic, Object... values) {
 
         if (StringUtils.isEmpty(fieldName)) {
             return null;
@@ -145,13 +145,13 @@ public abstract class AbstractCondition<T extends Condition<T>> extends Abstract
         if (values == null || values.length == 0 || values[0] == null) {
             IsNullExpression isNullExpression = new IsNullExpression();
             isNullExpression.setLeftExpression(column);
-            if (Objects.equals(operator, Operator.NOT_NULL)) {
+            if (Objects.equals(logic, Logic.NOT_NULL)) {
                 isNullExpression.setNot(true);
             }
             return isNullExpression;
         }
 
-        BinaryExpression expr = getBinaryExpression(operator);
+        BinaryExpression expr = getBinaryExpression(logic);
         if (expr != null) {
             expr.setLeftExpression(column);
             expr.setRightExpression(PARAM_EXPR);
@@ -167,14 +167,14 @@ public abstract class AbstractCondition<T extends Condition<T>> extends Abstract
         }
 
         InExpression inExpression = new InExpression(column, new ExpressionList(expressions));
-        if (Objects.equals(operator, Operator.NOT_IN)) {
+        if (Objects.equals(logic, Logic.NOT_IN)) {
             inExpression.setNot(true);
         }
         return inExpression;
     }
 
-    protected BinaryExpression getBinaryExpression(Operator operator) {
-        switch (operator) {
+    protected BinaryExpression getBinaryExpression(Logic logic) {
+        switch (logic) {
             case EQ:
                 return new EqualsTo();
             case NOT_EQ:

@@ -31,7 +31,7 @@ public class JdbcTemplateToolsImpl extends AbstractJdbcTools {
     protected StatementExecutor getDefaultExecutor() {
         if (jdbcOperations == null) {
             if (dataSource == null) {
-                throw new RuntimeException("DataSources is null, can not init..");
+                throw new RuntimeException("JdbcOperations is null, can not init..");
             }
             jdbcOperations = new JdbcTemplate(dataSource);
         }

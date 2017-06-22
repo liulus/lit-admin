@@ -2,7 +2,7 @@ package net.skeyurt.lit.jdbc.sta;
 
 import net.skeyurt.lit.commons.page.Pager;
 import net.skeyurt.lit.jdbc.enums.JoinType;
-import net.skeyurt.lit.jdbc.enums.Operator;
+import net.skeyurt.lit.jdbc.enums.Logic;
 
 import java.util.List;
 
@@ -100,24 +100,24 @@ public interface Select<T> extends Condition<Select<T>> {
      *
      * @param table1   on 条件的表1
      * @param field1   on 条件的表1中的属性
-     * @param operator 操作符
+     * @param logic 操作符
      * @param table2   on 条件的表2
      * @param field2   on 条件的表2中的属性
      * @return Select
      */
-    Select<T> on(Class<?> table1, String field1, Operator operator, Class<?> table2, String field2);
+    Select<T> on(Class<?> table1, String field1, Logic logic, Class<?> table2, String field2);
 
     /**
      * join 语句的条件, 只有simpleJoin 生效
      *
      * @param table1   join 条件的表1
      * @param field1   join 条件的表1中的属性
-     * @param operator 操作符
+     * @param logic 操作符
      * @param table2   join 条件的表2
      * @param field2   join 条件的表2中的属性
      * @return Select
      */
-    Select<T> joinCondition(Class<?> table1, String field1, Operator operator, Class<?> table2, String field2);
+    Select<T> joinCondition(Class<?> table1, String field1, Logic logic, Class<?> table2, String field2);
 
     /**
      * 添加 group by 的字段
@@ -140,11 +140,11 @@ public interface Select<T> extends Condition<Select<T>> {
      * 添加 having 条件
      *
      * @param fieldName 属性名
-     * @param operator  操作符
+     * @param logic  操作符
      * @param values    值
      * @return Select
      */
-    Select<T> having(String fieldName, Operator operator, Object... values);
+    Select<T> having(String fieldName, Logic logic, Object... values);
 
     /**
      * 添加 having and 条件，默认操作符 =
@@ -162,7 +162,7 @@ public interface Select<T> extends Condition<Select<T>> {
      * @param values    值
      * @return Select
      */
-    Select<T> havingAnd(String fieldName, Operator operator, Object... values);
+    Select<T> havingAnd(String fieldName, Logic logic, Object... values);
 
     /**
      * 添加 having or 条件，默认操作符 =
@@ -180,7 +180,7 @@ public interface Select<T> extends Condition<Select<T>> {
      * @param values    值
      * @return Select
      */
-    Select<T> havingOr(String fieldName, Operator operator, Object... values);
+    Select<T> havingOr(String fieldName, Logic logic, Object... values);
 
     /**
      * 添加升序排列属性

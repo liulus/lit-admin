@@ -1,6 +1,6 @@
 package net.skeyurt.lit.test.run;
 
-import net.skeyurt.lit.jdbc.enums.Operator;
+import net.skeyurt.lit.jdbc.enums.Logic;
 import net.skeyurt.lit.jdbc.spring.JdbcTemplateToolsImpl;
 import net.skeyurt.lit.test.bean.Goods;
 import net.skeyurt.lit.test.bean.GoodsVo;
@@ -25,12 +25,12 @@ public class SqlTest {
 
         jdbcTools.createSelect(Goods.class).tableAlias("g")
                 .join(GoodsVo.class).tableAlias("gv")
-                .on(Goods.class, "code", Operator.EQ, GoodsVo.class, "code")
+                .on(Goods.class, "code", Logic.EQ, GoodsVo.class, "code")
                 .addFunc("max", "price")
                 .alias("maxPrice")
-                .joinCondition(Goods.class, "code", Operator.EQ, GoodsVo.class, "code")
+                .joinCondition(Goods.class, "code", Logic.EQ, GoodsVo.class, "code")
                 .groupBy("code")
-                .having("maxPrice", Operator.GTEQ, 19.98D)
+                .having("maxPrice", Logic.GTEQ, 19.98D)
                 .asc("goodsId")
                 .single();
 

@@ -1,9 +1,13 @@
 package net.skeyurt.lit.web.config;
 
 import com.mchange.v2.c3p0.ComboPooledDataSource;
+import net.skeyurt.lit.jdbc.spring.config.EnableLitJdbc;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.jdbc.datasource.DataSourceTransactionManager;
+import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
 import javax.sql.DataSource;
@@ -14,7 +18,7 @@ import java.beans.PropertyVetoException;
  * Date : 2017/3/19 14:39
  * version $Id: config.java, v 0.1 Exp $
  */
-//@EnableLitJdbc
+@EnableLitJdbc
 @Configuration
 @ComponentScan(basePackages = "net.skeyurt.lit")
 public class SpringConfig extends WebMvcConfigurerAdapter {
@@ -22,7 +26,7 @@ public class SpringConfig extends WebMvcConfigurerAdapter {
     @Autowired
     private C3p0ConfigProperty c3p0ConfigProperty;
 
-//    @Bean
+    @Bean
     public DataSource dataSource() throws PropertyVetoException {
 
         ComboPooledDataSource source = new ComboPooledDataSource();
@@ -41,15 +45,11 @@ public class SpringConfig extends WebMvcConfigurerAdapter {
         return source;
     }
 
-//    @Bean
-//    public PlatformTransactionManager transactionManager(DataSource dataSource) {
-//        return new DataSourceTransactionManager(dataSource);
-//    }
+    @Bean
+    public PlatformTransactionManager transactionManager(DataSource dataSource) {
+        return new DataSourceTransactionManager(dataSource);
+    }
 
-//    @Override
-//    public void addInterceptors(InterceptorRegistry registry) {
-//        registry.addInterceptor(new ModelResultHandlerInterceptor()).addPathPatterns("/**");
-//    }
 
 
 

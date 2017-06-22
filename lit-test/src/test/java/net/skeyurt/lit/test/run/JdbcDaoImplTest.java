@@ -3,7 +3,7 @@ package net.skeyurt.lit.test.run;
 import lombok.extern.slf4j.Slf4j;
 import net.skeyurt.lit.commons.page.PageList;
 import net.skeyurt.lit.jdbc.JdbcTools;
-import net.skeyurt.lit.jdbc.enums.Operator;
+import net.skeyurt.lit.jdbc.enums.Logic;
 import net.skeyurt.lit.jdbc.sta.Select;
 import net.skeyurt.lit.test.base.BaseTest;
 import net.skeyurt.lit.test.bean.Goods;
@@ -125,7 +125,7 @@ public class JdbcDaoImplTest extends BaseTest {
     public void queryForSingle2() throws Exception {
         Select<Goods> select = jdbcTools.createSelect(Goods.class);
 
-        select.where("price", Operator.GT, 19.8D).desc("code");
+        select.where("price", Logic.GT, 19.8D).desc("code");
 
         PageList<Goods> goodss = (PageList<Goods>) select.page(1, 20).list();
         System.out.println(goodss.getPageInfo());

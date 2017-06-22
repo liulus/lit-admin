@@ -1,6 +1,6 @@
 package net.skeyurt.lit.jdbc.sta;
 
-import net.skeyurt.lit.jdbc.enums.Operator;
+import net.skeyurt.lit.jdbc.enums.Logic;
 
 /**
  * User : liulu
@@ -12,11 +12,11 @@ interface Condition<T extends Condition<T>> extends Statement {
     T idCondition(Object value);
 
     /**
-     * @param operator 操作符
+     * @param logic 操作符
      * @param values   值
      * @return Statement本身
      */
-    T idCondition(Operator operator, Object... values);
+    T idCondition(Logic logic, Object... values);
 
     /**
      * 添加 where 条件，默认操作符 =
@@ -31,11 +31,11 @@ interface Condition<T extends Condition<T>> extends Statement {
      * 添加 where 条件
      *
      * @param fieldName 属性名
-     * @param operator  操作符
+     * @param logic  操作符
      * @param values    值
      * @return Statement本身
      */
-    T where(String fieldName, Operator operator, Object... values);
+    T where(String fieldName, Logic logic, Object... values);
 
     /**
      * 添加 and 条件，默认操作符 =
@@ -53,7 +53,7 @@ interface Condition<T extends Condition<T>> extends Statement {
      * @param values    值
      * @return Statement本身
      */
-    T and(String fieldName, Operator operator, Object... values);
+    T and(String fieldName, Logic logic, Object... values);
 
     /**
      * 添加带 括号 的 and 条件， 默认操作符 =
@@ -71,7 +71,7 @@ interface Condition<T extends Condition<T>> extends Statement {
      * @param values    值
      * @return Statement本身
      */
-    T andWithBracket(String fieldName, Operator operator, Object... values);
+    T andWithBracket(String fieldName, Logic logic, Object... values);
 
     /**
      * 添加 or 条件，默认操作符 =
@@ -89,7 +89,7 @@ interface Condition<T extends Condition<T>> extends Statement {
      * @param values    值
      * @return Statement本身
      */
-    T or(String fieldName, Operator operator, Object... values);
+    T or(String fieldName, Logic logic, Object... values);
 
     /**
      * 添加带 括号 的 or 条件， 默认操作符 =
@@ -107,7 +107,7 @@ interface Condition<T extends Condition<T>> extends Statement {
      * @param values    值
      * @return Statement本身
      */
-    T orWithBracket(String fieldName, Operator operator, Object... values);
+    T orWithBracket(String fieldName, Logic logic, Object... values);
 
     /**
      * 添加 where 条件中的结束 括号

@@ -13,8 +13,8 @@ dependencies {
             libs.'bootstrap',
             libs.'font-awesome',
             libs.'jquery',
-            project(':lit-commons')
-//            project(':lit-plugins:lit-dictionary')
+//            project(':lit-commons')
+            project(':lit-plugins:lit-dictionary')
     compile (libs.'spring-boot-web'){
         exclude module: 'spring-boot-starter-tomcat'
         exclude module: 'spring-boot-starter-logging'

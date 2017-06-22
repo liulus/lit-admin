@@ -2,6 +2,7 @@ package net.skeyurt.lit.commons.context;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import net.skeyurt.lit.commons.condition.ConditionalOnClass;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.MediaType;
@@ -19,7 +20,8 @@ import java.util.Collections;
  * Date : 2017/6/18 16:45
  * version $Id: SpringConfig.java, v 0.1 Exp $
  */
-@Configuration
+@Configuration("litSpringConfig")
+@ConditionalOnClass(ViewResolver.class)
 public class SpringConfig {
 
     @Bean

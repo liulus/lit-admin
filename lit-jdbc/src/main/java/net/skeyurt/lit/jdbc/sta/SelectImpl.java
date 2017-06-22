@@ -13,7 +13,7 @@ import net.sf.jsqlparser.statement.select.*;
 import net.skeyurt.lit.commons.page.PageList;
 import net.skeyurt.lit.commons.page.Pager;
 import net.skeyurt.lit.jdbc.enums.JoinType;
-import net.skeyurt.lit.jdbc.enums.Operator;
+import net.skeyurt.lit.jdbc.enums.Logic;
 import net.skeyurt.lit.jdbc.model.StatementContext;
 import net.skeyurt.lit.jdbc.model.TableInfo;
 import org.apache.commons.lang3.StringUtils;
@@ -273,10 +273,10 @@ class SelectImpl<T> extends AbstractCondition<Select<T>> implements Select<T> {
     }
 
     @Override
-    public Select<T> on(Class<?> table1, String field1, Operator operator, Class<?> table2, String field2) {
+    public Select<T> on(Class<?> table1, String field1, Logic logic, Class<?> table2, String field2) {
         Join join = getLastJoin();
 
-        BinaryExpression expression = getBinaryExpression(operator);
+        BinaryExpression expression = getBinaryExpression(logic);
         expression.setLeftExpression(getColumn(table1, field1));
         expression.setRightExpression(getColumn(table2, field2));
 
@@ -298,9 +298,9 @@ class SelectImpl<T> extends AbstractCondition<Select<T>> implements Select<T> {
     }
 
     @Override
-    public Select<T> joinCondition(Class<?> table1, String field1, Operator operator, Class<?> table2, String field2) {
+    public Select<T> joinCondition(Class<?> table1, String field1, Logic logic, Class<?> table2, String field2) {
 
-        BinaryExpression expression = getBinaryExpression(operator);
+        BinaryExpression expression = getBinaryExpression(logic);
         expression.setLeftExpression(getColumn(table1, field1));
         expression.setRightExpression(getColumn(table2, field2));
         where = where == null ? expression : new AndExpression(where, expression);
@@ -321,40 +321,40 @@ class SelectImpl<T> extends AbstractCondition<Select<T>> implements Select<T> {
 
     @Override
     public Select<T> having(String fieldName, Object value) {
-        addHaving(fieldName, Operator.EQ, true, value);
+        addHaving(fieldName, Logic.EQ, true, value);
         return this;
     }
 
     @Override
-    public Select<T> having(String fieldName, Operator operator, Object... values) {
-        addHaving(fieldName, operator, true, values);
+    public Select<T> having(String fieldName, Logic logic, Object... values) {
+        addHaving(fieldName, logic, true, values);
         return this;
     }
 
     @Override
     public Select<T> havingAnd(String fieldName, Object value) {
-        return havingAnd(fieldName, Operator.EQ, value);
+        return havingAnd(fieldName, Logic.EQ, value);
     }
 
     @Override
-    public Select<T> havingAnd(String fieldName, Operator operator, Object... values) {
-        addHaving(fieldName, operator, true, values);
+    public Select<T> havingAnd(String fieldName, Logic logic, Object... values) {
+        addHaving(fieldName, logic, true, values);
         return this;
     }
 
     @Override
     public Select<T> havingOr(String fieldName, Object value) {
-        return havingOr(fieldName, Operator.EQ, value);
+        return havingOr(fieldName, Logic.EQ, value);
     }
 
     @Override
-    public Select<T> havingOr(String fieldName, Operator operator, Object... values) {
-        addHaving(fieldName, operator, false, values);
+    public Select<T> havingOr(String fieldName, Logic logic, Object... values) {
+        addHaving(fieldName, logic, false, values);
         return this;
     }
 
-    private void addHaving(String fieldName, Operator operator, boolean isAnd, Object... values) {
-        Expression expression = getExpression(fieldName, operator, values);
+    private void addHaving(String fieldName, Logic logic, boolean isAnd, Object... values) {
+        Expression expression = getExpression(fieldName, logic, values);
         if (expression != null) {
             having = having == null ? expression :
                     isAnd ? new AndExpression(having, expression) :

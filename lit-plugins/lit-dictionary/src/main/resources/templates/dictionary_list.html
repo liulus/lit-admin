@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
-<head th:replace="commons::head-css(~{::title/text()}, ~{::link})">
+<head>
     <title>字典管理</title>
 
-    <!--<link rel="stylesheet" th:href="@{/libs/bootstrap/3.3.7/css/bootstrap.css}"/>-->
+    <th:block th:include="commons::head-css"></th:block>
+
 </head>
 <body>
 <!-- 固定头部 -->
@@ -51,13 +52,14 @@
 
     <div class="row">
         <div class="breadcrumb">
-            <button id="data-add" class="btn btn-xs btn-danger">增加</button>
+            <button id="data-add" class="btn btn-sm btn-danger"><i class="fa fa-trash"></i>增加</button>
+            <a class="btn btn-sm  btn-danger data-del"><i class="fa fa-trash"></i>&nbsp;&nbsp;删除</a>
         </div>
 
         <table class="table ">
             <thead>
             <tr>
-                <th>
+                <th class="text-center">
                     <input class="check-all" type="checkbox">
                 </th>
                 <th>字典Key</th>
@@ -70,7 +72,7 @@
 
             <tbody>
             <tr th:each="item : ${result}" th:data-id="${item.dictId}">
-                <td>
+                <td class="text-center">
                     <input class="check-ls" type="checkbox">
                 </td>
                 <td th:text="${item.dictKey}"></td>
@@ -78,9 +80,11 @@
                 <td th:text="${item.system}?是:否"></td>
                 <td th:text="${item.memo}"></td>
                 <td class="min-width150">
-                    <a href="#" class="data-modify" title="编辑"><i class="fa fa-pencil"></i></a>
-                    <a th:href="@{'/diction/list/' + ${item.dictId}}" class="data-children" title="管理子字典"><i class="fa fa-level-down"></i></a>
-                    <a href="#" class="data-del" title="删除"><i class="fa fa-trash"></i></a>
+                    <a class="btn btn-sm btn-info data-modify"> <i class="fa fa-pencil"></i></a>
+                    <!--<a href="#" class="data-modify" title="编辑"><i class="fa fa-pencil"></i></a>-->
+                    <!--<a th:href="@{'/diction/list/' + ${item.dictId}}" class="data-children" title="管理子字典"><i-->
+                            <!--class="fa fa-level-down"></i></a>-->
+                    <a class="btn btn-sm btn-danger data-del"><i class="fa fa-trash">删除</i></a>
                 </td>
             </tr>
             <!--<tr>-->
@@ -131,7 +135,7 @@
 </div>
 
 
-<th:block th:replace="~{commons::bottom-js}"/>
+<th:block th:include="~{commons::bottom-js}"/>
 <script th:src="@{/src/js/dictionary.js}"></script>
 </body>
 </html>

@@ -3,7 +3,7 @@ package net.skeyurt.lit.test.run;
 import net.skeyurt.lit.dictionary.entity.Dictionary;
 import net.skeyurt.lit.dictionary.service.DictionaryService;
 import net.skeyurt.lit.jdbc.JdbcTools;
-import net.skeyurt.lit.jdbc.enums.Operator;
+import net.skeyurt.lit.jdbc.enums.Logic;
 import net.skeyurt.lit.test.base.BaseTest;
 import net.skeyurt.lit.test.bean.Goods;
 import net.skeyurt.lit.test.bean.GoodsVo;
@@ -103,7 +103,7 @@ public class InitData extends BaseTest {
                 .simpleJoin(Supplier.class)
                 .addField(Supplier.class, "name", "address")
                 .alias("supplierName", "supplier_Addr")
-                .joinCondition(Goods.class, "supplierCode", Operator.EQ, Supplier.class, "code")
+                .joinCondition(Goods.class, "supplierCode", Logic.EQ, Supplier.class, "code")
                 .page(1, 20)
                 .list(GoodsVo.class);
         System.out.println(goodsVos);

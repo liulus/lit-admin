@@ -459,7 +459,13 @@ class SelectImpl<T> extends AbstractCondition<Select<T>> implements Select<T> {
         return this;
     }
 
+    private boolean processed;
+
     private void processSelect() {
+
+        if (processed) {
+            return;
+        }
 
         if (selectItems.size() == addFieldLength) {
 
@@ -489,6 +495,7 @@ class SelectImpl<T> extends AbstractCondition<Select<T>> implements Select<T> {
         if (orderBy != null && orderBy.size() > 0) {
             plainSelect.setOrderByElements(orderBy);
         }
+        processed = true;
     }
 
 }

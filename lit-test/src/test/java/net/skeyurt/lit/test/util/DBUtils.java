@@ -24,7 +24,7 @@ public class DBUtils {
 
     private static DataSource dataSource;
 
-    public static JdbcTools getJdbcDao() throws PropertyVetoException {
+    public static JdbcTools getJdbcTools() throws PropertyVetoException {
         if (jdbcTools == null) {
             jdbcTools = new JdbcTemplateToolsImpl(getJdbcOperations());
         }

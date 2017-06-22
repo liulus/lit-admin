@@ -24,7 +24,6 @@ import java.beans.PropertyVetoException;
 @Configuration
 @EnableLitJdbc
 @PropertySource("config.properties")
-@SuppressWarnings("Duplicates")
 public class SpringConfig {
 
     private static final String DB = "mysql.";

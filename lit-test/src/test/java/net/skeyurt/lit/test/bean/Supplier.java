@@ -1,9 +1,7 @@
 package net.skeyurt.lit.test.bean;
 
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 import net.skeyurt.lit.jdbc.annotation.GeneratedValue;
 import net.skeyurt.lit.jdbc.annotation.Id;
 import net.skeyurt.lit.jdbc.annotation.Table;
@@ -19,8 +17,6 @@ import java.io.Serializable;
 @Table(name = "lit_supplier")
 @Data
 @Builder
-@NoArgsConstructor
-@AllArgsConstructor
 public class Supplier implements Serializable {
 
     private static final long serialVersionUID = 548793140920612818L;

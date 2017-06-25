@@ -6,6 +6,8 @@ import net.skeyurt.lit.jdbc.enums.Logic;
 import net.skeyurt.lit.jdbc.sta.Select;
 import net.skeyurt.lit.test.base.BaseTest;
 import net.skeyurt.lit.test.bean.Goods;
+import net.skeyurt.lit.test.bean.GoodsVo;
+import net.skeyurt.lit.test.bean.Supplier;
 import org.junit.Test;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,6 +35,7 @@ public class JdbcToolsTest extends BaseTest {
     public void testInsert1() {
         Goods goods = new Goods();
         goods.setCode("80145124");
+        goods.setName("这是一个商品");
         // ...
         Long id = (Long) jdbcTools.insert(goods);
         log.info("插入的实体ID为: {}", id);
@@ -53,6 +56,7 @@ public class JdbcToolsTest extends BaseTest {
 
         Goods goods = new Goods();
         goods.setGoodsId(12301L);
+        goods.setCode("8501221");
         goods.setName("康师傅绿茶");
 
         //实体中值为 null 的属性`不会`更新到数据库中
@@ -139,8 +143,109 @@ public class JdbcToolsTest extends BaseTest {
                 .list(); // 查询列表
     }
 
+    @Test
+    public void testSelect4() {
+
+        // 1. 指定函数名, 默认全部字段, 结果会添加  count(*)
+        Integer count = jdbcTools.createSelect(Goods.class)
+                .addFunc("count")
+                .single(Integer.class); // 指定函数返回类型
+
+        // 2. 指定函数名和字段, 结果会添加  max(price)
+        jdbcTools.createSelect(Goods.class)
+                .addFunc("max", "price")
+                .single(Double.class); // 指定返回类型
+
+        // 3. 指定函数名和字段, 第二个参数是 isDistinct, 结果会添加 count( distinct supplier_code )
+        jdbcTools.createSelect(Goods.class)
+                .addFunc("count", true, "supplierCode")
+                .single(Integer.class);
+    }
 
 
+    @Test
+    public void testSelect5() {
 
+        // 为函数指定别名 和 查询结果的 返回类型
+        // max(price) 的查询结果将会绑定到 GoodsVo 的 maxPrice 属性上
+        // count(inventory) 的查询结果将会绑定到 GoodsVo 的 inventoryCount 属性上
+        jdbcTools.createSelect(Goods.class)
+                .addFunc("max", "price")
+                .addFunc("count", "inventory")
+                .alias("maxPrice", "inventoryCount")
+                .single(GoodsVo.class); // 指定返回类型
+
+        // 另一种写法
+        jdbcTools.createSelect(Goods.class)
+                .addFunc("max", "price").alias("maxPrice")
+                .addFunc("count", "inventory").alias("inventoryCount")
+                .single(GoodsVo.class);
+    }
+
+
+    @Test
+    public void testSelect6() {
+
+        // 注: asc 和 desc 方法 可以放多个字段
+        List<Goods> list = jdbcTools.createSelect(Goods.class)
+                .where("name", Logic.LIKE, "%娃哈哈%")
+                .asc("code") // 按 code 升序排列
+                .desc("gmtCreate") // 按创建时间降序排列
+                .list();
+    }
+
+    @Test
+    public void testSelect7() {
+
+        // 按供应商代码 supplierCode 查询 最大价格和最大库存
+        jdbcTools.createSelect(Goods.class)
+                .include("supplierCode")
+                .addFunc("max", "price")
+                .addFunc("max", "inventory")
+                .alias("maxPrice", "maxInventory")
+                .where("price", Logic.GTEQ, 19.98)
+                .and("inventory", Logic.GTEQ, 10)
+                .groupBy("supplierCode")
+                // 添加 having 条件
+                .having("maxPrice", Logic.GTEQ, 198)
+                .and("maxInventory", Logic.GTEQ, 100)
+                .list(GoodsVo.class);
+    }
+
+    @Test
+    public void testSelect8() {
+
+        jdbcTools.createSelect(Goods.class)
+                // join 语句, 和 on 一起使用 设置关联条件
+                .join(Supplier.class)
+                .on(Supplier.class, "code", Logic.EQ, Goods.class, "supplierCode")
+
+                // 添加 供应商表中的字段
+                .addField(Supplier.class, "name")
+                .addField(Supplier.class, "address")
+
+                // 设置别名, 与 GoodsVo 中属性名一致,
+                .alias("supplierName", "supplierAddr")
+                .where("price", Logic.GTEQ, 19.98)
+                .list(GoodsVo.class);
+    }
+
+    @Test
+    public void testSelect9() {
+
+        jdbcTools.createSelect(Goods.class)
+                // 使用简单join  需要和 joinCondition 一起使用设置关联条件
+                .simpleJoin(Supplier.class)
+
+                // 添加 供应商表中的字段
+                .addField(Supplier.class, "name")
+                .addField(Supplier.class, "address")
+
+                // 设置别名, 与 GoodsVo 中属性名一致,
+                .alias("supplierName", "supplierAddr")
+                .joinCondition(Supplier.class, "code", Logic.EQ, Goods.class, "supplierCode")
+                .and("price", Logic.GTEQ, 19.98)
+                .list(GoodsVo.class);
+    }
 
 }

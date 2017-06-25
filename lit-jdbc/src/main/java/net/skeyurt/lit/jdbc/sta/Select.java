@@ -147,42 +147,6 @@ public interface Select<T> extends Condition<Select<T>> {
     Select<T> having(String fieldName, Logic logic, Object... values);
 
     /**
-     * 添加 having and 条件，默认操作符 =
-     *
-     * @param fieldName 属性名
-     * @param value     值
-     * @return Select
-     */
-    Select<T> havingAnd(String fieldName, Object value);
-
-    /**
-     * 添加 having and 条件，
-     *
-     * @param fieldName 属性名
-     * @param values    值
-     * @return Select
-     */
-    Select<T> havingAnd(String fieldName, Logic logic, Object... values);
-
-    /**
-     * 添加 having or 条件，默认操作符 =
-     *
-     * @param fieldName 属性名
-     * @param value     值
-     * @return Select
-     */
-    Select<T> havingOr(String fieldName, Object value);
-
-    /**
-     * 添加 having or 条件，
-     *
-     * @param fieldName 属性名
-     * @param values    值
-     * @return Select
-     */
-    Select<T> havingOr(String fieldName, Logic logic, Object... values);
-
-    /**
      * 添加升序排列属性
      *
      * @param fieldNames 字段名

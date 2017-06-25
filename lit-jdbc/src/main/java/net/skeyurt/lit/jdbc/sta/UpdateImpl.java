@@ -1,6 +1,7 @@
 package net.skeyurt.lit.jdbc.sta;
 
 import net.sf.jsqlparser.expression.Expression;
+import net.sf.jsqlparser.expression.HexValue;
 import net.sf.jsqlparser.schema.Column;
 import net.skeyurt.lit.commons.bean.BeanUtils;
 import net.skeyurt.lit.jdbc.model.StatementContext;
@@ -17,6 +18,8 @@ import java.util.Map;
  * version $Id: UpdateImpl.java, v 0.1 Exp $
  */
 class UpdateImpl extends AbstractCondition<Update> implements Update{
+
+    protected static final Expression NULL_EXPR = new HexValue("null");
 
     private net.sf.jsqlparser.statement.update.Update update;
 
@@ -37,7 +40,7 @@ class UpdateImpl extends AbstractCondition<Update> implements Update{
     @Override
     public Update set(String... fieldNames) {
         for (String fieldName : fieldNames) {
-            columns.add(new Column(table, getColumn(fieldName)));
+            columns.add(new Column(getColumn(fieldName)));
         }
         return this;
     }
@@ -71,9 +74,14 @@ class UpdateImpl extends AbstractCondition<Update> implements Update{
 
             Object obj = BeanUtils.invokeReaderMethod(entity, entry.getKey());
             if (!isIgnoreNull || obj != null && (!(obj instanceof String) || StringUtils.isNotBlank((String) obj))) {
-                columns.add(new Column(table, entry.getValue()));
-                values.add(PARAM_EXPR);
-                params.add(obj);
+                columns.add(new Column(entry.getValue()));
+                if (obj == null) {
+                    values.add(NULL_EXPR);
+                } else {
+                    values.add(PARAM_EXPR);
+                    params.add(obj);
+                }
+
             }
         }
         idCondition(key);

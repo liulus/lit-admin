@@ -49,9 +49,4 @@ public abstract class AbstractStatement implements Statement {
         return StringUtils.isEmpty(column) ? fieldName : column;
     }
 
-    public String getPkName () {
-        return tableInfo.getPkField();
-    }
-
-
 }

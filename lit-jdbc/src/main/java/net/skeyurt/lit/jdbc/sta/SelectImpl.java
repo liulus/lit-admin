@@ -56,16 +56,6 @@ class SelectImpl<T> extends AbstractCondition<Select<T>> implements Select<T> {
     private Map<Class<?>, TableInfo> joinTableInfos;
 
     /**
-     * groupBy 语句
-     */
-    private List<Expression> groupBy;
-
-    /**
-     * having 字句
-     */
-    private Expression having;
-
-    /**
      * order by语句
      */
     private List<OrderByElement> orderBy;
@@ -136,11 +126,7 @@ class SelectImpl<T> extends AbstractCondition<Select<T>> implements Select<T> {
     @Override
     public Select<T> addField(Class<?> tableClass, String... fieldNames) {
         addFieldLength += fieldNames.length;
-        if (joins == null) {
-            joins = new ArrayList<>();
-            joinTableInfos = new HashMap<>();
-            joinTables = new HashMap<>();
-        }
+        initJoin();
         if (joinTableInfos.get(tableClass) == null) {
             TableInfo tableInfo = new TableInfo(tableClass);
             joinTableInfos.put(tableClass, tableInfo);
@@ -170,10 +156,12 @@ class SelectImpl<T> extends AbstractCondition<Select<T>> implements Select<T> {
         Function function = new Function();
 
         boolean noFuncColumns = fieldNames == null || fieldNames.length == 0 || fieldNames[0] == null;
-        if (!noFuncColumns) {
+        if (noFuncColumns) {
+            function.setAllColumns(true);
+        } else {
             List<Expression> funcColumns = new ArrayList<>(fieldNames.length);
             for (String fieldName : fieldNames) {
-                funcColumns.add(new Column(table, getColumn(fieldName)));
+                funcColumns.add(new Column(getColumn(fieldName)));
             }
             function.setParameters(new ExpressionList(funcColumns));
         }
@@ -213,33 +201,8 @@ class SelectImpl<T> extends AbstractCondition<Select<T>> implements Select<T> {
     }
 
     @Override
-    public <E> Select<T> simpleJoin(Class<E> tableClass) {
-        return join(tableClass, true);
-    }
-
-    private <E> Select<T> join(Class<E> tableClass, boolean simple) {
-        if (joins == null) {
-            joins = new ArrayList<>();
-            joinTableInfos = new HashMap<>();
-            joinTables = new HashMap<>();
-        }
-        if (joinTableInfos.get(tableClass) == null) {
-            TableInfo tableInfo = new TableInfo(tableClass);
-            joinTableInfos.put(tableClass, tableInfo);
-            joinTables.put(tableClass, new Table(tableInfo.getTableName()));
-        }
-
-        Join join = new Join();
-        join.setRightItem(joinTables.get(tableClass));
-        join.setSimple(simple);
-        joins.add(join);
-
-        return this;
-    }
-
-    @Override
     public <E> Select<T> join(JoinType joinType, Class<E> tableClass) {
-        join(tableClass);
+        join(tableClass, false);
 
         Join join = getLastJoin();
         switch (joinType) {
@@ -270,6 +233,36 @@ class SelectImpl<T> extends AbstractCondition<Select<T>> implements Select<T> {
         }
 
         return this;
+    }
+
+    @Override
+    public <E> Select<T> simpleJoin(Class<E> tableClass) {
+        return join(tableClass, true);
+    }
+
+    private <E> Select<T> join(Class<E> tableClass, boolean simple) {
+        initJoin();
+
+        if (joinTableInfos.get(tableClass) == null) {
+            TableInfo tableInfo = new TableInfo(tableClass);
+            joinTableInfos.put(tableClass, tableInfo);
+            joinTables.put(tableClass, new Table(tableInfo.getTableName()));
+        }
+
+        Join join = new Join();
+        join.setRightItem(joinTables.get(tableClass));
+        join.setSimple(simple);
+        joins.add(join);
+
+        return this;
+    }
+
+    private void initJoin() {
+        if (joins == null) {
+            joins = new ArrayList<>();
+            joinTableInfos = new HashMap<>();
+            joinTables = new HashMap<>();
+        }
     }
 
     @Override
@@ -313,7 +306,7 @@ class SelectImpl<T> extends AbstractCondition<Select<T>> implements Select<T> {
             groupBy = new ArrayList<>(fields.length);
         }
         for (String field : fields) {
-            groupBy.add(new Column(table, getColumn(field)));
+            groupBy.add(new Column(getColumn(field)));
         }
 
         return this;
@@ -328,28 +321,6 @@ class SelectImpl<T> extends AbstractCondition<Select<T>> implements Select<T> {
     @Override
     public Select<T> having(String fieldName, Logic logic, Object... values) {
         addHaving(fieldName, logic, true, values);
-        return this;
-    }
-
-    @Override
-    public Select<T> havingAnd(String fieldName, Object value) {
-        return havingAnd(fieldName, Logic.EQ, value);
-    }
-
-    @Override
-    public Select<T> havingAnd(String fieldName, Logic logic, Object... values) {
-        addHaving(fieldName, logic, true, values);
-        return this;
-    }
-
-    @Override
-    public Select<T> havingOr(String fieldName, Object value) {
-        return havingOr(fieldName, Logic.EQ, value);
-    }
-
-    @Override
-    public Select<T> havingOr(String fieldName, Logic logic, Object... values) {
-        addHaving(fieldName, logic, false, values);
         return this;
     }
 
@@ -379,7 +350,7 @@ class SelectImpl<T> extends AbstractCondition<Select<T>> implements Select<T> {
 
         for (String fieldName : fieldNames) {
             OrderByElement element = new OrderByElement();
-            element.setExpression(new Column(table, getColumn(fieldName)));
+            element.setExpression(new Column(getColumn(fieldName)));
             element.setAsc(asc);
             orderBy.add(element);
         }

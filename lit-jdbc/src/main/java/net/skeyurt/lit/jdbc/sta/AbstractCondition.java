@@ -24,7 +24,20 @@ import java.util.Objects;
 @SuppressWarnings("unchecked")
 public abstract class AbstractCondition<T extends Condition<T>> extends AbstractStatement implements Condition<T> {
 
+    /**
+     * where 语句
+     */
     protected Expression where;
+
+    /**
+     * groupBy 语句
+     */
+    protected List<Expression> groupBy;
+
+    /**
+     * having 语句
+     */
+    protected Expression having;
 
     AbstractCondition(Class<?> clazz) {
         super(clazz);
@@ -127,9 +140,16 @@ public abstract class AbstractCondition<T extends Condition<T>> extends Abstract
             if (useBracket) {
                 expression = new LeftParenthesis(expression);
             }
-            where = where == null ? expression :
-                    isAnd ? new AndExpression(where, expression) :
-                            new OrExpression(where, expression);
+
+            if (groupBy == null) {
+                where = where == null ? expression :
+                        isAnd ? new AndExpression(where, expression) :
+                                new OrExpression(where, expression);
+            } else {
+                having = having == null ? expression :
+                        isAnd ? new AndExpression(having, expression) :
+                                new OrExpression(having, expression);
+            }
         }
     }
 
@@ -140,7 +160,7 @@ public abstract class AbstractCondition<T extends Condition<T>> extends Abstract
             return null;
         }
 
-        Column column = new Column(table, getColumn(fieldName));
+        Column column = new Column(getColumn(fieldName));
 
         if (values == null || values.length == 0 || values[0] == null) {
             IsNullExpression isNullExpression = new IsNullExpression();

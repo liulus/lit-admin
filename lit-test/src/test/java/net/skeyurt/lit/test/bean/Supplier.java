@@ -31,5 +31,4 @@ public class Supplier implements Serializable {
     private String contact;
     private String telephone;
     private String mobile;
-
 }

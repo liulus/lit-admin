@@ -19,7 +19,7 @@ public class Pager implements Serializable {
     /**
      * 每页记录数
      */
-    private int pageSize = 20;
+    private int pageSize = 10;
 
     /**
      * 当前页

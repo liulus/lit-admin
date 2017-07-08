@@ -6,29 +6,103 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="content-type" content="text/html;charset=UTF-8">
-    <link rel="stylesheet" th:href="@{/libs/bootstrap/3.3.7/css/bootstrap.min.css}"/>
+    <link rel="stylesheet" th:href="@{/libs/bootstrap/3.3.7/css/default/bootstrap.min.css}"/>
     <!--<link rel="stylesheet" th:href="@{/libs/font-awesome/4.7.0/css/font-awesome.min.css}">-->
-    <link rel="stylesheet" th:href="@{/src/styles/dashboard.css}"/>
+
+    <link rel="stylesheet" th:href="@{/css/top-nav.css}"/>
+    <link rel="stylesheet" th:href="@{/css/left-menu.css}"/>
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
-    <script src="https://cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
-    <script src="https://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <script th:src="@{/js/html5shiv.min.js}"></script>
+    <script th:src="@{/js/respond.min.js}"></script>
     <![endif]-->
 </head>
 
 <body>
+<div th:fragment="top-nav">
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"
+                        aria-expanded="false"
+                        aria-controls="navbar">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#">Lit - Web</a>
+            </div>
+            <div id="navbar" class="navbar-collapse collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a href="#">Dashboard</a></li>
+                    <li><a href="#">Settings</a></li>
+                    <li><a href="#">Profile</a></li>
+                    <li><a href="#">Help</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div style="height:54px"></div>
+</div>
 
+
+<div th:fragment="left-menu">
+    <div class="col-sm-6 col-md-4 sidebar">
+        <ul class="nav nav-sidebar">
+            <li><a href="#">Overview</a></li>
+            <li class="parent-menu">
+                <a href="#sub-item-1" data-toggle="collapse">Dropdown<i
+                        class="glyphicon glyphicon-menu-left pull-right"></i></a>
+                <ul id="sub-item-1" class="collapse children-menu">
+                    <li><a href="#">aaa</a></li>
+                    <li><a href="#">bbb</a></li>
+                    <li class="active"><a href="#">ccc</a></li>
+                    <li><a href="#">ddd</a></li>
+                    <li><a href="#">eee</a></li>
+                </ul>
+            </li>
+            <li class="active"><a href="#">Analytics</a></li>
+            <li class="parent-menu">
+                <a href="#sub-item-3" data-toggle="collapse">Dropdown2<i
+                        class="glyphicon glyphicon-menu-left pull-right"></i></a>
+                <ul id="sub-item-3" class="collapse children-menu">
+                    <li><a href="#">aaa</a></li>
+                    <li><a href="#">bbb</a></li>
+                    <li class="active"><a href="#">ccc</a></li>
+                    <li><a href="#">ddd</a></li>
+                    <li><a href="#">eee</a></li>
+                </ul>
+            </li>
+            <li><a href="#">Export</a></li>
+        </ul>
+        <ul class="nav nav-sidebar">
+            <li class="parent-menu">
+                <a href="#sub-item-2" data-toggle="collapse">Dropdown<i
+                        class="glyphicon glyphicon-menu-left pull-right"></i></a>
+                <ul id="sub-item-2" class="collapse children-menu">
+                    <li><a href="#">aaa</a></li>
+                    <li><a href="#">bbb</a></li>
+                    <li class="active"><a href="#">ccc</a></li>
+                    <li><a href="#">ddd</a></li>
+                    <li><a href="#">eee</a></li>
+                </ul>
+            </li>
+            <li><a href="">One more nav</a></li>
+            <li><a href="">Another nav item</a></li>
+        </ul>
+    </div>
+</div>
 
 
 <div th:fragment="bottom-js">
-
     <script th:src="@{/libs/jquery/1.12.4/jquery.min.js}"></script>
     <script th:src="@{/libs/bootstrap/3.3.7/js/bootstrap.min.js}"></script>
     <script th:src="@{/libs/layer/3.0.3/layer.js}"></script>
     <script type="text/javascript" th:inline="javascript">
-        var path = [[@{/}]];
+        var path = /*[[@{/}]]*/;
     </script>
 </div>
 </body>

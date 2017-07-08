@@ -28,7 +28,7 @@ public class DictionaryController {
     public String list(DictionaryQo qo, Model model) {
 
         model.addAttribute(ResultConst.RESULT, dictionaryService.queryPageList(qo));
-        return "dictionary_list";
+        return "dictionary";
     }
 
     @RequestMapping("/add")

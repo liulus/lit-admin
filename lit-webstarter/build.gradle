@@ -10,9 +10,9 @@ dependencies {
             libs.'c3p0',
             libs.'mysql',
             libs.'oracle',
-            libs.'bootstrap',
-            libs.'font-awesome',
-            libs.'jquery',
+//            libs.'bootstrap',
+//            libs.'font-awesome',
+//            libs.'jquery',
 //            project(':lit-commons')
             project(':lit-plugins:lit-dictionary')
     compile (libs.'spring-boot-web'){

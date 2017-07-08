@@ -3,17 +3,21 @@
 <head>
     <title>字典管理</title>
 
-    <th:block th:include="fragment::head-css"></th:block>
+    <th:block th:include="~{fragments::head-css}"></th:block>
 
 </head>
 <body>
 <!-- 固定头部 -->
-<th:block th:replace="~{commons::header-nav}"/>
+<th:block th:include="~{fragments::top-nav}"/>
+
 <!-- 左侧菜单 -->
-<th:block th:replace="~{commons::left-menu}"/>
+<th:block th:include="~{fragments::left-menu}"/>
 
 <!-- 主页面 -->
-<div class="main col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2">
+<div th:with="emptyResult=${#lists.isEmpty(result)}" class="col-sm-18 col-sm-offset-6 col-md-20 col-md-offset-4">
+    <!--/* <div th:with="emptyResult=${#lists.isEmpty(result)}" class="col-sm-24"> */-->
+
+    <!-- 导航条 -->
     <div class="row">
         <ol class="breadcrumb">
             <li><a href="#"><i class="glyphicon glyphicon-home"></i></a></li>
@@ -22,82 +26,97 @@
         </ol>
     </div>
 
+    <!-- 查询 -->
     <div class="row">
         <form class="form-horizontal " action="" method="post" name="query-form">
-            <div class="col-sm-6 col-md-4 form-group">
-                <div class="col-sm-4 text-right control-label">关键字:</div>
-                <div class="col-sm-8 ">
+            <div class="col-sm-12 col-md-9 form-group">
+                <div class="col-sm-8 text-right control-label">关键字:</div>
+                <div class="col-sm-16 ">
                     <input name="keyWord" class="input-sm form-control" type="text" th:value="${dictionaryQo.keyWord}"
                            placeholder="请输入">
                 </div>
             </div>
-            <div class="col-sm-6 col-md-4 form-group">
-                <div class="col-sm-4 text-right control-label">是否系统级:</div>
-                <div class="col-sm-8 ">
+            <div class="col-sm-12 col-md-10 form-group">
+                <div class="col-sm-10 text-right control-label">是否系统级:</div>
+                <div class="col-sm-14 ">
                     <select name="system" class="form-control">
                         <option value=""></option>
                         <option value="true" th:selected="${dictionaryQo.system}">是</option>
-                        <option value="false" th:selected="${dictionaryQo.system}">否</option>
+                        <option value="false" th:selected="${dictionaryQo.system} == false">否</option>
                     </select>
                 </div>
             </div>
             <input type="hidden" name="pageNum" th:value="${dictionaryQo.pageNum}">
             <input type="hidden" name="pageSize" th:value="${dictionaryQo.pageSize}">
-            <div class="col-sm-12 col-md-4 text-center form-group">
-                <button id="data-query" class="btn btn-sm btn-primary">查询</button>
-                <button id="data-reset" class="btn btn-sm btn-reset">重置</button>
+            <div class="col-sm-24 col-md-5 text-center form-group">
+                <button id="data-query" class="btn btn-sm btn-primary">&nbsp;&nbsp;查询&nbsp;&nbsp;</button>
             </div>
         </form>
     </div>
 
-    <div class="row">
-        <div class="breadcrumb">
-            <button id="data-add" class="btn btn-sm btn-danger"><i class="fa fa-trash"></i>增加</button>
-            <a class="btn btn-sm  btn-danger data-del"><i class="fa fa-trash"></i>&nbsp;&nbsp;删除</a>
+    <div class="panel panel-default">
+        <!-- 数据操作 -->
+        <div class="panel-heading">
+            <button id="data-add" class="btn btn-sm btn-success">
+                <i class="glyphicon glyphicon-plus"></i>&nbsp;&nbsp;增加
+            </button>
+            <button th:unless="${emptyResult}" id="data-del" class="btn btn-sm btn-danger">
+                <i class="glyphicon glyphicon-trash"></i>&nbsp;&nbsp;删除
+            </button>
+            <button th:unless="${emptyResult}" id="data-update" class="btn btn-sm btn-info">
+                <i class="glyphicon glyphicon-pencil"></i>&nbsp;&nbsp;修改
+            </button>
         </div>
 
-        <table class="table ">
+        <!-- 数据展示 -->
+        <table class="table table-hover table-responsive">
             <thead>
             <tr>
                 <th class="text-center">
                     <input class="check-all" type="checkbox">
                 </th>
+                <th>行号</th>
                 <th>字典Key</th>
                 <th>字典值</th>
                 <th>是否系统级</th>
                 <th>备注</th>
-                <th class="min-width150">操作</th>
             </tr>
             </thead>
 
             <tbody>
-            <tr th:each="item : ${result}" th:data-id="${item.dictId}">
+            <tr th:unless="${emptyResult}" th:each="item : ${result}" th:data-id="${item.dictId}">
                 <td class="text-center">
                     <input class="check-ls" type="checkbox">
                 </td>
+                <td th:text="${itemStat.count}"></td>
                 <td th:text="${item.dictKey}"></td>
                 <td th:text="${item.dictValue}"></td>
                 <td th:text="${item.system}?是:否"></td>
                 <td th:text="${item.memo}"></td>
-                <td class="min-width150">
-                    <a class="btn btn-sm btn-info data-modify"> <i class="fa fa-pencil"></i></a>
-                    <!--<a href="#" class="data-modify" title="编辑"><i class="fa fa-pencil"></i></a>-->
-                    <!--<a th:href="@{'/diction/list/' + ${item.dictId}}" class="data-children" title="管理子字典"><i-->
-                            <!--class="fa fa-level-down"></i></a>-->
-                    <a class="btn btn-sm btn-danger data-del"><i class="fa fa-trash">删除</i></a>
+            </tr>
+            <tr th:if="${emptyResult}">
+                <td colspan="6">
+                    <div class="no-data text-center">
+                        <span><i class="glyphicon glyphicon-info-sign"></i>&nbsp;&nbsp;没有数据</span>
+                    </div>
                 </td>
             </tr>
-            <!--<tr>-->
-            <!--<td colspan="6">-->
-            <!--<div class="no-data text-center">-->
-            <!--<span><i class="iconfont icon-help"></i>没有数据</span>-->
-            <!--</div>-->
-            <!--</td>-->
-            <!--</tr>-->
             </tbody>
         </table>
     </div>
 
+    <!-- 分页条 -->
+    <div th:unless="${emptyResult}" class="text-center">
+        <ul class="pagination">
+            <li><a href="#" aria-label="Previous"><span aria-hidden="true">Previous</span></a></li>
+            <li class="active"><a href="#">1 <span class="sr-only">(current)</span></a></li>
+            <li><a href="#">2</a></li>
+            <li><a href="#">3</a></li>
+            <li><a href="#">4</a></li>
+            <li><a href="#">5</a></li>
+            <li><a href="#">Next</a></li>
+        </ul>
+    </div>
 </div>
 
 <!-- 新增和编辑弹出框 -->
@@ -135,7 +154,7 @@
 </div>
 
 
-<th:block th:include="~{fragment::bottom-js}"/>
+<th:block th:include="~{fragments::bottom-js}"/>
 <script th:src="@{/src/js/dictionary.js}"></script>
 </body>
 </html>

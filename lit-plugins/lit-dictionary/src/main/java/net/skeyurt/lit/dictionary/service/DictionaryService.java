@@ -37,6 +37,22 @@ public interface DictionaryService {
 
     Dictionary findRootByKey(String key);
 
+    /**
+     * 根据 Id 查询字典对象
+     *
+     * @param dictId Id
+     * @return
+     */
+    Dictionary findById(Long dictId);
+
+    /**
+     * 根据 Id 删除字典对象
+     *
+     * @param ids Id
+     * @return
+     */
+    void delete(Long... ids);
+
 //    Dictionary findByKeys(String... keys);
 
 

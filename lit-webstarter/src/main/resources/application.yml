@@ -13,7 +13,7 @@ spring:
   thymeleaf:
     cache: false
 
-#server:
-#  context-path: /lit
+server:
+  context-path: /lit
 
 

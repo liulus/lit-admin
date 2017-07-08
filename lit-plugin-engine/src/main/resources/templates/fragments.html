@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="content-type" content="text/html;charset=UTF-8">
     <link rel="stylesheet" th:href="@{/libs/bootstrap/3.3.7/css/default/bootstrap.min.css}"/>
-    <!--<link rel="stylesheet" th:href="@{/libs/font-awesome/4.7.0/css/font-awesome.min.css}">-->
+    <link rel="stylesheet" th:href="@{/libs/font-awesome/4.7.0/css/font-awesome.min.css}">
 
     <link rel="stylesheet" th:href="@{/css/top-nav.css}"/>
     <link rel="stylesheet" th:href="@{/css/left-menu.css}"/>
@@ -100,7 +100,9 @@
 <div th:fragment="bottom-js">
     <script th:src="@{/libs/jquery/1.12.4/jquery.min.js}"></script>
     <script th:src="@{/libs/bootstrap/3.3.7/js/bootstrap.min.js}"></script>
+    <script th:src="@{/libs/juicer/0.6.8-stable/juicer-min.js}"></script>
     <script th:src="@{/libs/layer/3.0.3/layer.js}"></script>
+    <script th:src="@{/js/left-menu.js}"></script>
     <script type="text/javascript" th:inline="javascript">
         var path = /*[[@{/}]]*/;
     </script>

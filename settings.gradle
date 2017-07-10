@@ -7,4 +7,6 @@ include 'lit-plugins'
 include 'lit-plugins:lit-dictionary'
 findProject(':lit-plugins:lit-dictionary')?.name = 'lit-dictionary'
 include 'lit-plugin-engine'
+include 'lit-plugins:lit-menu'
+findProject(':lit-plugins:lit-menu')?.name = 'lit-menu'
 

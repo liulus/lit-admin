@@ -1,6 +1,15 @@
 $(function () {
 
-    var compiledEditTpl = juicer($('#edit-tpl').html());
+
+    $('#data-test').on('click', function (e) {
+        // MsgUtils.info('this is a info');
+
+        layer.tips('hisss', this, {
+            tips: [1]
+        })
+
+    })
+
 
     /** 新增弹出框 */
     $('#data-add').on('click', function (e) {

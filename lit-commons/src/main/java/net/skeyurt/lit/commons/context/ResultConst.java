@@ -23,9 +23,13 @@ public interface ResultConst {
 
     String MASSAGE_TYPE = "messageType";
 
+    String INFO = "info";
+
+    String WARNING = "warning";
+
     String ERROR = "error";
 
-    String INFO = "info";
+
 
 
 }

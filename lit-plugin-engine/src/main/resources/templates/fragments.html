@@ -45,7 +45,7 @@
             </div>
         </div>
     </nav>
-    <div style="height:54px"></div>
+    <div style="height:50px"></div>
 </div>
 
 
@@ -98,11 +98,30 @@
 
 
 <div th:fragment="bottom-js">
+
+    <script type="text/template" id="alert-message-tpl">
+        <div class="alert alert-${messageType} alert-dismissible" role="alert" style="margin-bottom: 0">
+            {@if messageType === 'success'}
+            <i class="fa fa-check"></i>
+            {@else if messageType === 'info'}
+            <i class="fa fa-info"></i>
+            {@else if messageType === 'warning'}
+            <i class="fa fa-exclamation"></i>
+            {@else if messageType === 'danger'}
+            <i class="fa fa-times"></i>
+            {@/if}
+            &nbsp;&nbsp;
+            ${message}
+        </div>
+    </script>
+
+
     <script th:src="@{/libs/jquery/1.12.4/jquery.min.js}"></script>
     <script th:src="@{/libs/bootstrap/3.3.7/js/bootstrap.min.js}"></script>
     <script th:src="@{/libs/juicer/0.6.8-stable/juicer-min.js}"></script>
     <script th:src="@{/libs/layer/3.0.3/layer.js}"></script>
     <script th:src="@{/js/left-menu.js}"></script>
+    <script th:src="@{/js/message.js}"></script>
     <script type="text/javascript" th:inline="javascript">
         var path = /*[[@{/}]]*/;
     </script>

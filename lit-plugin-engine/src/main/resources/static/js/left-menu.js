@@ -10,6 +10,9 @@ $(function () {
         $(this).find('i').toggleClass('glyphicon-menu-left', true).toggleClass('glyphicon-menu-down', false);
     });
 
+    $('.sidebar').css({
+        height: $('.main').height() + 1
+    })
 
 
 

@@ -8,7 +8,9 @@
     <meta http-equiv="content-type" content="text/html;charset=UTF-8">
     <link rel="stylesheet" th:href="@{/libs/bootstrap/3.3.7/css/default/bootstrap.min.css}"/>
     <link rel="stylesheet" th:href="@{/libs/font-awesome/4.7.0/css/font-awesome.min.css}">
+    <link rel="stylesheet" th:href="@{/css/animate.css}"/>
 
+    <link rel="stylesheet" th:href="@{/css/lit-plugin.css}"/>
     <link rel="stylesheet" th:href="@{/css/top-nav.css}"/>
     <link rel="stylesheet" th:href="@{/css/left-menu.css}"/>
 
@@ -22,7 +24,7 @@
 
 <body>
 <div th:fragment="top-nav">
-    <nav class="navbar navbar-inverse navbar-fixed-top">
+    <nav class="navbar navbar-inverse">
         <div class="container-fluid">
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"
@@ -45,7 +47,6 @@
             </div>
         </div>
     </nav>
-    <div style="height:50px"></div>
 </div>
 
 
@@ -100,14 +101,17 @@
 <div th:fragment="bottom-js">
 
     <script type="text/template" id="alert-message-tpl">
-        <div class="alert alert-${messageType} alert-dismissible" role="alert" style="margin-bottom: 0">
-            {@if messageType === 'success'}
+        <div id="msg-${msgCount}" class="alert alert-${msgType} alert-dismissible alert-message animated fadeIn" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            {@if msgType === 'success'}
             <i class="fa fa-check"></i>
-            {@else if messageType === 'info'}
+            {@else if msgType === 'info'}
             <i class="fa fa-info"></i>
-            {@else if messageType === 'warning'}
+            {@else if msgType === 'warning'}
             <i class="fa fa-exclamation"></i>
-            {@else if messageType === 'danger'}
+            {@else if msgType === 'danger'}
             <i class="fa fa-times"></i>
             {@/if}
             &nbsp;&nbsp;

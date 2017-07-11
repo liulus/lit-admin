@@ -1,14 +1,6 @@
 $(function () {
 
-
-    $('#data-test').on('click', function (e) {
-        // MsgUtils.info('this is a info');
-
-        layer.tips('hisss', this, {
-            tips: [1]
-        })
-
-    })
+    var compiledEditTpl = juicer($('#edit-tpl').html());
 
 
     /** 新增弹出框 */
@@ -20,11 +12,11 @@ $(function () {
     $('#data-modify').on('click', function (e) {
         var checkedInputs = $('.panel table .check-ls:checked');
         if (checkedInputs.length <= 0) {
-            layer.msg('请选择一条数据 !')
+            MsgUtils.warning('请选择一条数据 !')
             return;
         }
         if (checkedInputs.length > 1) {
-            layer.msg('只能选择一条数据 !')
+            MsgUtils.warning('只能选择一条数据 !')
             return;
         }
 

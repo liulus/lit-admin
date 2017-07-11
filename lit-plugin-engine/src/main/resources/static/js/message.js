@@ -1,5 +1,7 @@
 var compiledMsgTpl = juicer($('#alert-message-tpl').html());
 
+var msgCount = 1;
+
 var MsgUtils = {
 
     direction: {
@@ -11,27 +13,26 @@ var MsgUtils = {
 
     msg: function (messageType, message) {
 
+        $('.alert-message').alert('close')
+
         // 为了适应 bootstrap 提示框
         if (messageType === 'error') {
             messageType = 'danger'
         }
 
         var data = {
-            messageType: messageType,
+            msgCount: msgCount,
+            msgType: messageType,
             message: message
         }
 
-        layer.open({
-            type: 1,
-            area: '500px',
-            minWidth: '500px',
-            title: false,
-            offset: 't',
-            time: 2000,
-            closeBtn: 0,
-            shade: 0,
-            content: compiledMsgTpl.render(data)
-        })
+        $('body').append(compiledMsgTpl.render(data))
+        var id = '#msg-' + msgCount;
+        setTimeout(function () {
+            $(id).alert('close')
+        }, 4000)
+
+        msgCount++;
     },
 
     success: function (message) {

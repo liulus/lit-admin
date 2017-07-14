@@ -2,8 +2,8 @@ package net.skeyurt.lit.commons.mvc;
 
 import net.skeyurt.lit.commons.context.ResultConst;
 import net.skeyurt.lit.commons.exception.RunResultHolder;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.ui.ModelMap;
+import org.springframework.util.StringUtils;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -30,11 +30,11 @@ public class ModelResultHandlerInterceptor implements HandlerInterceptor {
             if (RunResultHolder.hasError()) {
                 modelMap.put(ResultConst.SUCCESS, false);
                 String code = RunResultHolder.getCode(false);
-                if (StringUtils.isNotEmpty(code)) {
+                if (!StringUtils.isEmpty(code)) {
                     modelMap.put(ResultConst.CODE, code);
                 }
                 String messages = RunResultHolder.getStrMessages();
-                if (StringUtils.isNotEmpty(messages)) {
+                if (!StringUtils.isEmpty(messages)) {
                     modelMap.put(ResultConst.MASSAGE, messages);
                 }
             } else {

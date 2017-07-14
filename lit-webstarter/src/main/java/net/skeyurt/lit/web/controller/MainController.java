@@ -5,7 +5,6 @@ import net.skeyurt.lit.commons.page.PageInfo;
 import net.skeyurt.lit.commons.page.PageList;
 import net.skeyurt.lit.web.service.GoodsService;
 import net.skeyurt.lit.web.vo.GoodsVo;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -71,7 +70,7 @@ public class MainController {
         model.addAttribute("redi", "真的");
         model.addFlashAttribute("flash", "flash");
 
-        if (StringUtils.endsWith(request.getRequestURI(), ".json")) {
+        if (request.getRequestURI().endsWith(".json")) {
             return "";
         }
         return "redirect:/main/testErr";

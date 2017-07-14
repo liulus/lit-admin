@@ -5,19 +5,15 @@ import net.sf.jsqlparser.expression.HexValue;
 import net.sf.jsqlparser.schema.Column;
 import net.skeyurt.lit.commons.bean.BeanUtils;
 import net.skeyurt.lit.jdbc.model.StatementContext;
-import org.apache.commons.lang3.StringUtils;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * User : liulu
  * Date : 2017/6/4 9:35
  * version $Id: UpdateImpl.java, v 0.1 Exp $
  */
-class UpdateImpl extends AbstractCondition<Update> implements Update{
+class UpdateImpl extends AbstractCondition<Update> implements Update {
 
     protected static final Expression NULL_EXPR = new HexValue("null");
 
@@ -68,12 +64,12 @@ class UpdateImpl extends AbstractCondition<Update> implements Update{
         Map<String, String> fieldColumnMap = tableInfo.getFieldColumnMap();
 
         for (Map.Entry<String, String> entry : fieldColumnMap.entrySet()) {
-            if (StringUtils.equals(tableInfo.getPkField(), entry.getKey())) {
+            if (Objects.equals(tableInfo.getPkField(), entry.getKey())) {
                 continue;
             }
 
             Object obj = BeanUtils.invokeReaderMethod(entity, entry.getKey());
-            if (!isIgnoreNull || obj != null && (!(obj instanceof String) || StringUtils.isNotBlank((String) obj))) {
+            if (!isIgnoreNull || obj != null && (!(obj instanceof String) || ((String) obj).isEmpty())) {
                 columns.add(new Column(entry.getValue()));
                 if (obj == null) {
                     values.add(NULL_EXPR);

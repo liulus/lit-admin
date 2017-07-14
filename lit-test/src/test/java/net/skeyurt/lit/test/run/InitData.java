@@ -42,7 +42,7 @@ public class InitData extends BaseTest {
     @Rollback(value = false)
     public void initData() throws Exception {
 
-        Dictionary goodsCategory = dictionaryService.findRootByKey(TestConstants.GOODS_CATEGORY);
+        Dictionary goodsCategory = dictionaryService.findByRootKey(TestConstants.GOODS_CATEGORY);
         if (goodsCategory == null) {
             goodsCategory = new Dictionary();
             goodsCategory.setDictKey(TestConstants.GOODS_CATEGORY);

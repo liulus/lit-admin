@@ -1,10 +1,7 @@
 package net.skeyurt.lit.test.bean;
 
+import lombok.*;
 import net.skeyurt.lit.commons.page.Pager;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -14,7 +11,8 @@ import java.util.Date;
  * Date : 2017-3-6 22:15
  * version $Id: GoodsVo.java, v 0.1 Exp $
  */
-@Data
+@Getter
+@Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor

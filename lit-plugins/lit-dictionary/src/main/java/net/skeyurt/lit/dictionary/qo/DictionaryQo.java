@@ -1,6 +1,6 @@
 package net.skeyurt.lit.dictionary.qo;
 
-import lombok.Data;
+import lombok.*;
 import net.skeyurt.lit.commons.page.Pager;
 
 /**
@@ -8,7 +8,12 @@ import net.skeyurt.lit.commons.page.Pager;
  * Date : 2017/4/8 20:52
  * version $Id: DictionaryQo.java, v 0.1 Exp $
  */
-@Data
+@Getter
+@Setter
+@Builder
+@ToString
+@NoArgsConstructor
+@AllArgsConstructor
 public class DictionaryQo extends Pager {
 
     private static final long serialVersionUID = -2144418218430870185L;

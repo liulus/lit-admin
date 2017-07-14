@@ -10,7 +10,6 @@ import net.skeyurt.lit.commons.bean.BeanUtils;
 import net.skeyurt.lit.jdbc.enums.Logic;
 import net.skeyurt.lit.jdbc.spi.expr.LeftParenthesis;
 import net.skeyurt.lit.jdbc.spi.expr.RightParenthesis;
-import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -125,7 +124,7 @@ public abstract class AbstractCondition<T extends Condition<T>> extends Abstract
     public T beanCondition(Object bean) {
         for (String field : tableInfo.getFieldColumnMap().keySet()) {
             Object value = BeanUtils.invokeReaderMethod(bean, field);
-            if (value != null && (!(value instanceof String) || StringUtils.isNotBlank((String) value))) {
+            if (value != null && (!(value instanceof String) || !((String) value).isEmpty())) {
                 and(field, value);
             }
         }
@@ -156,7 +155,7 @@ public abstract class AbstractCondition<T extends Condition<T>> extends Abstract
 
     protected Expression getExpression(String fieldName, Logic logic, Object... values) {
 
-        if (StringUtils.isEmpty(fieldName)) {
+        if (fieldName == null || fieldName.isEmpty()) {
             return null;
         }
 

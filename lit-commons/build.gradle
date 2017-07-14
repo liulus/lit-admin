@@ -1,8 +1,6 @@
 dependencies {
-    compile libs.'commons-lang3',
-            libs.'slf4j-api'
-
-    compileOnly libs.'spring-jdbc',
+    compileOnly libs.'slf4j-api',
+            libs.'spring-jdbc',
             libs.'spring-context',
             libs.'jackson-databind',
             libs.'spring-aspects',

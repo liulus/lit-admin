@@ -16,7 +16,6 @@ import net.skeyurt.lit.jdbc.enums.JoinType;
 import net.skeyurt.lit.jdbc.enums.Logic;
 import net.skeyurt.lit.jdbc.model.StatementContext;
 import net.skeyurt.lit.jdbc.model.TableInfo;
-import org.apache.commons.lang3.StringUtils;
 
 import java.util.*;
 
@@ -118,7 +117,7 @@ class SelectImpl<T> extends AbstractCondition<Select<T>> implements Select<T> {
             exclude = new ArrayList<>(fieldNames.length);
         }
         for (String fieldName : fieldNames) {
-            exclude.add(StringUtils.trim(fieldName));
+            exclude.add(fieldName.trim());
         }
         return this;
     }
@@ -282,8 +281,8 @@ class SelectImpl<T> extends AbstractCondition<Select<T>> implements Select<T> {
             String column = getColumn(field);
             return new Column(table, column);
         }
-        String column = joinTableInfos.get(clazz).getFieldColumnMap().get(StringUtils.trim(field));
-        return StringUtils.isEmpty(column) ? new Column(joinTables.get(clazz), field) : new Column(joinTables.get(clazz), column);
+        String column = joinTableInfos.get(clazz).getFieldColumnMap().get(field.trim());
+        return column == null || column.isEmpty() ? new Column(joinTables.get(clazz), field) : new Column(joinTables.get(clazz), column);
     }
 
     private Join getLastJoin() {

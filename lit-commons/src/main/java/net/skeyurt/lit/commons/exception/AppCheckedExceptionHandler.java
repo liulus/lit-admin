@@ -2,8 +2,6 @@ package net.skeyurt.lit.commons.exception;
 
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.Signature;
 import org.aspectj.lang.annotation.Around;
@@ -13,6 +11,7 @@ import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
+import java.util.Arrays;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -164,7 +163,7 @@ public class AppCheckedExceptionHandler {
      */
     private String argsToString(ProceedingJoinPoint pjp) {
         Object[] args = pjp.getArgs();
-        return ToStringBuilder.reflectionToString(args, ToStringStyle.MULTI_LINE_STYLE);
+        return Arrays.toString(args);
     }
 
 

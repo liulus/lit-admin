@@ -11,7 +11,8 @@ import java.util.Date;
  * Date : 2017-3-6 22:15
  * version $Id: GoodsVo.java, v 0.1 Exp $
  */
-@Data
+@Getter
+@Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor

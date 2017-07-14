@@ -1,7 +1,5 @@
 package net.skeyurt.lit.commons.util;
 
-import org.apache.commons.lang3.StringUtils;
-
 import java.io.*;
 import java.net.URL;
 import java.util.*;
@@ -41,7 +39,8 @@ public class PropertyUtils {
                     @Override
                     public boolean accept(File pathname) {
                         System.out.println(pathname.getPath() + "====" + pathname.getName());
-                        return StringUtils.endsWith(pathname.getName(), PRO_SUFFIX);
+//                        return StringUtils.endsWith(pathname.getName(), PRO_SUFFIX);
+                        return true;
                     }
                 });
 
@@ -54,9 +53,12 @@ public class PropertyUtils {
     public static void main(String[] args) throws IOException {
 
 
-        StringBuilder builder = new StringBuilder("and234");
-        System.out.println(builder.indexOf("and"));
+//        StringBuilder builder = new StringBuilder("and234");
+//        System.out.println(builder.indexOf("and"));
 
+
+        Character c = 'c';
+        System.out.println(c.toString());
     }
 
 
@@ -89,7 +91,7 @@ public class PropertyUtils {
     public static void loadProperties(String resourceName) {
 
         try {
-            if (!StringUtils.endsWith(resourceName, PRO_SUFFIX)) {
+            if (resourceName.endsWith(PRO_SUFFIX)) {
                 resourceName += PRO_SUFFIX;
             }
             Properties prop = new Properties();
@@ -126,7 +128,7 @@ public class PropertyUtils {
      * @return property
      */
     public static String getProperty(String resourceName, String key, String defaultValue) {
-        if (!StringUtils.endsWith(resourceName, PRO_SUFFIX)) {
+        if (resourceName.endsWith(PRO_SUFFIX)) {
             resourceName += PRO_SUFFIX;
         }
         String finalKey = resourceName + key;
@@ -134,7 +136,7 @@ public class PropertyUtils {
             loadProperties(resourceName);
         }
         String value = propMap.get(finalKey);
-        return StringUtils.isBlank(value) ? defaultValue : value;
+        return value == null ? defaultValue : value;
     }
 
     /**

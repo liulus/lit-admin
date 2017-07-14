@@ -14,6 +14,7 @@ dependencies {
 //            libs.'font-awesome',
 //            libs.'jquery',
 //            project(':lit-commons')
+            project(':lit-plugins:lit-menu'),
             project(':lit-plugins:lit-dictionary')
     compile (libs.'spring-boot-web'){
         exclude module: 'spring-boot-starter-tomcat'

@@ -1,7 +1,5 @@
 package net.skeyurt.lit.commons.util;
 
-import org.apache.commons.lang3.StringUtils;
-
 /**
  * 命名工具类
  * User : liulu
@@ -26,7 +24,7 @@ public class NameUtils {
      */
     public static String getCamelName(String name, Character delimiter) {
 
-        if (StringUtils.isBlank(name)) {
+        if (name == null || name.isEmpty()) {
             return "";
         }
         StringBuilder sb = new StringBuilder();
@@ -72,7 +70,7 @@ public class NameUtils {
      */
     public static String getUpperDelimiterName(String name, String delimiter) {
 
-        if (StringUtils.isBlank(name)) {
+        if (name == null || name.isEmpty()) {
             return "";
         }
         StringBuilder sb = new StringBuilder();
@@ -84,11 +82,6 @@ public class NameUtils {
             sb.append(c);
         }
         return sb.toString().toUpperCase();
-    }
-
-
-    public static void main(String[] args) {
-        System.out.println(getUnderLineName("UserName"));
     }
 
 }

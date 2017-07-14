@@ -1,12 +1,13 @@
 package net.skeyurt.lit.jdbc.model;
 
+import lombok.Getter;
 import net.skeyurt.lit.commons.bean.BeanUtils;
 import net.skeyurt.lit.commons.util.NameUtils;
 import net.skeyurt.lit.jdbc.annotation.*;
 import net.skeyurt.lit.jdbc.enums.GenerationType;
-import net.skeyurt.lit.jdbc.generator.*;
-import lombok.Getter;
-import org.apache.commons.lang3.StringUtils;
+import net.skeyurt.lit.jdbc.generator.EmptyKeyGenerator;
+import net.skeyurt.lit.jdbc.generator.KeyGenerator;
+import net.skeyurt.lit.jdbc.generator.SequenceGenerator;
 
 import java.beans.PropertyDescriptor;
 import java.lang.reflect.Field;
@@ -87,7 +88,7 @@ public class TableInfo {
             String columnName = column != null ? column.name().toLowerCase() : NameUtils.getUnderLineName(fieldName);
 
             // 主键信息 : 有 @Id 注解的字段，没有默认是 类名+Id
-            if (field.isAnnotationPresent(Id.class) || (StringUtils.equalsIgnoreCase(fieldName, clazz.getSimpleName() + "Id") && pkField == null)) {
+            if (field.isAnnotationPresent(Id.class) || (fieldName.equalsIgnoreCase(clazz.getSimpleName() + "Id") && pkField == null)) {
                 pkField = fieldName;
                 pkColumn = columnName;
                 initAutoKeyInfo(field);
@@ -115,13 +116,13 @@ public class TableInfo {
             generatorClass = generated.generator();
             if (Objects.equals(generatorClass, SequenceGenerator.class)) {
                 generationType = GenerationType.SEQUENCE;
-                sequenceName = StringUtils.isEmpty(generated.sequenceName()) ? "seq_" + tableName : generated.sequenceName();
+                sequenceName = generated.sequenceName().isEmpty() ? "seq_" + tableName : generated.sequenceName();
             }
             return;
         }
         generationType = generated.strategy();
         if (Objects.equals(generationType, GenerationType.SEQUENCE)) {
-            sequenceName = StringUtils.isEmpty(generated.sequenceName()) ? "seq_" + tableName : generated.sequenceName();
+            sequenceName = generated.sequenceName().isEmpty() ? "seq_" + tableName : generated.sequenceName();
         }
     }
 

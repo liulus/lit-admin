@@ -3,7 +3,6 @@ package net.skeyurt.lit.commons.bean;
 import net.skeyurt.lit.commons.page.PageList;
 import net.skeyurt.lit.commons.util.ClassUtils;
 import net.skeyurt.lit.commons.util.NameUtils;
-import org.apache.commons.lang3.StringUtils;
 
 import java.beans.PropertyDescriptor;
 import java.lang.reflect.Method;
@@ -60,7 +59,7 @@ public class BeanUtils {
             if (value != null) {
                 String propertyName = entry.getKey();
                 if (delimiter != null) {
-                    propertyName = StringUtils.contains(propertyName, delimiter) ?
+                    propertyName = propertyName.contains(delimiter.toString()) ?
                             NameUtils.getCamelName(propertyName, delimiter)
                             : propertyName.toLowerCase();
                 }

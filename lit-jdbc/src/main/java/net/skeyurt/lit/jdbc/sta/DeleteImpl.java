@@ -2,7 +2,6 @@ package net.skeyurt.lit.jdbc.sta;
 
 import net.skeyurt.lit.commons.bean.BeanUtils;
 import net.skeyurt.lit.jdbc.model.StatementContext;
-import org.apache.commons.lang3.StringUtils;
 
 /**
  * User : liulu
@@ -26,7 +25,7 @@ class DeleteImpl extends AbstractCondition<Delete> implements Delete {
             throw new NullPointerException("entity is null, can not delete!");
         }
         Object key = BeanUtils.invokeReaderMethod(entity, tableInfo.getPkField());
-        if (key != null && (!(key instanceof String) || StringUtils.isNotBlank((String) key))) {
+        if (key != null && (!(key instanceof String) || !((String) key).isEmpty())) {
             idCondition(key);
         } else {
             throw new NullPointerException("entity [" + entity + "] id is null, can not delete!");

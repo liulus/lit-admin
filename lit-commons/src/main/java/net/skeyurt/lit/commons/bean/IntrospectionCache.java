@@ -1,7 +1,5 @@
 package net.skeyurt.lit.commons.bean;
 
-import org.apache.commons.lang3.StringUtils;
-
 import java.beans.BeanInfo;
 import java.beans.IntrospectionException;
 import java.beans.Introspector;
@@ -118,7 +116,7 @@ public class IntrospectionCache {
 
         PropertyDescriptor pd = this.propertyDescriptorCache.get(name);
 
-        if (pd == null && StringUtils.isNotBlank(name)) {
+        if (pd == null && name != null) {
             // Same lenient fallback checking as in PropertyTypeDescriptor...
             pd = this.propertyDescriptorCache.get(name.substring(0, 1).toLowerCase() + name.substring(1));
             if (pd == null) {

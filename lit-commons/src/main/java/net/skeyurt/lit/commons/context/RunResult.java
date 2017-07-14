@@ -3,9 +3,9 @@ package net.skeyurt.lit.commons.context;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -61,7 +61,7 @@ public class RunResult<T> {
         if (messages == null || messages.isEmpty()) {
             return "";
         }
-        return StringUtils.join(messages, "; ");
+        return Arrays.toString(messages.toArray());
     }
 
 

@@ -5,7 +5,7 @@ $(function () {
 
     /** 新增弹出框 */
     $('#data-add').on('click', function (e) {
-        openEdit('增加', compiledEditTpl.render(), '#form-edit', 'plugin/dictionary/add.json')
+        openEdit('增加', compiledEditTpl.render(), '#form-edit', 'plugin/menu/add.json')
     });
 
     /** 修改弹出框 */
@@ -20,10 +20,10 @@ $(function () {
             return;
         }
 
-        $.post(path + 'plugin/dictionary/get.json', {
+        $.post(path + 'plugin/menu/get.json', {
             id: checkedInputs.val()
         }, function (result) {
-            openEdit('修改', compiledEditTpl.render(result['result']), '#form-edit', 'plugin/dictionary/update.json')
+            openEdit('修改', compiledEditTpl.render(result['result']), '#form-edit', 'plugin/menu/update.json')
         });
 
     })
@@ -38,7 +38,7 @@ $(function () {
             btn1: function (index) {
                 $.post(path + url, $(form).serialize(), function (result) {
                     if (result['success']) {
-                        $('#query-form').submit();
+                        window.location.reload();
                     } else {
                         MsgUtils.error(result['message']);
                     }
@@ -56,12 +56,11 @@ $(function () {
             MsgUtils.warning('请至少选择一条数据 !')
             return;
         }
-        layer.confirm('确定要删除选中的数据吗?', function (index) {
-            $.post(path + 'plugin/dictionary/delete.json', checkedInputs.serialize(), function (result) {
+        layer.confirm('确定要删除选中的数据吗?', function () {
+            $.post(path + 'plugin/menu/delete.json', checkedInputs.serialize(), function (result) {
                 if (result['success']) {
-                    $('#query-form').submit();
+                    window.location.reload();
                 } else {
-                    layer.close(index);
                     MsgUtils.error(result['message']);
                 }
             });

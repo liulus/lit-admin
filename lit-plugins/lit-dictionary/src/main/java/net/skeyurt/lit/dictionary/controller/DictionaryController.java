@@ -18,7 +18,7 @@ import javax.annotation.Resource;
  * version $Id: DictionaryController.java, v 0.1 Exp $
  */
 @Controller
-@RequestMapping("/dictionary")
+@RequestMapping("/plugin/dictionary")
 @Slf4j
 public class DictionaryController {
 
@@ -45,10 +45,10 @@ public class DictionaryController {
 
         Dictionary dictionary = dictionaryService.findById(dictId);
         if (dictionary != null && dictionary.getParentId() != null) {
-            return "redirect:/dictionary/" + dictionary.getParentId() + "/child";
+            return "redirect:/plugin/dictionary/" + dictionary.getParentId() + "/child";
         }
 
-        return "redirect:/dictionary";
+        return "redirect:/plugin/dictionary";
     }
 
     @RequestMapping("/get")

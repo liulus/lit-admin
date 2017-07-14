@@ -35,7 +35,6 @@ public interface DictionaryService {
      */
     void update(Dictionary dictionary);
 
-    Dictionary findRootByKey(String key);
 
     /**
      * 根据 Id 查询字典对象
@@ -53,7 +52,45 @@ public interface DictionaryService {
      */
     void delete(Long... ids);
 
-//    Dictionary findByKeys(String... keys);
+
+    /**
+     * 根据 根字典key 查询字典
+     *
+     * @param key
+     * @return
+     */
+    Dictionary findByRootKey(String key);
 
 
+    /**
+     * 根据字典key 查询字典
+     *
+     * @param keys
+     * @return
+     */
+    Dictionary findByKeys(String... keys);
+
+    /**
+     * 查找根级字典的所有子字典
+     *
+     * @param rootKey
+     * @return
+     */
+    List<Dictionary> findChildByRootKey(String rootKey);
+
+    /**
+     * 查找指定字典下的子字典
+     *
+     * @param keys
+     * @return
+     */
+    List<Dictionary> findChildByKeys(String... keys);
+
+    /**
+     * 根据父字典Id查询所有子字典
+     *
+     * @param parentId
+     * @return
+     */
+    List findChildByParentId(Long parentId);
 }

@@ -20,7 +20,8 @@ public class DictionaryDaoImpl implements DictionaryDao {
 
     @Override
     public int queryMaxOrder(Long parentId) {
-        Integer maxOrder = jdbcTools.createSelect(Dictionary.class).addFunc("max", "orderNum")
+        Integer maxOrder = jdbcTools.createSelect(Dictionary.class)
+                .addFunc("max", "orderNum")
                 .where("parentId", parentId).single(int.class);
         return maxOrder == null ? 0 : maxOrder;
     }

@@ -3,7 +3,6 @@ package net.skeyurt.lit.jdbc.spring.config;
 import net.skeyurt.lit.commons.condition.ConditionalOnMissingBean;
 import net.skeyurt.lit.jdbc.JdbcTools;
 import net.skeyurt.lit.jdbc.spring.JdbcTemplateToolsImpl;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -38,7 +37,7 @@ public class JdbcToolsConfig {
                 throw new RuntimeException("to enable JdbcTools, need config DataSource or JdbcOperations bean...");
             }
             String dataSourceBeanName = environment.getProperty("lit.jdbc.dataSource");
-            if (StringUtils.isEmpty(dataSourceBeanName)) {
+            if (dataSourceBeanName == null || dataSourceBeanName.isEmpty()) {
                 templateTools.setDataSource(dataSourceBeans.values().iterator().next());
                 return templateTools;
             } else {
@@ -52,7 +51,7 @@ public class JdbcToolsConfig {
         }
 
         String templateBeanName = environment.getProperty("lit.jdbc.template");
-        if (StringUtils.isEmpty(templateBeanName)) {
+        if (templateBeanName == null || templateBeanName.isEmpty()) {
             templateTools.setJdbcOperations(jdbcOperationsBeans.values().iterator().next());
         } else {
             JdbcOperations jdbcOperations = jdbcOperationsBeans.get(templateBeanName);

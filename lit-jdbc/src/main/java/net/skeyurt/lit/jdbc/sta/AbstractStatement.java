@@ -8,7 +8,6 @@ import net.sf.jsqlparser.schema.Table;
 import net.skeyurt.lit.jdbc.StatementExecutor;
 import net.skeyurt.lit.jdbc.model.TableInfo;
 import net.skeyurt.lit.jdbc.pager.StatementPageHandler;
-import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,9 +43,9 @@ public abstract class AbstractStatement implements Statement {
     }
 
     public String getColumn(String fieldName) {
-        fieldName = StringUtils.trim(fieldName);
+        fieldName = fieldName.trim();
         String column = tableInfo.getFieldColumnMap().get(fieldName);
-        return StringUtils.isEmpty(column) ? fieldName : column;
+        return column == null || column.isEmpty() ? fieldName : column;
     }
 
 }

@@ -82,8 +82,9 @@ public class AppCheckedExceptionHandler {
                         targetClass, targetMethod, ((AppCheckedException) throwable).getErrorCode(), throwable.getMessage(), argsToString(pjp));
             } else {
                 RunResultHolder.addError("系统未知异常");
-                log.warn(String.format("checked exception: [method=%s#%s], [errorMsg=%s], [args=%s]",
+                log.warn(String.format("unchecked exception: [method=%s#%s], [errorMsg=%s], [args=%s]",
                         targetClass, targetMethod, throwable.getMessage(), argsToString(pjp)), throwable);
+                throw throwable;
             }
 
             result = getDefaultValue(signature);

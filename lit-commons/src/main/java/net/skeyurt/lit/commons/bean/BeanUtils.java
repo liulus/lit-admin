@@ -129,20 +129,6 @@ public class BeanUtils {
     /**
      * 单个对象转换
      *
-     * @param target   目标对象
-     * @param source   源对象
-     * @param callBack 简单属性拷贝完成后的回调
-     * @param <T>
-     * @param <S>
-     * @return
-     */
-    public static <T, S> T convert(T target, S source, ConvertCallBack<T, S> callBack) {
-        return convert(target, source, null, callBack);
-    }
-
-    /**
-     * 单个对象转换
-     *
      * @param target           目标对象
      * @param source           源对象
      * @param ignoreProperties 需要过滤的属性
@@ -163,7 +149,7 @@ public class BeanUtils {
      * @param <S>
      * @return
      */
-    public static <T, S> T convert(T target, S source, String[] ignoreProperties, ConvertCallBack<T, S> callBack) {
+    private static <T, S> T convert(T target, S source, String[] ignoreProperties, ConvertCallBack<T, S> callBack) {
 
         if (target == null || source == null) {
             return null;

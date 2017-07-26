@@ -1,8 +1,12 @@
 package net.skeyurt.lit.web.config;
 
 import com.mchange.v2.c3p0.ComboPooledDataSource;
+import net.skeyurt.lit.dictionary.guava.GuavaCacheManager;
 import net.skeyurt.lit.jdbc.spring.config.EnableLitJdbc;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.EnableCaching;
+import org.springframework.cache.concurrent.ConcurrentMapCache;
+import org.springframework.cache.support.SimpleCacheManager;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -12,6 +16,8 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 
 import javax.sql.DataSource;
 import java.beans.PropertyVetoException;
+import java.util.Arrays;
+import java.util.Collections;
 
 /**
  * User : liulu
@@ -20,6 +26,7 @@ import java.beans.PropertyVetoException;
  */
 @EnableLitJdbc
 @Configuration
+@EnableCaching
 @ComponentScan(basePackages = "net.skeyurt.lit")
 public class SpringConfig extends WebMvcConfigurerAdapter {
 
@@ -50,6 +57,20 @@ public class SpringConfig extends WebMvcConfigurerAdapter {
         return new DataSourceTransactionManager(dataSource);
     }
 
+
+    public SimpleCacheManager cacheManager() {
+
+        GuavaCacheManager guavaCacheManager = new GuavaCacheManager();
+        guavaCacheManager.setCacheNames(Collections.singleton("dictionary"));
+
+
+
+        SimpleCacheManager cacheManager = new SimpleCacheManager();
+
+        cacheManager.setCaches(Arrays.asList(new ConcurrentMapCache("default"), new ConcurrentMapCache("dictionary")));
+
+        return cacheManager;
+    }
 
 
 

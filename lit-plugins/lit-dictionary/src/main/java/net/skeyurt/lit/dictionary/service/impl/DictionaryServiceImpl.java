@@ -2,7 +2,6 @@ package net.skeyurt.lit.dictionary.service.impl;
 
 import com.google.common.base.Strings;
 import net.skeyurt.lit.commons.exception.AppCheckedException;
-import net.skeyurt.lit.dictionary.dao.DictionaryDao;
 import net.skeyurt.lit.dictionary.entity.Dictionary;
 import net.skeyurt.lit.dictionary.qo.DictionaryQo;
 import net.skeyurt.lit.dictionary.service.DictionaryService;
@@ -24,14 +23,10 @@ import java.util.List;
  * version $Id: DictionaryServiceImpl.java, v 0.1 Exp $
  */
 @Service
-@Transactional
 public class DictionaryServiceImpl implements DictionaryService {
 
     @Resource
     private JdbcTools jdbcTools;
-
-    @Resource
-    private DictionaryDao dictionaryDao;
 
     @Override
     public List<Dictionary> queryPageList(DictionaryQo qo) {
@@ -63,6 +58,7 @@ public class DictionaryServiceImpl implements DictionaryService {
     }
 
     @Override
+    @Transactional
     public void add(Dictionary dictionary) {
 
         checkDictKey(dictionary.getDictKey(), dictionary.getParentId());
@@ -81,12 +77,17 @@ public class DictionaryServiceImpl implements DictionaryService {
             dictionary.setSystem(false);
         }
 
-        int maxOrder = dictionaryDao.queryMaxOrder(dictionary.getParentId());
-        dictionary.setOrderNum(maxOrder + 1);
+        Integer maxOrder = jdbcTools.createSelect(Dictionary.class)
+                .addFunc("max", "orderNum")
+                .where("parentId", dictionary.getParentId())
+                .single(int.class);
+
+        dictionary.setOrderNum(maxOrder == null ? 1 : maxOrder + 1);
         dictionary.setDictId((Long) jdbcTools.insert(dictionary));
     }
 
     @Override
+    @Transactional
     public void update(Dictionary dictionary) {
         checkDictKey(dictionary.getDictKey(), dictionary.getParentId());
         jdbcTools.update(dictionary);
@@ -116,6 +117,7 @@ public class DictionaryServiceImpl implements DictionaryService {
     }
 
     @Override
+    @Transactional
     public void delete(Long... ids) {
         if (ids == null || ids.length == 0) {
             return;
@@ -139,6 +141,13 @@ public class DictionaryServiceImpl implements DictionaryService {
         }
         jdbcTools.deleteByIds(Dictionary.class, validIds.toArray(new Serializable[validIds.size()]));
     }
+
+
+    /**
+     * *********************************************** *
+     * ****************  以下为接口用  **************** *
+     * *********************************************** *
+     */
 
 
     @Override

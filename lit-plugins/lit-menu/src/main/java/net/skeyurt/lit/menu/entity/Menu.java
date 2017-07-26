@@ -66,11 +66,6 @@ public class Menu implements Serializable {
     private String menuType;
 
     /**
-     * 所属模块
-     */
-    private String module;
-
-    /**
      * 是否启用
      */
     @Column(name = "is_enable")

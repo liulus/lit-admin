@@ -2,7 +2,6 @@ subprojects{
     dependencies {
         compile libs.'spring-webmvc',
                 libs.'jackson-databind',
-                libs.'guava',
                 project(':lit-plugin-engine'),
                 project(':lit-jdbc')
 

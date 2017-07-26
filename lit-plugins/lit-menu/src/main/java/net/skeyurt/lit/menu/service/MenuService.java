@@ -47,4 +47,12 @@ public interface MenuService {
      * @param ids
      */
     void delete(Long... ids);
+
+    /**
+     * 移动菜单
+     *
+     * @param parentId 新的parentId
+     * @param ids      要移动的菜单 id
+     */
+    void moveMenu(Long parentId, Long[] ids);
 }

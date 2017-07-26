@@ -1,7 +1,6 @@
 package net.skeyurt.lit.menu.vo;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import net.skeyurt.lit.commons.page.Pager;
 
 /**
@@ -11,6 +10,10 @@ import net.skeyurt.lit.commons.page.Pager;
  */
 @Getter
 @Setter
+@Builder
+@ToString
+@NoArgsConstructor
+@AllArgsConstructor
 public class MenuVo extends Pager {
 
     private static final long serialVersionUID = -4104369004390601578L;
@@ -54,9 +57,9 @@ public class MenuVo extends Pager {
     private String menuType;
 
     /**
-     * 所属模块
+     * 菜单类型中文
      */
-    private String module;
+    private String menuTypeStr;
 
     /**
      * 是否启用
@@ -67,4 +70,9 @@ public class MenuVo extends Pager {
      * 父菜单Id
      */
     private Long parentId;
+
+    /**
+     * 是否父节点, 菜单树需要
+     */
+    private Boolean isParent;
 }

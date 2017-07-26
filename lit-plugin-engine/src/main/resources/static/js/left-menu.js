@@ -11,7 +11,7 @@ $(function () {
     });
 
     $('.sidebar').css({
-        height: $('.main').height() + 1
+        height: Math.max($('.main').outerHeight(), innerHeight-$('#top-nav').outerHeight())
     })
 
 

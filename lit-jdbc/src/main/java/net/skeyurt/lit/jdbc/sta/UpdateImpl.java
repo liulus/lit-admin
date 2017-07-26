@@ -44,8 +44,12 @@ class UpdateImpl extends AbstractCondition<Update> implements Update {
     @Override
     public Update values(Object... values) {
         for (Object value : values) {
-            this.values.add(PARAM_EXPR);
-            params.add(value);
+            if (value == null) {
+                this.values.add(NULL_EXPR);
+            } else {
+                this.values.add(PARAM_EXPR);
+                params.add(value);
+            }
         }
         return this;
     }

@@ -375,7 +375,13 @@ class SelectImpl<T> extends AbstractCondition<Select<T>> implements Select<T> {
     @Override
     public <E> E single(Class<E> clazz) {
         processSelect();
-        return (E) executor.execute(new StatementContext(select.toString(), params, StatementContext.StatementType.SELECT_SINGLE, clazz));
+        String sql;
+        if (pageNum != null && pageSize != null) {
+            sql = pageHandler.getPageSql(dbName, select.toString(), pageSize, pageNum);
+        } else {
+            sql = select.toString();
+        }
+        return (E) executor.execute(new StatementContext(sql, params, StatementContext.StatementType.SELECT_SINGLE, clazz));
     }
 
     @Override

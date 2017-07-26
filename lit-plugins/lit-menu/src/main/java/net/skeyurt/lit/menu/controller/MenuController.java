@@ -56,8 +56,19 @@ public class MenuController {
 
     @RequestMapping("/move")
     public String move(Long parentId, Long... ids) {
-
         menuService.moveMenu(parentId, ids);
+        return "";
+    }
+
+    @RequestMapping("/move/up")
+    public String moveUp(Long menuId){
+        menuService.move(menuId, true);
+        return "";
+    }
+
+    @RequestMapping("/move/down")
+    public String moveDown(Long menuId){
+        menuService.move(menuId, false);
         return "";
     }
 

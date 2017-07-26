@@ -55,4 +55,12 @@ public interface MenuService {
      * @param ids      要移动的菜单 id
      */
     void moveMenu(Long parentId, Long[] ids);
+
+    /**
+     * 向上或向下移动菜单
+     *
+     * @param menuId 被移动菜单Id
+     * @param isUp   是否向上
+     */
+    void move(Long menuId, boolean isUp);
 }

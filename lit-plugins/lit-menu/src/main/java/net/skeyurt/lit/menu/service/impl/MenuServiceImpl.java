@@ -20,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.io.Serializable;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -124,10 +125,65 @@ public class MenuServiceImpl implements MenuService {
 
     @Override
     public void moveMenu(Long parentId, Long[] ids) {
+
+
+        Arrays.sort(ids);
+        // 验证新的 parentId 不是 被移动菜单本身
+        if (parentId != null && Arrays.binarySearch(ids, parentId) >= 0) {
+            throw new AppCheckedException("父菜单不能是自己 !");
+        }
+
+        // 验证新的 parentId 不是 被移动菜单的子菜单
+        Menu menu = jdbcTools.get(Menu.class, parentId);
+        while (menu != null) {
+            if (menu.getParentId() != null && Arrays.binarySearch(ids, menu.getParentId()) >= 0) {
+                throw new AppCheckedException("无法移动到子菜单下 !");
+            }
+            menu = jdbcTools.get(Menu.class, menu.getParentId());
+        }
+
+        // 执行更新
         jdbcTools.createUpdate(Menu.class)
                 .set("parentId")
                 .values(parentId)
                 .where("menuId", Logic.IN, (Object[]) ids)
                 .execute();
+    }
+
+    @Override
+    public void move(Long menuId, boolean isUp) {
+        if (menuId == null) {
+            throw new AppCheckedException("菜单id不能为空 !");
+        }
+
+        Menu menu = jdbcTools.get(Menu.class, menuId);
+        if (menu == null) {
+            throw new AppCheckedException("被移动菜单不存在 !");
+        }
+
+        String orderNum = "orderNum";
+        Select<Menu> select = jdbcTools.createSelect(Menu.class)
+                .where(orderNum, isUp ? Logic.LTEQ : Logic.GTEQ, menu.getOrderNum())
+                .and("menuId", Logic.NOT_EQ, menu.getMenuId())
+                .and("parentId", menu.getParentId());
+
+        select = isUp ? select.desc(orderNum) : select.asc(orderNum);
+
+        Menu changeMenu = select.page(1, 1).single();
+        if (changeMenu == null) {
+            throw new AppCheckedException("无法移动!");
+        }
+
+        jdbcTools.createUpdate(Menu.class)
+                .set(orderNum)
+                .values(changeMenu.getOrderNum())
+                .where("menuId", menu.getMenuId())
+                .execute();
+        jdbcTools.createUpdate(Menu.class)
+                .set(orderNum)
+                .values(menu.getOrderNum())
+                .where("menuId", changeMenu.getMenuId())
+                .execute();
+
     }
 }

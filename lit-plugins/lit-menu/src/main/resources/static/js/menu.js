@@ -1,29 +1,26 @@
 $(function () {
 
+    var urlPrefix = path + "plugin/menu";
+
     var compiledEditTpl = juicer($('#edit-tpl').html());
 
 
     /** 新增弹出框 */
     $('#data-add').on('click', function (e) {
-        openEdit('增加', compiledEditTpl.render(), '#form-edit', 'plugin/menu/add.json')
+        openEdit('增加', compiledEditTpl.render(), '#form-edit', urlPrefix + '/add.json')
     });
 
     /** 修改弹出框 */
     $('#data-modify').on('click', function (e) {
         var checkedInputs = $('.panel table .check-ls:checked');
-        if (checkedInputs.length <= 0) {
-            MsgUtils.warning('请选择一条数据 !');
-            return;
-        }
-        if (checkedInputs.length > 1) {
-            MsgUtils.warning('只能选择一条数据 !');
+        if (!checkOnlyOne(checkedInputs.length)) {
             return;
         }
 
         $.post(path + 'plugin/menu/get.json', {
             id: checkedInputs.val()
         }, function (result) {
-            openEdit('修改', compiledEditTpl.render(result['result']), '#form-edit', 'plugin/menu/update.json');
+            openEdit('修改', compiledEditTpl.render(result['result']), '#form-edit', urlPrefix + '/update.json');
         });
 
     })
@@ -36,7 +33,7 @@ $(function () {
             content: content,
             btn: ['确认', '取消'],
             btn1: function (index) {
-                $.post(path + url, $(form).serialize(), function (result) {
+                $.post(url, $(form).serialize(), function (result) {
                     if (result['success']) {
                         window.location.reload();
                     } else {
@@ -60,7 +57,7 @@ $(function () {
             return;
         }
         layer.confirm('确定要删除选中的数据吗?', function () {
-            $.post(path + 'plugin/menu/delete.json', checkedInputs.serialize(), function (result) {
+            $.post(urlPrefix + '/delete.json', checkedInputs.serialize(), function (result) {
                 if (result['success']) {
                     window.location.reload();
                 } else {
@@ -73,7 +70,7 @@ $(function () {
 
     var menuTreeConfig = {
         async: {
-            url: path + "plugin/menu.json",
+            url: urlPrefix + "/list.json",
             dataType: "json",
             enable: true,
             autoParam: ["menuId=parentId"],
@@ -100,6 +97,9 @@ $(function () {
         }
     }
 
+    /**
+     * 移动菜单
+     */
     var menuTree;
     $('#data-move').on('click', function (e) {
 
@@ -109,16 +109,9 @@ $(function () {
             return;
         }
 
-        if (menuTree === undefined) {
+        if (!menuTree) {
             menuTree = $.fn.zTree.init($('.ztree'), menuTreeConfig, null);
         }
-
-        var serialize = checkedInputs.serialize();
-        var nodesByFilter = menuTree.getNodesByFilter(function (node) {
-            return serialize.indexOf('ids=' + node['menuId']) >= 0;
-        }, false);
-        menuTree.hideNodes(nodesByFilter);
-
 
         layer.open({
             type: 1,
@@ -131,10 +124,29 @@ $(function () {
                 var selectedNodes = menuTree.getSelectedNodes();
                 if (selectedNodes.length === 0) {
                     MsgUtils.warning('请选择一个节点');
+                    return;
                 }
+
+                var checkedMenuIds = checkedInputs.serialize();
+
+                // 验证新的 父菜单 不是 被移动菜单本身或子菜单
+                var checkNode = selectedNodes[0];
+                var checked = true;
+                while (checkNode) {
+                    if (checkedMenuIds.indexOf(checkNode['menuId']) > 0) {
+                        checked = false;
+                        break;
+                    }
+                    checkNode = checkNode.getParentNode();
+                }
+                if (!checked) {
+                    MsgUtils.warning('无法将菜单移动到此节点');
+                    return;
+                }
+
                 var parentId = selectedNodes[0]['menuId'];
-                var data = parentId ? 'parentId=' + parentId + '&' + serialize : serialize;
-                $.post(path + 'plugin/menu/move.json', data, function (result) {
+                var data = parentId ? 'parentId=' + parentId + '&' + checkedMenuIds : checkedMenuIds;
+                $.post(urlPrefix + '/move.json', data, function (result) {
                     if (result['success']) {
                         window.location.reload();
                     } else {
@@ -143,8 +155,57 @@ $(function () {
                 })
             }
         })
-
     })
+
+    /**
+     * 向上移动菜单
+     */
+    $('#data-move-up').on('click', function (e) {
+        var checkedInputs = $('.panel table .check-ls:checked');
+        if (!checkOnlyOne(checkedInputs.length)) {
+            return;
+        }
+        $.post(urlPrefix + '/move/up.json', {
+            menuId: checkedInputs.val()
+        }, function (result) {
+            if (result['success']) {
+                window.location.reload();
+            } else {
+                MsgUtils.error(result['message']);
+            }
+        })
+    })
+
+    /**
+     * 向下移动菜单
+     */
+    $('#data-move-down').on('click', function (e) {
+        var checkedInputs = $('.panel table .check-ls:checked');
+        if (!checkOnlyOne(checkedInputs.length)) {
+            return;
+        }
+        $.post(urlPrefix + '/move/down.json', {
+            menuId: checkedInputs.val()
+        }, function (result) {
+            if (result['success']) {
+                window.location.reload();
+            } else {
+                MsgUtils.error(result['message']);
+            }
+        })
+    })
+
+    function checkOnlyOne(checkedLength) {
+        if (checkedLength <= 0) {
+            MsgUtils.warning('请选择一条数据 !');
+            return false;
+        }
+        if (checkedLength > 1) {
+            MsgUtils.warning('只能选择一条数据 !');
+            return false;
+        }
+        return true;
+    }
 
 
     /**

@@ -2,14 +2,16 @@ $(function () {
 
     var compiledEditTpl = juicer($('#edit-tpl').html());
 
+    var urlPrefix = path + 'plugin/dictionary';
+
 
     /** 新增弹出框 */
     $('#data-add').on('click', function (e) {
-        openEdit('增加', compiledEditTpl.render(), '#form-edit', 'plugin/dictionary/add.json')
+        openEdit('增加', compiledEditTpl.render(), '#form-edit', urlPrefix + '/add.json')
     });
 
     /** 修改弹出框 */
-    $('#data-modify').on('click', function (e) {
+    $('#data-update').on('click', function (e) {
         var checkedInputs = $('.panel table .check-ls:checked');
         if (checkedInputs.length <= 0) {
             MsgUtils.warning('请选择一条数据 !')
@@ -20,10 +22,10 @@ $(function () {
             return;
         }
 
-        $.post(path + 'plugin/dictionary/get.json', {
+        $.post(urlPrefix + '/get.json', {
             id: checkedInputs.val()
         }, function (result) {
-            openEdit('修改', compiledEditTpl.render(result['result']), '#form-edit', 'plugin/dictionary/update.json')
+            openEdit('修改', compiledEditTpl.render(result['result']), '#form-edit', urlPrefix + '/update.json')
         });
 
     })
@@ -36,7 +38,7 @@ $(function () {
             content: content,
             btn: ['确认', '取消'],
             btn1: function (index) {
-                $.post(path + url, $(form).serialize(), function (result) {
+                $.post(url, $(form).serialize(), function (result) {
                     if (result['success']) {
                         $('#query-form').submit();
                     } else {
@@ -57,7 +59,7 @@ $(function () {
             return;
         }
         layer.confirm('确定要删除选中的数据吗?', function (index) {
-            $.post(path + 'plugin/dictionary/delete.json', checkedInputs.serialize(), function (result) {
+            $.post(urlPrefix + '/delete.json', checkedInputs.serialize(), function (result) {
                 if (result['success']) {
                     $('#query-form').submit();
                 } else {

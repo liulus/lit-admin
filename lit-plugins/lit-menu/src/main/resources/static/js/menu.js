@@ -11,7 +11,7 @@ $(function () {
     });
 
     /** 修改弹出框 */
-    $('#data-modify').on('click', function (e) {
+    $('#data-update').on('click', function (e) {
         var checkedInputs = $('.panel table .check-ls:checked');
         if (!checkOnlyOne(checkedInputs.length)) {
             return;

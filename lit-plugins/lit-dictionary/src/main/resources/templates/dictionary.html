@@ -63,7 +63,7 @@
             <button th:if="!${emptyResult}" id="data-del" class="btn btn-sm btn-danger">
                 <i class="fa fa-trash-o"></i>&nbsp;&nbsp;删除
             </button>
-            <button th:if="!${emptyResult}" id="data-modify" class="btn btn-sm btn-info">
+            <button th:if="!${emptyResult}" id="data-update" class="btn btn-sm btn-info">
                 <i class="fa fa-pencil"></i>&nbsp;&nbsp;修改
             </button>
             <a th:if="${dictionaryQo.parentId} != null" th:href="@{'/plugin/dictionary/back/'+${dictionaryQo.parentId}}"

@@ -7,8 +7,11 @@ package net.skeyurt.lit.menu.context;
  */
 public interface MenuConst {
 
-
+    /** 菜单类型字典 key */
     String MENU_TYPE = "menu_type";
+
+    /** 系统初始化 Application 中菜单属性 */
+    String MENUS = "menus";
 
 
 }

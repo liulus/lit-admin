@@ -37,7 +37,7 @@
                 </button>
                 <a class="navbar-brand" href="#">Lit - Web</a>
             </div>
-            <div class="navbar-collapse collapse">
+            <div id="navbar" class="navbar-collapse collapse">
                 <ul class="nav navbar-nav navbar-right">
                     <li><a href="#">Dashboard</a></li>
                     <li><a href="#">Settings</a></li>
@@ -53,46 +53,22 @@
 <div th:fragment="left-menu">
     <div class="col-sm-6 col-md-4 sidebar">
         <ul class="nav nav-sidebar">
-            <li><a href="#">Overview</a></li>
-            <li class="parent-menu">
-                <a href="#sub-item-1" data-toggle="collapse">Dropdown<i
-                        class="glyphicon glyphicon-menu-left pull-right"></i></a>
-                <ul id="sub-item-1" class="collapse children-menu">
-                    <li><a href="#">aaa</a></li>
-                    <li><a href="#">bbb</a></li>
-                    <li class="active"><a href="#">ccc</a></li>
-                    <li><a href="#">ddd</a></li>
-                    <li><a href="#">eee</a></li>
-                </ul>
-            </li>
-            <li class="active"><a href="#">Analytics</a></li>
-            <li class="parent-menu">
-                <a href="#sub-item-3" data-toggle="collapse">Dropdown2<i
-                        class="glyphicon glyphicon-menu-left pull-right"></i></a>
-                <ul id="sub-item-3" class="collapse children-menu">
-                    <li><a href="#">aaa</a></li>
-                    <li><a href="#">bbb</a></li>
-                    <li class="active"><a href="#">ccc</a></li>
-                    <li><a href="#">ddd</a></li>
-                    <li><a href="#">eee</a></li>
-                </ul>
-            </li>
-            <li><a href="#">Export</a></li>
-        </ul>
-        <ul class="nav nav-sidebar">
-            <li class="parent-menu">
-                <a href="#sub-item-2" data-toggle="collapse">Dropdown<i
-                        class="glyphicon glyphicon-menu-left pull-right"></i></a>
-                <ul id="sub-item-2" class="collapse children-menu">
-                    <li><a href="#">aaa</a></li>
-                    <li><a href="#">bbb</a></li>
-                    <li class="active"><a href="#">ccc</a></li>
-                    <li><a href="#">ddd</a></li>
-                    <li><a href="#">eee</a></li>
-                </ul>
-            </li>
-            <li><a href="">One more nav</a></li>
-            <li><a href="">Another nav item</a></li>
+            <th:block th:each="menu : ${application.menus}">
+                <li th:if="${menu.enable}" th:class="${menu.isParent}?'parent-menu'">
+                    <a th:href="${menu.isParent}?'#sub-item-1-'+${menuStat.count}:@{${menu.menuUrl}}"
+                       data-toggle="collapse">
+                        <i th:if="${menu.isParent}" class="fa fa-pencil">&nbsp;&nbsp;</i>[(${menu.menuName})]
+                        <i th:if="${menu.isParent}" class="glyphicon glyphicon-menu-left pull-right"></i>
+                    </a>
+                    <ul th:if="${menu.isParent}" th:id="'sub-item-1-'+${menuStat.count}" class="collapse children-menu">
+                        <li th:each="sencond : ${menu.children}" th:if="${sencond.enable}">
+                            <a th:href="${sencond.isParent}?'#':@{${sencond.menuUrl}}">
+                                <i class="fa fa-pencil">&nbsp;&nbsp;</i>[(${sencond.menuName})]
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+            </th:block>
         </ul>
     </div>
 </div>
@@ -101,7 +77,8 @@
 <div th:fragment="bottom-js">
 
     <script type="text/template" id="alert-message-tpl">
-        <div id="msg-${msgCount}" class="alert alert-${msgType} alert-dismissible alert-message animated fadeIn" role="alert">
+        <div id="msg-${msgCount}" class="alert alert-${msgType} alert-dismissible alert-message animated fadeIn"
+             role="alert">
             <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
             </button>

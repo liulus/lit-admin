@@ -186,4 +186,31 @@ public class MenuServiceImpl implements MenuService {
                 .execute();
 
     }
+
+    @Override
+    public List<MenuVo> findAll() {
+        List<Menu> rootMenus = buildSelect(new MenuVo()).list();
+        List<MenuVo> menuVos = BeanUtils.convert(MenuVo.class, rootMenus);
+
+        findChildMenu(menuVos);
+
+        return menuVos;
+    }
+
+    private void findChildMenu(List<MenuVo> menuVos) {
+        MenuVo condition = new MenuVo();
+
+        for (MenuVo menuVo : menuVos) {
+            condition.setParentId(menuVo.getMenuId());
+            List<Menu> childMenus = buildSelect(condition).list();
+            if (!childMenus.isEmpty()) {
+                menuVo.setIsParent(true);
+                List<MenuVo> childMenuVos = BeanUtils.convert(MenuVo.class, childMenus);
+                menuVo.setChildren(childMenuVos);
+                findChildMenu(childMenuVos);
+            } else {
+                menuVo.setIsParent(false);
+            }
+        }
+    }
 }

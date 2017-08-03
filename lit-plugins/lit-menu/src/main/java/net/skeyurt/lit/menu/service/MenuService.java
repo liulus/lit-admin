@@ -63,4 +63,10 @@ public interface MenuService {
      * @param isUp   是否向上
      */
     void move(Long menuId, boolean isUp);
+
+    /**
+     *
+     * @return
+     */
+    List<MenuVo> findAll();
 }

@@ -9,4 +9,6 @@ findProject(':lit-plugins:lit-dictionary')?.name = 'lit-dictionary'
 include 'lit-plugin-engine'
 include 'lit-plugins:lit-menu'
 findProject(':lit-plugins:lit-menu')?.name = 'lit-menu'
+include 'lit-plugins:lit-user'
+findProject(':lit-plugins:lit-user')?.name = 'lit-user'
 

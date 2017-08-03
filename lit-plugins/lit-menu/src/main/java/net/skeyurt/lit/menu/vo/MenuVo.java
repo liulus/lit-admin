@@ -3,6 +3,8 @@ package net.skeyurt.lit.menu.vo;
 import lombok.*;
 import net.skeyurt.lit.commons.page.Pager;
 
+import java.util.List;
+
 /**
  * User : liulu
  * Date : 2017/7/13 19:49
@@ -75,4 +77,9 @@ public class MenuVo extends Pager {
      * 是否父节点, 菜单树需要
      */
     private Boolean isParent;
+
+    /**
+     * 子菜单
+     */
+    private List<MenuVo> children;
 }

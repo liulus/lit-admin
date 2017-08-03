@@ -1,6 +1,6 @@
 package net.skeyurt.lit.dictionary.tool;
 
-import net.skeyurt.lit.commons.context.AppContextUtils;
+import net.skeyurt.lit.commons.context.SpringContextUtils;
 import net.skeyurt.lit.dictionary.entity.Dictionary;
 import net.skeyurt.lit.dictionary.service.DictionaryService;
 
@@ -13,7 +13,7 @@ import java.util.List;
  */
 public class DictionaryTools {
 
-    private static final DictionaryService DICT_SERVICE = AppContextUtils.getBean(DictionaryService.class);
+    private static final DictionaryService DICT_SERVICE = SpringContextUtils.getBean(DictionaryService.class);
 
     /**
      * 根据 根字典key 查询字典

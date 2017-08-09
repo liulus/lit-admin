@@ -10,6 +10,7 @@ dependencies {
             libs.'c3p0',
             libs.'mysql',
             libs.'oracle',
+            libs.'spring-aspects',
 //            libs.'bootstrap',
 //            libs.'font-awesome',
 //            libs.'jquery',

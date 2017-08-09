@@ -209,6 +209,28 @@ $(function () {
 
 
     /**
+     * 启用或禁用菜单
+     */
+    $('.data-enable, .data-disable').on('click', function (e) {
+        var enable = $(this).hasClass('data-enable');
+        if ($(this).hasClass('btn-default')) {
+            return;
+        }
+
+        $(this).toggleClass('btn-default', true).toggleClass(enable ? 'btn-success' : 'btn-danger', false);
+        $(this).find('span').toggleClass('invisible', true);
+
+        var other = $(this).siblings();
+        other.toggleClass('btn-default', false).toggleClass(enable ? 'btn-danger' : 'btn-success', true);
+        other.find('span').toggleClass('invisible', false);
+
+        $.post(urlPrefix + (enable ? '/disable' : '/enable') + '.json', {
+            menuId: $(this).parents('tr').find('.check-ls').val()
+        })
+    })
+
+
+    /**
      * 全选功能
      */
     $('.check-all').on('click', function (e) {

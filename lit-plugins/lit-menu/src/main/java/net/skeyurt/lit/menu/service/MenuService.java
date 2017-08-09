@@ -65,8 +65,16 @@ public interface MenuService {
     void move(Long menuId, boolean isUp);
 
     /**
+     * 改变菜单状态
      *
+     * @param menuId
+     * @param isEnable 是否启用
+     */
+    void changeStatus(Long menuId, boolean isEnable);
+
+    /**
      * @return
      */
     List<MenuVo> findAll();
+
 }

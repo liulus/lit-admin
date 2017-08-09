@@ -44,10 +44,10 @@
             <button th:if="!${emptyResult}" id="data-move" class="btn btn-sm btn-primary">
                 <i class="fa fa-random"></i>&nbsp;&nbsp;移动
             </button>
-            <button th:if="!${emptyResult}"  id="data-move-up" class="btn btn-sm btn-success">
+            <button th:if="!${emptyResult}" id="data-move-up" class="btn btn-sm btn-success">
                 <i class="fa fa-chevron-up"></i>&nbsp;&nbsp;上移
             </button>
-            <button th:if="!${emptyResult}"  id="data-move-down" class="btn btn-sm btn-info">
+            <button th:if="!${emptyResult}" id="data-move-down" class="btn btn-sm btn-info">
                 <i class="fa fa-chevron-down"></i>&nbsp;&nbsp;下移
             </button>
             <a th:if="${menuVo.parentId} != null" th:href="@{'/plugin/menu/back/'+${menuVo.parentId}}"
@@ -87,9 +87,15 @@
                 <td th:text="${item.menuIcon}"></td>
                 <td th:text="${item.menuUrl}"></td>
                 <td th:text="${item.menuTypeStr}"></td>
-                <td th:class="${item.enable}?'text-success':'text-danger'">
-                    <i class="fa fa-circle"></i>&nbsp;
-                    <span th:text="${item.enable}?启用:禁用"></span>
+                <td>
+                    <div class="btn-group btn-group-xs" role="group">
+                        <a class="data-enable btn " th:classappend="${item.enable}?'btn-success':'btn-default'">
+                            <span th:class="${item.enable}?'':'invisible'">启用</span>
+                        </a>
+                        <a class="data-disable btn " th:classappend="${item.enable}?'btn-default':'btn-danger'">
+                            <span th:class="${item.enable}?'invisible'">禁用</span>
+                        </a>
+                    </div>
                 </td>
                 <td th:text="${item.memo}"></td>
             </tr>
@@ -173,7 +179,6 @@
 
 <th:block th:include="~{fragments::bottom-js}"/>
 <script th:src="@{/libs/zTree/3.5/js/ztree.all.min.js}"></script>
-<script th:src="@{/libs/zTree/3.5/js/ztree.exhide.min.js}"></script>
 <script th:src="@{/js/menu.js}"></script>
 </body>
 </html>

@@ -5,6 +5,7 @@ import com.google.common.base.Strings;
 import com.google.common.collect.Maps;
 import net.skeyurt.lit.commons.bean.BeanUtils;
 import net.skeyurt.lit.commons.bean.ConvertCallBack;
+import net.skeyurt.lit.commons.event.PublishEvent;
 import net.skeyurt.lit.commons.exception.AppCheckedException;
 import net.skeyurt.lit.dictionary.entity.Dictionary;
 import net.skeyurt.lit.dictionary.tool.DictionaryTools;
@@ -13,6 +14,7 @@ import net.skeyurt.lit.jdbc.enums.Logic;
 import net.skeyurt.lit.jdbc.sta.Select;
 import net.skeyurt.lit.menu.context.MenuConst;
 import net.skeyurt.lit.menu.entity.Menu;
+import net.skeyurt.lit.menu.event.MenuUpdateEvent;
 import net.skeyurt.lit.menu.service.MenuService;
 import net.skeyurt.lit.menu.vo.MenuVo;
 import org.springframework.stereotype.Service;
@@ -30,6 +32,7 @@ import java.util.Map;
  * version $Id: MenuServiceImpl.java, v 0.1 Exp $
  */
 @Service
+@Transactional()
 public class MenuServiceImpl implements MenuService {
 
     @Resource
@@ -79,7 +82,7 @@ public class MenuServiceImpl implements MenuService {
     }
 
     @Override
-    @Transactional
+    @PublishEvent(eventClass = MenuUpdateEvent.class)
     public void add(MenuVo vo) {
 
         checkMenuCode(vo.getMenuCode(), vo.getParentId());
@@ -98,7 +101,7 @@ public class MenuServiceImpl implements MenuService {
     }
 
     @Override
-    @Transactional
+    @PublishEvent(eventClass = MenuUpdateEvent.class)
     public void update(MenuVo vo) {
         checkMenuCode(vo.getMenuCode(), vo.getParentId());
         jdbcTools.update(BeanUtils.convert(new Menu(), vo));
@@ -119,11 +122,13 @@ public class MenuServiceImpl implements MenuService {
     }
 
     @Override
+    @PublishEvent(eventClass = MenuUpdateEvent.class)
     public void delete(Long... ids) {
         jdbcTools.deleteByIds(Menu.class, (Serializable[]) ids);
     }
 
     @Override
+    @PublishEvent(eventClass = MenuUpdateEvent.class)
     public void moveMenu(Long parentId, Long[] ids) {
 
 
@@ -185,6 +190,17 @@ public class MenuServiceImpl implements MenuService {
                 .where("menuId", changeMenu.getMenuId())
                 .execute();
 
+    }
+
+    @Override
+    @PublishEvent(eventClass = MenuUpdateEvent.class)
+    public void changeStatus(Long menuId, boolean isEnable) {
+
+        jdbcTools.createUpdate(Menu.class)
+                .set("enable")
+                .values(isEnable)
+                .where("menuId", menuId)
+                .execute();
     }
 
     @Override

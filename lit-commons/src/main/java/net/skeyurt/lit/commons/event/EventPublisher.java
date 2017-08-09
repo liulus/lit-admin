@@ -28,4 +28,11 @@ public interface EventPublisher {
      */
     void publish(Object event);
 
+    /**
+     * 异步发布事件
+     *
+     * @param event
+     */
+    void asyncPublish(Object event);
+
 }

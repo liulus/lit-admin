@@ -34,6 +34,14 @@ public class MenuController {
         return "menu";
     }
 
+    /**
+     * 查询父菜单下的子菜单列表
+     *
+     * @param vo
+     * @param parentId
+     * @param model
+     * @return
+     */
     @RequestMapping("/{parentId}/child")
     public String childList(MenuVo vo, @PathVariable Long parentId, Model model) {
 
@@ -43,6 +51,13 @@ public class MenuController {
         return "menu";
     }
 
+    /**
+     * 返回上级按钮
+     *
+     * @param menuId
+     * @param model
+     * @return
+     */
     @RequestMapping("/back/{menuId}")
     public String back(@PathVariable Long menuId, Model model) {
 
@@ -54,21 +69,64 @@ public class MenuController {
         return "redirect:/plugin/menu";
     }
 
+    /**
+     * 移动菜单,改变父节点
+     *
+     * @param parentId
+     * @param ids
+     * @return
+     */
     @RequestMapping("/move")
     public String move(Long parentId, Long... ids) {
         menuService.moveMenu(parentId, ids);
         return "";
     }
 
+    /**
+     * 同级向上移动菜单
+     *
+     * @param menuId
+     * @return
+     */
     @RequestMapping("/move/up")
-    public String moveUp(Long menuId){
+    public String moveUp(Long menuId) {
         menuService.move(menuId, true);
         return "";
     }
 
+    /**
+     * 同级向下移动菜单
+     *
+     * @param menuId
+     * @return
+     */
     @RequestMapping("/move/down")
-    public String moveDown(Long menuId){
+    public String moveDown(Long menuId) {
         menuService.move(menuId, false);
+        return "";
+    }
+
+    /**
+     * 启用菜单
+     *
+     * @param menuId
+     * @return
+     */
+    @RequestMapping("/enable")
+    public String enable(Long menuId) {
+        menuService.changeStatus(menuId, true);
+        return "";
+    }
+
+    /**
+     * 禁用菜单
+     *
+     * @param menuId
+     * @return
+     */
+    @RequestMapping("/disable")
+    public String disable(Long menuId) {
+        menuService.changeStatus(menuId, false);
         return "";
     }
 

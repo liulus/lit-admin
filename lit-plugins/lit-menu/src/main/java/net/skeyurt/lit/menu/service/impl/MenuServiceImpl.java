@@ -5,7 +5,7 @@ import com.google.common.base.Strings;
 import com.google.common.collect.Maps;
 import net.skeyurt.lit.commons.bean.BeanUtils;
 import net.skeyurt.lit.commons.bean.ConvertCallBack;
-import net.skeyurt.lit.commons.event.PublishEvent;
+import net.skeyurt.lit.commons.event.Event;
 import net.skeyurt.lit.commons.exception.AppCheckedException;
 import net.skeyurt.lit.dictionary.entity.Dictionary;
 import net.skeyurt.lit.dictionary.tool.DictionaryTools;
@@ -82,7 +82,7 @@ public class MenuServiceImpl implements MenuService {
     }
 
     @Override
-    @PublishEvent(eventClass = MenuUpdateEvent.class)
+    @Event(eventClass = MenuUpdateEvent.class)
     public void add(MenuVo vo) {
 
         checkMenuCode(vo.getMenuCode(), vo.getParentId());
@@ -101,7 +101,7 @@ public class MenuServiceImpl implements MenuService {
     }
 
     @Override
-    @PublishEvent(eventClass = MenuUpdateEvent.class)
+    @Event(eventClass = MenuUpdateEvent.class)
     public void update(MenuVo vo) {
         checkMenuCode(vo.getMenuCode(), vo.getParentId());
         jdbcTools.update(BeanUtils.convert(new Menu(), vo));
@@ -122,13 +122,13 @@ public class MenuServiceImpl implements MenuService {
     }
 
     @Override
-    @PublishEvent(eventClass = MenuUpdateEvent.class)
+    @Event(eventClass = MenuUpdateEvent.class)
     public void delete(Long... ids) {
         jdbcTools.deleteByIds(Menu.class, (Serializable[]) ids);
     }
 
     @Override
-    @PublishEvent(eventClass = MenuUpdateEvent.class)
+    @Event(eventClass = MenuUpdateEvent.class)
     public void moveMenu(Long parentId, Long[] ids) {
 
 
@@ -193,7 +193,7 @@ public class MenuServiceImpl implements MenuService {
     }
 
     @Override
-    @PublishEvent(eventClass = MenuUpdateEvent.class)
+    @Event(eventClass = MenuUpdateEvent.class)
     public void changeStatus(Long menuId, boolean isEnable) {
 
         jdbcTools.createUpdate(Menu.class)

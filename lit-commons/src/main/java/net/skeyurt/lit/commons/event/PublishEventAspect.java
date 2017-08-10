@@ -20,14 +20,14 @@ public class PublishEventAspect {
     @Resource
     private EventPublisher eventPublisher;
 
-    @AfterReturning("@annotation(publishEvent)")
-    public void publishEvent(PublishEvent publishEvent) {
-        Class<?> eventClass = publishEvent.eventClass();
+    @AfterReturning("@annotation(event)")
+    public void publishEvent(Event event) {
+        Class<?> eventClass = event.eventClass();
         Object instance = ClassUtils.newInstance(eventClass);
 
-        if (Objects.equals(publishEvent.publishType(), PublishEvent.PublishType.SYNC)) {
+        if (Objects.equals(event.publishType(), Event.Type.SYNC)) {
             eventPublisher.publish(instance);
-        } else if (Objects.equals(publishEvent.publishType(), PublishEvent.PublishType.ASYNC)) {
+        } else if (Objects.equals(event.publishType(), Event.Type.ASYNC)) {
             eventPublisher.asyncPublish(instance);
         }
 

@@ -3,16 +3,10 @@ package net.skeyurt.lit.commons.context;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import net.skeyurt.lit.commons.condition.ConditionalOnClass;
-import net.skeyurt.lit.commons.event.PublishEvent;
-import net.skeyurt.lit.commons.util.WebUtils;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.event.ContextRefreshedEvent;
-import org.springframework.context.event.EventListener;
-import org.springframework.core.annotation.Order;
 import org.springframework.http.MediaType;
 import org.springframework.web.accept.ContentNegotiationManagerFactoryBean;
-import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.servlet.View;
 import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.view.ContentNegotiatingViewResolver;
@@ -27,21 +21,9 @@ import java.util.Collections;
  * version $Id: SpringConfig.java, v 0.1 Exp $
  */
 @Configuration("litSpringConfig")
-@Order(5)
 @ConditionalOnClass(ViewResolver.class)
 public class SpringConfig {
 
-    @EventListener
-    @PublishEvent(eventClass = AppStartedEvent.class)
-    public void findMenu(ContextRefreshedEvent event) {
-
-        if (event.getSource() instanceof WebApplicationContext) {
-            WebApplicationContext webApplicationContext = (WebApplicationContext) event.getSource();
-            WebUtils.setServletContext(webApplicationContext.getServletContext());
-        }
-
-
-    }
 
     @Bean
     public ContentNegotiatingViewResolver contentNegotiatingViewResolver(ViewResolver... viewResolvers) {

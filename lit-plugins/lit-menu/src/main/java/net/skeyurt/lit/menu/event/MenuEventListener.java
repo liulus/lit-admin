@@ -1,7 +1,7 @@
 package net.skeyurt.lit.menu.event;
 
 import com.google.common.eventbus.Subscribe;
-import net.skeyurt.lit.commons.context.AppStartedEvent;
+import net.skeyurt.lit.commons.event.AppStartedEvent;
 import net.skeyurt.lit.commons.event.EventComponent;
 import net.skeyurt.lit.commons.util.WebUtils;
 import net.skeyurt.lit.menu.context.MenuConst;

@@ -8,17 +8,17 @@ import java.lang.annotation.Target;
 /**
  * User : liulu
  * Date : 2017/8/9 21:52
- * version $Id: PublishEvent.java, v 0.1 Exp $
+ * version $Id: Event.java, v 0.1 Exp $
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.METHOD})
-public @interface PublishEvent {
+public @interface Event {
 
     Class<?> eventClass();
 
-    PublishType publishType() default PublishType.ASYNC;
+    Type publishType() default Type.ASYNC;
 
-    enum PublishType {
+    enum Type {
         SYNC,
         ASYNC,;
     }

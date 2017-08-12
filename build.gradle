@@ -4,6 +4,8 @@ ext {
     jacksonVersion = '2.8.3'
     druidVersion = '1.0.29'
     thymeleafVersion = '3.0.2.RELEASE'
+    velocityVersion = '1.7'
+    velocityToolsVersion = '2.0'
     springVersion = '4.3.7.RELEASE'
     springBootVersion = '1.5.2.RELEASE'
 
@@ -32,6 +34,8 @@ ext {
             'oracle'                : "com.oracle:ojdbc6:11.2.0.3",
             'thymeleaf'             : "org.thymeleaf:thymeleaf:${thymeleafVersion}",
             'thymeleaf-spring4'     : "org.thymeleaf:thymeleaf-spring4:${thymeleafVersion}",
+            'velocity'              : "org.apache.velocity:velocity:${velocityVersion}",
+            'velocity-tools'        : "org.apache.velocity:velocity-tools:${velocityToolsVersion}",
             'jackson-core'          : "com.fasterxml.jackson.core:jackson-core:${jacksonVersion}",
             'jackson-annotations'   : "com.fasterxml.jackson.core:jackson-annotations:${jacksonVersion}",
             'jackson-databind'      : "com.fasterxml.jackson.core:jackson-databind:${jacksonVersion}",

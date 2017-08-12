@@ -5,6 +5,8 @@ dependencies {
     compile libs.'jcl-over-slf4j',
             libs.'slf4j-log4j12',
             libs.'thymeleaf-spring4',
+//            libs.'velocity' + '@jar',
+//            libs.'velocity-tools' + '@jar',
             libs.'jackson-databind',
             libs.'commons-io',
             libs.'c3p0',
@@ -17,13 +19,13 @@ dependencies {
 //            project(':lit-commons')
             project(':lit-plugins:lit-menu'),
             project(':lit-plugins:lit-dictionary')
-    compile (libs.'spring-boot-web'){
+    compile(libs.'spring-boot-web') {
         exclude module: 'spring-boot-starter-tomcat'
         exclude module: 'spring-boot-starter-logging'
         exclude module: 'hibernate-validator'
-        exclude module : 'jackson-databind'
+        exclude module: 'jackson-databind'
     }
-    compile (libs.'commons-fileupload',){
+    compile(libs.'commons-fileupload',) {
         exclude module: 'commons-io'
     }
     compile libs.'spring-boot-tomcat'

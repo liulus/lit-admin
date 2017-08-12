@@ -156,6 +156,7 @@ public class MenuServiceImpl implements MenuService {
     }
 
     @Override
+    @Event(eventClass = MenuUpdateEvent.class)
     public void move(Long menuId, boolean isUp) {
         if (menuId == null) {
             throw new AppCheckedException("菜单id不能为空 !");

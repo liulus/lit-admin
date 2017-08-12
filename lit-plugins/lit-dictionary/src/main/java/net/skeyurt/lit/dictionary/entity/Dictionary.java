@@ -3,6 +3,7 @@ package net.skeyurt.lit.dictionary.entity;
 import lombok.Data;
 import net.skeyurt.lit.jdbc.annotation.*;
 import net.skeyurt.lit.jdbc.enums.GenerationType;
+import net.skeyurt.lit.plugin.context.PluginConst;
 
 import java.io.Serializable;
 
@@ -12,7 +13,7 @@ import java.io.Serializable;
  * version $Id: Dictionary.java, v 0.1 Exp $
  */
 @Data
-@Table(name = "lit_dictionary")
+@Table(name = PluginConst.TABLE_PREFIX + "dictionary")
 public class Dictionary implements Serializable {
 
     private static final long serialVersionUID = -8733548251351142793L;

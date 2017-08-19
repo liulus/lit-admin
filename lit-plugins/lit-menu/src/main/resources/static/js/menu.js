@@ -1,6 +1,6 @@
 $(function () {
 
-    var urlPrefix = path + "plugin/menu";
+    var urlPrefix = path + "/plugin/menu";
 
     var compiledEditTpl = juicer($('#edit-tpl').html());
 

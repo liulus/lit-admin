@@ -2,7 +2,7 @@ $(function () {
 
     var compiledEditTpl = juicer($('#edit-tpl').html());
 
-    var urlPrefix = path + 'plugin/dictionary';
+    var urlPrefix = path + '/plugin/dictionary';
 
 
     /** 新增弹出框 */

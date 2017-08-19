@@ -5,6 +5,7 @@ ext {
     druidVersion = '1.0.29'
     thymeleafVersion = '3.0.2.RELEASE'
     velocityVersion = '1.7'
+    freemarkerVersion = '2.3.23'
     velocityToolsVersion = '2.0'
     springVersion = '4.3.7.RELEASE'
     springBootVersion = '1.5.2.RELEASE'
@@ -15,9 +16,11 @@ ext {
     jqueryVersion = '3.2.0'
 
     libs = [
+            'commons-long'          : "commons-lang:commons-lang:2.6",
             'commons-lang3'         : "org.apache.commons:commons-lang3:3.4",
             'commons-io'            : "commons-io:commons-io:2.5",
             'commons-fileupload'    : "commons-fileupload:commons-fileupload:1.3.2",
+            'commons-collections'   : "commons-collections:commons-collections:3.2.2",
             'guava'                 : "com.google.guava:guava:20.0",
             'junit'                 : "junit:junit:4.12",
             'jmockdata'             : "com.github.jsonzou:jmockdata:2.0",
@@ -36,6 +39,7 @@ ext {
             'thymeleaf-spring4'     : "org.thymeleaf:thymeleaf-spring4:${thymeleafVersion}",
             'velocity'              : "org.apache.velocity:velocity:${velocityVersion}",
             'velocity-tools'        : "org.apache.velocity:velocity-tools:${velocityToolsVersion}",
+            'freemarker'            : "org.freemarker:freemarker:${freemarkerVersion}",
             'jackson-core'          : "com.fasterxml.jackson.core:jackson-core:${jacksonVersion}",
             'jackson-annotations'   : "com.fasterxml.jackson.core:jackson-annotations:${jacksonVersion}",
             'jackson-databind'      : "com.fasterxml.jackson.core:jackson-databind:${jacksonVersion}",
@@ -87,8 +91,7 @@ allprojects {
     }
 
     javadoc {
-        options.addStringOption("encoding", "UTF-8")
-        options.addStringOption("charset", "UTF-8")
+        options.encoding = "UTF-8"
     }
 }
 

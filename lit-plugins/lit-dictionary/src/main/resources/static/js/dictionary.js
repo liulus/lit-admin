@@ -52,13 +52,14 @@ $(function () {
         })
     }
 
+    /** 删除功能 */
     $('#data-del').on('click', function (e) {
         var checkedInputs = $('.panel table .check-ls:checked');
         if (checkedInputs.length <= 0) {
             MsgUtils.warning('请至少选择一条数据 !')
             return;
         }
-        layer.confirm('确定要删除选中的数据吗?', function (index) {
+        layer.confirm('确定要删除选中的数据吗?',{icon: 3}, function (index) {
             $.post(urlPrefix + '/delete.json', checkedInputs.serialize(), function (result) {
                 if (result['success']) {
                     $('#query-form').submit();

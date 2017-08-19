@@ -22,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -124,7 +125,23 @@ public class MenuServiceImpl implements MenuService {
     @Override
     @Event(eventClass = MenuUpdateEvent.class)
     public void delete(Long... ids) {
-        jdbcTools.deleteByIds(Menu.class, (Serializable[]) ids);
+        if (ids == null || ids.length == 0) {
+            return;
+        }
+        List<Long> validIds = new ArrayList<>(ids.length);
+        for (Long id : ids) {
+            MenuVo menuVo = findById(id);
+            if (menuVo == null) {
+                continue;
+            }
+            int count = buildSelect(MenuVo.builder().parentId(menuVo.getMenuId()).build()).count();
+            if (count > 0) {
+                throw new AppCheckedException(String.format("请先删除 %s 的子菜单数据 !", menuVo.getMenuName()));
+            }
+            validIds.add(id);
+        }
+
+        jdbcTools.deleteByIds(Menu.class, validIds.toArray(new Serializable[validIds.size()]));
     }
 
     @Override

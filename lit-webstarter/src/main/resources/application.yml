@@ -12,6 +12,12 @@ c3p0:
 spring:
   thymeleaf:
     cache: false
+  freemarker:
+    expose-request-attributes: true
+    expose-session-attributes: true
+    request-context-attribute: rc
+    prefer-file-system-access: false
+
 
 server:
   context-path: /lit

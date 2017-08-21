@@ -16,6 +16,8 @@ import java.util.Objects;
 public class PageInfo implements Serializable {
 
     private static final long serialVersionUID = -1073813980324211986L;
+
+    private static final int pagebarLength = 5;
     /**
      * 每页记录数
      */

@@ -1,18 +1,18 @@
+<#include "macro/plugin-macro.ftl">
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <title>菜单管理</title>
-
-<#include "fragment/top-css.ftl">
+<@topCss></@topCss>
     <link rel="stylesheet" href="${rc.contextPath}/libs/zTree/3.5/css/metroStyle/metroStyle.css">
 <#--<link rel="stylesheet" href="${rc.contextPath}/libs/zTree/3.5/css/zTreeStyle/zTreeStyle.css">-->
 
 </head>
 <body>
 <!-- 固定头部 -->
-<#include "fragment/top-nav.ftl">
+<@topNav></@topNav>
 <!-- 左侧菜单 -->
-<#include "fragment/left-menu.ftl">
+<@leftMenu></@leftMenu>
 
 <!-- 主页面 -->
 <div class="main col-sm-18 col-sm-offset-6 col-md-20 col-md-offset-4">
@@ -171,9 +171,10 @@
                 <span class="control-label col-sm-6"><i class="text-danger">*&nbsp;</i>菜单类型 :</span>
                 <div class="col-sm-16">
                     <select name="menuType" class="form-control">
-                        <#list menuType as item>
-                            <option value="${item.dictKey!}" {@if menuType === '${item.dictKey!}'}selected {@/if}>${item.dictValue!}</option>
-                        </#list>
+                    <#list menuType as item>
+                        <option value="${item.dictKey!}" {@if menuType===
+                        '${item.dictKey!}'}selected {@/if}>${item.dictValue!}</option>
+                    </#list>
                     </select>
                 </div>
             </div>
@@ -187,7 +188,7 @@
     </div>
 </script>
 
-<#include "fragment/bottom-js.ftl">
+<@bottomJs></@bottomJs>
 <script src="${rc.contextPath}/libs/zTree/3.5/js/ztree.all.min.js"></script>
 <script src="${rc.contextPath}/js/menu.js"></script>
 </body>

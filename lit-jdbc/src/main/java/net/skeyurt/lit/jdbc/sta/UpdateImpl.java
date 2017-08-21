@@ -73,7 +73,7 @@ class UpdateImpl extends AbstractCondition<Update> implements Update {
             }
 
             Object obj = BeanUtils.invokeReaderMethod(entity, entry.getKey());
-            if (!isIgnoreNull || obj != null && (!(obj instanceof String) || ((String) obj).isEmpty())) {
+            if (!isIgnoreNull || obj != null && !(obj instanceof String && ((String) obj).isEmpty())) {
                 columns.add(new Column(entry.getValue()));
                 if (obj == null) {
                     values.add(NULL_EXPR);

@@ -71,7 +71,7 @@ class InsertImpl extends AbstractStatement implements Insert {
 
         for (Map.Entry<String, String> entry : fieldColumnMap.entrySet()) {
             Object obj = BeanUtils.invokeReaderMethod(entity, entry.getKey());
-            if (obj != null && (!(obj instanceof String) || !((String) obj).isEmpty())) {
+            if (obj != null && !(obj instanceof String && ((String) obj).isEmpty())) {
                 columns.add(new Column(entry.getValue()));
                 values.add(PARAM_EXPR);
                 params.add(obj);

@@ -17,7 +17,7 @@ $(function () {
             return;
         }
 
-        $.post(path + 'plugin/menu/get.json', {
+        $.post(urlPrefix + '/get.json', {
             id: checkedInputs.val()
         }, function (result) {
             openEdit('修改', compiledEditTpl.render(result['result']), '#form-edit', urlPrefix + '/update.json');

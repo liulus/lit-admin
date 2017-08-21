@@ -16,6 +16,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * User : liulu
@@ -60,8 +61,10 @@ public class DictionaryServiceImpl implements DictionaryService {
     @Override
     @Transactional
     public void add(Dictionary dictionary) {
-
-        checkDictKey(dictionary.getDictKey(), dictionary.getParentId());
+        Dictionary dict = findByKeyAndParentId(dictionary.getDictKey(), dictionary.getParentId());
+        if (dict != null) {
+            throw new AppCheckedException("字典Key已经存在!");
+        }
 
         if (dictionary.getParentId() == null) {
             dictionary.setDictLevel(1);
@@ -89,15 +92,15 @@ public class DictionaryServiceImpl implements DictionaryService {
     @Override
     @Transactional
     public void update(Dictionary dictionary) {
-        checkDictKey(dictionary.getDictKey(), dictionary.getParentId());
-        jdbcTools.update(dictionary);
-    }
-
-    private void checkDictKey(String dictKey, Long parentId) {
-        Dictionary dict = findByKeyAndParentId(dictKey, parentId);
-        if (dict != null) {
-            throw new AppCheckedException("字典Key已经存在!");
+        Dictionary oldDict = findById(dictionary.getDictId());
+        if (!Objects.equals(dictionary.getDictKey(), oldDict.getDictKey())) {
+            Dictionary dict = findByKeyAndParentId(dictionary.getDictKey(), dictionary.getParentId());
+            if (dict != null) {
+                throw new AppCheckedException("字典Key已经存在!");
+            }
         }
+
+        jdbcTools.update(dictionary);
     }
 
     private Dictionary findByKeyAndParentId(String dictKey, Long parentId) {

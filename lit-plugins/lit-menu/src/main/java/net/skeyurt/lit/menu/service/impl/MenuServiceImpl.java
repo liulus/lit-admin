@@ -22,10 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * User : liulu
@@ -86,7 +83,10 @@ public class MenuServiceImpl implements MenuService {
     @Event(eventClass = MenuUpdateEvent.class)
     public void add(MenuVo vo) {
 
-        checkMenuCode(vo.getMenuCode(), vo.getParentId());
+        Menu oldMenu = findByCodeAndParentId(vo.getMenuCode(), vo.getParentId());
+        if (oldMenu != null) {
+            throw new AppCheckedException("菜单编码已经存在!");
+        }
 
         Menu menu = BeanUtils.convert(new Menu(), vo);
         menu.setEnable(true);
@@ -104,15 +104,15 @@ public class MenuServiceImpl implements MenuService {
     @Override
     @Event(eventClass = MenuUpdateEvent.class)
     public void update(MenuVo vo) {
-        checkMenuCode(vo.getMenuCode(), vo.getParentId());
-        jdbcTools.update(BeanUtils.convert(new Menu(), vo));
-    }
-
-    private void checkMenuCode(String menuCode, Long parentId) {
-        Menu menu = findByCodeAndParentId(menuCode, parentId);
-        if (menu != null) {
-            throw new AppCheckedException("菜单编码已经存在!");
+        Menu oldMenu = jdbcTools.get(Menu.class, vo.getMenuId());
+        if (!Objects.equals(oldMenu.getMenuCode(), vo.getMenuCode())) {
+            Menu menu = findByCodeAndParentId(vo.getMenuCode(), vo.getParentId());
+            if (menu != null) {
+                throw new AppCheckedException("菜单编码已经存在!");
+            }
         }
+
+        jdbcTools.update(BeanUtils.convert(new Menu(), vo));
     }
 
     private Menu findByCodeAndParentId(String menuCode, Long parentId) {

@@ -1,14 +1,15 @@
+<#include "macro/plugin-macro.ftl">
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <title>字典管理</title>
-<#include "fragment/top-css.ftl">
+<@topCss></@topCss>
 </head>
 <body>
 <!-- 固定头部 -->
-<#include "fragment/top-nav.ftl">
+<@topNav></@topNav>
 <!-- 左侧菜单 -->
-<#include "fragment/left-menu.ftl">
+<@leftMenu></@leftMenu>
 
 <!-- 主页面 -->
 <div class="main col-sm-18 col-sm-offset-6 col-md-20 col-md-offset-4">
@@ -116,17 +117,7 @@
 
     <!-- 分页条 -->
 <#if !emptyResult>
-    <div class="text-center">
-        <ul class="pagination">
-            <li><a href="#" aria-label="Previous"><span aria-hidden="true">Previous</span></a></li>
-            <li class="active"><a href="#">1 <span class="sr-only">(current)</span></a></li>
-            <li><a href="#">2</a></li>
-            <li><a href="#">3</a></li>
-            <li><a href="#">4</a></li>
-            <li><a href="#">5</a></li>
-            <li><a href="#">Next</a></li>
-        </ul>
-    </div>
+    <@pagebar pageInfo></@pagebar>
 </#if>
 
 </div>
@@ -169,8 +160,7 @@
     </div>
 </script>
 
-
-<#include "fragment/bottom-js.ftl">
+<@bottomJs></@bottomJs>
 <script src="${rc.contextPath}/js/dictionary.js"></script>
 </body>
 </html>

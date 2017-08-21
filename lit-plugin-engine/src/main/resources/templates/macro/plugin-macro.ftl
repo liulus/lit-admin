@@ -79,15 +79,14 @@
 <#macro pagebar pageInfo>
 <div class="text-center">
     <ul class="pagination">
-
-
-        <li><a href="#" aria-label="Previous"><span aria-hidden="true">Previous</span></a></li>
-        <li class="active"><a href="#">1 <span class="sr-only">(current)</span></a></li>
-        <li><a href="#">2</a></li>
-        <li><a href="#">3</a></li>
-        <li><a href="#">4</a></li>
-        <li><a href="#">5</a></li>
-        <li><a href="#">Next</a></li>
+        <#list pageInfo.start..pageInfo.end>
+            <li><a href="#" data-page-num="1">第一页${pageInfo.start}</a></li>
+            <#items as index>
+                <li><a href="#" data-page-num="${index?c}"
+                       class="pager-num <#if index == pageInfo.pageNum>active</#if>">${index?c}</a></li>
+            </#items>
+            <li><a href="#" data-page-num="${pageInfo.totalPage?c}">最后一页${pageInfo.end}</a></li>
+        </#list>
     </ul>
 </div>
 </#macro>

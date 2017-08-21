@@ -2,6 +2,7 @@ package net.skeyurt.lit.dictionary.controller;
 
 import lombok.extern.slf4j.Slf4j;
 import net.skeyurt.lit.commons.context.ResultConst;
+import net.skeyurt.lit.commons.page.PageList;
 import net.skeyurt.lit.dictionary.entity.Dictionary;
 import net.skeyurt.lit.dictionary.qo.DictionaryQo;
 import net.skeyurt.lit.dictionary.service.DictionaryService;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * User : liulu
@@ -27,8 +29,9 @@ public class DictionaryController {
 
     @RequestMapping({"/list", ""})
     public String list(DictionaryQo qo, Model model) {
-
-        model.addAttribute(ResultConst.RESULT, dictionaryService.queryPageList(qo));
+        List<Dictionary> dictionaries = dictionaryService.queryPageList(qo);
+        model.addAttribute(ResultConst.RESULT, dictionaries);
+        model.addAttribute("pageInfo", ((PageList<Dictionary>) dictionaries).getPageInfo());
         return "dictionary";
     }
 
@@ -36,7 +39,9 @@ public class DictionaryController {
     public String childList(DictionaryQo qo, @PathVariable Long parentId, Model model) {
 
         qo.setParentId(parentId);
-        model.addAttribute(ResultConst.RESULT, dictionaryService.queryPageList(qo));
+        List<Dictionary> dictionaries = dictionaryService.queryPageList(qo);
+        model.addAttribute(ResultConst.RESULT, dictionaries);
+        model.addAttribute("pageInfo", ((PageList<Dictionary>) dictionaries).getPageInfo());
         return "dictionary";
     }
 

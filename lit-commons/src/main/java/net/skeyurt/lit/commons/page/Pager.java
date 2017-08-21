@@ -19,21 +19,21 @@ public class Pager implements Serializable {
     /**
      * 每页记录数
      */
-    private int pageSize = 20;
+    protected int pageSize = 20;
 
     /**
      * 当前页
      */
-    private int pageNum = 1;
+    protected int pageNum = 1;
 
     /**
      * 是否查询总记录数
      */
     @Getter
-    private boolean count = true;
+    protected boolean count = true;
 
     @Getter
-    private String keyWord;
+    protected String keyWord;
 
     public Pager(int pageSize, int pageNum) {
         this.pageSize = pageSize;

@@ -17,7 +17,8 @@ public class PageInfo implements Serializable {
 
     private static final long serialVersionUID = -1073813980324211986L;
 
-    private static final int pagebarLength = 5;
+    private static final int PAGER_LENGTH = 3;
+
     /**
      * 每页记录数
      */
@@ -33,15 +34,19 @@ public class PageInfo implements Serializable {
      */
     private int totalRecord;
 
-    public PageInfo (int pageSize, int pageNum) {
+    public PageInfo(int pageSize, int pageNum) {
         this.pageSize = pageSize;
         this.pageNum = pageNum;
     }
 
-    public PageInfo (int pageSize, int pageNum, int totalRecord) {
+    public PageInfo(int pageSize, int pageNum, int totalRecord) {
         this.pageSize = pageSize;
         this.pageNum = pageNum;
         this.totalRecord = totalRecord;
+    }
+
+    public int getPageNum() {
+        return Math.min(Math.max(1, pageNum), getTotalPage());
     }
 
     /**
@@ -51,12 +56,26 @@ public class PageInfo implements Serializable {
         return (totalRecord - 1) / pageSize + 1;
     }
 
+    /**
+     * @return 分页条起始页码
+     */
+    public int getStart() {
+        return Math.max(1, getPageNum() - PAGER_LENGTH);
+    }
+
+    /**
+     * @return 分页条结束页码
+     */
+    public int getEnd() {
+        return Math.min(getTotalPage(), getPageNum() + PAGER_LENGTH);
+    }
+
     public boolean isFirstPage() {
-        return pageNum == 1;
+        return getPageNum() == 1;
     }
 
     public boolean isLastPage() {
-        return Objects.equals(getTotalPage(), pageNum);
+        return Objects.equals(getTotalPage(), getPageNum());
     }
 
 }

@@ -4,6 +4,8 @@ $(function () {
 
     var urlPrefix = path + '/plugin/dictionary';
 
+    var $dataResult = $('#data-result');
+
 
     /** 新增弹出框 */
     $('#data-add').on('click', function (e) {
@@ -12,13 +14,13 @@ $(function () {
 
     /** 修改弹出框 */
     $('#data-update').on('click', function (e) {
-        var checkedInputs = $('.panel table .check-ls:checked');
+        var checkedInputs = $dataResult.find('.check-ls:checked');
         if (checkedInputs.length <= 0) {
-            MsgUtils.warning('请选择一条数据 !')
+            MsgUtils.warning('请选择一条数据 !');
             return;
         }
         if (checkedInputs.length > 1) {
-            MsgUtils.warning('只能选择一条数据 !')
+            MsgUtils.warning('只能选择一条数据 !');
             return;
         }
 
@@ -28,7 +30,7 @@ $(function () {
             openEdit('修改', compiledEditTpl.render(result['result']), '#form-edit', urlPrefix + '/update.json')
         });
 
-    })
+    });
 
     function openEdit(title, content, form, url) {
         layer.open({
@@ -54,9 +56,9 @@ $(function () {
 
     /** 删除功能 */
     $('#data-del').on('click', function (e) {
-        var checkedInputs = $('.panel table .check-ls:checked');
+        var checkedInputs = $dataResult.find('.check-ls:checked');
         if (checkedInputs.length <= 0) {
-            MsgUtils.warning('请至少选择一条数据 !')
+            MsgUtils.warning('请至少选择一条数据 !');
             return;
         }
         layer.confirm('确定要删除选中的数据吗?',{icon: 3}, function (index) {
@@ -71,12 +73,4 @@ $(function () {
         })
     })
 
-    /**
-     * 全选功能
-     */
-    $('.check-all').on('click', function (e) {
-        var checked = $(this).prop('checked');
-        $(this).parents('table').find('.check-ls').prop('checked', checked);
-    })
-
-})
+});

@@ -74,7 +74,7 @@
         </div>
 
         <!-- 数据展示 -->
-        <table class="table table-hover">
+        <table id="data-result" class="table table-hover">
             <thead>
             <tr>
                 <th class="text-center">

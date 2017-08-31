@@ -40,15 +40,6 @@
             <button id="data-update" class="btn btn-sm btn-info">
                 <i class="fa fa-pencil"></i>&nbsp;&nbsp;修改
             </button>
-            <button id="data-move" class="btn btn-sm btn-primary">
-                <i class="fa fa-random"></i>&nbsp;&nbsp;移动
-            </button>
-            <button id="data-move-up" class="btn btn-sm btn-success">
-                <i class="fa fa-chevron-up"></i>&nbsp;&nbsp;上移
-            </button>
-            <button id="data-move-down" class="btn btn-sm btn-info">
-                <i class="fa fa-chevron-down"></i>&nbsp;&nbsp;下移
-            </button>
         </#if>
         <#if menuVo.parentId??>
             <a href="${rc.contextPath}/plugin/menu/back/${menuVo.parentId?c}" class="btn btn-sm btn-warning">
@@ -60,7 +51,7 @@
         </div>
 
         <!-- 数据展示 -->
-        <table class="table table-hover">
+        <table id="data-result" class="table table-hover">
             <thead>
             <tr>
                 <th class="text-center">
@@ -74,6 +65,7 @@
                 <th>类型</th>
                 <th>状态</th>
                 <th>备注</th>
+                <th>操作</th>
             </tr>
             </thead>
 
@@ -102,6 +94,17 @@
                     </div>
                 </td>
                 <td>${item.memo!?html}</td>
+                <td>
+                    <a class="data-move btn btn-xs btn-primary">
+                        <i class="fa fa-random"></i>&nbsp;移动
+                    </a>
+                    <a class="data-move-up btn btn-xs btn-success">
+                        <i class="fa fa-chevron-up"></i>&nbsp;上移
+                    </a>
+                    <a class="data-move-down btn btn-xs btn-info">
+                        <i class="fa fa-chevron-down"></i>&nbsp;下移
+                    </a>
+                </td>
             </tr>
             <#else>
             <tr>

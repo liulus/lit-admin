@@ -4,6 +4,8 @@ $(function () {
 
     var compiledEditTpl = juicer($('#edit-tpl').html());
 
+    var $dataResult = $('#data-result');
+
 
     /** 新增弹出框 */
     $('#data-add').on('click', function (e) {
@@ -12,7 +14,7 @@ $(function () {
 
     /** 修改弹出框 */
     $('#data-update').on('click', function (e) {
-        var checkedInputs = $('.panel table .check-ls:checked');
+        var checkedInputs = $dataResult.find('.check-ls:checked');
         if (!checkOnlyOne(checkedInputs.length)) {
             return;
         }
@@ -23,7 +25,7 @@ $(function () {
             openEdit('修改', compiledEditTpl.render(result['result']), '#form-edit', urlPrefix + '/update.json');
         });
 
-    })
+    });
 
     function openEdit(title, content, form, url) {
         layer.open({
@@ -51,12 +53,12 @@ $(function () {
      * 删除功能
      */
     $('#data-del').on('click', function (e) {
-        var checkedInputs = $('.panel table .check-ls:checked');
+        var checkedInputs = $dataResult.find('.check-ls:checked');
         if (checkedInputs.length <= 0) {
             MsgUtils.warning('请至少选择一条数据 !');
             return;
         }
-        layer.confirm('确定要删除选中的数据吗?',{icon: 3}, function (index) {
+        layer.confirm('确定要删除选中的数据吗?', {icon: 3}, function (index) {
             $.post(urlPrefix + '/delete.json', checkedInputs.serialize(), function (result) {
                 if (result['success']) {
                     window.location.reload();
@@ -66,7 +68,7 @@ $(function () {
                 }
             });
         })
-    })
+    });
 
 
     var menuTreeConfig = {
@@ -83,7 +85,7 @@ $(function () {
                 var data = {
                     menuName: '菜单',
                     children: responseData.result
-                }
+                };
                 return data;
             }
         },
@@ -96,24 +98,20 @@ $(function () {
         view: {
             selectedMulti: false
         }
-    }
+    };
+
 
     /**
      * 移动菜单
      */
     var menuTree;
-    $('#data-move').on('click', function (e) {
 
-        var checkedInputs = $('.panel table .check-ls:checked');
-        if (checkedInputs.length <= 0) {
-            MsgUtils.warning('请至少选择一条数据 !');
-            return;
-        }
+    $dataResult.find('.data-move').on('click', function (e) {
 
         if (!menuTree) {
             menuTree = $.fn.zTree.init($('.ztree'), menuTreeConfig, null);
         }
-
+        var id = getId(e);
         layer.open({
             type: 1,
             title: '菜单',
@@ -128,25 +126,23 @@ $(function () {
                     return;
                 }
 
-                var checkedMenuIds = checkedInputs.serialize();
-
                 // 验证新的 父菜单 不是 被移动菜单本身或子菜单
                 var checkNode = selectedNodes[0];
                 var checked = true;
                 while (checkNode) {
-                    if (checkedMenuIds.indexOf(checkNode['menuId']) > 0) {
+                    if (id.indexOf(checkNode['menuId']) >= 0) {
                         checked = false;
                         break;
                     }
                     checkNode = checkNode.getParentNode();
                 }
                 if (!checked) {
-                    MsgUtils.warning('无法将菜单移动到此节点');
+                    MsgUtils.error('无法将菜单移动到此节点');
                     return;
                 }
 
                 var parentId = selectedNodes[0]['menuId'];
-                var data = parentId ? 'parentId=' + parentId + '&' + checkedMenuIds : checkedMenuIds;
+                var data = parentId ? 'parentId=' + parentId + '&ids=' + id : 'ids=' + id;
                 $.post(urlPrefix + '/move.json', data, function (result) {
                     if (result['success']) {
                         window.location.reload();
@@ -156,18 +152,14 @@ $(function () {
                 })
             }
         })
-    })
+    });
 
     /**
      * 向上移动菜单
      */
-    $('#data-move-up').on('click', function (e) {
-        var checkedInputs = $('.panel table .check-ls:checked');
-        if (!checkOnlyOne(checkedInputs.length)) {
-            return;
-        }
+    $dataResult.find('.data-move-up').on('click', function (e) {
         $.post(urlPrefix + '/move/up.json', {
-            menuId: checkedInputs.val()
+            menuId: getId(e)
         }, function (result) {
             if (result['success']) {
                 window.location.reload();
@@ -175,18 +167,14 @@ $(function () {
                 MsgUtils.error(result['message']);
             }
         })
-    })
+    });
 
     /**
      * 向下移动菜单
      */
-    $('#data-move-down').on('click', function (e) {
-        var checkedInputs = $('.panel table .check-ls:checked');
-        if (!checkOnlyOne(checkedInputs.length)) {
-            return;
-        }
+    $dataResult.find('.data-move-down').on('click', function (e) {
         $.post(urlPrefix + '/move/down.json', {
-            menuId: checkedInputs.val()
+            menuId: getId(e)
         }, function (result) {
             if (result['success']) {
                 window.location.reload();
@@ -194,7 +182,7 @@ $(function () {
                 MsgUtils.error(result['message']);
             }
         })
-    })
+    });
 
     function checkOnlyOne(checkedLength) {
         if (checkedLength <= 0) {
@@ -212,7 +200,7 @@ $(function () {
     /**
      * 启用或禁用菜单
      */
-    $('.data-enable, .data-disable').on('click', function (e) {
+    $dataResult.find('.data-enable, .data-disable').on('click', function (e) {
         var enable = $(this).hasClass('data-enable');
         if ($(this).hasClass('btn-default')) {
             return;
@@ -226,17 +214,9 @@ $(function () {
         other.find('span').toggleClass('invisible', false);
 
         $.post(urlPrefix + (enable ? '/disable' : '/enable') + '.json', {
-            menuId: $(this).parents('tr').find('.check-ls').val()
+            menuId: getId(e)
         })
-    })
+    });
 
 
-    /**
-     * 全选功能
-     */
-    $('.check-all').on('click', function (e) {
-        var checked = $(this).prop('checked');
-        $(this).parents('table').find('.check-ls').prop('checked', checked);
-    })
-
-})
+});

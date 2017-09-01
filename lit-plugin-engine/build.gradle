@@ -1,5 +1,6 @@
 dependencies{
-    compile libs.'guava',
+    compile project(':lit-commons'),
+            libs.'guava',
             libs.'jackson-databind',
             libs.'spring-webmvc',
             libs.'spring-context-support'

@@ -1,21 +1,21 @@
 dependencies {
-    testCompile project(':lit-jdbc'),
-            libs.'mysql',
-            libs.'oracle',
-            libs.'c3p0',
-            libs.'druid',
-            libs.'lombok',
-            libs.'commons-io',
-            libs.'spring-boot-test',
-            libs.'spring-aspects',
-            libs.'jackson-annotations',
-            libs.'jackson-core',
-            libs.'jackson-databind',
-            libs.'jcl-over-slf4j',
-            libs.'slf4j-log4j12'
 
     compile (project(':lit-plugins:lit-dictionary')){
         exclude module: 'spring-webmvc'
     }
+
+
+    testCompile libs.mysql
+    testCompile libs.oracle
+    testCompile libs.c3p0
+    testCompile libs.druid
+    testCompile libs.commons_io
+    testCompile libs.spring_boot_test
+    testCompile libs.spring_aspects
+    testCompile libs.jackson_databind
+    testCompile libs.jcl_over_slf4j
+    testCompile libs.slf4j_log4j12
+    testCompile project(':lit-jdbc')
+
 
 }

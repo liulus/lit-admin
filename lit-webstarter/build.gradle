@@ -2,27 +2,24 @@ apply plugin: 'war'
 
 dependencies {
 
-    compile libs.'jcl-over-slf4j',
-            libs.'slf4j-log4j12',
-            libs.'freemarker',
-            libs.'jackson-databind',
-            libs.'commons-io',
-            libs.'c3p0',
-            libs.'mysql',
-            libs.'oracle',
-            libs.'spring-aspects',
-//            libs.'bootstrap',
-//            libs.'font-awesome',
-//            libs.'jquery',
-//            project(':lit-commons')
-            project(':lit-plugins:lit-menu'),
-            project(':lit-plugins:lit-dictionary')
-    compile(libs.'spring-boot-web') {
+    compile libs.jcl_over_slf4j
+    compile libs.slf4j_log4j12
+    compile libs.freemarker
+    compile libs.jackson_databind
+    compile libs.commons_io
+    compile libs.c3p0
+    compile libs.mysql
+    compile libs.oracle
+    compile libs.spring_aspects
+    compile project(':lit-plugins:lit-menu')
+    compile project(':lit-plugins:lit-dictionary')
+
+    compile(libs.spring_boot_web) {
         exclude module: 'spring-boot-starter-logging'
         exclude module: 'hibernate-validator'
         exclude module: 'jackson-databind'
     }
-    compile(libs.'commons-fileupload',) {
+    compile(libs.commons_fileupload,) {
         exclude module: 'commons-io'
     }
 

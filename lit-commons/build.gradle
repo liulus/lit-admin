@@ -1,9 +1,9 @@
 dependencies {
-    compileOnly libs.'slf4j-api',
-            libs.'guava',
-            libs.'spring-jdbc',
-            libs.'spring-context',
-            libs.'jackson-databind',
-            libs.'spring-aspects',
-            libs.'spring-webmvc'
+    compileOnly libs.slf4j_api
+    compileOnly libs.guava
+    compileOnly libs.jackson_databind
+    compileOnly libs.spring_jdbc
+    compileOnly libs.spring_context
+    compileOnly libs.spring_aspects
+    compileOnly libs.spring_webmvc
 }

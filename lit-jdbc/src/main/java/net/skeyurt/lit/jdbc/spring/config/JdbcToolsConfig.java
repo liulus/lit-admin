@@ -5,7 +5,6 @@ import net.skeyurt.lit.jdbc.JdbcTools;
 import net.skeyurt.lit.jdbc.spring.JdbcTemplateToolsImpl;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
 import org.springframework.jdbc.core.JdbcOperations;
@@ -19,7 +18,7 @@ import java.util.Map;
  * version $Id: JdbcToolsConfig.java, v 0.1 Exp $
  */
 @Configuration
-@ComponentScan(basePackages = "net.skeyurt.lit")
+//@ComponentScan(basePackages = "net.skeyurt.lit")
 public class JdbcToolsConfig {
 
 

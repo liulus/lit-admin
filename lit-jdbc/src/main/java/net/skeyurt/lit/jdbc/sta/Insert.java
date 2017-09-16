@@ -8,28 +8,22 @@ package net.skeyurt.lit.jdbc.sta;
 public interface Insert extends Statement {
 
     /**
-     * Insert 语句的 字段名
-     *
-     * @param fieldNames 字段名
-     * @return Insert
+     * insert 语句操作的字段和值
+     * @param fieldName 字段名
+     * @param value 字段值
+     * @return
      */
-    Insert field(String... fieldNames);
+    Insert into(String fieldName, Object value);
 
     /**
-     * Insert 语句的 value值
+     * insert 语句操作的字段和值
      *
-     * @param values 值
-     * @return Insert
+     * @param fieldName 字段名
+     * @param value     字段值
+     * @param isNative  为 true 将不采用 ? 占位符方式, 将值直接拼到 sql 中
+     * @return
      */
-    Insert values(Object... values);
-
-    /**
-     * 将值直接拼到 Insert 语句中，不采用 ? 占位符的方式
-     *
-     * @param values 值
-     * @return Insert
-     */
-    Insert nativeValues(String... values);
+    Insert into(String fieldName, Object value, boolean isNative);
 
     /**
      * 初始化 inset，将entity 中不为空的属性添加到 insert 的字段中

@@ -166,8 +166,7 @@ public class MenuServiceImpl implements MenuService {
 
         // 执行更新
         jdbcTools.createUpdate(Menu.class)
-                .set("parentId")
-                .values(parentId)
+                .set("parentId", parentId)
                 .where("menuId", Logic.IN, (Object[]) ids)
                 .execute();
     }
@@ -198,13 +197,11 @@ public class MenuServiceImpl implements MenuService {
         }
 
         jdbcTools.createUpdate(Menu.class)
-                .set(orderNum)
-                .values(changeMenu.getOrderNum())
+                .set(orderNum, changeMenu.getOrderNum())
                 .where("menuId", menu.getMenuId())
                 .execute();
         jdbcTools.createUpdate(Menu.class)
-                .set(orderNum)
-                .values(menu.getOrderNum())
+                .set(orderNum, menu.getOrderNum())
                 .where("menuId", changeMenu.getMenuId())
                 .execute();
 
@@ -215,8 +212,7 @@ public class MenuServiceImpl implements MenuService {
     public void changeStatus(Long menuId, boolean isEnable) {
 
         jdbcTools.createUpdate(Menu.class)
-                .set("enable")
-                .values(isEnable)
+                .set("enable", isEnable)
                 .where("menuId", menuId)
                 .execute();
     }

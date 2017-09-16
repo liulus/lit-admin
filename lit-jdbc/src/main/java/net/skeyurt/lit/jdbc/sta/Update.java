@@ -10,10 +10,11 @@ public interface Update extends Condition<Update> {
     /**
      * createUpdate 语句中的 set 字段
      *
-     * @param fieldNames
+     * @param fieldName 字段名
+     * @param value 字段值
      * @return
      */
-    Update set(String... fieldNames);
+    Update set(String fieldName, Object value);
 
     /**
      * set 字段对应 的值
@@ -21,7 +22,7 @@ public interface Update extends Condition<Update> {
      * @param values
      * @return
      */
-    Update values(Object... values);
+//    Update values(Object... values);
 
     Update initEntity(Object entity, boolean isIgnoreNull);
 

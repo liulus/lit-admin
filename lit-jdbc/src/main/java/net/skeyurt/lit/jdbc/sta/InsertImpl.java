@@ -38,26 +38,16 @@ class InsertImpl extends AbstractStatement implements Insert {
     }
 
     @Override
-    public Insert field(String... fieldNames) {
-        for (String fieldName : fieldNames) {
-            columns.add(new Column(getColumn(fieldName)));
-        }
-        return this;
+    public Insert into(String fieldName, Object value) {
+        return into(fieldName, value, false);
     }
 
     @Override
-    public Insert values(Object... values) {
-        for (Object value : values) {
-            this.values.add(PARAM_EXPR);
+    public Insert into(String fieldName, Object value, boolean isNative) {
+        columns.add(new Column(getColumn(fieldName)));
+        values.add(isNative ? new HexValue(value.toString()) : PARAM_EXPR);
+        if (!isNative) {
             params.add(value);
-        }
-        return this;
-    }
-
-    @Override
-    public Insert nativeValues(String... values) {
-        for (String value : values) {
-            this.values.add(new HexValue(value));
         }
         return this;
     }
@@ -88,13 +78,12 @@ class InsertImpl extends AbstractStatement implements Insert {
         KeyGenerator generator = getKeyGenerator();
         Serializable idValue = null;
         if (generator != null) {
-            this.field(tableInfo.getPkField());
             if (generator instanceof SequenceGenerator) {
                 idValue = ((SequenceGenerator) generator).generateKey(dbName, tableInfo.getSequenceName());
-                nativeValues(String.valueOf(idValue));
+                this.into(tableInfo.getPkField(), idValue, true);
             } else {
                 idValue = generator.generateKey(dbName);
-                values(idValue);
+                this.into(tableInfo.getPkField(), idValue);
             }
         }
 

@@ -44,8 +44,9 @@ public class JdbcToolsTest extends BaseTest {
     @Test
     public void testInsert2() {
         Long id = (Long) jdbcTools.createInsert(Goods.class)
-                .field("code", "name", "price")
-                .values("80145412", "农夫山泉", 2D)
+                .into("code", "80145412")
+                .into("name", "农夫山泉")
+                .into("price", 2D)
                 .execute();
         log.info("插入的实体ID为: {}", id);
     }
@@ -72,8 +73,8 @@ public class JdbcToolsTest extends BaseTest {
         // 会将 code 为 80145412 的商品的 name 和 price 更新, 返回受影响记录的条数
 
         int rows = jdbcTools.createUpdate(Goods.class)
-                .set("name", "price")
-                .values("统一红茶", 3.0D)
+                .set("name", "统一红茶")
+                .set("price", 3.0D)
                 .where("code", "80145412")
                 .execute();
     }

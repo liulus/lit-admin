@@ -9,6 +9,7 @@ dependencies {
     testCompile libs.oracle
     testCompile libs.c3p0
     testCompile libs.druid
+    testCompile libs.lombok
     testCompile libs.commons_io
     testCompile libs.spring_boot_test
     testCompile libs.spring_aspects

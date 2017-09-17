@@ -1,8 +1,8 @@
 package net.skeyurt.lit.test.config;
 
 import com.mchange.v2.c3p0.ComboPooledDataSource;
-import net.skeyurt.lit.jdbc.spring.config.EnableLitJdbc;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
@@ -22,8 +22,8 @@ import java.beans.PropertyVetoException;
  */
 
 @Configuration
-@EnableLitJdbc
 @PropertySource("config.properties")
+@ComponentScan("net.skeyurt.lit")
 public class SpringConfig {
 
     private static final String DB = "mysql.";

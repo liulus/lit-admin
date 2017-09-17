@@ -60,7 +60,7 @@ public class DictionaryServiceImpl implements DictionaryService {
 
     @Override
     @Transactional
-    public void add(Dictionary dictionary) {
+    public void insert(Dictionary dictionary) {
         Dictionary dict = findByKeyAndParentId(dictionary.getDictKey(), dictionary.getParentId());
         if (dict != null) {
             throw new AppCheckedException("字典Key已经存在!");

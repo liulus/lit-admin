@@ -8,13 +8,11 @@ import net.skeyurt.lit.commons.event.AppStartedEvent;
 import net.skeyurt.lit.commons.event.Event;
 import net.skeyurt.lit.commons.event.EventComponent;
 import net.skeyurt.lit.commons.event.EventPublisher;
-import net.skeyurt.lit.commons.util.WebUtils;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.context.event.EventListener;
-import org.springframework.web.context.WebApplicationContext;
 
 import java.util.Map;
 import java.util.concurrent.Executors;
@@ -43,10 +41,6 @@ public class EventConfig {
     @Event(eventClass = AppStartedEvent.class)
     public void registerEvent(ContextRefreshedEvent event) {
 
-        if (event.getSource() instanceof WebApplicationContext) {
-            WebApplicationContext webApplicationContext = (WebApplicationContext) event.getSource();
-            WebUtils.setServletContext(webApplicationContext.getServletContext());
-        }
         ApplicationContext context = event.getApplicationContext();
 
         EventPublisher publisher = context.getBean(EventPublisher.class);

@@ -44,6 +44,15 @@ public class PublishEventAspect {
 
     }
 
+    /**
+     * 实例化 事件对象 并将切入点方法参数的值注入事件对象的属性中, 规则:
+     * 1. 方法参数名和对象属性名一致 且 事件对象属性的类型和参数类型一致或是其父类, 直接注入
+     * 2. 非基本类型或其包装类, 参数类型中只有一个和属性类型一致或是其子类的, 注入
+     *
+     * @param eventClass 事件对象
+     * @param joinPoint  切入点
+     * @return 事件对象
+     */
     private Object newInstanceAndInitProperty(Class<?> eventClass, JoinPoint joinPoint) {
 
         Object eventObj = ClassUtils.newInstance(eventClass);
@@ -60,7 +69,8 @@ public class PublishEventAspect {
             Class<?> propertyType = descriptor.getPropertyType();
 
             int nameIndex = getParameterNameIndex(parameterNames, descriptor.getName());
-            if (nameIndex >= 0 && Objects.equals(propertyType, parameterTypes[nameIndex])) {
+            // 名称一致, 是子类或相同
+            if (nameIndex >= 0 && propertyType.isAssignableFrom(parameterTypes[nameIndex])) {
                 ClassUtils.invokeMethod(descriptor.getWriteMethod(), eventObj, args[nameIndex]);
             } else if (!ClassUtils.isPrimitiveOrWrapper(propertyType)) {
                 int typeIndex = getParameterTypeIndex(parameterTypes, propertyType);
@@ -84,13 +94,12 @@ public class PublishEventAspect {
     private int getParameterTypeIndex(Class<?>[] parameterTypes, Class<?> searchType) {
         int result = -1, count = 0;
         for (int i = 0; i < parameterTypes.length; i++) {
-            if (Objects.equals(parameterTypes[i], searchType)) {
+            if (searchType.isAssignableFrom(parameterTypes[i])) {
                 result = i;
                 count++;
             }
         }
         return count > 1 ? -1 : result;
     }
-
 
 }

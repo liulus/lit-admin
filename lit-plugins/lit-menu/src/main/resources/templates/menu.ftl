@@ -77,7 +77,7 @@
                 </td>
             <#--<td text="${item?counter}"></td>-->
                 <td>
-                    <a href="${rc.contextPath}/plugin/menu/${item.menuId?c}/child">${item.menuCode!?html}</a>
+                    <a href="${rc.contextPath}/plugin/menu/${item.menuId?c}">${item.menuCode!?html}</a>
                 </td>
                 <td>${item.menuName!?html}</td>
                 <td>${item.menuIcon!}</td>
@@ -121,17 +121,7 @@
 
     <!-- 分页条 -->
 <#if !emptyResult>
-    <div class="text-center">
-        <ul class="pagination">
-            <li><a href="#" aria-label="Previous"><span aria-hidden="true">Previous</span></a></li>
-            <li class="active"><a href="#">1 <span class="sr-only">(current)</span></a></li>
-            <li><a href="#">2</a></li>
-            <li><a href="#">3</a></li>
-            <li><a href="#">4</a></li>
-            <li><a href="#">5</a></li>
-            <li><a href="#">Next</a></li>
-        </ul>
-    </div>
+    <@pagebar pageInfo=pageInfo></@pagebar>
 </#if>
 </div>
 

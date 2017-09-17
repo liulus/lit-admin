@@ -31,17 +31,22 @@ public class DictionaryController {
     public String list(DictionaryQo qo, Model model) {
         List<Dictionary> dictionaries = dictionaryService.queryPageList(qo);
         model.addAttribute(ResultConst.RESULT, dictionaries);
-        model.addAttribute("pageInfo", ((PageList<Dictionary>) dictionaries).getPageInfo());
+        if (dictionaries instanceof PageList) {
+            model.addAttribute("pageInfo", ((PageList<Dictionary>) dictionaries).getPageInfo());
+        }
+
         return "dictionary";
     }
 
-    @RequestMapping("/{parentId}/child")
+    @RequestMapping("/{parentId}")
     public String childList(DictionaryQo qo, @PathVariable Long parentId, Model model) {
 
         qo.setParentId(parentId);
         List<Dictionary> dictionaries = dictionaryService.queryPageList(qo);
         model.addAttribute(ResultConst.RESULT, dictionaries);
-        model.addAttribute("pageInfo", ((PageList<Dictionary>) dictionaries).getPageInfo());
+        if (dictionaries instanceof PageList) {
+            model.addAttribute("pageInfo", ((PageList<Dictionary>) dictionaries).getPageInfo());
+        }
         return "dictionary";
     }
 
@@ -50,7 +55,7 @@ public class DictionaryController {
 
         Dictionary dictionary = dictionaryService.findById(dictId);
         if (dictionary != null && dictionary.getParentId() != null) {
-            return "redirect:/plugin/dictionary/" + dictionary.getParentId() + "/child";
+            return "redirect:/plugin/dictionary/" + dictionary.getParentId();
         }
 
         return "redirect:/plugin/dictionary";
@@ -66,7 +71,7 @@ public class DictionaryController {
 
     @RequestMapping("/add")
     public String add(Dictionary dictionary, Model model) {
-        dictionaryService.add(dictionary);
+        dictionaryService.insert(dictionary);
         return "";
     }
 

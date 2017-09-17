@@ -47,7 +47,7 @@ public class InitData extends BaseTest {
             goodsCategory = new Dictionary();
             goodsCategory.setDictKey(TestConstants.GOODS_CATEGORY);
             goodsCategory.setDictValue("商品类别字典");
-            dictionaryService.add(goodsCategory);
+            dictionaryService.insert(goodsCategory);
         }
 
         InputStream inputStream = getClass().getResourceAsStream("/goods.txt");
@@ -79,7 +79,7 @@ public class InitData extends BaseTest {
                 child.setDictKey(categoryCode);
                 child.setDictValue(goodsInfo[9]);
                 child.setParentId(goodsCategory.getDictId());
-                dictionaryService.add(child);
+                dictionaryService.insert(child);
             }
 
             if (supplierCodeStr.indexOf(supplierCode + ",") == -1) {

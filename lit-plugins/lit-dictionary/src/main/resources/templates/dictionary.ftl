@@ -44,8 +44,8 @@
                     </select>
                 </div>
             </div>
-            <input type="hidden" name="pageNum" value="${dictionaryQo.pageNum!}">
-            <input type="hidden" name="pageSize" value="${dictionaryQo.pageSize!}">
+        <#--<input type="hidden" name="pageNum" value="${dictionaryQo.pageNum!}">-->
+        <#--<input type="hidden" name="pageSize" value="${dictionaryQo.pageSize!}">-->
             <div class="col-sm-24 col-md-5 text-center form-group">
                 <button id="data-query" class="btn btn-sm btn-primary">&nbsp;&nbsp;查询&nbsp;&nbsp;</button>
             </div>
@@ -96,7 +96,7 @@
                 </td>
                 <td>${item?counter}</td>
                 <td>
-                    <a href="${rc.contextPath}/plugin/dictionary/${item.dictId?c}/child">${item.dictKey!?html}</a>
+                    <a href="${rc.contextPath}/plugin/dictionary/${item.dictId?c}">${item.dictKey!?html}</a>
                 </td>
                 <td>${item.dictValue!?html}</td>
                 <td>${item.system?string('是', '否')}</td>
@@ -117,7 +117,7 @@
 
     <!-- 分页条 -->
 <#if !emptyResult>
-    <@pagebar pageInfo></@pagebar>
+    <@pagebar pageInfo=pageInfo queryForm='#query-form'></@pagebar>
 </#if>
 
 </div>

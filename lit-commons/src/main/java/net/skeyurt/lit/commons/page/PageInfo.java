@@ -60,14 +60,14 @@ public class PageInfo implements Serializable {
      * @return 分页条起始页码
      */
     public int getStart() {
-        return Math.max(1, getPageNum() - PAGER_LENGTH);
+        return Math.max(1, Math.min(getPageNum(), getTotalPage() - PAGER_LENGTH) - PAGER_LENGTH);
     }
 
     /**
      * @return 分页条结束页码
      */
     public int getEnd() {
-        return Math.min(getTotalPage(), getPageNum() + PAGER_LENGTH);
+        return Math.min(getTotalPage(), Math.max(getPageNum(), PAGER_LENGTH + 1) + PAGER_LENGTH);
     }
 
     public boolean isFirstPage() {

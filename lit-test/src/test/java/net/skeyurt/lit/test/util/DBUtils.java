@@ -1,8 +1,7 @@
 package net.skeyurt.lit.test.util;
 
-import net.skeyurt.lit.commons.util.PropertyUtils;
-//import net.skeyurt.lit.jdbc.impl.JdbcDaoImpl;
 import com.mchange.v2.c3p0.ComboPooledDataSource;
+import net.skeyurt.lit.commons.util.PropertyUtils;
 import net.skeyurt.lit.jdbc.JdbcTools;
 import net.skeyurt.lit.jdbc.spring.JdbcTemplateToolsImpl;
 import org.springframework.jdbc.core.JdbcOperations;

@@ -24,13 +24,13 @@ var MsgUtils = {
             msgCount: msgCount,
             msgType: messageType,
             message: message
-        }
+        };
 
         $('body').append(compiledMsgTpl.render(data))
         var id = '#msg-' + msgCount;
         setTimeout(function () {
             $(id).alert('close')
-        }, 4000)
+        }, 4000);
 
         msgCount++;
     },

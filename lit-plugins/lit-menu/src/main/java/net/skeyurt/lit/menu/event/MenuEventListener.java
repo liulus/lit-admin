@@ -7,6 +7,7 @@ import net.skeyurt.lit.commons.util.WebUtils;
 import net.skeyurt.lit.menu.context.MenuConst;
 import net.skeyurt.lit.menu.tool.MenuTools;
 import net.skeyurt.lit.menu.vo.MenuVo;
+import org.springframework.web.context.WebApplicationContext;
 
 import java.util.List;
 
@@ -20,6 +21,12 @@ public class MenuEventListener {
 
     @Subscribe
     public void appStartedEvent(AppStartedEvent event) {
+
+        if (event.getEvent().getApplicationContext() instanceof WebApplicationContext) {
+            WebApplicationContext webApplicationContext = (WebApplicationContext) event.getEvent().getApplicationContext();
+            WebUtils.setServletContext(webApplicationContext.getServletContext());
+        }
+
         List<MenuVo> menuVos = MenuTools.findAll();
         WebUtils.setAttribute(MenuConst.MENUS, menuVos);
     }

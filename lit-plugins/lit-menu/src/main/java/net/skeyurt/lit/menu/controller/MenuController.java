@@ -2,6 +2,7 @@ package net.skeyurt.lit.menu.controller;
 
 import lombok.extern.slf4j.Slf4j;
 import net.skeyurt.lit.commons.context.ResultConst;
+import net.skeyurt.lit.commons.page.PageList;
 import net.skeyurt.lit.dictionary.tool.DictionaryTools;
 import net.skeyurt.lit.menu.context.MenuConst;
 import net.skeyurt.lit.menu.service.MenuService;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * User : liulu
@@ -27,10 +29,14 @@ public class MenuController {
     private MenuService menuService;
 
 
-    @RequestMapping({"", "/list"})
+    @RequestMapping({"/list", ""})
     public String menuList(MenuVo vo, Model model) {
-        model.addAttribute(ResultConst.RESULT, menuService.queryPageList(vo));
+        List<MenuVo> menuVos = menuService.queryPageList(vo);
+        model.addAttribute(ResultConst.RESULT, menuVos);
         model.addAttribute("menuType", DictionaryTools.findChildByRootKey(MenuConst.MENU_TYPE));
+        if (menuVos instanceof PageList) {
+            model.addAttribute("pageInfo", ((PageList<MenuVo>) menuVos).getPageInfo());
+        }
         return "menu";
     }
 
@@ -42,12 +48,17 @@ public class MenuController {
      * @param model
      * @return
      */
-    @RequestMapping("/{parentId}/child")
+    @RequestMapping("/{parentId}")
     public String childList(MenuVo vo, @PathVariable Long parentId, Model model) {
 
         vo.setParentId(parentId);
-        model.addAttribute(ResultConst.RESULT, menuService.queryPageList(vo));
+        List<MenuVo> menuVos = menuService.queryPageList(vo);
+        model.addAttribute(ResultConst.RESULT, menuVos);
         model.addAttribute("menuType", DictionaryTools.findChildByRootKey(MenuConst.MENU_TYPE));
+        if (menuVos instanceof PageList) {
+            model.addAttribute("pageInfo", ((PageList<MenuVo>) menuVos).getPageInfo());
+        }
+
         return "menu";
     }
 
@@ -63,7 +74,7 @@ public class MenuController {
 
         MenuVo menuVo = menuService.findById(menuId);
         if (menuVo != null && menuVo.getParentId() != null) {
-            return "redirect:/plugin/menu/" + menuVo.getParentId() + "/child";
+            return "redirect:/plugin/menu/" + menuVo.getParentId();
         }
 
         return "redirect:/plugin/menu";

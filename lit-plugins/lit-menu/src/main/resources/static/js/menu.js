@@ -104,13 +104,10 @@ $(function () {
     /**
      * 移动菜单
      */
-    var menuTree;
+    var menuTree = $.fn.zTree.init($('.ztree'), menuTreeConfig, null);
 
     $dataResult.find('.data-move').on('click', function (e) {
 
-        if (!menuTree) {
-            menuTree = $.fn.zTree.init($('.ztree'), menuTreeConfig, null);
-        }
         var id = getId(e);
         layer.open({
             type: 1,

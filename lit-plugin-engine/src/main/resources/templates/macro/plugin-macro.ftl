@@ -77,16 +77,32 @@
 </#macro>
 
 <#-- 分页条 -->
-<#macro pagebar pageInfo>
-<div class="text-center">
+<#macro pagebar pageInfo pageUrl='' queryForm=''>
+<div class="text-center pageContent" data-query-form="${queryForm}">
+    <form action="${pageUrl}" method="post"><input type="hidden" name="pageNum"></form>
     <ul class="pagination">
         <#list pageInfo.start..pageInfo.end>
-            <li><a href="#" data-page-num="1">第一页${pageInfo.start}</a></li>
+            <li>
+                <#if pageInfo.pageNum == 1>
+                    <span>第一页</span>
+                <#else>
+                    <a href="#" class="page-num" data-page-num="1">第一页</a>
+                </#if>
+            </li>
             <#items as index>
-                <li><a href="#" data-page-num="${index?c}"
-                       class="pager-num <#if index == pageInfo.pageNum>active</#if>">${index?c}</a></li>
+                <#if index == pageInfo.pageNum>
+                    <li class="active"><span>${index?c}</span></li>
+                <#else >
+                    <li><a href="#" class="page-num" data-page-num="${index?c}">${index?c}</a></li>
+                </#if>
             </#items>
-            <li><a href="#" data-page-num="${pageInfo.totalPage?c}">最后一页${pageInfo.end}</a></li>
+            <li>
+                <#if pageInfo.pageNum == pageInfo.totalPage>
+                    <span>最后一页</span>
+                <#else>
+                    <a href="#" class="page-num" data-page-num="${pageInfo.totalPage?c}">最后一页</a>
+                </#if>
+            </li>
         </#list>
     </ul>
 </div>
@@ -127,7 +143,8 @@
 <script src="${rc.contextPath}/libs/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <script src="${rc.contextPath}/libs/juicer/0.6.8-stable/juicer-min.js"></script>
 <script src="${rc.contextPath}/libs/layer/3.0.3/layer.js"></script>
-<script src="${rc.contextPath}/js/commons-func.js"></script>
 <script src="${rc.contextPath}/js/left-menu.js"></script>
+<script src="${rc.contextPath}/js/page.js"></script>
+<script src="${rc.contextPath}/js/commons-func.js"></script>
 <script src="${rc.contextPath}/js/message.js"></script>
 </#macro>

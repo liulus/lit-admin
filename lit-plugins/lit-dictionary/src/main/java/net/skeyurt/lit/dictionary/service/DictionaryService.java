@@ -26,7 +26,7 @@ public interface DictionaryService {
      *
      * @param dictionary
      */
-    void add(Dictionary dictionary);
+    void insert(Dictionary dictionary);
 
     /**
      * 更新字典对象

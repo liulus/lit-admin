@@ -2,7 +2,7 @@ package net.skeyurt.lit.jdbc.enums;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import net.skeyurt.lit.commons.util.EnumAware;
+import net.skeyurt.lit.commons.util.IEnum;
 
 /**
  * User : liulu
@@ -11,7 +11,7 @@ import net.skeyurt.lit.commons.util.EnumAware;
  */
 @Getter
 @AllArgsConstructor
-public enum JoinType implements EnumAware {
+public enum JoinType implements IEnum {
 
     RIGHT("RIGHT", "RIGHT"),
 

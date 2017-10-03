@@ -1,7 +1,11 @@
 package net.skeyurt.lit.dictionary.entity;
 
-import lombok.Data;
-import net.skeyurt.lit.jdbc.annotation.*;
+import lombok.Getter;
+import lombok.Setter;
+import net.skeyurt.lit.jdbc.annotation.Column;
+import net.skeyurt.lit.jdbc.annotation.GeneratedValue;
+import net.skeyurt.lit.jdbc.annotation.Id;
+import net.skeyurt.lit.jdbc.annotation.Table;
 import net.skeyurt.lit.jdbc.enums.GenerationType;
 import net.skeyurt.lit.plugin.context.PluginConst;
 
@@ -12,7 +16,8 @@ import java.io.Serializable;
  * Date : 2017/4/8 19:55
  * version $Id: Dictionary.java, v 0.1 Exp $
  */
-@Data
+@Getter
+@Setter
 @Table(name = PluginConst.TABLE_PREFIX + "dictionary")
 public class Dictionary implements Serializable {
 

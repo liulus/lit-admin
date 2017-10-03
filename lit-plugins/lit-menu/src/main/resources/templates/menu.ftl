@@ -3,16 +3,16 @@
 <html lang="en">
 <head>
     <title>菜单管理</title>
-<@topCss></@topCss>
+<#include "fragment/head-css.ftl">
     <link rel="stylesheet" href="${rc.contextPath}/libs/zTree/3.5/css/metroStyle/metroStyle.css">
 <#--<link rel="stylesheet" href="${rc.contextPath}/libs/zTree/3.5/css/zTreeStyle/zTreeStyle.css">-->
 
 </head>
 <body>
 <!-- 固定头部 -->
-<@topNav></@topNav>
+<#include "fragment/top-nav.ftl">
 <!-- 左侧菜单 -->
-<@leftMenu></@leftMenu>
+<#include "fragment/left-menu.ftl">
 
 <!-- 主页面 -->
 <div class="main col-sm-18 col-sm-offset-6 col-md-20 col-md-offset-4">
@@ -181,7 +181,7 @@
     </div>
 </script>
 
-<@bottomJs></@bottomJs>
+<<#include "fragment/bottom-js.ftl">
 <script src="${rc.contextPath}/libs/zTree/3.5/js/ztree.all.min.js"></script>
 <script src="${rc.contextPath}/js/menu.js"></script>
 </body>

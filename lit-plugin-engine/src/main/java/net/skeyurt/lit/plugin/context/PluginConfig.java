@@ -25,39 +25,6 @@ import java.util.Collections;
 public class PluginConfig {
 
 
-////    @Bean
-//    public VelocityConfig velocityConfig() {
-//        VelocityConfigurer velocityConfigurer = new VelocityConfigurer();
-//        velocityConfigurer.setResourceLoaderPath("classpath:/templates/");
-//        velocityConfigurer.setPreferFileSystemAccess(true);
-//
-//        Map<String, Object> velocityPropMap = new HashMap<>();
-//        velocityPropMap.put("input.encoding", "UTF-8");
-//        velocityPropMap.put("output.encoding", "UTF-8");
-//        velocityPropMap.put("velocimacro.library", "/templates/macro/pluginMacro.vm");
-//
-//        velocityConfigurer.setVelocityPropertiesMap(velocityPropMap);
-//
-//        velocityConfigurer.setConfigLocation(new ClassPathResource("velocity.properties"));
-//
-//        return velocityConfigurer;
-//    }
-//
-////    @Bean
-//    public VelocityViewResolver velocityViewResolver() {
-//        VelocityViewResolver viewResolver = new VelocityViewResolver();
-//
-//        viewResolver.setSuffix(".vm");
-////        viewResolver.setPrefix("/templates/");
-//        viewResolver.setContentType("text/html; charset=utf-8");
-//        viewResolver.setExposeRequestAttributes(true);
-//        viewResolver.setExposeSessionAttributes(true);
-//        viewResolver.setRequestContextAttribute("rc");
-//
-//
-//        return viewResolver;
-//    }
-
 
     @Bean
     public ContentNegotiatingViewResolver contentNegotiatingViewResolver(ViewResolver... viewResolvers) {

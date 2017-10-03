@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>字典管理</title>
+    <title>参数管理</title>
 <#include "fragment/head-css.ftl">
 </head>
 <body>
@@ -20,7 +20,7 @@
         <ol class="breadcrumb">
             <li><a href="#"><i class="glyphicon glyphicon-home"></i></a></li>
             <li class="active">系统管理</li>
-            <li class="active">字典管理</li>
+            <li class="active">参数管理</li>
         </ol>
     </div>
 
@@ -30,7 +30,7 @@
             <div class="col-sm-12 col-md-9 form-group">
                 <div class="col-sm-8 text-right control-label">关键字:</div>
                 <div class="col-sm-16 ">
-                    <input name="keyWord" class="form-control input-sm" type="text" value="${dictionaryQo.keyWord!}"
+                    <input name="keyWord" class="form-control input-sm" type="text" value="${systemParamQo.keyWord!}"
                            placeholder="请输入">
                 </div>
             </div>
@@ -39,13 +39,11 @@
                 <div class="col-sm-14 ">
                     <select name="system" class="form-control input-sm">
                         <option value=""></option>
-                        <option value="true" ${(dictionaryQo.system!false)?string('selected', '')}>是</option>
-                        <option value="false" ${(dictionaryQo.system!true)?string('', 'selected')}>否</option>
+                        <option value="true" ${(systemParamQo.system!false)?string('selected', '')}>是</option>
+                        <option value="false" ${(systemParamQo.system!true)?string('', 'selected')}>否</option>
                     </select>
                 </div>
             </div>
-        <#--<input type="hidden" name="pageNum" value="${dictionaryQo.pageNum!}">-->
-        <#--<input type="hidden" name="pageSize" value="${dictionaryQo.pageSize!}">-->
             <div class="col-sm-24 col-md-5 text-center form-group">
                 <button id="data-query" class="btn btn-sm btn-primary">&nbsp;&nbsp;查询&nbsp;&nbsp;</button>
             </div>
@@ -66,11 +64,6 @@
                 <i class="fa fa-pencil"></i>&nbsp;&nbsp;修改
             </button>
         </#if>
-        <#if dictionaryQo.parentId??>
-            <a href="${rc.contextPath}/plugin/dictionary/back/${dictionaryQo.parentId?c}" class="btn btn-sm btn-warning">
-                <i class="fa fa-reply"></i>&nbsp;&nbsp;返回上级
-            </a>
-        </#if>
         </div>
 
         <!-- 数据展示 -->
@@ -81,9 +74,11 @@
                     <input class="check-all" type="checkbox">
                 </th>
                 <th>行号</th>
-                <th>字典Key</th>
-                <th>字典值</th>
-                <th>是否系统级</th>
+                <th>参数码</th>
+                <th>参数值</th>
+                <th>参数类型</th>
+                <th>系统级</th>
+                <th>启动加载</th>
                 <th>备注</th>
             </tr>
             </thead>
@@ -92,19 +87,19 @@
             <#list result as item>
             <tr>
                 <td class="text-center">
-                    <input class="check-ls" name="ids" type="checkbox" value="${item.dictId?c}">
+                    <input class="check-ls" name="ids" type="checkbox" value="${item.paramId?c}">
                 </td>
                 <td>${item?counter}</td>
-                <td>
-                    <a href="${rc.contextPath}/plugin/dictionary/${item.dictId?c}">${item.dictKey!?html}</a>
-                </td>
-                <td>${item.dictValue!?html}</td>
+                <td>${item.paramCode!?html}</td>
+                <td>${item.paramValue!?html}</td>
+                <td>${item.paramType!?html}</td>
                 <td>${item.system?string('是', '否')}</td>
+                <td>${item.load?string('是', '否')}</td>
                 <td>${item.memo!?html}</td>
             </tr>
             <#else>
             <tr>
-                <td colspan="6">
+                <td colspan="8">
                     <div class="no-data text-center">
                         <span><i class="fa fa-info-circle fa-1g"></i>&nbsp;&nbsp;没有数据</span>
                     </div>
@@ -125,28 +120,38 @@
 <script type="text/template" id="edit-tpl">
     <div class="modal-body">
         <form id="form-edit" class="form-horizontal" action="">
-        <#if dictionaryQo.parentId??>
-            <input type="hidden" name="parentId" value="${dictionaryQo.parentId?c}">
-        </#if>
-            <input type="hidden" name="dictId" value="${r'${dictId}'}">
+            <input type="hidden" name="paramId" value="${r'${paramId}'}">
             <div class="form-group">
-                <span class="control-label col-sm-6"><i class="text-danger">*&nbsp;</i>字典key :</span>
+                <span class="control-label col-sm-6"><i class="text-danger">*&nbsp;</i>参数码 :</span>
                 <div class="col-sm-16">
-                    <input type="text" name="dictKey" value="${r'${dictKey}'}" class="form-control">
+                    <input type="text" name="paramCode" value="${r'${paramCode}'}" class="form-control">
                 </div>
             </div>
             <div class="form-group">
-                <span class="control-label col-sm-6"><i class="text-danger">*&nbsp;</i>字典值 :</span>
+                <span class="control-label col-sm-6"><i class="text-danger">*&nbsp;</i>参数值 :</span>
                 <div class="col-sm-16">
-                    <input type="text" name="dictValue" value="${r'${dictValue}'}" class="form-control">
+                    <input type="text" name="paramValue" value="${r'${paramValue}'}" class="form-control">
                 </div>
             </div>
             <div class="form-group">
                 <span class="control-label col-sm-6"><i class="text-danger">*&nbsp;</i>是否系统级 :</span>
                 <div class="col-sm-16">
                     <select name="system" class="form-control">
-                        <option value="true" {@if system} selected {@/if}>是 </option>
-                        <option value="false" {@if !system} selected {@/if}>否 </option>
+                        <option value="true" {@if system} selected {@
+                        /if}>是 </option>
+                        <option value="false" {@if !system} selected {@
+                        /if}>否 </option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <span class="control-label col-sm-6"><i class="text-danger">*&nbsp;</i>启动加载 :</span>
+                <div class="col-sm-16">
+                    <select name="load" class="form-control">
+                        <option value="true" {@if load} selected {@
+                        /if}>是 </option>
+                        <option value="false" {@if !load} selected {@
+                        /if}>否 </option>
                     </select>
                 </div>
             </div>
@@ -161,6 +166,6 @@
 </script>
 
 <#include "fragment/bottom-js.ftl">
-<script src="${rc.contextPath}/js/dictionary.js"></script>
+<script src="${rc.contextPath}/js/param.js"></script>
 </body>
 </html>

@@ -135,10 +135,8 @@
                 <span class="control-label col-sm-6"><i class="text-danger">*&nbsp;</i>是否系统级 :</span>
                 <div class="col-sm-16">
                     <select name="system" class="form-control">
-                        <option value="true" {@if system} selected {@
-                        /if}>是 </option>
-                        <option value="false" {@if !system} selected {@
-                        /if}>否 </option>
+                        <option value="true" {@if system} selected {@/if}>是 </option>
+                        <option value="false" {@if !system} selected {@/if}>否 </option>
                     </select>
                 </div>
             </div>
@@ -146,10 +144,8 @@
                 <span class="control-label col-sm-6"><i class="text-danger">*&nbsp;</i>启动加载 :</span>
                 <div class="col-sm-16">
                     <select name="load" class="form-control">
-                        <option value="true" {@if load} selected {@
-                        /if}>是 </option>
-                        <option value="false" {@if !load} selected {@
-                        /if}>否 </option>
+                        <option value="true" {@if load} selected {@/if}>是 </option>
+                        <option value="false" {@if !load} selected {@/if}>否 </option>
                     </select>
                 </div>
             </div>

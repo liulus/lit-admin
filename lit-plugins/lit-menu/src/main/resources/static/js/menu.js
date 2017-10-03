@@ -9,7 +9,7 @@ $(function () {
 
     /** 新增弹出框 */
     $('#data-add').on('click', function (e) {
-        openEdit('增加', compiledEditTpl.render(), '#form-edit', urlPrefix + '/add.json')
+        openEdit('增加菜单', compiledEditTpl.render(), '#form-edit', urlPrefix + '/add.json')
     });
 
     /** 修改弹出框 */
@@ -22,7 +22,7 @@ $(function () {
         $.post(urlPrefix + '/get.json', {
             id: checkedInputs.val()
         }, function (result) {
-            openEdit('修改', compiledEditTpl.render(result['result']), '#form-edit', urlPrefix + '/update.json');
+            openEdit('修改菜单', compiledEditTpl.render(result.result), '#form-edit', urlPrefix + '/update.json');
         });
 
     });
@@ -36,10 +36,10 @@ $(function () {
             btn: ['确认', '取消'],
             btn1: function (index) {
                 $.post(url, $(form).serialize(), function (result) {
-                    if (result['success']) {
+                    if (result.success) {
                         window.location.reload();
                     } else {
-                        MsgUtils.error(result['message']);
+                        MsgUtils.error(result.message);
                     }
                 });
             },
@@ -60,11 +60,11 @@ $(function () {
         }
         layer.confirm('确定要删除选中的数据吗?', {icon: 3}, function (index) {
             $.post(urlPrefix + '/delete.json', checkedInputs.serialize(), function (result) {
-                if (result['success']) {
+                if (result.success) {
                     window.location.reload();
                 } else {
                     layer.close(index);
-                    MsgUtils.error(result['message']);
+                    MsgUtils.error(result.message);
                 }
             });
         })
@@ -127,7 +127,7 @@ $(function () {
                 var checkNode = selectedNodes[0];
                 var checked = true;
                 while (checkNode) {
-                    if (id.indexOf(checkNode['menuId']) >= 0) {
+                    if (id.indexOf(checkNode.menuId) >= 0) {
                         checked = false;
                         break;
                     }
@@ -138,13 +138,13 @@ $(function () {
                     return;
                 }
 
-                var parentId = selectedNodes[0]['menuId'];
+                var parentId = selectedNodes[0].menuId;
                 var data = parentId ? 'parentId=' + parentId + '&ids=' + id : 'ids=' + id;
                 $.post(urlPrefix + '/move.json', data, function (result) {
-                    if (result['success']) {
+                    if (result.success) {
                         window.location.reload();
                     } else {
-                        MsgUtils.error(result['message']);
+                        MsgUtils.error(result.message);
                     }
                 })
             }
@@ -158,10 +158,10 @@ $(function () {
         $.post(urlPrefix + '/move/up.json', {
             menuId: getId(e)
         }, function (result) {
-            if (result['success']) {
+            if (result.success) {
                 window.location.reload();
             } else {
-                MsgUtils.error(result['message']);
+                MsgUtils.error(result.message);
             }
         })
     });
@@ -173,10 +173,10 @@ $(function () {
         $.post(urlPrefix + '/move/down.json', {
             menuId: getId(e)
         }, function (result) {
-            if (result['success']) {
+            if (result.success) {
                 window.location.reload();
             } else {
-                MsgUtils.error(result['message']);
+                MsgUtils.error(result.message);
             }
         })
     });

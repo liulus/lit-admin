@@ -86,7 +86,7 @@ public class DictionaryServiceImpl implements DictionaryService {
                 .single(int.class);
 
         dictionary.setOrderNum(maxOrder == null ? 1 : maxOrder + 1);
-        dictionary.setDictId((Long) jdbcTools.insert(dictionary));
+        jdbcTools.insert(dictionary);
     }
 
     @Override

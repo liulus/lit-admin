@@ -98,7 +98,7 @@ public class MenuServiceImpl implements MenuService {
 
         menu.setOrderNum(maxOrder == null ? 1 : maxOrder + 1);
 
-        vo.setMenuId((Long) jdbcTools.insert(menu));
+        jdbcTools.insert(menu);
     }
 
     @Override

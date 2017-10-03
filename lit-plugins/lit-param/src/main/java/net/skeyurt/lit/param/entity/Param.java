@@ -2,6 +2,7 @@ package net.skeyurt.lit.param.entity;
 
 import lombok.Getter;
 import lombok.Setter;
+import net.skeyurt.lit.jdbc.annotation.Column;
 import net.skeyurt.lit.jdbc.annotation.GeneratedValue;
 import net.skeyurt.lit.jdbc.annotation.Id;
 import net.skeyurt.lit.jdbc.annotation.Table;
@@ -48,11 +49,13 @@ public class Param implements Serializable {
     /**
      * 是否系统级
      */
+    @Column(name = "is_system")
     private Boolean system;
 
     /**
      * 是否启动加载
      */
+    @Column(name = "is_load")
     private Boolean load;
 
 }

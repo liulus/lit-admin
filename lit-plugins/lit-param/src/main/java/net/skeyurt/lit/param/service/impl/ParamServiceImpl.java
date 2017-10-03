@@ -1,6 +1,7 @@
 package net.skeyurt.lit.param.service.impl;
 
 import com.google.common.base.Strings;
+import net.skeyurt.lit.commons.exception.AppCheckedException;
 import net.skeyurt.lit.jdbc.JdbcTools;
 import net.skeyurt.lit.jdbc.enums.Logic;
 import net.skeyurt.lit.jdbc.sta.Select;
@@ -8,9 +9,13 @@ import net.skeyurt.lit.param.entity.Param;
 import net.skeyurt.lit.param.qo.ParamQo;
 import net.skeyurt.lit.param.service.ParamService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * User : liulu
@@ -18,6 +23,7 @@ import java.util.List;
  * version $Id: ParamServiceImpl.java, v 0.1 Exp $
  */
 @Service
+@Transactional
 public class ParamServiceImpl implements ParamService {
 
 
@@ -46,5 +52,58 @@ public class ParamServiceImpl implements ParamService {
         }
 
         return select.page(qo).list();
+    }
+
+    @Override
+    public Param findById(Long id) {
+        return jdbcTools.get(Param.class, id);
+    }
+
+    @Override
+    public Param findByCode(String code) {
+        return jdbcTools.findByProperty(Param.class, "paramCode", code);
+    }
+
+    @Override
+    public void insert(Param param) {
+        Param oldParam = findByCode(param.getParamCode());
+
+        if (oldParam != null) {
+            throw new AppCheckedException("参数 code 已经存在!");
+        }
+
+        jdbcTools.insert(param);
+    }
+
+    @Override
+    public void update(Param param) {
+        Param oldParam = findById(param.getParamId());
+
+        if (!Objects.equals(param.getParamCode(), oldParam.getParamCode())) {
+            Param exist = findByCode(param.getParamCode());
+            if (exist != null){
+                throw new AppCheckedException("参数 code 已经存在!");
+            }
+        }
+        jdbcTools.update(param);
+    }
+
+    @Override
+    public void delete(Long... ids) {
+        if (ids == null || ids.length == 0) {
+            return;
+        }
+        List<Long> validIds = new ArrayList<>(ids.length);
+        for (Long id : ids) {
+            Param param = findById(id);
+            if (param == null) {
+                continue;
+            }
+            if (param.getSystem()) {
+                throw new AppCheckedException(String.format("%s 是系统级字典, 不允许删除 !", param.getParamCode()));
+            }
+            validIds.add(id);
+        }
+        jdbcTools.deleteByIds(Param.class, validIds.toArray(new Serializable[validIds.size()]));
     }
 }

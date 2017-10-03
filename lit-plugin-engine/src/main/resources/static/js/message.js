@@ -30,7 +30,7 @@ var MsgUtils = {
         var id = '#msg-' + msgCount;
         setTimeout(function () {
             $(id).alert('close')
-        }, 400000);
+        }, 4000);
 
         msgCount++;
     },

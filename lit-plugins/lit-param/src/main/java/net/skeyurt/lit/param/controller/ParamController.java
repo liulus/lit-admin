@@ -32,4 +32,31 @@ public class ParamController {
 
         return "param";
     }
+
+    @RequestMapping("/get")
+    public String get(Long id, Model model) {
+
+        model.addAttribute(ResultConst.RESULT, paramService.findById(id));
+
+        return "";
+    }
+
+    @RequestMapping("/add")
+    public String add(Param param, Model model) {
+        paramService.insert(param);
+        return "";
+    }
+
+    @RequestMapping("/update")
+    public String update(Param param, Model model) {
+
+        paramService.update(param);
+        return "";
+    }
+
+    @RequestMapping("/delete")
+    public String delete(Long... ids) {
+        paramService.delete(ids);
+        return "";
+    }
 }

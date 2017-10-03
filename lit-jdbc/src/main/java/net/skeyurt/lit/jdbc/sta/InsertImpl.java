@@ -28,6 +28,8 @@ class InsertImpl extends AbstractStatement implements Insert {
 
     private List<Expression> values = new ArrayList<>();
 
+    private Object entity = null;
+
 
     InsertImpl(Class<?> clazz) {
         super(clazz);
@@ -57,6 +59,7 @@ class InsertImpl extends AbstractStatement implements Insert {
         if (entity == null) {
             return this;
         }
+        this.entity = entity;
         Map<String, String> fieldColumnMap = tableInfo.getFieldColumnMap();
 
         for (Map.Entry<String, String> entry : fieldColumnMap.entrySet()) {
@@ -94,8 +97,14 @@ class InsertImpl extends AbstractStatement implements Insert {
         context.setStatementType(StatementContext.StatementType.INSERT);
 
         Object obj = executor.execute(context);
+        Object id = context.isGenerateKeyByDb() ? obj : idValue;
 
-        return context.isGenerateKeyByDb() ? obj : idValue;
+        if (entity != null) {
+            BeanUtils.invokeWriteMethod(entity, tableInfo.getPkField(), id);
+            entity = null;
+        }
+
+        return id;
     }
 
     /**

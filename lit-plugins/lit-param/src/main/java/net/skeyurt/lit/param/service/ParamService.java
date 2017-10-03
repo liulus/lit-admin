@@ -13,4 +13,14 @@ import java.util.List;
 public interface ParamService {
 
     List<Param> queryPageList(ParamQo qo);
+
+    Param findById(Long id);
+
+    Param findByCode(String code);
+
+    void insert(Param param);
+
+    void update(Param param);
+
+    void delete(Long... ids);
 }

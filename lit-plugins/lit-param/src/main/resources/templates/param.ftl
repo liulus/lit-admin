@@ -30,7 +30,7 @@
             <div class="col-sm-12 col-md-9 form-group">
                 <div class="col-sm-8 text-right control-label">关键字:</div>
                 <div class="col-sm-16 ">
-                    <input name="keyWord" class="form-control input-sm" type="text" value="${systemParamQo.keyWord!}"
+                    <input name="keyWord" class="form-control input-sm" type="text" value="${paramQo.keyWord!}"
                            placeholder="请输入">
                 </div>
             </div>
@@ -39,8 +39,8 @@
                 <div class="col-sm-14 ">
                     <select name="system" class="form-control input-sm">
                         <option value=""></option>
-                        <option value="true" ${(systemParamQo.system!false)?string('selected', '')}>是</option>
-                        <option value="false" ${(systemParamQo.system!true)?string('', 'selected')}>否</option>
+                        <option value="true" ${(paramQo.system!false)?string('selected', '')}>是</option>
+                        <option value="false" ${(paramQo.system!true)?string('', 'selected')}>否</option>
                     </select>
                 </div>
             </div>
@@ -76,7 +76,6 @@
                 <th>行号</th>
                 <th>参数码</th>
                 <th>参数值</th>
-                <th>参数类型</th>
                 <th>系统级</th>
                 <th>启动加载</th>
                 <th>备注</th>
@@ -92,7 +91,6 @@
                 <td>${item?counter}</td>
                 <td>${item.paramCode!?html}</td>
                 <td>${item.paramValue!?html}</td>
-                <td>${item.paramType!?html}</td>
                 <td>${item.system?string('是', '否')}</td>
                 <td>${item.load?string('是', '否')}</td>
                 <td>${item.memo!?html}</td>

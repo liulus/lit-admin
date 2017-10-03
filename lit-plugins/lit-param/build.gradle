@@ -1,4 +1,3 @@
 dependencies {
 
-    compile project(':lit-plugins:lit-dictionary')
 }

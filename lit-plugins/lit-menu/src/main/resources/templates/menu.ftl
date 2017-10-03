@@ -181,7 +181,7 @@
     </div>
 </script>
 
-<<#include "fragment/bottom-js.ftl">
+<#include "fragment/bottom-js.ftl">
 <script src="${rc.contextPath}/libs/zTree/3.5/js/ztree.all.min.js"></script>
 <script src="${rc.contextPath}/js/menu.js"></script>
 </body>

@@ -2,6 +2,8 @@ package net.skeyurt.lit.commons.mvc;
 
 import net.skeyurt.lit.commons.context.ResultConst;
 import net.skeyurt.lit.commons.exception.RunResultHolder;
+import net.skeyurt.lit.commons.page.PageInfo;
+import net.skeyurt.lit.commons.page.PageList;
 import org.springframework.ui.ModelMap;
 import org.springframework.util.StringUtils;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -27,6 +29,20 @@ public class ModelResultHandlerInterceptor implements HandlerInterceptor {
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
         ModelMap modelMap = modelAndView == null ? null : modelAndView.getModelMap();
         if (modelMap != null) {
+
+            PageInfo pageInfo = null;
+            for (Object obj : modelMap.values()) {
+                if (obj instanceof PageList) {
+                    pageInfo = ((PageList) obj).getPageInfo();
+                    break;
+                }
+            }
+
+            if (pageInfo != null) {
+                modelMap.put(ResultConst.PAGE_INFO, pageInfo);
+            }
+
+
             if (RunResultHolder.hasError()) {
                 modelMap.put(ResultConst.SUCCESS, false);
                 String code = RunResultHolder.getCode(false);

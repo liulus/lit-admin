@@ -2,7 +2,6 @@ package net.skeyurt.lit.menu.controller;
 
 import lombok.extern.slf4j.Slf4j;
 import net.skeyurt.lit.commons.context.ResultConst;
-import net.skeyurt.lit.commons.page.PageList;
 import net.skeyurt.lit.dictionary.tool.DictionaryTools;
 import net.skeyurt.lit.menu.context.MenuConst;
 import net.skeyurt.lit.menu.service.MenuService;
@@ -34,9 +33,6 @@ public class MenuController {
         List<MenuVo> menuVos = menuService.queryPageList(vo);
         model.addAttribute(ResultConst.RESULT, menuVos);
         model.addAttribute("menuType", DictionaryTools.findChildByRootKey(MenuConst.MENU_TYPE));
-        if (menuVos instanceof PageList) {
-            model.addAttribute("pageInfo", ((PageList<MenuVo>) menuVos).getPageInfo());
-        }
         return "menu";
     }
 
@@ -55,10 +51,6 @@ public class MenuController {
         List<MenuVo> menuVos = menuService.queryPageList(vo);
         model.addAttribute(ResultConst.RESULT, menuVos);
         model.addAttribute("menuType", DictionaryTools.findChildByRootKey(MenuConst.MENU_TYPE));
-        if (menuVos instanceof PageList) {
-            model.addAttribute("pageInfo", ((PageList<MenuVo>) menuVos).getPageInfo());
-        }
-
         return "menu";
     }
 

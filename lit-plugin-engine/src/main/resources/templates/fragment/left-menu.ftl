@@ -12,7 +12,7 @@
                         </#if>
                     </a>
                     <#if menu.isParent>
-                        <ul id="sub-item-1-${menu?counter}" class="collapse children-menu">
+                        <ul id="sub-item-1-${menu?counter}" class="children-menu collapse in">
                             <#list menu.children as second>
                                 <#if second.enable>
                                     <li>

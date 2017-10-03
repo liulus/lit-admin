@@ -2,7 +2,6 @@ package net.skeyurt.lit.dictionary.controller;
 
 import lombok.extern.slf4j.Slf4j;
 import net.skeyurt.lit.commons.context.ResultConst;
-import net.skeyurt.lit.commons.page.PageList;
 import net.skeyurt.lit.dictionary.entity.Dictionary;
 import net.skeyurt.lit.dictionary.qo.DictionaryQo;
 import net.skeyurt.lit.dictionary.service.DictionaryService;
@@ -31,9 +30,6 @@ public class DictionaryController {
     public String list(DictionaryQo qo, Model model) {
         List<Dictionary> dictionaries = dictionaryService.queryPageList(qo);
         model.addAttribute(ResultConst.RESULT, dictionaries);
-        if (dictionaries instanceof PageList) {
-            model.addAttribute("pageInfo", ((PageList<Dictionary>) dictionaries).getPageInfo());
-        }
 
         return "dictionary";
     }
@@ -44,9 +40,6 @@ public class DictionaryController {
         qo.setParentId(parentId);
         List<Dictionary> dictionaries = dictionaryService.queryPageList(qo);
         model.addAttribute(ResultConst.RESULT, dictionaries);
-        if (dictionaries instanceof PageList) {
-            model.addAttribute("pageInfo", ((PageList<Dictionary>) dictionaries).getPageInfo());
-        }
         return "dictionary";
     }
 

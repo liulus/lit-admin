@@ -13,12 +13,12 @@ import java.io.Serializable;
 /**
  * User : liulu
  * Date : 17-9-17 下午2:39
- * version $Id: SystemParam.java, v 0.1 Exp $
+ * version $Id: Param.java, v 0.1 Exp $
  */
 @Getter
 @Setter
-@Table(name = PluginConst.TABLE_PREFIX + "system_param")
-public class SystemParam implements Serializable {
+@Table(name = PluginConst.TABLE_PREFIX + "param")
+public class Param implements Serializable {
 
     private static final long serialVersionUID = -958178685990081472L;
 
@@ -39,10 +39,6 @@ public class SystemParam implements Serializable {
      */
     private String paramValue;
 
-    /**
-     * 参数类型
-     */
-    private String paramType;
 
     /**
      * 备注

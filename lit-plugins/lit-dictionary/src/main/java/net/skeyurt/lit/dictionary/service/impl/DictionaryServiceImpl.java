@@ -30,11 +30,11 @@ public class DictionaryServiceImpl implements DictionaryService {
     private JdbcTools jdbcTools;
 
     @Override
-    public List<Dictionary> queryPageList(DictionaryVo qo) {
+    public List<Dictionary> queryPageList(DictionaryVo vo) {
 
-        Select<Dictionary> select = buildSelect(qo);
+        Select<Dictionary> select = buildSelect(vo);
 
-        return select.page(qo).list();
+        return select.page(vo).list();
     }
 
     private Select<Dictionary> buildSelect(DictionaryVo qo) {
@@ -54,6 +54,8 @@ public class DictionaryServiceImpl implements DictionaryService {
         if (!Strings.isNullOrEmpty(qo.getDictKey())) {
             select.and("dictKey", qo.getDictKey());
         }
+
+        select.asc("orderNum");
 
         return select;
     }

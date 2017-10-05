@@ -1,5 +1,8 @@
 package net.skeyurt.lit.commons.util;
 
+import net.skeyurt.lit.commons.context.SpringContextUtils;
+import org.springframework.context.ApplicationContext;
+import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
@@ -46,6 +49,13 @@ public class WebUtils {
 
 
     public static ServletContext getServletContext() {
+
+        if (SERVLET_CONTEXT == null) {
+            ApplicationContext applicationContext = SpringContextUtils.getApplicationContext();
+            if (applicationContext instanceof WebApplicationContext) {
+                SERVLET_CONTEXT = ((WebApplicationContext) applicationContext).getServletContext();
+            }
+        }
 
         if (SERVLET_CONTEXT == null) {
             SERVLET_CONTEXT = getSession().getServletContext();

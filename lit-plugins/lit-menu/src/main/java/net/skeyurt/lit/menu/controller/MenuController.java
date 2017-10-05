@@ -67,10 +67,10 @@ public class MenuController {
 
         MenuVo menuVo = menuService.findById(menuId);
         if (menuVo != null && menuVo.getParentId() != null) {
-            return "redirect:/plugin/menu/" + menuVo.getParentId();
+            return PluginConst.REDIRECT + PluginConst.URL_PREFIX + "/menu/" + menuVo.getParentId();
         }
 
-        return "redirect:/plugin/menu";
+        return PluginConst.REDIRECT + PluginConst.URL_PREFIX + "/menu";
     }
 
     /**

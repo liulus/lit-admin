@@ -2,7 +2,7 @@
 <#macro pagebar pageInfo pageUrl='' queryForm=''>
 <div class="text-center pageContent" data-query-form="${queryForm}">
     <form action="${pageUrl}" method="post"><input type="hidden" name="pageNum"></form>
-    <ul class="pagination">
+    <ul class="pagination pagination-sm">
         <#list pageInfo.start..pageInfo.end>
             <li>
                 <#if pageInfo.pageNum == 1>

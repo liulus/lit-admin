@@ -1,13 +1,15 @@
 CREATE TABLE lit_organization (
-  org_id     INT UNSIGNED PRIMARY KEY NOT NULL AUTO_INCREMENT
+  org_id      INT UNSIGNED PRIMARY KEY NOT NULL AUTO_INCREMENT
   COMMENT '机构id',
-  org_code   VARCHAR(32) COMMENT '机构号',
-  org_name   VARCHAR(512) COMMENT '机构名',
-  short_name VARCHAR(128) COMMENT '机构简称',
-  org_type   VARCHAR(64) COMMENT '机构类型',
-  org_level  TINYINT COMMENT '机构层级',
-  serial_num VARCHAR(512) COMMENT '特殊编号, 用于查询',
-  org_address    VARCHAR(512) COMMENT '地址'
+  parent_id   INT UNSIGNED COMMENT '父机构Id',
+  org_code    VARCHAR(32) COMMENT '机构号',
+  org_name    VARCHAR(512) COMMENT '机构名',
+  short_name  VARCHAR(128) COMMENT '机构简称',
+  org_type    VARCHAR(64) COMMENT '机构类型',
+  org_level   TINYINT COMMENT '机构层级',
+  serial_num  VARCHAR(512) COMMENT '特殊编号, 用于查询',
+  org_address VARCHAR(512) COMMENT '地址',
+  memo        VARCHAR(512) COMMENT '备注'
 )
   ENGINE = InnoDB
   DEFAULT CHARSET = utf8
@@ -15,6 +17,10 @@ CREATE TABLE lit_organization (
 
 CREATE UNIQUE INDEX lit_org_org_code_uindex
   ON lit_organization (org_code);
+
+ALTER TABLE lit_organization
+  ADD CONSTRAINT lit_organization_org_id_parent_id_fk
+FOREIGN KEY (parent_id) REFERENCES lit_organization (org_id);
 
 CREATE TABLE lit_user
 (

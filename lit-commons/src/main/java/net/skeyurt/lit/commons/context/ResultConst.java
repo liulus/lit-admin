@@ -5,29 +5,29 @@ package net.skeyurt.lit.commons.context;
  * Date : 2017/3/20 20:30
  * version $Id: ResultConst.java, v 0.1 Exp $
  */
-public interface ResultConst {
+public final class ResultConst {
 
-    String SUCCESS = "success";
+    public static final String SUCCESS = "success";
 
-    String STATUS = "status";
+    public static final String STATUS = "status";
 
-    String CODE = "code";
+    public static final String CODE = "code";
 
-    String RESULT = "result";
+    public static final String RESULT = "result";
 
-    String URL = "url";
+    public static final String URL = "url";
 
-    String PAGE_INFO = "pageInfo";
+    public static final String PAGE_INFO = "pageInfo";
 
-    String MASSAGE = "message";
+    public static final String MASSAGE = "message";
 
-    String MASSAGE_TYPE = "messageType";
+    public static final String MASSAGE_TYPE = "messageType";
 
-    String INFO = "info";
+    public static final String INFO = "info";
 
-    String WARNING = "warning";
+    public static final String WARNING = "warning";
 
-    String ERROR = "error";
+    public static final String ERROR = "error";
 
 
 

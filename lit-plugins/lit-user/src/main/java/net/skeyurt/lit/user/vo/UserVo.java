@@ -15,11 +15,11 @@ public class UserVo extends Pager{
 
     private static final long serialVersionUID = -7054655578166527259L;
 
-    private Integer userId;
+    private Long userId;
 
     private String userCode;
 
-    private Integer orgId;
+    private Long orgId;
 
     private String orgCode;
 

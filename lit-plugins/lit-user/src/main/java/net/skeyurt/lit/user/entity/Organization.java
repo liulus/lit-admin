@@ -27,6 +27,9 @@ public class Organization implements Serializable{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long orgId;
 
+    /** 父机构 Id */
+    private Long parentId;
+
     /** 机构号 */
     private String orgCode;
 
@@ -39,13 +42,21 @@ public class Organization implements Serializable{
     /** 机构类型 */
     private String orgType;
 
-    /** 机构层级 */
+    /** 机构层级 从 1 开始 */
     private Integer orgLevel;
 
-    /** 特殊序号, 用于查询 */
+    /**
+     * 特殊序号, 用于查询
+     * 一个层级 3 位数字, 从 001 开始, 子机构: 父机构 serialNum + 3位数字
+     * 例: 010 -> 层级为 1 的第 10 个机构, 没有父机构
+     * 例: 007003 -> 层级为 2 且父机构 serialNum 为 007 的第 3 个机构
+     */
     private String serialNum;
 
     /** 地址 */
     private String orgAddress;
+
+    /** 备注 */
+    private String memo;
 
 }

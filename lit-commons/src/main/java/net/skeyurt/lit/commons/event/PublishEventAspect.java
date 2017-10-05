@@ -3,7 +3,7 @@ package net.skeyurt.lit.commons.event;
 import net.skeyurt.lit.commons.bean.BeanUtils;
 import net.skeyurt.lit.commons.util.ClassUtils;
 import org.aspectj.lang.JoinPoint;
-import org.aspectj.lang.annotation.AfterReturning;
+import org.aspectj.lang.annotation.After;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.core.DefaultParameterNameDiscoverer;
@@ -29,7 +29,7 @@ public class PublishEventAspect {
     @Resource
     private EventPublisher eventPublisher;
 
-    @AfterReturning("@annotation(event)")
+    @After("@annotation(event)")
     public void publishEvent(JoinPoint joinPoint, Event event) {
 
         Class<?> eventClass = event.eventClass();

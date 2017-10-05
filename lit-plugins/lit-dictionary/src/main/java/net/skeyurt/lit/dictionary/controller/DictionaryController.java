@@ -28,18 +28,18 @@ public class DictionaryController {
     private DictionaryService dictionaryService;
 
     @RequestMapping({"/list", ""})
-    public String list(DictionaryVo qo, Model model) {
-        List<Dictionary> dictionaries = dictionaryService.queryPageList(qo);
+    public String list(DictionaryVo vo, Model model) {
+        List<Dictionary> dictionaries = dictionaryService.queryPageList(vo);
         model.addAttribute(ResultConst.RESULT, dictionaries);
 
         return "dictionary";
     }
 
     @RequestMapping("/{parentId}")
-    public String childList(DictionaryVo qo, @PathVariable Long parentId, Model model) {
+    public String childList(DictionaryVo vo, @PathVariable Long parentId, Model model) {
 
-        qo.setParentId(parentId);
-        List<Dictionary> dictionaries = dictionaryService.queryPageList(qo);
+        vo.setParentId(parentId);
+        List<Dictionary> dictionaries = dictionaryService.queryPageList(vo);
         model.addAttribute(ResultConst.RESULT, dictionaries);
         return "dictionary";
     }

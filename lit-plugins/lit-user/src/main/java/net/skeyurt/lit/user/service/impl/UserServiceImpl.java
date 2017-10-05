@@ -2,6 +2,7 @@ package net.skeyurt.lit.user.service.impl;
 
 import com.google.common.base.Strings;
 import net.skeyurt.lit.jdbc.JdbcTools;
+import net.skeyurt.lit.jdbc.enums.JoinType;
 import net.skeyurt.lit.jdbc.enums.Logic;
 import net.skeyurt.lit.jdbc.sta.Select;
 import net.skeyurt.lit.user.context.LoginUser;
@@ -30,7 +31,7 @@ public class UserServiceImpl implements UserService {
     private JdbcTools jdbcTools;
 
     @Override
-    public List<User> queryPageList(UserVo vo) {
+    public List<UserVo> queryPageList(UserVo vo) {
         LoginUser loginUser = UserUtils.getLoginUser();
 
         if (loginUser != null && loginUser.hasOrg()) {
@@ -39,35 +40,32 @@ public class UserServiceImpl implements UserService {
                 vo.setOrgCode(loginUser.getOrgCode());
             }
         }
+        vo.setUserId(1L);
 
-        List<User> users = buildSelect(vo).page(vo).list();
+        List<UserVo> userVos = buildSelect(vo).page(vo).list(UserVo.class);
 
-        return users;
+        return userVos;
     }
 
 
     private Select<User> buildSelect(UserVo vo) {
 
-        Select<User> select = jdbcTools.createSelect(User.class);
+        Select<User> select = jdbcTools.createSelect(User.class).where("1", 1);
 
         if (vo.getUserId() != null) {
             select.and("userId", vo.getUserId());
 
             if (!Strings.isNullOrEmpty(vo.getSerialNum())) {
-
-                List<Integer> orgIds = jdbcTools.createSelect(Organization.class)
-                        .include("orgId")
-                        .where("serialNum", Logic.LIKE, vo.getSerialNum() + "%")
-                        .list(Integer.class);
-
-                select.and("orgId", Logic.IN, orgIds.toArray());
+                select.join(JoinType.LEFT, Organization.class)
+                        .on(User.class, "orgId", Logic.EQ, Organization.class, "orgId")
+                        .addField(Organization.class, "orgCode", "orgName")
+                        .and(Organization.class, "serialNum", Logic.LIKE, vo.getSerialNum() + "%");
             }
         } else if (vo.getOrgId() != null) {
             select.and("orgId", vo.getOrgId());
         }
 
-        select.or("orgId", null)
-                .desc("orgId");
+        select.or("orgId", null).desc("orgId");
 
         return select;
     }

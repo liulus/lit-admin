@@ -4,6 +4,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import net.sf.jsqlparser.expression.Expression;
 import net.sf.jsqlparser.expression.JdbcParameter;
+import net.sf.jsqlparser.schema.Column;
 import net.sf.jsqlparser.schema.Table;
 import net.skeyurt.lit.jdbc.StatementExecutor;
 import net.skeyurt.lit.jdbc.model.TableInfo;
@@ -42,10 +43,10 @@ public abstract class AbstractStatement implements Statement {
         table = new Table(tableInfo.getTableName());
     }
 
-    public String getColumn(String fieldName) {
+    public Column buildColumn(String fieldName) {
         fieldName = fieldName.trim();
         String column = tableInfo.getFieldColumnMap().get(fieldName);
-        return column == null || column.isEmpty() ? fieldName : column;
+        return column == null || column.isEmpty()? new Column(fieldName): new Column(table, column);
     }
 
 }

@@ -1,6 +1,5 @@
 package net.skeyurt.lit.user.service;
 
-import net.skeyurt.lit.user.entity.User;
 import net.skeyurt.lit.user.vo.UserVo;
 
 import java.util.List;
@@ -19,5 +18,5 @@ public interface UserService {
      * @param vo 查询条件
      * @return
      */
-    List<User> queryPageList(UserVo vo);
+    List<UserVo> queryPageList(UserVo vo);
 }

@@ -24,9 +24,16 @@ public class UserUtils {
 
     public static LoginUser getLoginUser(HttpSession session) {
 
-        Object loginUser = session.getAttribute(UserConst.LOGIN_USER);
+        LoginUser loginUser = (LoginUser) session.getAttribute(UserConst.LOGIN_USER);
 
-        return loginUser == null ? null : (LoginUser) loginUser;
+        // todo 测试使用
+        if (loginUser == null) {
+            loginUser = new LoginUser();
+            loginUser.setOrgCode("999000");
+            loginUser.setSerialNum("001");
+        }
+
+        return loginUser;
     }
 
     public static String nextSerialNum(String parentSerialNum, List<String> existSerialNums) {

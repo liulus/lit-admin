@@ -36,7 +36,7 @@ class UpdateImpl extends AbstractCondition<Update> implements Update {
     @Override
     public Update set(String fieldName, Object value) {
 
-        columns.add(new Column(getColumn(fieldName)));
+        columns.add(buildColumn(fieldName));
 
         values.add(value == null ? NULL_EXPR : PARAM_EXPR);
         if (value != null) {

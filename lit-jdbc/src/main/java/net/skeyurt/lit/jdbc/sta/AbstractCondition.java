@@ -134,7 +134,7 @@ public abstract class AbstractCondition<T extends Condition<T>> extends Abstract
 
 
     private void addExpr(String fieldName, Logic logic, boolean isAnd, boolean useBracket, Object... values) {
-        Expression expression = getExpression(fieldName, logic, values);
+        Expression expression = getExpression(buildColumn(fieldName), logic, values);
         if (expression != null) {
             if (useBracket) {
                 expression = new LeftParenthesis(expression);
@@ -153,13 +153,7 @@ public abstract class AbstractCondition<T extends Condition<T>> extends Abstract
     }
 
 
-    protected Expression getExpression(String fieldName, Logic logic, Object... values) {
-
-        if (fieldName == null || fieldName.isEmpty()) {
-            return null;
-        }
-
-        Column column = new Column(getColumn(fieldName));
+    protected Expression getExpression(Column column, Logic logic, Object... values) {
 
         if (values == null || values.length == 0 || values[0] == null) {
             IsNullExpression isNullExpression = new IsNullExpression();

@@ -106,7 +106,7 @@ class SelectImpl<T> extends AbstractCondition<Select<T>> implements Select<T> {
     public Select<T> include(String... fieldNames) {
 
         for (String fieldName : fieldNames) {
-            selectItems.add(new SelectExpressionItem(new Column(table, getColumn(fieldName))));
+            selectItems.add(new SelectExpressionItem(buildColumn(fieldName)));
         }
         return this;
     }
@@ -133,7 +133,7 @@ class SelectImpl<T> extends AbstractCondition<Select<T>> implements Select<T> {
         }
 
         for (String fieldName : fieldNames) {
-            selectItems.add(new SelectExpressionItem(getColumn(tableClass, fieldName)));
+            selectItems.add(new SelectExpressionItem(buildColumn(tableClass, fieldName)));
         }
         return this;
     }
@@ -160,7 +160,7 @@ class SelectImpl<T> extends AbstractCondition<Select<T>> implements Select<T> {
         } else {
             List<Expression> funcColumns = new ArrayList<>(fieldNames.length);
             for (String fieldName : fieldNames) {
-                funcColumns.add(new Column(getColumn(fieldName)));
+                funcColumns.add(buildColumn(fieldName));
             }
             function.setParameters(new ExpressionList(funcColumns));
         }
@@ -269,17 +269,16 @@ class SelectImpl<T> extends AbstractCondition<Select<T>> implements Select<T> {
         Join join = getLastJoin();
 
         BinaryExpression expression = getBinaryExpression(logic);
-        expression.setLeftExpression(getColumn(table1, field1));
-        expression.setRightExpression(getColumn(table2, field2));
+        expression.setLeftExpression(buildColumn(table1, field1));
+        expression.setRightExpression(buildColumn(table2, field2));
 
         join.setOnExpression(expression);
         return this;
     }
 
-    private Column getColumn(Class<?> clazz, String field) {
+    private Column buildColumn(Class<?> clazz, String field) {
         if (Objects.equals(clazz, entityClass)) {
-            String column = getColumn(field);
-            return new Column(table, column);
+            return buildColumn(field);
         }
         String column = joinTableInfos.get(clazz).getFieldColumnMap().get(field.trim());
         return column == null || column.isEmpty() ? new Column(joinTables.get(clazz), field) : new Column(joinTables.get(clazz), column);
@@ -293,9 +292,23 @@ class SelectImpl<T> extends AbstractCondition<Select<T>> implements Select<T> {
     public Select<T> joinCondition(Class<?> table1, String field1, Logic logic, Class<?> table2, String field2) {
 
         BinaryExpression expression = getBinaryExpression(logic);
-        expression.setLeftExpression(getColumn(table1, field1));
-        expression.setRightExpression(getColumn(table2, field2));
+        expression.setLeftExpression(buildColumn(table1, field1));
+        expression.setRightExpression(buildColumn(table2, field2));
         where = where == null ? expression : new AndExpression(where, expression);
+        return this;
+    }
+
+    @Override
+    public Select<T> and(Class<?> table, String field, Logic logic, Object... values) {
+        Expression expression = getExpression(buildColumn(table, field), logic, values);
+        where = where == null ? expression : new AndExpression(where, expression);
+        return this;
+    }
+
+    @Override
+    public Select<T> or(Class<?> table, String field, Logic logic, Object... values) {
+        Expression expression = getExpression(buildColumn(table, field), logic, values);
+        where = where == null ? expression : new OrExpression(where, expression);
         return this;
     }
 
@@ -305,7 +318,7 @@ class SelectImpl<T> extends AbstractCondition<Select<T>> implements Select<T> {
             groupBy = new ArrayList<>(fields.length);
         }
         for (String field : fields) {
-            groupBy.add(new Column(getColumn(field)));
+            groupBy.add(buildColumn(field));
         }
 
         return this;
@@ -324,7 +337,7 @@ class SelectImpl<T> extends AbstractCondition<Select<T>> implements Select<T> {
     }
 
     private void addHaving(String fieldName, Logic logic, boolean isAnd, Object... values) {
-        Expression expression = getExpression(fieldName, logic, values);
+        Expression expression = getExpression(buildColumn(fieldName), logic, values);
         if (expression != null) {
             having = having == null ? expression :
                     isAnd ? new AndExpression(having, expression) :
@@ -349,7 +362,7 @@ class SelectImpl<T> extends AbstractCondition<Select<T>> implements Select<T> {
 
         for (String fieldName : fieldNames) {
             OrderByElement element = new OrderByElement();
-            element.setExpression(new Column(getColumn(fieldName)));
+            element.setExpression(buildColumn(fieldName));
             element.setAsc(asc);
             orderBy.add(element);
         }

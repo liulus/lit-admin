@@ -98,11 +98,11 @@ public interface Select<T> extends Condition<Select<T>> {
     /**
      * join 语句的 on 条件, simpleJoin 方法不生效
      *
-     * @param table1   on 条件的表1
-     * @param field1   on 条件的表1中的属性
-     * @param logic 操作符
-     * @param table2   on 条件的表2
-     * @param field2   on 条件的表2中的属性
+     * @param table1 on 条件的表1
+     * @param field1 on 条件的表1中的属性
+     * @param logic  操作符
+     * @param table2 on 条件的表2
+     * @param field2 on 条件的表2中的属性
      * @return Select
      */
     Select<T> on(Class<?> table1, String field1, Logic logic, Class<?> table2, String field2);
@@ -110,14 +110,36 @@ public interface Select<T> extends Condition<Select<T>> {
     /**
      * join 语句的条件, 只有simpleJoin 生效
      *
-     * @param table1   join 条件的表1
-     * @param field1   join 条件的表1中的属性
-     * @param logic 操作符
-     * @param table2   join 条件的表2
-     * @param field2   join 条件的表2中的属性
+     * @param table1 join 条件的表1
+     * @param field1 join 条件的表1中的属性
+     * @param logic  操作符
+     * @param table2 join 条件的表2
+     * @param field2 join 条件的表2中的属性
      * @return Select
      */
     Select<T> joinCondition(Class<?> table1, String field1, Logic logic, Class<?> table2, String field2);
+
+    /**
+     * 多表查询时, 可以指定其他表的字段条件
+     *
+     * @param table  要设置条件的表
+     * @param field  字段
+     * @param logic  操作符
+     * @param values 值
+     * @return
+     */
+    Select<T> and(Class<?> table, String field, Logic logic, Object... values);
+
+    /**
+     * 多表查询时, 可以指定其他表的字段条件
+     *
+     * @param table  要设置条件的表
+     * @param field  字段
+     * @param logic  操作符
+     * @param values 值
+     * @return
+     */
+    Select<T> or(Class<?> table, String field, Logic logic, Object... values);
 
     /**
      * 添加 group by 的字段
@@ -140,7 +162,7 @@ public interface Select<T> extends Condition<Select<T>> {
      * 添加 having 条件
      *
      * @param fieldName 属性名
-     * @param logic  操作符
+     * @param logic     操作符
      * @param values    值
      * @return Select
      */

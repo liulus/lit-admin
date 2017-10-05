@@ -1,7 +1,7 @@
 package net.skeyurt.lit.user.controller;
 
+import net.skeyurt.lit.commons.context.ResultConst;
 import net.skeyurt.lit.plugin.context.PluginConst;
-import net.skeyurt.lit.user.entity.User;
 import net.skeyurt.lit.user.service.UserService;
 import net.skeyurt.lit.user.vo.UserVo;
 import org.springframework.stereotype.Controller;
@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
@@ -54,9 +53,10 @@ public class UserController {
 
 
     @RequestMapping({"/list", ""})
-    public String userList(HttpServletRequest request, UserVo vo, Model model) {
+    public String userList(UserVo vo, Model model) {
 
-        List<User> users = userService.queryPageList(vo);
+        List<UserVo> userVos = userService.queryPageList(vo);
+        model.addAttribute(ResultConst.RESULT, userVos);
         return "user";
     }
 

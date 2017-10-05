@@ -46,7 +46,7 @@ class InsertImpl extends AbstractStatement implements Insert {
 
     @Override
     public Insert into(String fieldName, Object value, boolean isNative) {
-        columns.add(new Column(getColumn(fieldName)));
+        columns.add(buildColumn(fieldName));
         values.add(isNative ? new HexValue(value.toString()) : PARAM_EXPR);
         if (!isNative) {
             params.add(value);

@@ -1,6 +1,11 @@
 package net.skeyurt.lit.commons.util;
 
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
+
 import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 /**
  * User : liulu
@@ -12,25 +17,53 @@ public class WebUtils {
 
     private static ServletContext SERVLET_CONTEXT;
 
+
+    public static void setServletContext(ServletContext servletContext) {
+        if (SERVLET_CONTEXT == null) {
+            SERVLET_CONTEXT = servletContext;
+        }
+    }
+
+    public static HttpServletRequest getRequest() {
+        return ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+    }
+
+    public static HttpSession getSession() {
+        return getRequest().getSession();
+    }
+
+    public static Object getSessionAttribute(String name){
+        return getSession().getAttribute(name);
+    }
+
+    public static void setSessionAttribute(String name, Object object){
+        getSession().setAttribute(name, object);
+    }
+
+    public static void removeSessionAttribute(String name) {
+        getSession().removeAttribute(name);
+    }
+
+
     public static ServletContext getServletContext() {
+
+        if (SERVLET_CONTEXT == null) {
+            SERVLET_CONTEXT = getSession().getServletContext();
+        }
+
         return SERVLET_CONTEXT;
     }
 
-    public static void setServletContext(ServletContext servletContext) {
-        SERVLET_CONTEXT = servletContext;
+    public static Object getContextAttribute(String name) {
+
+        return getServletContext().getAttribute(name);
     }
 
-    public static Object getAttribute(String name) {
-        return SERVLET_CONTEXT.getAttribute(name);
+    public static void setContextAttribute(String name, Object object) {
+        getServletContext().setAttribute(name, object);
     }
 
-    public static void setAttribute(String name, Object object) {
-        SERVLET_CONTEXT.setAttribute(name, object);
+    public static void removeContextAttribute(String name) {
+        getServletContext().removeAttribute(name);
     }
-
-    public static void removeAttribute(String name) {
-        SERVLET_CONTEXT.removeAttribute(name);
-    }
-
-
 }

@@ -1,7 +1,7 @@
 package net.skeyurt.lit.dictionary.service;
 
 import net.skeyurt.lit.dictionary.entity.Dictionary;
-import net.skeyurt.lit.dictionary.qo.DictionaryQo;
+import net.skeyurt.lit.dictionary.vo.DictionaryVo;
 
 import java.util.List;
 
@@ -19,7 +19,7 @@ public interface DictionaryService {
      * @param qo 查询对象
      * @return
      */
-    List<Dictionary> queryPageList(DictionaryQo qo);
+    List<Dictionary> queryPageList(DictionaryVo qo);
 
     /**
      * 添加字典对象

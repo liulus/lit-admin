@@ -3,8 +3,8 @@ package net.skeyurt.lit.dictionary.service.impl;
 import com.google.common.base.Strings;
 import net.skeyurt.lit.commons.exception.AppCheckedException;
 import net.skeyurt.lit.dictionary.entity.Dictionary;
-import net.skeyurt.lit.dictionary.qo.DictionaryQo;
 import net.skeyurt.lit.dictionary.service.DictionaryService;
+import net.skeyurt.lit.dictionary.vo.DictionaryVo;
 import net.skeyurt.lit.jdbc.JdbcTools;
 import net.skeyurt.lit.jdbc.enums.Logic;
 import net.skeyurt.lit.jdbc.sta.Select;
@@ -30,14 +30,14 @@ public class DictionaryServiceImpl implements DictionaryService {
     private JdbcTools jdbcTools;
 
     @Override
-    public List<Dictionary> queryPageList(DictionaryQo qo) {
+    public List<Dictionary> queryPageList(DictionaryVo qo) {
 
         Select<Dictionary> select = buildSelect(qo);
 
         return select.page(qo).list();
     }
 
-    private Select<Dictionary> buildSelect(DictionaryQo qo) {
+    private Select<Dictionary> buildSelect(DictionaryVo qo) {
         Select<Dictionary> select = jdbcTools.createSelect(Dictionary.class).where("parentId", qo.getParentId());
 
         if (!Strings.isNullOrEmpty(qo.getKeyWord())) {
@@ -105,7 +105,7 @@ public class DictionaryServiceImpl implements DictionaryService {
 
     private Dictionary findByKeyAndParentId(String dictKey, Long parentId) {
 
-        DictionaryQo qo = DictionaryQo.builder()
+        DictionaryVo qo = DictionaryVo.builder()
                 .dictKey(dictKey)
                 .parentId(parentId)
                 .build();
@@ -155,7 +155,7 @@ public class DictionaryServiceImpl implements DictionaryService {
 
     @Override
     public Dictionary findByRootKey(String key) {
-        DictionaryQo qo = DictionaryQo.builder().dictKey(key).build();
+        DictionaryVo qo = DictionaryVo.builder().dictKey(key).build();
         return buildSelect(qo).single();
     }
 
@@ -181,7 +181,7 @@ public class DictionaryServiceImpl implements DictionaryService {
             return Collections.emptyList();
         }
 
-        DictionaryQo qo = DictionaryQo.builder().parentId(rootDict.getDictId()).build();
+        DictionaryVo qo = DictionaryVo.builder().parentId(rootDict.getDictId()).build();
 
         return buildSelect(qo).list();
     }
@@ -194,7 +194,7 @@ public class DictionaryServiceImpl implements DictionaryService {
             return Collections.emptyList();
         }
 
-        DictionaryQo qo = DictionaryQo.builder().parentId(parentDict.getDictId()).build();
+        DictionaryVo qo = DictionaryVo.builder().parentId(parentDict.getDictId()).build();
 
         return buildSelect(qo).list();
     }
@@ -206,7 +206,7 @@ public class DictionaryServiceImpl implements DictionaryService {
             return Collections.emptyList();
         }
 
-        DictionaryQo qo = DictionaryQo.builder().parentId(parentDict.getDictId()).build();
+        DictionaryVo qo = DictionaryVo.builder().parentId(parentDict.getDictId()).build();
 
         return buildSelect(qo).list();
     }

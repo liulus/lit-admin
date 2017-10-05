@@ -1,6 +1,7 @@
 package net.skeyurt.lit.user.entity;
 
 import lombok.Data;
+import net.skeyurt.lit.jdbc.annotation.Column;
 import net.skeyurt.lit.jdbc.annotation.GeneratedValue;
 import net.skeyurt.lit.jdbc.annotation.Id;
 import net.skeyurt.lit.jdbc.annotation.Table;
@@ -25,11 +26,22 @@ public class User implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userId;
 
+    private Long orgId;
+
     /** 用户编码 */
     private String userCode;
 
     /** 用户名 */
     private String userName;
+
+    /** 昵称 */
+    private String nickName;
+
+    /** 真实名称 */
+    private String realName;
+
+    /** 头像 */
+    private String avatar;
 
     /** 密码 */
     private String password;
@@ -46,12 +58,6 @@ public class User implements Serializable {
     /** 电话 */
     private String telephone;
 
-    /** 昵称 */
-    private String nickName;
-
-    /** 真实名称 */
-    private String realName;
-
     /** 身份证号 */
     private String idCardNum;
 
@@ -59,16 +65,20 @@ public class User implements Serializable {
     private String userType;
 
     /** 用户状态 */
-    private Integer userStatus;
+    private String userStatus;
 
     /** 是否锁定 */
+    @Column(name = "is_lock")
     private Boolean lock;
 
-    /** 是否启用 */
-    private Boolean enable;
+    /** 创建人 */
+    private String creator;
 
     /** 创建时间 */
-    private Date createTime;
+    private Date gmtCreate;
+
+    /** 上次登录时间 */
+    private Date gmtLastLogin;
 
 
 }

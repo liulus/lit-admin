@@ -1,7 +1,7 @@
 package net.skeyurt.lit.param.service;
 
 import net.skeyurt.lit.param.entity.Param;
-import net.skeyurt.lit.param.qo.ParamQo;
+import net.skeyurt.lit.param.vo.ParamVo;
 
 import java.util.List;
 
@@ -12,7 +12,7 @@ import java.util.List;
  */
 public interface ParamService {
 
-    List<Param> queryPageList(ParamQo qo);
+    List<Param> queryPageList(ParamVo qo);
 
     Param findById(Long id);
 

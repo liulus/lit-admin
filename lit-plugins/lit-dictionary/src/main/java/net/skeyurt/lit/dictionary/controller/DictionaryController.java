@@ -3,8 +3,9 @@ package net.skeyurt.lit.dictionary.controller;
 import lombok.extern.slf4j.Slf4j;
 import net.skeyurt.lit.commons.context.ResultConst;
 import net.skeyurt.lit.dictionary.entity.Dictionary;
-import net.skeyurt.lit.dictionary.qo.DictionaryQo;
 import net.skeyurt.lit.dictionary.service.DictionaryService;
+import net.skeyurt.lit.dictionary.vo.DictionaryVo;
+import net.skeyurt.lit.plugin.context.PluginConst;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,7 +20,7 @@ import java.util.List;
  * version $Id: DictionaryController.java, v 0.1 Exp $
  */
 @Controller
-@RequestMapping("/plugin/dictionary")
+@RequestMapping(PluginConst.URL_PREFIX + "/dictionary")
 @Slf4j
 public class DictionaryController {
 
@@ -27,7 +28,7 @@ public class DictionaryController {
     private DictionaryService dictionaryService;
 
     @RequestMapping({"/list", ""})
-    public String list(DictionaryQo qo, Model model) {
+    public String list(DictionaryVo qo, Model model) {
         List<Dictionary> dictionaries = dictionaryService.queryPageList(qo);
         model.addAttribute(ResultConst.RESULT, dictionaries);
 
@@ -35,7 +36,7 @@ public class DictionaryController {
     }
 
     @RequestMapping("/{parentId}")
-    public String childList(DictionaryQo qo, @PathVariable Long parentId, Model model) {
+    public String childList(DictionaryVo qo, @PathVariable Long parentId, Model model) {
 
         qo.setParentId(parentId);
         List<Dictionary> dictionaries = dictionaryService.queryPageList(qo);

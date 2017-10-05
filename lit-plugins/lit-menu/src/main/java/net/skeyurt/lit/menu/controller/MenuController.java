@@ -6,6 +6,7 @@ import net.skeyurt.lit.dictionary.tool.DictionaryTools;
 import net.skeyurt.lit.menu.context.MenuConst;
 import net.skeyurt.lit.menu.service.MenuService;
 import net.skeyurt.lit.menu.vo.MenuVo;
+import net.skeyurt.lit.plugin.context.PluginConst;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,7 +21,7 @@ import java.util.List;
  * version $Id: MenuController.java, v 0.1 Exp $
  */
 @Controller
-@RequestMapping("/plugin/menu")
+@RequestMapping(PluginConst.URL_PREFIX + "/menu")
 @Slf4j
 public class MenuController {
 

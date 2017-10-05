@@ -6,8 +6,8 @@ import net.skeyurt.lit.jdbc.JdbcTools;
 import net.skeyurt.lit.jdbc.enums.Logic;
 import net.skeyurt.lit.jdbc.sta.Select;
 import net.skeyurt.lit.param.entity.Param;
-import net.skeyurt.lit.param.qo.ParamQo;
 import net.skeyurt.lit.param.service.ParamService;
+import net.skeyurt.lit.param.vo.ParamVo;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -32,7 +32,7 @@ public class ParamServiceImpl implements ParamService {
 
 
     @Override
-    public List<Param> queryPageList(ParamQo qo) {
+    public List<Param> queryPageList(ParamVo qo) {
 
         Select<Param> select = jdbcTools.createSelect(Param.class);
 

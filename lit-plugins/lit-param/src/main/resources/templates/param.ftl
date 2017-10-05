@@ -30,7 +30,7 @@
             <div class="col-sm-12 col-md-9 form-group">
                 <div class="col-sm-8 text-right control-label">关键字:</div>
                 <div class="col-sm-16 ">
-                    <input name="keyWord" class="form-control input-sm" type="text" value="${paramQo.keyWord!}"
+                    <input name="keyWord" class="form-control input-sm" type="text" value="${paramVo.keyWord!}"
                            placeholder="请输入">
                 </div>
             </div>
@@ -39,8 +39,8 @@
                 <div class="col-sm-14 ">
                     <select name="system" class="form-control input-sm">
                         <option value=""></option>
-                        <option value="true" ${(paramQo.system!false)?string('selected', '')}>是</option>
-                        <option value="false" ${(paramQo.system!true)?string('', 'selected')}>否</option>
+                        <option value="true" ${(paramVo.system!false)?string('selected', '')}>是</option>
+                        <option value="false" ${(paramVo.system!true)?string('', 'selected')}>否</option>
                     </select>
                 </div>
             </div>

@@ -25,6 +25,15 @@ public class LoginUser implements Serializable {
     /** 用户名 */
     private String userName;
 
+    /** 昵称 */
+    private String nickName;
+
+    /** 真实名称 */
+    private String realName;
+
+    /** 头像 */
+    private String avatar;
+
     /** 密码 */
     private String password;
 
@@ -40,12 +49,6 @@ public class LoginUser implements Serializable {
     /** 电话 */
     private String telephone;
 
-    /** 昵称 */
-    private String nickName;
-
-    /** 真实名称 */
-    private String realName;
-
     /** 身份证号 */
     private String idCardNum;
 
@@ -53,15 +56,38 @@ public class LoginUser implements Serializable {
     private String userType;
 
     /** 用户状态 */
-    private Integer userStatus;
+    private String userStatus;
 
     /** 是否锁定 */
     private Boolean lock;
 
-    /** 是否启用 */
-    private Boolean enable;
+    /** 创建人 */
+    private String creator;
 
     /** 创建时间 */
-    private Date createTime;
+    private Date gmtCreate;
+
+    /** 上次登录时间 */
+    private Date gmtLastLogin;
+
+    private String orgId;
+
+    private String orgCode;
+
+    private String orgName;
+
+    private String orgType;
+
+    private Integer orgLevel;
+
+    private String shortName;
+
+    private String orgAddress;
+
+    private String serialNum;
+
+    public boolean hasOrg() {
+        return this.orgCode != null && !this.orgCode.isEmpty();
+    }
 
 }

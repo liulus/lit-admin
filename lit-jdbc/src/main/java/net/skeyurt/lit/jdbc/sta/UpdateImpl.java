@@ -97,6 +97,6 @@ class UpdateImpl extends AbstractCondition<Update> implements Update {
     @Override
     public int execute() {
         update.setWhere(where);
-        return (int) executor.execute(new StatementContext(update.toString(), params, StatementContext.StatementType.UPDATE));
+        return (int) executor.execute(new StatementContext(update.toString(), params, StatementContext.Type.UPDATE));
     }
 }

@@ -94,7 +94,7 @@ class InsertImpl extends AbstractStatement implements Insert {
         context.setPkColumn(tableInfo.getPkColumn());
         context.setSql(insert.toString());
         context.setParams(params);
-        context.setStatementType(StatementContext.StatementType.INSERT);
+        context.setStatementType(StatementContext.Type.INSERT);
 
         Object obj = executor.execute(context);
         Object id = context.isGenerateKeyByDb() ? obj : idValue;

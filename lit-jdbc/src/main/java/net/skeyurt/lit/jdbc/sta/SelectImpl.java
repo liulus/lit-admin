@@ -374,7 +374,7 @@ class SelectImpl<T> extends AbstractCondition<Select<T>> implements Select<T> {
         processSelect();
         plainSelect.setOrderByElements(null);
         plainSelect.setSelectItems(COUNT_FUNC_ITEM);
-        int count = (int) executor.execute(new StatementContext(select.toString(), params, StatementContext.StatementType.SELECT_SINGLE, int.class));
+        int count = (int) executor.execute(new StatementContext(select.toString(), params, StatementContext.Type.SELECT_SINGLE, int.class));
         plainSelect.setOrderByElements(orderBy);
         plainSelect.setSelectItems(selectItems);
         return count;
@@ -394,7 +394,7 @@ class SelectImpl<T> extends AbstractCondition<Select<T>> implements Select<T> {
         } else {
             sql = select.toString();
         }
-        return (E) executor.execute(new StatementContext(sql, params, StatementContext.StatementType.SELECT_SINGLE, clazz));
+        return (E) executor.execute(new StatementContext(entityClass, sql, params, StatementContext.Type.SELECT_SINGLE, clazz));
     }
 
     @Override
@@ -419,7 +419,7 @@ class SelectImpl<T> extends AbstractCondition<Select<T>> implements Select<T> {
             }
 
             String pageSql = pageHandler.getPageSql(dbName, select.toString(), pageSize, pageNum);
-            List execute = (List) executor.execute(new StatementContext(pageSql, params, StatementContext.StatementType.SELECT_LIST, clazz));
+            List execute = (List) executor.execute(new StatementContext(entityClass, pageSql, params, StatementContext.Type.SELECT_LIST, clazz));
 
             result.addAll(execute);
 
@@ -427,7 +427,7 @@ class SelectImpl<T> extends AbstractCondition<Select<T>> implements Select<T> {
         }
 
         processSelect();
-        return (List<E>) executor.execute(new StatementContext(select.toString(), params, StatementContext.StatementType.SELECT_LIST, clazz));
+        return (List<E>) executor.execute(new StatementContext(entityClass, select.toString(), params, StatementContext.Type.SELECT_LIST, clazz));
     }
 
     @Override

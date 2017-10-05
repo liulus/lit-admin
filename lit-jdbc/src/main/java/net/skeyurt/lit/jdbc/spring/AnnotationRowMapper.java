@@ -115,23 +115,7 @@ public class AnnotationRowMapper<T> implements RowMapper<T> {
 
         this.mappedClass = mappedClass;
         this.mappedFields = new HashMap<>();
-
-        Field[] fields = mappedClass.getDeclaredFields();
-        for (Field field : fields) {
-            if (field.isAnnotationPresent(Transient.class)) {
-                continue;
-            }
-            Column column = field.getAnnotation(Column.class);
-            PropertyDescriptor pd = BeanUtils.getPropertyDescriptor(mappedClass, field.getName());
-            if (pd != null && pd.getReadMethod() != null && pd.getWriteMethod() != null) {
-                String columnName = column != null ? column.name().toLowerCase() : NameUtils.getUnderLineName(field.getName());
-                mappedFields.put(columnName, pd);
-                String lowerPdName = pd.getName().toLowerCase();
-                if (!lowerPdName.equals(columnName)) {
-                    mappedFields.put(lowerPdName, pd);
-                }
-            }
-        }
+        addMappedField(mappedClass);
     }
 
 
@@ -219,6 +203,41 @@ public class AnnotationRowMapper<T> implements RowMapper<T> {
      */
     public static <T> AnnotationRowMapper<T> newInstance(Class<T> mappedClass) {
         return new AnnotationRowMapper<>(mappedClass);
+    }
+
+    /**
+     * 当 返回类型不是实体类时, 增加实体类上的映射关系
+     * @param clazz
+     */
+    public void addMappedField(Class<?> clazz) {
+
+        if (clazz == null) {
+            return;
+        }
+
+        Field[] fields = clazz.getDeclaredFields();
+        for (Field field : fields) {
+            if (field.isAnnotationPresent(Transient.class)) {
+                continue;
+            }
+            Column column = field.getAnnotation(Column.class);
+            PropertyDescriptor pd = BeanUtils.getPropertyDescriptor(clazz, field.getName());
+            if (pd != null && pd.getReadMethod() != null && pd.getWriteMethod() != null) {
+                String columnName = column != null ? column.name().toLowerCase() : NameUtils.getUnderLineName(field.getName());
+                if (mappedFields.get(columnName) == null) {
+                    mappedFields.put(columnName, pd);
+                }
+
+                String lowerPdName = pd.getName().toLowerCase();
+                if (!lowerPdName.equals(columnName)) {
+                    if (mappedFields.get(lowerPdName) == null) {
+                        mappedFields.put(lowerPdName, pd);
+                    }
+
+                }
+            }
+        }
+
     }
 
 }

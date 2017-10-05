@@ -29,7 +29,7 @@ public class StatementContext {
     /**
      * 语句操作类型
      */
-    private StatementType statementType;
+    private Type statementType;
 
     /**
      * sql语句
@@ -42,17 +42,30 @@ public class StatementContext {
     private List<Object> params;
 
     /**
+     * 主表对应的实体类
+     */
+    private Class<?> entityClass;
+
+    /**
      * 返回的类型
      */
     private Class<?> requireType;
 
-    public StatementContext(String sql, List<Object> params, StatementType type) {
+    public StatementContext(String sql, List<Object> params, Type type) {
         this.sql = sql;
         this.params = params;
         this.statementType = type;
     }
 
-    public StatementContext(String sql, List<Object> params, StatementType type, Class<?> requireType) {
+    public StatementContext(String sql, List<Object> params, Type type, Class<?> requireType) {
+        this.sql = sql;
+        this.params = params;
+        this.statementType = type;
+        this.requireType = requireType;
+    }
+
+    public StatementContext(Class<?> entityClass, String sql, List<Object> params, Type type, Class<?> requireType) {
+        this.entityClass = entityClass;
         this.sql = sql;
         this.params = params;
         this.statementType = type;
@@ -60,7 +73,7 @@ public class StatementContext {
     }
 
 
-    public enum StatementType {
+    public enum Type {
         INSERT,
         DELETE,
         UPDATE,

@@ -36,6 +36,6 @@ class DeleteImpl extends AbstractCondition<Delete> implements Delete {
     @Override
     public int execute() {
         delete.setWhere(where);
-        return (int) executor.execute(new StatementContext(delete.toString(), params, StatementContext.StatementType.DELETE));
+        return (int) executor.execute(new StatementContext(delete.toString(), params, StatementContext.Type.DELETE));
     }
 }

@@ -104,8 +104,9 @@ public class JdbcTemplateExecutor extends AbstractStatementExecutor {
                 return jdbcTemplate.queryForList(sql, args, context.getRequireType());
             }
         }
-
-        return jdbcTemplate.query(sql, args, AnnotationRowMapper.newInstance(context.getRequireType()));
+        AnnotationRowMapper<?> rowMapper = AnnotationRowMapper.newInstance(context.getRequireType());
+        rowMapper.addMappedField(context.getEntityClass());
+        return jdbcTemplate.query(sql, args, rowMapper);
     }
 
 }

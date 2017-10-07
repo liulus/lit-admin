@@ -30,9 +30,9 @@ public class JdbcToolsConfig {
         templateTools.setDbName(environment.getProperty("lit.jdbc.dbName"));
 
         Map<String, JdbcOperations> jdbcOperationsBeans = context.getBeansOfType(JdbcOperations.class);
-        if (jdbcOperationsBeans == null || jdbcOperationsBeans.size() == 0) {
+        if (jdbcOperationsBeans == null || jdbcOperationsBeans.isEmpty()) {
             Map<String, DataSource> dataSourceBeans = context.getBeansOfType(DataSource.class);
-            if (dataSourceBeans == null || dataSourceBeans.size() == 0) {
+            if (dataSourceBeans == null || dataSourceBeans.isEmpty()) {
                 throw new RuntimeException("to enable JdbcTools, need config DataSource or JdbcOperations bean...");
             }
             String dataSourceBeanName = environment.getProperty("lit.jdbc.dataSource");

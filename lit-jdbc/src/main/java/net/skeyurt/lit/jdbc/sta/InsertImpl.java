@@ -13,7 +13,10 @@ import net.skeyurt.lit.jdbc.generator.SequenceGenerator;
 import net.skeyurt.lit.jdbc.model.StatementContext;
 
 import java.io.Serializable;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * User : liulu
@@ -110,13 +113,13 @@ class InsertImpl extends AbstractStatement implements Insert {
     /**
      * 主键生成器实例的缓存
      */
-    private static final Map<String, KeyGenerator> KEY_GENERATOR_CACHE = Collections.synchronizedMap(new HashMap<String, KeyGenerator>());
+    private static final Map<String, KeyGenerator> KEY_GENERATOR_CACHE = new ConcurrentHashMap<>();
 
     private static final SequenceGenerator SEQUENCE_GENERATOR = new SequenceGenerator();
 
     private KeyGenerator getKeyGenerator() {
 
-        if (Objects.equals(GenerationType.SEQUENCE, tableInfo.getGenerationType())) {
+        if (GenerationType.SEQUENCE == tableInfo.getGenerationType()) {
             return SEQUENCE_GENERATOR;
         }
 

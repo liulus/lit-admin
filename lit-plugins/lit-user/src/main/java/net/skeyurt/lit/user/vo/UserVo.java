@@ -74,6 +74,8 @@ public class UserVo extends Pager{
 
     private String orgCode;
 
+    private String orgName;
+
     private String serialNum;
 
 

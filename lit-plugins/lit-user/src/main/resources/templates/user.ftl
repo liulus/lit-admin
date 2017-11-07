@@ -27,23 +27,23 @@
     <!-- 查询 -->
     <div class="row">
         <form class="form-horizontal " action="" method="post" id="query-form">
-            <div class="col-sm-12 col-md-9 form-group">
+            <div class="col-sm-12 col-md-8 form-group">
                 <div class="col-sm-8 text-right control-label">关键字:</div>
                 <div class="col-sm-16 ">
                     <input name="keyWord" class="form-control input-sm" type="text" value="${userVo.keyWord!}"
                            placeholder="请输入">
                 </div>
             </div>
-            <div class="col-sm-12 col-md-9 form-group">
+            <div class="col-sm-12 col-md-8 form-group">
                 <div class="col-sm-8 text-right control-label">用户:</div>
                 <div class="col-sm-16 ">
                     <input name="userId" class="form-control input-sm" type="text" value="${userVo.userId!}"
                            placeholder="请输入">
                 </div>
             </div>
-            <div class="col-sm-12 col-md-10 form-group">
-                <div class="col-sm-10 text-right control-label">用户类型:</div>
-                <div class="col-sm-14 ">
+            <div class="col-sm-12 col-md-8 form-group">
+                <div class="col-sm-8 text-right control-label">用户类型:</div>
+                <div class="col-sm-16 ">
                     <select name="userType" class="form-control input-sm">
                         <option value=""></option>
                         <#--<option value="true" ${(userVo.system!false)?string('selected', '')}>是</option>-->
@@ -51,7 +51,7 @@
                     </select>
                 </div>
             </div>
-            <div class="col-sm-24 col-md-5 text-center form-group">
+            <div class="col-sm-12 col-md-24 text-center form-group">
                 <button id="data-query" class="btn btn-sm btn-primary">&nbsp;&nbsp;查询&nbsp;&nbsp;</button>
             </div>
         </form>
@@ -127,30 +127,66 @@
         <form id="form-edit" class="form-horizontal" action="">
             <input type="hidden" name="userId" value="${r'${userId}'}">
             <div class="form-group">
-                <span class="control-label col-sm-6"><i class="text-danger">*&nbsp;</i>参数码 :</span>
+                <span class="control-label col-sm-6"><i class="text-danger">*&nbsp;</i>用户编号 :</span>
                 <div class="col-sm-16">
                     <input type="text" name="userCode" value="${r'${userCode}'}" class="form-control">
                 </div>
             </div>
             <div class="form-group">
-                <span class="control-label col-sm-6"><i class="text-danger">*&nbsp;</i>参数值 :</span>
+                <span class="control-label col-sm-6"><i class="text-danger">*&nbsp;</i>用户名 :</span>
                 <div class="col-sm-16">
-                    <input type="text" name="userValue" value="${r'${userValue}'}" class="form-control">
+                    <input type="text" name="userName" value="${r'${userName}'}" class="form-control">
                 </div>
             </div>
             <div class="form-group">
-                <span class="control-label col-sm-6"><i class="text-danger">*&nbsp;</i>启动加载 :</span>
+                <span class="control-label col-sm-6"><i class="text-danger">*&nbsp;</i>昵称 :</span>
                 <div class="col-sm-16">
-                    <select name="load" class="form-control">
-                        <option value="true" {@if load} selected {@/if}>是 </option>
-                        <option value="false" {@if !load} selected {@/if}>否 </option>
+                    <input type="text" name="nickName" value="${r'${nickName}'}" class="form-control">
+                </div>
+            </div>
+            <div class="form-group">
+                <span class="control-label col-sm-6"><i class="text-danger">*&nbsp;</i>头像 :</span>
+                <div class="col-sm-16">
+                    <input type="text" name="avatar" value="${r'${avatar}'}" class="form-control">
+                </div>
+            </div>
+            <div class="form-group">
+                <span class="control-label col-sm-6"><i class="text-danger">*&nbsp;</i>性别 :</span>
+                <div class="col-sm-16">
+                    <select name="sex" class="form-control">
+                        <option value="true" {@if sex} selected {@/if}>男 </option>
+                        <option value="false" {@if !sex} selected {@/if}>女 </option>
                     </select>
                 </div>
             </div>
             <div class="form-group">
-                <span class="control-label col-sm-6"><i class="text-danger">*&nbsp;</i>备注 :</span>
+                <span class="control-label col-sm-6"><i class="text-danger">*&nbsp;</i>手机号 :</span>
                 <div class="col-sm-16">
-                    <textarea name="memo" class="form-control" rows="3">${r'${memo}'}</textarea>
+                    <input type="text" name="mobilePhone" value="${r'${mobilePhone}'}" class="form-control">
+                </div>
+            </div>
+            <div class="form-group">
+                <span class="control-label col-sm-6"><i class="text-danger">*&nbsp;</i>电话 :</span>
+                <div class="col-sm-16">
+                    <input type="text" name="telephone" value="${r'${telephone}'}" class="form-control">
+                </div>
+            </div>
+            <div class="form-group">
+                <span class="control-label col-sm-6"><i class="text-danger">*&nbsp;</i>邮箱 :</span>
+                <div class="col-sm-16">
+                    <input type="text" name="email" value="${r'${email}'}" class="form-control">
+                </div>
+            </div>
+            <div class="form-group">
+                <span class="control-label col-sm-6"><i class="text-danger">*&nbsp;</i>身份证号 :</span>
+                <div class="col-sm-16">
+                    <input type="text" name="idCardNum" value="${r'${idCardNum}'}" class="form-control">
+                </div>
+            </div>
+            <div class="form-group">
+                <span class="control-label col-sm-6"><i class="text-danger">*&nbsp;</i>真实姓名 :</span>
+                <div class="col-sm-16">
+                    <input type="text" name="realName" value="${r'${realName}'}" class="form-control">
                 </div>
             </div>
         </form>

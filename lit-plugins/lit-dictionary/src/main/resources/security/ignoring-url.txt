@@ -1,0 +1,2 @@
+/plugin/dictionary
+/plugin/dictionary/list

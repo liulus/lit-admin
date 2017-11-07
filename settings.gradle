@@ -13,4 +13,6 @@ include 'lit-plugins:lit-user'
 findProject(':lit-plugins:lit-user')?.name = 'lit-user'
 include 'lit-plugins:lit-param'
 findProject(':lit-plugins:lit-param')?.name = 'lit-param'
+include 'lit-plugins:lit-security'
+findProject(':lit-plugins:lit-security')?.name = 'lit-security'
 

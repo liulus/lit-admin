@@ -15,6 +15,7 @@ dependencies {
     compile project(':lit-plugins:lit-param')
     compile project(':lit-plugins:lit-dictionary')
     compile project(':lit-plugins:lit-user')
+    compile project(':lit-plugins:lit-security')
 
     compile(libs.spring_boot_web) {
         exclude module: 'spring-boot-starter-logging'

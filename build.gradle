@@ -7,7 +7,7 @@ ext {
     velocityVersion = '1.7'
     freemarkerVersion = '2.3.23'
     velocityToolsVersion = '2.0'
-    springVersion = '4.3.7.RELEASE'
+    springVersion = '4.3.9.RELEASE'
     springBootVersion = '1.5.2.RELEASE'
 
     bootstrapVersion = '3.3.7'
@@ -49,6 +49,8 @@ ext {
             spring_aop            : "org.springframework:spring-aop:${springVersion}",
             spring_aspects        : "org.springframework:spring-aspects:${springVersion}",
             spring_webmvc         : "org.springframework:spring-webmvc:${springVersion}",
+            spring_security_web   : "org.springframework.security:spring-security-web:4.2.3.RELEASE",
+            spring_security_config: "org.springframework.security:spring-security-config:4.2.3.RELEASE",
             spring_test           : "org.springframework:spring-test:${springVersion}",
             spring_boot_web       : "org.springframework.boot:spring-boot-starter-web:${springBootVersion}",
             spring_boot_tomcat    : "org.springframework.boot:spring-boot-starter-tomcat:${springBootVersion}",

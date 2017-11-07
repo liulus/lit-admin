@@ -41,14 +41,15 @@ public class UserController {
 
     @GetMapping("/login")
     public String login() {
-
-        return "default_login";
+        return "default-login";
     }
 
     @PostMapping("/login")
-    public String doLogin() {
+    public String doLogin(String userName, String password, Model model) {
 
-        return "";
+        System.out.println(userName + "--" + password);
+//        userService.login
+        return "redirect:/plugin/user";
     }
 
 
@@ -58,6 +59,31 @@ public class UserController {
         List<UserVo> userVos = userService.queryPageList(vo);
         model.addAttribute(ResultConst.RESULT, userVos);
         return "user";
+    }
+
+    @RequestMapping("get")
+    public String get(Long id, Model model) {
+        UserVo userVo = userService.findById(id);
+        model.addAttribute(ResultConst.RESULT, userVo);
+        return "";
+    }
+
+    @RequestMapping("/add")
+    public String add(UserVo userVo, Model model) {
+        userService.insert(userVo);
+        return "";
+    }
+
+    @RequestMapping("/update")
+    public String update(UserVo userVo) {
+        userService.update(userVo);
+        return "";
+    }
+
+    @RequestMapping("/delete")
+    public String delete(Long... ids) {
+        userService.delete(ids);
+        return "";
     }
 
 

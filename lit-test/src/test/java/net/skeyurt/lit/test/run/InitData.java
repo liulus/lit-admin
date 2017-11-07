@@ -5,6 +5,7 @@ import net.skeyurt.lit.dictionary.service.DictionaryService;
 import net.skeyurt.lit.jdbc.JdbcTools;
 import net.skeyurt.lit.jdbc.enums.Logic;
 import net.skeyurt.lit.test.base.BaseTest;
+import net.skeyurt.lit.test.bean.District;
 import net.skeyurt.lit.test.bean.Goods;
 import net.skeyurt.lit.test.bean.GoodsVo;
 import net.skeyurt.lit.test.bean.Supplier;
@@ -35,6 +36,76 @@ public class InitData extends BaseTest {
     @Test
     public void test() {
         System.out.println("sss");
+    }
+
+
+    // province, city，district
+    @Test
+    @Transactional
+    @Rollback(value = false)
+    public void testDis() throws Exception {
+
+        InputStream inputStream = getClass().getResourceAsStream("/dis.txt");
+
+        List<String> strings = IOUtils.readLines(inputStream, "UTF-8");
+
+        long provinceId = 0, cityId = 0;
+
+        int pCount = 1;
+        int cCount = 1;
+        int dCount = 1;
+        for (String line : strings) {
+            String[] split = line.split("##");
+            String code = split[0].trim();
+            String name = split[1].trim();
+
+            int type = getType(code);
+
+            District district = new District();
+            district.setCode(code);
+            district.setName(name);
+
+            if (type >= 4) {
+                district.setOrderNum(pCount++);
+                district.setType("province");
+                jdbcTools.insert(district);
+                provinceId = district.getId();
+                cCount = 1;
+            } else if (type >= 2) {
+                district.setOrderNum(cCount++);
+                district.setType("city");
+                district.setParentId(provinceId);
+                jdbcTools.insert(district);
+                cityId = district.getId();
+                dCount = 1;
+            } else if (type >= 0) {
+                if (name.equals("市辖区")) {
+                    continue;
+                }
+                district.setOrderNum(dCount++);
+                district.setType("district");
+                district.setParentId(cityId);
+                jdbcTools.insert(district);
+            }
+
+        }
+
+
+
+    }
+
+    private int getType(String code) {
+
+        StringBuilder sb = new StringBuilder(code).reverse();
+
+        int count = 0;
+        for (int i = 0; i < sb.length(); i++) {
+            if (sb.charAt(i) != '0') {
+                break;
+            }
+            count ++;
+        }
+        return count;
     }
 
     @Test

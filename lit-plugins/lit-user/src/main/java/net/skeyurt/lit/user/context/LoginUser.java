@@ -70,7 +70,7 @@ public class LoginUser implements Serializable {
     /** 上次登录时间 */
     private Date gmtLastLogin;
 
-    private String orgId;
+    private Long orgId;
 
     private String orgCode;
 

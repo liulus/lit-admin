@@ -169,8 +169,8 @@ public class DictionaryServiceImpl implements DictionaryService {
 
         Dictionary result = new Dictionary();
 
-        for (int i = 0; i < keys.length; i++) {
-            result = findByKeyAndParentId(keys[i], result.getParentId());
+        for (String key : keys) {
+            result = findByKeyAndParentId(key, result.getDictId());
         }
         return result;
     }

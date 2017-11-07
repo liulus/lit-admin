@@ -21,6 +21,8 @@ public class UserConst {
     // 超级管理员
     public static final String ADMIN = "admin";
 
+    public static final String PWD_PREFIX = "@$#l#y!^";
+
     public static final String ORGANIZATION_TYPE = "organization_type";
 
 

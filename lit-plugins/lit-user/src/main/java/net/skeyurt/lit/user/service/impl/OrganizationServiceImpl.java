@@ -1,7 +1,7 @@
 package net.skeyurt.lit.user.service.impl;
 
 import com.google.common.base.Strings;
-import net.skeyurt.lit.commons.exception.AppCheckedException;
+import net.skeyurt.lit.commons.exception.AppException;
 import net.skeyurt.lit.jdbc.JdbcTools;
 import net.skeyurt.lit.jdbc.enums.Logic;
 import net.skeyurt.lit.jdbc.sta.Select;
@@ -53,7 +53,7 @@ public class OrganizationServiceImpl implements OrganizationService {
 
         Organization oldOrg = findByCode(organization.getOrgCode());
         if (oldOrg != null) {
-            throw new AppCheckedException("机构号已经存在!");
+            throw new AppException("机构号已经存在!");
         }
 
         // 处理 orgLevel
@@ -62,7 +62,7 @@ public class OrganizationServiceImpl implements OrganizationService {
         } else {
             Organization parentOrg = findById(organization.getParentId());
             if (parentOrg == null) {
-                throw new AppCheckedException("父机构信息丢失!");
+                throw new AppException("父机构信息丢失!");
             }
             parentSerialNum = parentOrg.getSerialNum();
             organization.setOrgLevel(parentOrg.getOrgLevel() + 1);
@@ -86,7 +86,7 @@ public class OrganizationServiceImpl implements OrganizationService {
         if (!Objects.equals(oldOrg.getOrgCode(), organization.getOrgCode())) {
             Organization checkOrg = findByCode(organization.getOrgCode());
             if (checkOrg != null) {
-                throw new AppCheckedException("机构号已经存在!");
+                throw new AppException("机构号已经存在!");
             }
         }
         // 不允许更新的属性
@@ -109,7 +109,7 @@ public class OrganizationServiceImpl implements OrganizationService {
             }
             int count = buildSelect(OrganizationVo.builder().parentId(organization.getOrgId()).build()).count();
             if (count > 0) {
-                throw new AppCheckedException(String.format("请先删除 %s 的子机构数据 !", organization.getOrgName()));
+                throw new AppException(String.format("请先删除 %s 的子机构数据 !", organization.getOrgName()));
             }
             validIds.add(id);
         }

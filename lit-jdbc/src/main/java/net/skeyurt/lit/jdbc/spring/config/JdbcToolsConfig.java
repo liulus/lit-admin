@@ -1,6 +1,6 @@
 package net.skeyurt.lit.jdbc.spring.config;
 
-import net.skeyurt.lit.commons.condition.ConditionalOnMissingBean;
+import net.skeyurt.lit.commons.spring.condition.ConditionalOnMissingBean;
 import net.skeyurt.lit.jdbc.JdbcTools;
 import net.skeyurt.lit.jdbc.spring.JdbcTemplateToolsImpl;
 import org.springframework.context.ApplicationContext;

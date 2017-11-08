@@ -1,6 +1,6 @@
 package net.skeyurt.lit.web.service;
 
-import net.skeyurt.lit.commons.exception.AppCheckedException;
+import net.skeyurt.lit.commons.exception.AppException;
 import org.springframework.stereotype.Service;
 
 //import net.skeyurt.lit.web.entity.Goods;
@@ -26,7 +26,7 @@ public class GoodsService {
 
     public void testEx() {
 
-        throw new AppCheckedException("进错方法了");
+        throw new AppException("进错方法了");
 
 //        throw new AppUnCheckedException();
 //        int i = 5 / 0;

@@ -1,5 +1,5 @@
 /*
- * Copyright 2012-2015 the original author or authors.
+ * Copyright 2012-2016 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-package net.skeyurt.lit.commons.condition;
+package net.skeyurt.lit.commons.spring.condition;
 
 import org.springframework.context.annotation.Conditional;
 
 import java.lang.annotation.*;
 
 /**
- * {@link Conditional} that only matches when the specified resources are on the
+ * {@link Conditional} that only matches when the specified classes are not on the
  * classpath.
  *
  * @author Dave Syer
@@ -29,13 +29,13 @@ import java.lang.annotation.*;
 @Target({ ElementType.TYPE, ElementType.METHOD })
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-@Conditional(OnResourceCondition.class)
-public @interface ConditionalOnResource {
+@Conditional(OnClassCondition.class)
+public @interface ConditionalOnMissingClass {
 
 	/**
-	 * The resources that must be present.
-	 * @return the resource paths that must be present.
+	 * The names of the classes that must not be present.
+	 * @return the names of the classes that must not be present
 	 */
-	String[] resources() default {};
+	String[] value() default {};
 
 }

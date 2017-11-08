@@ -2,7 +2,7 @@ package net.skeyurt.lit.plugin.context;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import net.skeyurt.lit.commons.condition.ConditionalOnClass;
+import net.skeyurt.lit.commons.spring.condition.ConditionalOnClass;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.MediaType;

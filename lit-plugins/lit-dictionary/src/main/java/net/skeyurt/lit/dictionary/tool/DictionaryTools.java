@@ -1,6 +1,6 @@
 package net.skeyurt.lit.dictionary.tool;
 
-import net.skeyurt.lit.commons.context.SpringContextUtils;
+import net.skeyurt.lit.commons.spring.context.SpringContextUtils;
 import net.skeyurt.lit.dictionary.entity.Dictionary;
 import net.skeyurt.lit.dictionary.service.DictionaryService;
 

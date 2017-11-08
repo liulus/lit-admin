@@ -1,8 +1,6 @@
-subprojects{
+subprojects {
     dependencies {
-        compile project(':lit-plugin-engine'),
-                project(':lit-jdbc')
-
+        compile project(':lit-plugin-engine')
 
     }
 }

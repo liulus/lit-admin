@@ -77,9 +77,9 @@ public class AppCheckedExceptionHandler {
             }
             AppExceptionTransactionAspectSupport.rollBack();
 
-            if (throwable instanceof AppCheckedException) {
+            if (throwable instanceof AppException) {
                 log.warn("checked exception: [method={}#{}], errorCode={} errorMsg={}], [args={}]",
-                        targetClass, targetMethod, ((AppCheckedException) throwable).getErrorCode(), throwable.getMessage(), argsToString(pjp));
+                        targetClass, targetMethod, ((AppException) throwable).getErrorCode(), throwable.getMessage(), argsToString(pjp));
             } else {
                 RunResultHolder.addError("系统未知异常");
                 log.warn(String.format("unchecked exception: [method=%s#%s], [errorMsg=%s], [args=%s]",

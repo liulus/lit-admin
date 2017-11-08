@@ -1,7 +1,7 @@
 package net.skeyurt.lit.user.util;
 
 import com.google.common.base.Strings;
-import net.skeyurt.lit.commons.util.WebUtils;
+import net.skeyurt.lit.commons.spring.web.WebUtils;
 import net.skeyurt.lit.user.context.LoginUser;
 import net.skeyurt.lit.user.context.UserConst;
 

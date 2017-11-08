@@ -1,4 +1,4 @@
-package net.skeyurt.lit.commons.context;
+package net.skeyurt.lit.commons.spring.context;
 
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;

@@ -3,7 +3,7 @@ package net.skeyurt.lit.menu.event;
 import com.google.common.eventbus.Subscribe;
 import net.skeyurt.lit.commons.event.AppStartedEvent;
 import net.skeyurt.lit.commons.event.EventComponent;
-import net.skeyurt.lit.commons.util.WebUtils;
+import net.skeyurt.lit.commons.spring.web.WebUtils;
 import net.skeyurt.lit.menu.context.MenuConst;
 import net.skeyurt.lit.menu.tool.MenuTools;
 import net.skeyurt.lit.menu.vo.MenuVo;

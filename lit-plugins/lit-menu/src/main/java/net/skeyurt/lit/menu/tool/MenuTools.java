@@ -1,6 +1,6 @@
 package net.skeyurt.lit.menu.tool;
 
-import net.skeyurt.lit.commons.context.SpringContextUtils;
+import net.skeyurt.lit.commons.spring.context.SpringContextUtils;
 import net.skeyurt.lit.menu.service.MenuService;
 import net.skeyurt.lit.menu.vo.MenuVo;
 

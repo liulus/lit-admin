@@ -13,7 +13,7 @@ public class RunResultHolder {
 
     private static ThreadLocal<RunResult> RESULT_CONTEXT = new ThreadLocal<>();
 
-    public static void addError(AppCheckedException checkedException) {
+    public static void addError(AppException checkedException) {
         add(false, checkedException.getErrorCode(), checkedException.getErrorMsg());
     }
 

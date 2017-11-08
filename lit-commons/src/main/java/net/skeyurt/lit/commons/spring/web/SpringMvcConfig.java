@@ -1,7 +1,6 @@
-package net.skeyurt.lit.commons.context;
+package net.skeyurt.lit.commons.spring.web;
 
-import net.skeyurt.lit.commons.condition.ConditionalOnClass;
-import net.skeyurt.lit.commons.mvc.ModelResultHandlerInterceptor;
+import net.skeyurt.lit.commons.spring.condition.ConditionalOnClass;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.DispatcherServlet;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;

@@ -55,8 +55,8 @@ public class ExceptionAdvice {
     @ExceptionHandler(Exception.class)
     public String exception(Model model, HttpServletRequest request, HttpServletResponse response, Exception ex) throws IOException {
         model.addAttribute(ResultConst.SUCCESS, false);
-        if (ex instanceof AppCheckedException) {
-            AppCheckedException checkedException = (AppCheckedException) ex;
+        if (ex instanceof AppException) {
+            AppException checkedException = (AppException) ex;
             model.addAttribute(ResultConst.CODE, checkedException.getErrorCode());
             model.addAttribute(ResultConst.MASSAGE, checkedException.getErrorMsg());
 
@@ -78,7 +78,7 @@ public class ExceptionAdvice {
     }
 
     private void handlerResponseStatus(HttpServletResponse response, Exception ex) {
-        if (ex instanceof AppCheckedException) {
+        if (ex instanceof AppException) {
             response.setStatus(HttpServletResponse.SC_OK);
         } else if (ex instanceof HttpRequestMethodNotSupportedException) {
             String[] supportedMethods = ((HttpRequestMethodNotSupportedException) ex).getSupportedMethods();

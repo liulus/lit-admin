@@ -63,7 +63,7 @@ ext {
 }
 
 allprojects {
-    group = 'net.skeyurt.lit'
+    group = 'com.github.liulus'
     version = '1.0.0-SNAPSHOT'
 
     apply plugin: 'java'

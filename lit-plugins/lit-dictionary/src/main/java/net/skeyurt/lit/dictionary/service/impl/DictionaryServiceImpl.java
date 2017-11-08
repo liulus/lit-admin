@@ -1,7 +1,7 @@
 package net.skeyurt.lit.dictionary.service.impl;
 
 import com.google.common.base.Strings;
-import net.skeyurt.lit.commons.exception.AppCheckedException;
+import net.skeyurt.lit.commons.exception.AppException;
 import net.skeyurt.lit.dictionary.entity.Dictionary;
 import net.skeyurt.lit.dictionary.service.DictionaryService;
 import net.skeyurt.lit.dictionary.vo.DictionaryVo;
@@ -65,7 +65,7 @@ public class DictionaryServiceImpl implements DictionaryService {
     public void insert(Dictionary dictionary) {
         Dictionary dict = findByKeyAndParentId(dictionary.getDictKey(), dictionary.getParentId());
         if (dict != null) {
-            throw new AppCheckedException("字典Key已经存在!");
+            throw new AppException("字典Key已经存在!");
         }
 
         if (dictionary.getParentId() == null) {
@@ -73,7 +73,7 @@ public class DictionaryServiceImpl implements DictionaryService {
         } else {
             Dictionary parentDict = jdbcTools.get(Dictionary.class, dictionary.getParentId());
             if (parentDict == null) {
-                throw new AppCheckedException("父字典信息丢失!");
+                throw new AppException("父字典信息丢失!");
             }
             dictionary.setDictLevel(parentDict.getDictLevel() + 1);
         }
@@ -98,7 +98,7 @@ public class DictionaryServiceImpl implements DictionaryService {
         if (!Objects.equals(dictionary.getDictKey(), oldDict.getDictKey())) {
             Dictionary dict = findByKeyAndParentId(dictionary.getDictKey(), dictionary.getParentId());
             if (dict != null) {
-                throw new AppCheckedException("字典Key已经存在!");
+                throw new AppException("字典Key已经存在!");
             }
         }
 
@@ -134,13 +134,13 @@ public class DictionaryServiceImpl implements DictionaryService {
                 continue;
             }
             if (dictionary.getSystem()) {
-                throw new AppCheckedException(String.format("%s 是系统级字典, 不允许删除 !", dictionary.getDictKey()));
+                throw new AppException(String.format("%s 是系统级字典, 不允许删除 !", dictionary.getDictKey()));
             }
             int childDict = jdbcTools.createSelect(Dictionary.class)
                     .where("parentId", id)
                     .count();
             if (childDict > 0) {
-                throw new AppCheckedException(String.format("请先删除 %s 的子字典数据 !", dictionary.getDictKey()));
+                throw new AppException(String.format("请先删除 %s 的子字典数据 !", dictionary.getDictKey()));
             }
             validIds.add(id);
         }

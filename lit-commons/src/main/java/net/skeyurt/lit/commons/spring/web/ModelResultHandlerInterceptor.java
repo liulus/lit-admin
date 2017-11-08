@@ -1,4 +1,4 @@
-package net.skeyurt.lit.commons.mvc;
+package net.skeyurt.lit.commons.spring.web;
 
 import net.skeyurt.lit.commons.context.ResultConst;
 import net.skeyurt.lit.commons.exception.RunResultHolder;

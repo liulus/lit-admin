@@ -1,6 +1,6 @@
-package net.skeyurt.lit.commons.util;
+package net.skeyurt.lit.commons.spring.web;
 
-import net.skeyurt.lit.commons.context.SpringContextUtils;
+import net.skeyurt.lit.commons.spring.context.SpringContextUtils;
 import org.springframework.context.ApplicationContext;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.request.RequestContextHolder;

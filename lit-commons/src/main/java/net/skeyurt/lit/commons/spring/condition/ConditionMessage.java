@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package net.skeyurt.lit.commons.condition;
+package net.skeyurt.lit.commons.spring.condition;
 
 import org.springframework.util.Assert;
 import org.springframework.util.ClassUtils;

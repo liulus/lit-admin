@@ -1,7 +1,7 @@
 package net.skeyurt.lit.param.service.impl;
 
 import com.google.common.base.Strings;
-import net.skeyurt.lit.commons.exception.AppCheckedException;
+import net.skeyurt.lit.commons.exception.AppException;
 import net.skeyurt.lit.jdbc.JdbcTools;
 import net.skeyurt.lit.jdbc.enums.Logic;
 import net.skeyurt.lit.jdbc.sta.Select;
@@ -69,7 +69,7 @@ public class ParamServiceImpl implements ParamService {
         Param oldParam = findByCode(param.getParamCode());
 
         if (oldParam != null) {
-            throw new AppCheckedException("参数 code 已经存在!");
+            throw new AppException("参数 code 已经存在!");
         }
 
         jdbcTools.insert(param);
@@ -82,7 +82,7 @@ public class ParamServiceImpl implements ParamService {
         if (!Objects.equals(param.getParamCode(), oldParam.getParamCode())) {
             Param exist = findByCode(param.getParamCode());
             if (exist != null){
-                throw new AppCheckedException("参数 code 已经存在!");
+                throw new AppException("参数 code 已经存在!");
             }
         }
         jdbcTools.update(param);
@@ -100,7 +100,7 @@ public class ParamServiceImpl implements ParamService {
                 continue;
             }
             if (param.getSystem()) {
-                throw new AppCheckedException(String.format("%s 是系统级字典, 不允许删除 !", param.getParamCode()));
+                throw new AppException(String.format("%s 是系统级字典, 不允许删除 !", param.getParamCode()));
             }
             validIds.add(id);
         }

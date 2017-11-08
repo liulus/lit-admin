@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-package net.skeyurt.lit.commons.condition;
+package net.skeyurt.lit.commons.spring.condition;
 
-import net.skeyurt.lit.commons.condition.ConditionMessage.Style;
+import net.skeyurt.lit.commons.spring.condition.ConditionMessage.Style;
 import org.springframework.context.annotation.Condition;
 import org.springframework.context.annotation.ConditionContext;
 import org.springframework.core.Ordered;

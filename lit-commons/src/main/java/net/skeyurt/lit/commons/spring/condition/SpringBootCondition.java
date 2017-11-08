@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package net.skeyurt.lit.commons.condition;
+package net.skeyurt.lit.commons.spring.condition;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Condition;

@@ -2,7 +2,7 @@ package net.skeyurt.lit.user.service.impl;
 
 import com.google.common.base.Strings;
 import net.skeyurt.lit.commons.bean.BeanUtils;
-import net.skeyurt.lit.commons.exception.AppCheckedException;
+import net.skeyurt.lit.commons.exception.AppException;
 import net.skeyurt.lit.jdbc.JdbcTools;
 import net.skeyurt.lit.jdbc.enums.JoinType;
 import net.skeyurt.lit.jdbc.enums.Logic;
@@ -95,7 +95,7 @@ public class UserServiceImpl implements UserService {
         }
         int count = jdbcTools.createSelect(User.class).where("userName", userName).count();
         if (count>=1) {
-            throw new AppCheckedException("改用户名被使用 !");
+            throw new AppException("改用户名被使用 !");
         }
     }
 
@@ -105,7 +105,7 @@ public class UserServiceImpl implements UserService {
         }
         int count = jdbcTools.createSelect(User.class).where("email", email).count();
         if (count>=1) {
-            throw new AppCheckedException("改邮箱已被使用 !");
+            throw new AppException("改邮箱已被使用 !");
         }
     }
 
@@ -115,7 +115,7 @@ public class UserServiceImpl implements UserService {
         }
         int count = jdbcTools.createSelect(User.class).where("mobilePhone", mobilePhone).count();
         if (count>=1) {
-            throw new AppCheckedException("改手机号已被使用 !");
+            throw new AppException("改手机号已被使用 !");
         }
     }
 

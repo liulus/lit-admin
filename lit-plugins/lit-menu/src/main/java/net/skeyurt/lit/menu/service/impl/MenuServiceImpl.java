@@ -6,7 +6,7 @@ import com.google.common.collect.Maps;
 import net.skeyurt.lit.commons.bean.BeanUtils;
 import net.skeyurt.lit.commons.bean.ConvertCallBack;
 import net.skeyurt.lit.commons.event.Event;
-import net.skeyurt.lit.commons.exception.AppCheckedException;
+import net.skeyurt.lit.commons.exception.AppException;
 import net.skeyurt.lit.dictionary.entity.Dictionary;
 import net.skeyurt.lit.dictionary.tool.DictionaryTools;
 import net.skeyurt.lit.jdbc.JdbcTools;
@@ -85,7 +85,7 @@ public class MenuServiceImpl implements MenuService {
 
         Menu oldMenu = findByCodeAndParentId(vo.getMenuCode(), vo.getParentId());
         if (oldMenu != null) {
-            throw new AppCheckedException("菜单编码已经存在!");
+            throw new AppException("菜单编码已经存在!");
         }
 
         Menu menu = BeanUtils.convert(new Menu(), vo);
@@ -108,7 +108,7 @@ public class MenuServiceImpl implements MenuService {
         if (!Objects.equals(oldMenu.getMenuCode(), vo.getMenuCode())) {
             Menu menu = findByCodeAndParentId(vo.getMenuCode(), vo.getParentId());
             if (menu != null) {
-                throw new AppCheckedException("菜单编码已经存在!");
+                throw new AppException("菜单编码已经存在!");
             }
         }
 
@@ -136,7 +136,7 @@ public class MenuServiceImpl implements MenuService {
             }
             int count = buildSelect(MenuVo.builder().parentId(menuVo.getMenuId()).build()).count();
             if (count > 0) {
-                throw new AppCheckedException(String.format("请先删除 %s 的子菜单数据 !", menuVo.getMenuName()));
+                throw new AppException(String.format("请先删除 %s 的子菜单数据 !", menuVo.getMenuName()));
             }
             validIds.add(id);
         }
@@ -152,14 +152,14 @@ public class MenuServiceImpl implements MenuService {
         Arrays.sort(ids);
         // 验证新的 parentId 不是 被移动菜单本身
         if (parentId != null && Arrays.binarySearch(ids, parentId) >= 0) {
-            throw new AppCheckedException("父菜单不能是自己 !");
+            throw new AppException("父菜单不能是自己 !");
         }
 
         // 验证新的 parentId 不是 被移动菜单的子菜单
         Menu menu = jdbcTools.get(Menu.class, parentId);
         while (menu != null) {
             if (menu.getParentId() != null && Arrays.binarySearch(ids, menu.getParentId()) >= 0) {
-                throw new AppCheckedException("无法移动到子菜单下 !");
+                throw new AppException("无法移动到子菜单下 !");
             }
             menu = jdbcTools.get(Menu.class, menu.getParentId());
         }
@@ -175,12 +175,12 @@ public class MenuServiceImpl implements MenuService {
     @Event(eventClass = MenuUpdateEvent.class)
     public void move(Long menuId, boolean isUp) {
         if (menuId == null) {
-            throw new AppCheckedException("菜单id不能为空 !");
+            throw new AppException("菜单id不能为空 !");
         }
 
         Menu menu = jdbcTools.get(Menu.class, menuId);
         if (menu == null) {
-            throw new AppCheckedException("被移动菜单不存在 !");
+            throw new AppException("被移动菜单不存在 !");
         }
 
         String orderNum = "orderNum";
@@ -193,7 +193,7 @@ public class MenuServiceImpl implements MenuService {
 
         Menu changeMenu = select.page(1, 1).single();
         if (changeMenu == null) {
-            throw new AppCheckedException("无法移动!");
+            throw new AppException("无法移动!");
         }
 
         jdbcTools.createUpdate(Menu.class)

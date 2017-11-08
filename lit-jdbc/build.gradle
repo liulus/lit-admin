@@ -1,11 +1,11 @@
 dependencies {
 
-    compile libs.slf4j_api
-    compile libs.spring_jdbc + '@jar'
-    compile libs.spring_tx + '@jar'
     compile libs.jsqlparser
     compile project(':lit-commons')
 
+    compileOnly libs.slf4j_api
     compileOnly libs.spring_context
+    compileOnly libs.spring_jdbc + '@jar'
+    compileOnly libs.spring_tx + '@jar'
 
 }

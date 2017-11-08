@@ -1,9 +1,10 @@
 dependencies{
 
+    compile libs.slf4j_api
     compile libs.guava
     compile libs.jackson_databind
     compile libs.spring_webmvc
     compile libs.spring_context_support
-    compile project(':lit-commons')
+    compile project(':lit-jdbc')
 
 }

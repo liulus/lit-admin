@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package net.skeyurt.lit.commons.condition;
+package net.skeyurt.lit.commons.spring.condition;
 
 /**
  * Some named search strategies for beans in the bean factory hierarchy.

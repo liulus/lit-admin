@@ -1,7 +1,7 @@
 package net.skeyurt.lit.web.vo;
 
+import com.github.lit.commons.page.Page;
 import lombok.*;
-import net.skeyurt.lit.commons.page.Pager;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -16,7 +16,7 @@ import java.util.Date;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class GoodsVo extends Pager implements Serializable {
+public class GoodsVo extends Page implements Serializable {
 
     private static final long serialVersionUID = -6502691308871630951L;
 

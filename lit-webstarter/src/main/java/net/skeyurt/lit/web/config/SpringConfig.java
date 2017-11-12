@@ -1,8 +1,8 @@
 package net.skeyurt.lit.web.config;
 
+import com.github.lit.dictionary.guava.GuavaCacheManager;
+import com.github.lit.jdbc.spring.config.EnableLitJdbc;
 import com.mchange.v2.c3p0.ComboPooledDataSource;
-import net.skeyurt.lit.dictionary.guava.GuavaCacheManager;
-import net.skeyurt.lit.jdbc.spring.config.EnableLitJdbc;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.cache.concurrent.ConcurrentMapCache;

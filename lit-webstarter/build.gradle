@@ -11,6 +11,7 @@ dependencies {
     compile libs.mysql
     compile libs.oracle
     compile libs.spring_aspects
+    compile libs.spring_jdbc
     compile project(':lit-plugins:lit-menu')
     compile project(':lit-plugins:lit-param')
     compile project(':lit-plugins:lit-dictionary')

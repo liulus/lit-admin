@@ -1,6 +1,6 @@
 package net.skeyurt.lit.web.service;
 
-import net.skeyurt.lit.commons.exception.AppException;
+import com.github.lit.plugin.exception.AppException;
 import org.springframework.stereotype.Service;
 
 //import net.skeyurt.lit.web.entity.Goods;

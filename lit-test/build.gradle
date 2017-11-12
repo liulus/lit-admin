@@ -13,10 +13,11 @@ dependencies {
     testCompile libs.commons_io
     testCompile libs.spring_boot_test
     testCompile libs.spring_aspects
+    testCompile libs.spring_jdbc
     testCompile libs.jackson_databind
     testCompile libs.jcl_over_slf4j
     testCompile libs.slf4j_log4j12
-    testCompile project(':lit-jdbc')
+    testCompile libs.lit_jdbc
 
 
 }

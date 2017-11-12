@@ -1,8 +1,8 @@
-package net.skeyurt.lit.web.controller;
+package com.github.lit.web.controller;
 
-import net.skeyurt.lit.commons.context.ResultConst;
-import net.skeyurt.lit.commons.page.PageInfo;
-import net.skeyurt.lit.commons.page.PageList;
+import com.github.lit.commons.context.ResultConst;
+import com.github.lit.commons.page.PageInfo;
+import com.github.lit.commons.page.PageList;
 import net.skeyurt.lit.web.service.GoodsService;
 import net.skeyurt.lit.web.vo.GoodsVo;
 import org.springframework.stereotype.Controller;

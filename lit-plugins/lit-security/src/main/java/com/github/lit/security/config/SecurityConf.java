@@ -71,7 +71,7 @@ public class SecurityConf extends WebSecurityConfigurerAdapter {
         }
 
         http.formLogin().loginPage("/plugin/user/login").usernameParameter("userName")
-                .passwordParameter("password").permitAll().successForwardUrl("/plugin/user/login").and()
+                .passwordParameter("password").permitAll().defaultSuccessUrl("/plugin/user/pass").and()
                 .csrf().disable()
                 .authorizeRequests().anyRequest().authenticated();
 

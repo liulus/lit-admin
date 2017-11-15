@@ -52,6 +52,12 @@ public class UserController {
         return "redirect:/plugin/user";
     }
 
+    @RequestMapping("/pass")
+    public String pass() {
+        System.out.println("----------------");
+        return "redirect:/plugin/user";
+    }
+
 
     @RequestMapping({"/list", ""})
     public String userList(UserVo vo, Model model) {

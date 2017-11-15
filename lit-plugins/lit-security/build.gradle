@@ -1,8 +1,0 @@
-
-dependencies {
-
-    compile libs.spring_security_web
-    compile libs.spring_security_config
-    compile project(':lit-plugins:lit-user')
-
-}

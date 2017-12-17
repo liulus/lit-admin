@@ -2,6 +2,7 @@ package com.github.lit.user.service;
 
 import com.github.lit.user.vo.UserVo;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -54,6 +55,6 @@ public interface UserService {
      *
      * @param ids
      */
-    void delete(Long... ids);
+    void delete(Serializable[] ids);
 
 }

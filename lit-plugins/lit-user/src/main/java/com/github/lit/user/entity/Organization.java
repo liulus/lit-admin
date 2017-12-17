@@ -7,6 +7,7 @@ import com.github.lit.jdbc.enums.GenerationType;
 import com.github.lit.plugin.context.PluginConst;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import java.io.Serializable;
 
@@ -17,6 +18,7 @@ import java.io.Serializable;
  */
 @Getter
 @Setter
+@ToString
 @Table(name = PluginConst.TABLE_PREFIX + "organization")
 public class Organization implements Serializable{
 

@@ -6,7 +6,9 @@ import com.github.lit.jdbc.annotation.Id;
 import com.github.lit.jdbc.annotation.Table;
 import com.github.lit.jdbc.enums.GenerationType;
 import com.github.lit.plugin.context.PluginConst;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -16,7 +18,9 @@ import java.util.Date;
  * Date : 2017/8/12 10:51
  * version $Id: User.java, v 0.1 Exp $
  */
-@Data
+@Getter
+@Setter
+@ToString
 @Table(name = PluginConst.TABLE_PREFIX + "user")
 public class User implements Serializable {
 

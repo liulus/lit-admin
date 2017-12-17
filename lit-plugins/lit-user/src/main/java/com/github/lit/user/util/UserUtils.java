@@ -1,9 +1,12 @@
 package com.github.lit.user.util;
 
+import com.github.lit.commons.context.SpringContextUtils;
+import com.github.lit.commons.util.EncryptUtils;
 import com.github.lit.plugin.web.WebUtils;
 import com.github.lit.user.context.LoginUser;
 import com.github.lit.user.context.UserConst;
 import com.google.common.base.Strings;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.servlet.http.HttpSession;
 import java.util.Collections;
@@ -16,6 +19,8 @@ import java.util.Objects;
  * version $Id: UserUtils.java, v 0.1 Exp $
  */
 public class UserUtils {
+
+    public static final String PWD_PREFIX = "#@^%$#^!";
 
 
     public static LoginUser getLoginUser() {
@@ -63,6 +68,14 @@ public class UserUtils {
         }
 
         return "";
+    }
+
+    public static String encode(String password){
+        PasswordEncoder passwordEncoder = SpringContextUtils.getBean(PasswordEncoder.class);
+        if (passwordEncoder == null) {
+            return EncryptUtils.md5(PWD_PREFIX + password);
+        }
+        return passwordEncoder.encode(password);
     }
 
 }

@@ -15,12 +15,6 @@ CREATE TABLE lit_organization (
   DEFAULT CHARSET = utf8
   COMMENT = '机构表';
 
-CREATE UNIQUE INDEX lit_org_org_code_uindex
-  ON lit_organization (org_code);
-
-ALTER TABLE lit_organization
-  ADD CONSTRAINT lit_organization_org_id_parent_id_fk
-FOREIGN KEY (parent_id) REFERENCES lit_organization (org_id);
 
 CREATE TABLE lit_user
 (
@@ -51,14 +45,4 @@ CREATE TABLE lit_user
   DEFAULT CHARSET = utf8
   COMMENT = '用户表';
 
-CREATE UNIQUE INDEX lit_user_user_name_uindex
-  ON lit_user (user_name);
-CREATE UNIQUE INDEX lit_user_email_uindex
-  ON lit_user (email);
-CREATE UNIQUE INDEX lit_user_mobile_phone_uindex
-  ON lit_user (mobile_phone);
-
-ALTER TABLE lit_user
-  ADD CONSTRAINT lit_user_lit_org_org_Id_fk
-FOREIGN KEY (org_id) REFERENCES lit_organization (org_id);
 

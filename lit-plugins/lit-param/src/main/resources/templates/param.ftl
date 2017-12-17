@@ -97,7 +97,7 @@
             </tr>
             <#else>
             <tr>
-                <td colspan="8">
+                <td colspan="7">
                     <div class="no-data text-center">
                         <span><i class="fa fa-info-circle fa-1g"></i>&nbsp;&nbsp;没有数据</span>
                     </div>

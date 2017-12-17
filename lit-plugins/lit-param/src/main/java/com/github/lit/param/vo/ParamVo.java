@@ -3,6 +3,7 @@ package com.github.lit.param.vo;
 import com.github.lit.commons.page.Page;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 /**
  * User : liulu
@@ -11,6 +12,7 @@ import lombok.Setter;
  */
 @Getter
 @Setter
+@ToString
 public class ParamVo extends Page {
 
     private static final long serialVersionUID = -117622963182937153L;

@@ -6,8 +6,6 @@ import com.github.lit.user.service.UserService;
 import com.github.lit.user.vo.UserVo;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.annotation.Resource;
@@ -24,40 +22,6 @@ public class UserController {
 
     @Resource
     private UserService userService;
-
-
-    @GetMapping("/register")
-    public String register() {
-
-        return "default_register";
-    }
-
-    @PostMapping("/register")
-    public String doRegister() {
-
-        return "";
-    }
-
-
-    @GetMapping("/login")
-    public String login() {
-        return "default-login";
-    }
-
-    @PostMapping("/login")
-    public String doLogin(String userName, String password, Model model) {
-
-        System.out.println(userName + "--" + password);
-//        userService.login
-        return "redirect:/plugin/user";
-    }
-
-    @RequestMapping("/pass")
-    public String pass() {
-        System.out.println("----------------");
-        return "redirect:/plugin/user";
-    }
-
 
     @RequestMapping({"/list", ""})
     public String userList(UserVo vo, Model model) {

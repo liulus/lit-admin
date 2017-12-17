@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
 
@@ -84,7 +85,7 @@ public class UserServiceImpl implements UserService {
         checkUserName(userVo.getUserName());
         checkEmail(userVo.getEmail());
         checkMobilePhone(userVo.getMobilePhone());
-
+        userVo.setPassword(UserUtils.encode("123456"));
         jdbcTools.insert(BeanUtils.convert(new User(), userVo));
     }
 
@@ -94,7 +95,7 @@ public class UserServiceImpl implements UserService {
             return;
         }
         int count = jdbcTools.createSelect(User.class).where("userName", userName).count();
-        if (count>=1) {
+        if (count >= 1) {
             throw new AppException("改用户名被使用 !");
         }
     }
@@ -104,7 +105,7 @@ public class UserServiceImpl implements UserService {
             return;
         }
         int count = jdbcTools.createSelect(User.class).where("email", email).count();
-        if (count>=1) {
+        if (count >= 1) {
             throw new AppException("改邮箱已被使用 !");
         }
     }
@@ -114,7 +115,7 @@ public class UserServiceImpl implements UserService {
             return;
         }
         int count = jdbcTools.createSelect(User.class).where("mobilePhone", mobilePhone).count();
-        if (count>=1) {
+        if (count >= 1) {
             throw new AppException("改手机号已被使用 !");
         }
     }
@@ -140,7 +141,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void delete(Long... ids) {
+    public void delete(Serializable[] ids) {
         jdbcTools.deleteByIds(User.class, ids);
     }
 

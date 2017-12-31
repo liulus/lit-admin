@@ -13,7 +13,6 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 
 import java.util.List;
 import java.util.Map;
@@ -26,7 +25,7 @@ import java.util.Map;
 @Configuration
 @EnableWebSecurity
 @Slf4j
-public class SecurityConf extends WebSecurityConfigurerAdapter {
+public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 
     @Override
@@ -72,7 +71,6 @@ public class SecurityConf extends WebSecurityConfigurerAdapter {
         }
 
         http.formLogin().loginPage("/user/login").usernameParameter("userName").passwordParameter("password")
-                .successHandler(new SimpleUrlAuthenticationSuccessHandler())
                 .defaultSuccessUrl("/user/pass", true).permitAll()
                 .and().csrf().disable()
                 .authorizeRequests().anyRequest().authenticated();

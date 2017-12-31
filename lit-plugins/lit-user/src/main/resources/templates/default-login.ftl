@@ -22,10 +22,11 @@
                     <input type="password" class="form-control" name="password" placeholder="密码">
                 </div>
             </fieldset>
-            <div class="alert alert-error alert-danger">
-                <button type="button" class="close">×</button>
-                <span></span>
+        <#if RequestParameters['error']??>
+            <div class="text-danger text-center">
+            ${message!}
             </div>
+        </#if>
             <div class="form-horizontal normal-button">
                 <input type="submit" class="btn btn-primary" value="登录">
             </div>

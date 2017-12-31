@@ -1,5 +1,8 @@
 package com.github.lit.user.controller;
 
+import com.github.lit.commons.context.ResultConst;
+import com.github.lit.user.context.LoginErrorContext;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,6 +18,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/user")
 public class LoginController {
 
+    @Autowired(required = false)
+    private LoginErrorContext loginErrorContext;
 
     @GetMapping("/register")
     public String register() {
@@ -30,7 +35,10 @@ public class LoginController {
 
 
     @GetMapping("/login")
-    public String login() {
+    public String login(Model model) {
+        if (loginErrorContext != null) {
+            model.addAttribute(ResultConst.MASSAGE, loginErrorContext.getLoginError());
+        }
         return "default-login";
     }
 

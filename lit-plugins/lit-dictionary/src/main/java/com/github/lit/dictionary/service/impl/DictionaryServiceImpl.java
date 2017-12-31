@@ -5,7 +5,7 @@ import com.github.lit.dictionary.service.DictionaryService;
 import com.github.lit.dictionary.vo.DictionaryVo;
 import com.github.lit.jdbc.JdbcTools;
 import com.github.lit.jdbc.enums.Logic;
-import com.github.lit.jdbc.sta.Select;
+import com.github.lit.jdbc.statement.Select;
 import com.github.lit.plugin.exception.AppException;
 import com.google.common.base.Strings;
 import org.springframework.stereotype.Service;
@@ -41,7 +41,7 @@ public class DictionaryServiceImpl implements DictionaryService {
         Select<Dictionary> select = jdbcTools.createSelect(Dictionary.class).where("parentId", qo.getParentId());
 
         if (!Strings.isNullOrEmpty(qo.getKeyWord())) {
-            select.andWithBracket("dictKey", Logic.LIKE, qo.getBlurKeyWord())
+            select.and().parenthesis().condition("dictKey", Logic.LIKE, qo.getBlurKeyWord())
                     .or("dictValue", Logic.LIKE, qo.getBlurKeyWord())
                     .or("memo", Logic.LIKE, qo.getBlurKeyWord())
                     .end();

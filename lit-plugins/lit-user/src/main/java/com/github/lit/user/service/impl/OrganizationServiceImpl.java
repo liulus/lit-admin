@@ -2,7 +2,7 @@ package com.github.lit.user.service.impl;
 
 import com.github.lit.jdbc.JdbcTools;
 import com.github.lit.jdbc.enums.Logic;
-import com.github.lit.jdbc.sta.Select;
+import com.github.lit.jdbc.statement.Select;
 import com.github.lit.plugin.exception.AppException;
 import com.github.lit.user.entity.Organization;
 import com.github.lit.user.service.OrganizationService;
@@ -120,7 +120,7 @@ public class OrganizationServiceImpl implements OrganizationService {
         Select<Organization> select = jdbcTools.createSelect(Organization.class).where("parentId", vo.getParentId());
 
         if (!Strings.isNullOrEmpty(vo.getKeyWord())) {
-            select.andWithBracket("orgCode", Logic.LIKE, vo.getBlurKeyWord())
+            select.and().parenthesis().condition("orgCode", Logic.LIKE, vo.getBlurKeyWord())
                     .or("orgName", Logic.LIKE, vo.getBlurKeyWord())
                     .or("memo", Logic.LIKE, vo.getBlurKeyWord())
                     .end();

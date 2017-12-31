@@ -3,7 +3,7 @@ package com.github.lit.test.run;
 import com.github.lit.commons.page.PageList;
 import com.github.lit.jdbc.JdbcTools;
 import com.github.lit.jdbc.enums.Logic;
-import com.github.lit.jdbc.sta.Select;
+import com.github.lit.jdbc.statement.Select;
 import com.github.lit.test.base.BaseTest;
 import com.github.lit.test.bean.Goods;
 import com.github.lit.test.bean.GoodsVo;
@@ -107,12 +107,6 @@ public class JdbcDaoImplTest extends BaseTest {
     public void get() throws Exception {
         Goods goods = jdbcTools.get(Goods.class, 10002);
         log.info("查询实体： {}", goods);
-    }
-
-    @Test
-    public void queryForSingle() throws Exception {
-        Goods goods = jdbcTools.queryForSingle(Goods.class, goodsVo);
-        log.info("\n {}",goods.toString());
     }
 
     @Test

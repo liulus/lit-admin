@@ -7,7 +7,7 @@ import com.github.lit.dictionary.entity.Dictionary;
 import com.github.lit.dictionary.tool.DictionaryTools;
 import com.github.lit.jdbc.JdbcTools;
 import com.github.lit.jdbc.enums.Logic;
-import com.github.lit.jdbc.sta.Select;
+import com.github.lit.jdbc.statement.Select;
 import com.github.lit.menu.context.MenuConst;
 import com.github.lit.menu.entity.Menu;
 import com.github.lit.menu.event.MenuUpdateEvent;

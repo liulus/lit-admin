@@ -26,7 +26,7 @@ public class RoleServiceImpl implements RoleService {
     @Override
     public List<Role> findPageList(RoleVo roleVo) {
 
-        return jdbcTools.queryPageList(Role.class, roleVo);
+        return jdbcTools.createSelect(Role.class).list();
     }
 
     @Override

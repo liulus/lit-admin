@@ -4,7 +4,7 @@ import com.github.lit.commons.bean.BeanUtils;
 import com.github.lit.jdbc.JdbcTools;
 import com.github.lit.jdbc.enums.JoinType;
 import com.github.lit.jdbc.enums.Logic;
-import com.github.lit.jdbc.sta.Select;
+import com.github.lit.jdbc.statement.Select;
 import com.github.lit.plugin.exception.AppException;
 import com.github.lit.user.context.LoginUser;
 import com.github.lit.user.entity.Organization;
@@ -148,7 +148,7 @@ public class UserServiceImpl implements UserService {
 
     private Select<User> buildSelect(UserVo vo) {
 
-        Select<User> select = jdbcTools.createSelect(User.class).where("1", 1);
+        Select<User> select = jdbcTools.createSelect(User.class);
 
         if (vo.getUserId() != null) {
             select.and("userId", vo.getUserId());

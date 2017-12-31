@@ -2,7 +2,7 @@ package com.github.lit.param.service.impl;
 
 import com.github.lit.jdbc.JdbcTools;
 import com.github.lit.jdbc.enums.Logic;
-import com.github.lit.jdbc.sta.Select;
+import com.github.lit.jdbc.statement.Select;
 import com.github.lit.param.entity.Param;
 import com.github.lit.param.service.ParamService;
 import com.github.lit.param.vo.ParamVo;
@@ -37,7 +37,8 @@ public class ParamServiceImpl implements ParamService {
         Select<Param> select = jdbcTools.createSelect(Param.class);
 
         if (!Strings.isNullOrEmpty(qo.getKeyWord())) {
-            select.andWithBracket("paramCode", Logic.LIKE, qo.getBlurKeyWord())
+            select.and().parenthesis()
+                    .condition("paramCode", Logic.LIKE, qo.getBlurKeyWord())
                     .or("paramValue", Logic.LIKE, qo.getBlurKeyWord())
                     .or("memo", Logic.LIKE, qo.getBlurKeyWord())
                     .end();

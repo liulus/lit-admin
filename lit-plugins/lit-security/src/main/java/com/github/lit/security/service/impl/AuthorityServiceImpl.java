@@ -37,7 +37,7 @@ public class AuthorityServiceImpl implements AuthorityService {
     @Override
     public List<Authority> queryPageList(AuthorityVo vo) {
 
-        return jdbcTools.queryPageList(Authority.class, vo);
+        return jdbcTools.createSelect(Authority.class).list();
     }
 
     @Override

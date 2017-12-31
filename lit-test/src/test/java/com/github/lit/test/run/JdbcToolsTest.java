@@ -2,7 +2,7 @@ package com.github.lit.test.run;
 
 import com.github.lit.jdbc.JdbcTools;
 import com.github.lit.jdbc.enums.Logic;
-import com.github.lit.jdbc.sta.Select;
+import com.github.lit.jdbc.statement.Select;
 import com.github.lit.test.base.BaseTest;
 import com.github.lit.test.bean.Goods;
 import com.github.lit.test.bean.GoodsVo;
@@ -132,7 +132,7 @@ public class JdbcToolsTest extends BaseTest {
         List<Goods> goodsList1 = jdbcTools.createSelect(Goods.class)
                 .include("code", "name") // 只查询 code 和 name
                 .where("name", Logic.LIKE, "%娃哈哈%") //  条件 name like ? 参数 %娃哈哈%
-                .andWithBracket("price", Logic.LTEQ, 38.7D) // 添加带有括号的 and条件   and ( price <= ? 参数 38.7
+                .and().parenthesis().condition("price", Logic.LTEQ, 38.7D) // 添加带有括号的 and条件   and ( price <= ? 参数 38.7
                 .or("supplierCode", "00776") // 条件 supplier_code=? 参数 00776
                 .end() // 结束刚才 and 条件添加的括号  )
                 .list(); // 查询列表

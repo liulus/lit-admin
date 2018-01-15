@@ -1,6 +1,8 @@
 package com.github.lit.menu.service;
 
-import com.github.lit.menu.vo.MenuVo;
+import com.github.lit.menu.model.Menu;
+import com.github.lit.menu.model.MenuQo;
+import com.github.lit.menu.model.MenuVo;
 
 import java.util.List;
 
@@ -14,18 +16,18 @@ public interface MenuService {
     /**
      * 根据 vo 的条件查询菜单列表
      *
-     * @param vo
-     * @return
+     * @param qo 查询条件
+     * @return 菜单列表
      */
-    List<MenuVo> queryPageList(MenuVo vo);
+    List<Menu> findPageList(MenuQo qo);
 
     /**
      * 根据Id查询菜单
      *
-     * @param id
-     * @return
+     * @param id 主键
+     * @return 菜单
      */
-    MenuVo findById(Long id);
+    Menu findById(Long id);
 
     /**
      * 增加菜单

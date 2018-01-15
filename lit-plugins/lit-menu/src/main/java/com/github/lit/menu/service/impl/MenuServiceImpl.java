@@ -1,28 +1,26 @@
 package com.github.lit.menu.service.impl;
 
 import com.github.lit.commons.bean.BeanUtils;
-import com.github.lit.commons.bean.ConvertCallBack;
 import com.github.lit.commons.event.Event;
-import com.github.lit.dictionary.entity.Dictionary;
-import com.github.lit.dictionary.tool.DictionaryTools;
 import com.github.lit.jdbc.JdbcTools;
 import com.github.lit.jdbc.enums.Logic;
 import com.github.lit.jdbc.statement.Select;
-import com.github.lit.menu.context.MenuConst;
-import com.github.lit.menu.entity.Menu;
 import com.github.lit.menu.event.MenuUpdateEvent;
+import com.github.lit.menu.model.Menu;
+import com.github.lit.menu.model.MenuQo;
+import com.github.lit.menu.model.MenuVo;
 import com.github.lit.menu.service.MenuService;
-import com.github.lit.menu.vo.MenuVo;
 import com.github.lit.plugin.exception.AppException;
-import com.google.common.base.Function;
 import com.google.common.base.Strings;
-import com.google.common.collect.Maps;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.io.Serializable;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Objects;
 
 /**
  * User : liulu
@@ -30,48 +28,27 @@ import java.util.*;
  * version $Id: MenuServiceImpl.java, v 0.1 Exp $
  */
 @Service
-@Transactional()
+@Transactional
 public class MenuServiceImpl implements MenuService {
 
     @Resource
     private JdbcTools jdbcTools;
 
     @Override
-    public List<MenuVo> queryPageList(MenuVo vo) {
-        Select<Menu> select = buildSelect(vo);
-
-        final List<Dictionary> dictionaries = DictionaryTools.findChildByRootKey(MenuConst.MENU_TYPE);
-
-        final Map<String, Dictionary> dictMap = Maps.uniqueIndex(dictionaries, new Function<Dictionary, String>() {
-            @Override
-            public String apply(Dictionary dictionary) {
-                return dictionary.getDictKey();
-            }
-        });
-
-        return BeanUtils.convert(MenuVo.class, select.page(vo).list(), new ConvertCallBack<MenuVo, Menu>() {
-            @Override
-            public void convertCallBack(MenuVo target, Menu source) {
-                Dictionary dictionary = dictMap.get(source.getMenuType());
-                target.setMenuTypeStr(dictionary == null ? "" : dictionary.getDictValue());
-
-                MenuVo menuVo = MenuVo.builder().parentId(source.getMenuId()).build();
-                int count = buildSelect(menuVo).count();
-                target.setIsParent(count > 0);
-            }
-        });
+    public List<Menu> findPageList(MenuQo qo) {
+        return buildSelect(qo).page(qo).list();
     }
 
     @Override
-    public MenuVo findById(Long id) {
-        return BeanUtils.convert(new MenuVo(), jdbcTools.get(Menu.class, id));
+    public Menu findById(Long id) {
+        return jdbcTools.get(Menu.class, id);
     }
 
-    private Select<Menu> buildSelect(MenuVo vo) {
-        Select<Menu> select = jdbcTools.createSelect(Menu.class).where("parentId", vo.getParentId());
+    private Select<Menu> buildSelect(MenuQo qo) {
+        Select<Menu> select = jdbcTools.createSelect(Menu.class).where("parentId", qo.getParentId());
 
-        if (!Strings.isNullOrEmpty(vo.getMenuCode())) {
-            select.and("menuCode", vo.getMenuCode());
+        if (!Strings.isNullOrEmpty(qo.getMenuCode())) {
+            select.and("menuCode", qo.getMenuCode());
         }
 
         select.asc("orderNum");
@@ -117,9 +94,9 @@ public class MenuServiceImpl implements MenuService {
 
     private Menu findByCodeAndParentId(String menuCode, Long parentId) {
 
-        MenuVo menuVo = MenuVo.builder().menuCode(menuCode).parentId(parentId).build();
+        MenuQo menuQo = MenuQo.builder().menuCode(menuCode).parentId(parentId).build();
 
-        return buildSelect(menuVo).single();
+        return buildSelect(menuQo).single();
     }
 
     @Override
@@ -130,13 +107,13 @@ public class MenuServiceImpl implements MenuService {
         }
         List<Long> validIds = new ArrayList<>(ids.length);
         for (Long id : ids) {
-            MenuVo menuVo = findById(id);
-            if (menuVo == null) {
+            Menu menu = findById(id);
+            if (menu == null) {
                 continue;
             }
-            int count = buildSelect(MenuVo.builder().parentId(menuVo.getMenuId()).build()).count();
+            int count = buildSelect(MenuQo.builder().parentId(menu.getMenuId()).build()).count();
             if (count > 0) {
-                throw new AppException(String.format("请先删除 %s 的子菜单数据 !", menuVo.getMenuName()));
+                throw new AppException(String.format("请先删除 %s 的子菜单数据 !", menu.getMenuName()));
             }
             validIds.add(id);
         }
@@ -219,7 +196,7 @@ public class MenuServiceImpl implements MenuService {
 
     @Override
     public List<MenuVo> findAll() {
-        List<Menu> rootMenus = buildSelect(new MenuVo()).list();
+        List<Menu> rootMenus = buildSelect(new MenuQo()).list();
         List<MenuVo> menuVos = BeanUtils.convert(MenuVo.class, rootMenus);
 
         findChildMenu(menuVos);
@@ -228,7 +205,7 @@ public class MenuServiceImpl implements MenuService {
     }
 
     private void findChildMenu(List<MenuVo> menuVos) {
-        MenuVo condition = new MenuVo();
+        MenuQo condition = new MenuQo();
 
         for (MenuVo menuVo : menuVos) {
             condition.setParentId(menuVo.getMenuId());

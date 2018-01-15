@@ -1,11 +1,16 @@
 package com.github.lit.menu.controller;
 
+import com.github.lit.commons.bean.BeanUtils;
 import com.github.lit.commons.context.ResultConst;
+import com.github.lit.dictionary.entity.Dictionary;
 import com.github.lit.dictionary.tool.DictionaryTools;
 import com.github.lit.menu.context.MenuConst;
+import com.github.lit.menu.model.Menu;
+import com.github.lit.menu.model.MenuQo;
+import com.github.lit.menu.model.MenuVo;
 import com.github.lit.menu.service.MenuService;
-import com.github.lit.menu.vo.MenuVo;
 import com.github.lit.plugin.context.PluginConst;
+import com.google.common.collect.Maps;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.Map;
 
 /**
  * User : liulu
@@ -30,29 +36,40 @@ public class MenuController {
 
 
     @RequestMapping({"/list", ""})
-    public String menuList(MenuVo vo, Model model) {
-        List<MenuVo> menuVos = menuService.queryPageList(vo);
-        model.addAttribute(ResultConst.RESULT, menuVos);
-        model.addAttribute("menuType", DictionaryTools.findChildByRootKey(MenuConst.MENU_TYPE));
+    public String menuList(MenuQo qo, Model model) {
+        List<Menu> menus = menuService.findPageList(qo);
+        processResult(model, menus);
         return "menu";
     }
 
     /**
      * 查询父菜单下的子菜单列表
      *
-     * @param vo
-     * @param parentId
-     * @param model
-     * @return
+     * @param qo       查询条件
+     * @param parentId 父菜单Id
+     * @param model    视图
+     * @return String
      */
     @RequestMapping("/{parentId}")
-    public String childList(MenuVo vo, @PathVariable Long parentId, Model model) {
+    public String childList(MenuQo qo, @PathVariable Long parentId, Model model) {
 
-        vo.setParentId(parentId);
-        List<MenuVo> menuVos = menuService.queryPageList(vo);
-        model.addAttribute(ResultConst.RESULT, menuVos);
-        model.addAttribute("menuType", DictionaryTools.findChildByRootKey(MenuConst.MENU_TYPE));
+        qo.setParentId(parentId);
+        List<Menu> menus = menuService.findPageList(qo);
+        processResult(model, menus);
         return "menu";
+    }
+
+    private void processResult(Model model, List<Menu> menus) {
+        List<Dictionary> dictionaries = DictionaryTools.findChildByRootKey(MenuConst.MENU_TYPE);
+
+        Map<String, Dictionary> dictionaryMap = Maps.uniqueIndex(dictionaries, Dictionary::getDictKey);
+        List<MenuVo> menuVos = BeanUtils.convert(MenuVo.class, menus, (menuVo, menu) -> {
+            Dictionary dictionary = dictionaryMap.get(menu.getMenuType());
+            menuVo.setMenuTypeStr(dictionary == null ? "" : dictionary.getDictValue());
+        });
+
+        model.addAttribute(ResultConst.RESULT, menuVos);
+        model.addAttribute("menuType", dictionaries);
     }
 
     /**
@@ -65,9 +82,9 @@ public class MenuController {
     @RequestMapping("/back/{menuId}")
     public String back(@PathVariable Long menuId, Model model) {
 
-        MenuVo menuVo = menuService.findById(menuId);
-        if (menuVo != null && menuVo.getParentId() != null) {
-            return PluginConst.REDIRECT + PluginConst.URL_PREFIX + "/menu/" + menuVo.getParentId();
+        Menu menu = menuService.findById(menuId);
+        if (menu != null && menu.getParentId() != null) {
+            return PluginConst.REDIRECT + PluginConst.URL_PREFIX + "/menu/" + menu.getParentId();
         }
 
         return PluginConst.REDIRECT + PluginConst.URL_PREFIX + "/menu";

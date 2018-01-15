@@ -29,6 +29,11 @@
                 </exclusion>
             </exclusions>
         </dependency>
+        <dependency>
+            <groupId>com.github.liulus</groupId>
+            <artifactId>lit-spring-boot-atuoconfigure</artifactId>
+            <version>${project.version}</version>
+        </dependency>
 
         <!-- lit -->
         <dependency>

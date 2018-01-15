@@ -1,8 +1,8 @@
-package com.github.lit.menu.vo;
+package com.github.lit.menu.model;
 
-import com.github.lit.commons.page.Page;
 import lombok.*;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -16,7 +16,7 @@ import java.util.List;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-public class MenuVo extends Page {
+public class MenuVo implements Serializable {
 
     private static final long serialVersionUID = -4104369004390601578L;
 

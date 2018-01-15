@@ -41,8 +41,8 @@
                 <i class="fa fa-pencil"></i>&nbsp;&nbsp;修改
             </button>
         </#if>
-        <#if menuVo.parentId??>
-            <a href="${rc.contextPath}/plugin/menu/back/${menuVo.parentId?c}" class="btn btn-sm btn-warning">
+        <#if menuQo.parentId??>
+            <a href="${rc.contextPath}/plugin/menu/back/${menuQo.parentId?c}" class="btn btn-sm btn-warning">
                 <i class="fa fa-reply"></i>&nbsp;&nbsp;返回上级
             </a>
         </#if>
@@ -132,8 +132,8 @@
 <script type="text/template" id="edit-tpl">
     <div class="modal-body">
         <form id="form-edit" class="form-horizontal" action="">
-        <#if menuVo.parentId??>
-            <input type="hidden" name="parentId" value="${menuVo.parentId?c}">
+        <#if menuQo.parentId??>
+            <input type="hidden" name="parentId" value="${menuQo.parentId?c}">
         </#if>
             <input type="hidden" name="menuId" value="${r'${menuId}'}">
             <div class="form-group">

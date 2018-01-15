@@ -1,12 +1,12 @@
 package com.github.lit.web.config;
 
 import com.github.lit.commons.event.guava.EventConfig;
-import com.github.lit.dictionary.guava.GuavaCacheManager;
 import com.github.lit.jdbc.spring.config.EnableLitJdbc;
 import com.mchange.v2.c3p0.ComboPooledDataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.cache.concurrent.ConcurrentMapCache;
+import org.springframework.cache.guava.GuavaCacheManager;
 import org.springframework.cache.support.SimpleCacheManager;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;

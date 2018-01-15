@@ -1,4 +1,4 @@
-package com.github.lit.menu.entity;
+package com.github.lit.menu.model;
 
 import com.github.lit.jdbc.annotation.Column;
 import com.github.lit.jdbc.annotation.GeneratedValue;

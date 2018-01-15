@@ -3,8 +3,8 @@ package com.github.lit.menu.event;
 import com.github.lit.commons.event.AppStartedEvent;
 import com.github.lit.commons.event.EventComponent;
 import com.github.lit.menu.context.MenuConst;
+import com.github.lit.menu.model.MenuVo;
 import com.github.lit.menu.tool.MenuTools;
-import com.github.lit.menu.vo.MenuVo;
 import com.github.lit.plugin.web.WebUtils;
 import com.google.common.eventbus.Subscribe;
 

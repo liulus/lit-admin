@@ -61,12 +61,6 @@ public class LoginUser implements Serializable {
     /** 是否锁定 */
     private Boolean lock;
 
-    /** 创建人 */
-    private String creator;
-
-    /** 创建时间 */
-    private Date gmtCreate;
-
     /** 上次登录时间 */
     private Date gmtLastLogin;
 

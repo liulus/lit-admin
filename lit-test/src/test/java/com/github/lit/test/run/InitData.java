@@ -1,6 +1,6 @@
 package com.github.lit.test.run;
 
-import com.github.lit.dictionary.entity.Dictionary;
+import com.github.lit.dictionary.model.Dictionary;
 import com.github.lit.dictionary.service.DictionaryService;
 import com.github.lit.jdbc.JdbcTools;
 import com.github.lit.jdbc.enums.Logic;

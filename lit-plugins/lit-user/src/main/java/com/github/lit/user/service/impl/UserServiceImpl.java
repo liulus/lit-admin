@@ -6,12 +6,9 @@ import com.github.lit.jdbc.enums.JoinType;
 import com.github.lit.jdbc.enums.Logic;
 import com.github.lit.jdbc.statement.Select;
 import com.github.lit.plugin.exception.AppException;
-import com.github.lit.user.context.LoginUser;
-import com.github.lit.user.entity.Organization;
-import com.github.lit.user.entity.User;
+import com.github.lit.user.model.*;
 import com.github.lit.user.service.UserService;
 import com.github.lit.user.util.UserUtils;
-import com.github.lit.user.vo.UserVo;
 import com.google.common.base.Strings;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -65,17 +62,17 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<UserVo> queryPageList(UserVo vo) {
+    public List<UserVo> findPageList(UserQo qo) {
         LoginUser loginUser = UserUtils.getLoginUser();
 
         if (loginUser != null && loginUser.hasOrg()) {
-            vo.setSerialNum(loginUser.getSerialNum());
-            if (Strings.isNullOrEmpty(vo.getOrgCode())) {
-                vo.setOrgCode(loginUser.getOrgCode());
+            qo.setSerialNum(loginUser.getSerialNum());
+            if (Strings.isNullOrEmpty(qo.getOrgCode())) {
+                qo.setOrgCode(loginUser.getOrgCode());
             }
         }
 
-        List<UserVo> userVos = buildSelect(vo).page(vo).list(UserVo.class);
+        List<UserVo> userVos = buildSelect(qo).page(qo).list(UserVo.class);
 
         return userVos;
     }
@@ -146,21 +143,21 @@ public class UserServiceImpl implements UserService {
     }
 
 
-    private Select<User> buildSelect(UserVo vo) {
+    private Select<User> buildSelect(UserQo qo) {
 
         Select<User> select = jdbcTools.createSelect(User.class);
 
-        if (vo.getUserId() != null) {
-            select.and("userId", vo.getUserId());
+        if (qo.getUserId() != null) {
+            select.and("userId", qo.getUserId());
 
-            if (!Strings.isNullOrEmpty(vo.getSerialNum())) {
+            if (!Strings.isNullOrEmpty(qo.getSerialNum())) {
                 select.join(JoinType.LEFT, Organization.class)
                         .on(User.class, "orgId", Logic.EQ, Organization.class, "orgId")
                         .addField(Organization.class, "orgCode", "orgName")
-                        .and(Organization.class, "serialNum", Logic.LIKE, vo.getSerialNum() + "%");
+                        .and(Organization.class, "serialNum", Logic.LIKE, qo.getSerialNum() + "%");
             }
-        } else if (vo.getOrgId() != null) {
-            select.and("orgId", vo.getOrgId());
+        } else if (qo.getOrgId() != null) {
+            select.and("orgId", qo.getOrgId());
         }
 
         select.or("orgId", null).desc("orgId");

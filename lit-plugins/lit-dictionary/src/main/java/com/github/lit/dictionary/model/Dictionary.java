@@ -1,4 +1,4 @@
-package com.github.lit.dictionary.entity;
+package com.github.lit.dictionary.model;
 
 import com.github.lit.jdbc.annotation.Column;
 import com.github.lit.jdbc.annotation.GeneratedValue;

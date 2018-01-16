@@ -4,9 +4,9 @@ import com.github.lit.commons.context.ResultConst;
 import com.github.lit.dictionary.tool.DictionaryTools;
 import com.github.lit.plugin.context.PluginConst;
 import com.github.lit.user.context.UserConst;
-import com.github.lit.user.entity.Organization;
+import com.github.lit.user.model.Organization;
+import com.github.lit.user.model.OrganizationQo;
 import com.github.lit.user.service.OrganizationService;
-import com.github.lit.user.vo.OrganizationVo;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -29,7 +29,7 @@ public class OrganizationController {
     private OrganizationService organizationService;
 
     @RequestMapping({"/list", ""})
-    public String orgList(OrganizationVo vo, Model model) {
+    public String orgList(OrganizationQo vo, Model model) {
         List<Organization> orgs = organizationService.queryPageList(vo);
         model.addAttribute(ResultConst.RESULT, orgs);
         model.addAttribute("orgType", DictionaryTools.findChildByRootKey(UserConst.ORGANIZATION_TYPE));
@@ -45,7 +45,7 @@ public class OrganizationController {
      * @return
      */
     @RequestMapping("/{parentId}")
-    public String childList(OrganizationVo vo, @PathVariable Long parentId, Model model) {
+    public String childList(OrganizationQo vo, @PathVariable Long parentId, Model model) {
 
         vo.setParentId(parentId);
         List<Organization> orgs = organizationService.queryPageList(vo);

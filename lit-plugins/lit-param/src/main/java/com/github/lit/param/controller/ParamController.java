@@ -1,9 +1,9 @@
 package com.github.lit.param.controller;
 
 import com.github.lit.commons.context.ResultConst;
-import com.github.lit.param.entity.Param;
+import com.github.lit.param.model.Param;
+import com.github.lit.param.model.ParamQo;
 import com.github.lit.param.service.ParamService;
-import com.github.lit.param.vo.ParamVo;
 import com.github.lit.plugin.context.PluginConst;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -26,7 +26,7 @@ public class ParamController {
     private ParamService paramService;
 
     @RequestMapping({"/list", ""})
-    public String list(ParamVo qo, Model model) {
+    public String list(ParamQo qo, Model model) {
 
         List<Param> dictionaries = paramService.queryPageList(qo);
         model.addAttribute(ResultConst.RESULT, dictionaries);

@@ -4,10 +4,10 @@ import com.github.lit.jdbc.JdbcTools;
 import com.github.lit.jdbc.enums.Logic;
 import com.github.lit.jdbc.statement.Select;
 import com.github.lit.plugin.exception.AppException;
-import com.github.lit.user.entity.Organization;
+import com.github.lit.user.model.Organization;
+import com.github.lit.user.model.OrganizationQo;
 import com.github.lit.user.service.OrganizationService;
 import com.github.lit.user.util.UserUtils;
-import com.github.lit.user.vo.OrganizationVo;
 import com.google.common.base.Strings;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,7 +32,7 @@ public class OrganizationServiceImpl implements OrganizationService {
 
 
     @Override
-    public List<Organization> queryPageList(OrganizationVo vo) {
+    public List<Organization> queryPageList(OrganizationQo vo) {
         return buildSelect(vo).page(vo).list();
     }
 
@@ -107,7 +107,7 @@ public class OrganizationServiceImpl implements OrganizationService {
             if (organization == null) {
                 continue;
             }
-            int count = buildSelect(OrganizationVo.builder().parentId(organization.getOrgId()).build()).count();
+            int count = buildSelect(OrganizationQo.builder().parentId(organization.getOrgId()).build()).count();
             if (count > 0) {
                 throw new AppException(String.format("请先删除 %s 的子机构数据 !", organization.getOrgName()));
             }
@@ -116,7 +116,7 @@ public class OrganizationServiceImpl implements OrganizationService {
         jdbcTools.deleteByIds(Organization.class, validIds.toArray(new Serializable[validIds.size()]));
     }
 
-    private Select<Organization> buildSelect(OrganizationVo vo) {
+    private Select<Organization> buildSelect(OrganizationQo vo) {
         Select<Organization> select = jdbcTools.createSelect(Organization.class).where("parentId", vo.getParentId());
 
         if (!Strings.isNullOrEmpty(vo.getKeyWord())) {

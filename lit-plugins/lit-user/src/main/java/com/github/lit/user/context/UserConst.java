@@ -1,6 +1,6 @@
 package com.github.lit.user.context;
 
-import com.github.lit.dictionary.entity.Dictionary;
+import com.github.lit.dictionary.model.Dictionary;
 import com.github.lit.dictionary.tool.DictionaryTools;
 import com.google.common.base.Function;
 import com.google.common.collect.Maps;

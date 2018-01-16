@@ -1,7 +1,7 @@
 package com.github.lit.param.service;
 
-import com.github.lit.param.entity.Param;
-import com.github.lit.param.vo.ParamVo;
+import com.github.lit.param.model.Param;
+import com.github.lit.param.model.ParamQo;
 
 import java.util.List;
 
@@ -12,7 +12,7 @@ import java.util.List;
  */
 public interface ParamService {
 
-    List<Param> queryPageList(ParamVo qo);
+    List<Param> queryPageList(ParamQo qo);
 
     Param findById(Long id);
 

@@ -1,4 +1,4 @@
-package com.github.lit.user.entity;
+package com.github.lit.user.model;
 
 import com.github.lit.jdbc.annotation.GeneratedValue;
 import com.github.lit.jdbc.annotation.Id;

@@ -2,8 +2,9 @@ package com.github.lit.user.controller;
 
 import com.github.lit.commons.context.ResultConst;
 import com.github.lit.plugin.context.PluginConst;
+import com.github.lit.user.model.UserQo;
+import com.github.lit.user.model.UserVo;
 import com.github.lit.user.service.UserService;
-import com.github.lit.user.vo.UserVo;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,9 +25,9 @@ public class UserController {
     private UserService userService;
 
     @RequestMapping({"/list", ""})
-    public String userList(UserVo vo, Model model) {
+    public String userList(UserQo qo, Model model) {
 
-        List<UserVo> userVos = userService.queryPageList(vo);
+        List<UserVo> userVos = userService.findPageList(qo);
         model.addAttribute(ResultConst.RESULT, userVos);
         return "user";
     }

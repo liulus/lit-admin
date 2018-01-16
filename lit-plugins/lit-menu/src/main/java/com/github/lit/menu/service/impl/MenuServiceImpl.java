@@ -2,7 +2,7 @@ package com.github.lit.menu.service.impl;
 
 import com.github.lit.commons.bean.BeanUtils;
 import com.github.lit.commons.event.Event;
-import com.github.lit.dictionary.entity.Dictionary;
+import com.github.lit.dictionary.model.Dictionary;
 import com.github.lit.dictionary.tool.DictionaryTools;
 import com.github.lit.jdbc.JdbcTools;
 import com.github.lit.jdbc.enums.Logic;

@@ -1,4 +1,4 @@
-package com.github.lit.dictionary.vo;
+package com.github.lit.dictionary.model;
 
 import com.github.lit.commons.page.Page;
 import lombok.*;
@@ -14,7 +14,7 @@ import lombok.*;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-public class DictionaryVo extends Page {
+public class DictionaryQo extends Page {
 
     private static final long serialVersionUID = -2144418218430870185L;
 

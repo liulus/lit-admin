@@ -30,14 +30,14 @@
             <div class="col-sm-12 col-md-8 form-group">
                 <div class="col-sm-8 text-right control-label">关键字:</div>
                 <div class="col-sm-16 ">
-                    <input name="keyWord" class="form-control input-sm" type="text" value="${userVo.keyWord!}"
+                    <input name="keyWord" class="form-control input-sm" type="text" value="${userQo.keyWord!}"
                            placeholder="请输入">
                 </div>
             </div>
             <div class="col-sm-12 col-md-8 form-group">
                 <div class="col-sm-8 text-right control-label">用户:</div>
                 <div class="col-sm-16 ">
-                    <input name="userId" class="form-control input-sm" type="text" value="${userVo.userId!}"
+                    <input name="userId" class="form-control input-sm" type="text" value="${userQo.userId!}"
                            placeholder="请输入">
                 </div>
             </div>
@@ -46,8 +46,8 @@
                 <div class="col-sm-16 ">
                     <select name="userType" class="form-control input-sm">
                         <option value=""></option>
-                        <#--<option value="true" ${(userVo.system!false)?string('selected', '')}>是</option>-->
-                        <#--<option value="false" ${(userVo.system!true)?string('', 'selected')}>否</option>-->
+                        <#--<option value="true" ${(userQo.system!false)?string('selected', '')}>是</option>-->
+                        <#--<option value="false" ${(userQo.system!true)?string('', 'selected')}>否</option>-->
                     </select>
                 </div>
             </div>
@@ -153,9 +153,9 @@
             <div class="form-group">
                 <span class="control-label col-sm-6"><i class="text-danger">*&nbsp;</i>性别 :</span>
                 <div class="col-sm-16">
-                    <select name="sex" class="form-control">
-                        <option value="true" {@if sex} selected {@/if}>男 </option>
-                        <option value="false" {@if !sex} selected {@/if}>女 </option>
+                    <select name="gender" class="form-control">
+                        <option value="true" {@if gender} selected {@/if}>男 </option>
+                        <option value="false" {@if !gender} selected {@/if}>女 </option>
                     </select>
                 </div>
             </div>

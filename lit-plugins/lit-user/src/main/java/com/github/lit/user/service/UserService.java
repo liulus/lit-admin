@@ -1,6 +1,7 @@
 package com.github.lit.user.service;
 
-import com.github.lit.user.vo.UserVo;
+import com.github.lit.user.model.UserQo;
+import com.github.lit.user.model.UserVo;
 
 import java.io.Serializable;
 import java.util.List;
@@ -31,10 +32,10 @@ public interface UserService {
     /**
      * 根据条件查询用户列表
      *
-     * @param vo 查询条件
+     * @param qo 查询条件
      * @return
      */
-    List<UserVo> queryPageList(UserVo vo);
+    List<UserVo> findPageList(UserQo qo);
 
     /**
      * 新增用户

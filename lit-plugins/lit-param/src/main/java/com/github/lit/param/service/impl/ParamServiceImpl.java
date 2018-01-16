@@ -3,9 +3,9 @@ package com.github.lit.param.service.impl;
 import com.github.lit.jdbc.JdbcTools;
 import com.github.lit.jdbc.enums.Logic;
 import com.github.lit.jdbc.statement.Select;
-import com.github.lit.param.entity.Param;
+import com.github.lit.param.model.Param;
+import com.github.lit.param.model.ParamQo;
 import com.github.lit.param.service.ParamService;
-import com.github.lit.param.vo.ParamVo;
 import com.github.lit.plugin.exception.AppException;
 import com.google.common.base.Strings;
 import org.springframework.stereotype.Service;
@@ -32,7 +32,7 @@ public class ParamServiceImpl implements ParamService {
 
 
     @Override
-    public List<Param> queryPageList(ParamVo qo) {
+    public List<Param> queryPageList(ParamQo qo) {
 
         Select<Param> select = jdbcTools.createSelect(Param.class);
 

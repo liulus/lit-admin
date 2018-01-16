@@ -1,4 +1,4 @@
-package com.github.lit.param.entity;
+package com.github.lit.param.model;
 
 import com.github.lit.jdbc.annotation.Column;
 import com.github.lit.jdbc.annotation.GeneratedValue;

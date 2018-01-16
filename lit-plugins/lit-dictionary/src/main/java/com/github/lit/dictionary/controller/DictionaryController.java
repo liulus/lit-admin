@@ -1,9 +1,9 @@
 package com.github.lit.dictionary.controller;
 
 import com.github.lit.commons.context.ResultConst;
-import com.github.lit.dictionary.entity.Dictionary;
+import com.github.lit.dictionary.model.Dictionary;
+import com.github.lit.dictionary.model.DictionaryQo;
 import com.github.lit.dictionary.service.DictionaryService;
-import com.github.lit.dictionary.vo.DictionaryVo;
 import com.github.lit.plugin.context.PluginConst;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -28,7 +28,7 @@ public class DictionaryController {
     private DictionaryService dictionaryService;
 
     @RequestMapping({"/list", ""})
-    public String list(DictionaryVo vo, Model model) {
+    public String list(DictionaryQo vo, Model model) {
         List<Dictionary> dictionaries = dictionaryService.queryPageList(vo);
         model.addAttribute(ResultConst.RESULT, dictionaries);
 
@@ -36,7 +36,7 @@ public class DictionaryController {
     }
 
     @RequestMapping("/{parentId}")
-    public String childList(DictionaryVo vo, @PathVariable Long parentId, Model model) {
+    public String childList(DictionaryQo vo, @PathVariable Long parentId, Model model) {
 
         vo.setParentId(parentId);
         List<Dictionary> dictionaries = dictionaryService.queryPageList(vo);

@@ -30,7 +30,7 @@
             <div class="col-sm-12 col-md-9 form-group">
                 <div class="col-sm-8 text-right control-label">关键字:</div>
                 <div class="col-sm-16 ">
-                    <input name="keyWord" class="form-control input-sm" type="text" value="${dictionaryVo.keyWord!}"
+                    <input name="keyWord" class="form-control input-sm" type="text" value="${dictionaryQo.keyWord!}"
                            placeholder="请输入">
                 </div>
             </div>
@@ -39,13 +39,13 @@
                 <div class="col-sm-14 ">
                     <select name="system" class="form-control input-sm">
                         <option value=""></option>
-                        <option value="true" ${(dictionaryVo.system!false)?string('selected', '')}>是</option>
-                        <option value="false" ${(dictionaryVo.system!true)?string('', 'selected')}>否</option>
+                        <option value="true" ${(dictionaryQo.system!false)?string('selected', '')}>是</option>
+                        <option value="false" ${(dictionaryQo.system!true)?string('', 'selected')}>否</option>
                     </select>
                 </div>
             </div>
-        <#--<input type="hidden" name="pageNum" value="${dictionaryVo.pageNum!}">-->
-        <#--<input type="hidden" name="pageSize" value="${dictionaryVo.pageSize!}">-->
+        <#--<input type="hidden" name="pageNum" value="${dictionaryQo.pageNum!}">-->
+        <#--<input type="hidden" name="pageSize" value="${dictionaryQo.pageSize!}">-->
             <div class="col-sm-24 col-md-5 text-center form-group">
                 <button id="data-query" class="btn btn-sm btn-primary">&nbsp;&nbsp;查询&nbsp;&nbsp;</button>
             </div>
@@ -66,8 +66,8 @@
                 <i class="fa fa-pencil"></i>&nbsp;&nbsp;修改
             </button>
         </#if>
-        <#if dictionaryVo.parentId??>
-            <a href="${rc.contextPath}/plugin/dictionary/back/${dictionaryVo.parentId?c}" class="btn btn-sm btn-warning">
+        <#if dictionaryQo.parentId??>
+            <a href="${rc.contextPath}/plugin/dictionary/back/${dictionaryQo.parentId?c}" class="btn btn-sm btn-warning">
                 <i class="fa fa-reply"></i>&nbsp;&nbsp;返回上级
             </a>
         </#if>
@@ -125,8 +125,8 @@
 <script type="text/template" id="edit-tpl">
     <div class="modal-body">
         <form id="form-edit" class="form-horizontal" action="">
-        <#if dictionaryVo.parentId??>
-            <input type="hidden" name="parentId" value="${dictionaryVo.parentId?c}">
+        <#if dictionaryQo.parentId??>
+            <input type="hidden" name="parentId" value="${dictionaryQo.parentId?c}">
         </#if>
             <input type="hidden" name="dictId" value="${r'${dictId}'}">
             <div class="form-group">

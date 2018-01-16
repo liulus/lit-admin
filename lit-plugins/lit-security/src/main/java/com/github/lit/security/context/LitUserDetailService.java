@@ -1,7 +1,7 @@
 package com.github.lit.security.context;
 
+import com.github.lit.user.model.UserVo;
 import com.github.lit.user.service.UserService;
-import com.github.lit.user.vo.UserVo;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;

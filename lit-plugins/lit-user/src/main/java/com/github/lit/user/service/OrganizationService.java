@@ -1,7 +1,7 @@
 package com.github.lit.user.service;
 
-import com.github.lit.user.entity.Organization;
-import com.github.lit.user.vo.OrganizationVo;
+import com.github.lit.user.model.Organization;
+import com.github.lit.user.model.OrganizationQo;
 
 import java.util.List;
 
@@ -17,7 +17,7 @@ public interface OrganizationService {
      * @param vo 查询条件
      * @return
      */
-    List<Organization> queryPageList(OrganizationVo vo);
+    List<Organization> queryPageList(OrganizationQo vo);
 
     /**
      * 查询单个机构

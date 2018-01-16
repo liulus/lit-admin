@@ -1,7 +1,7 @@
 package com.github.lit.dictionary.service;
 
-import com.github.lit.dictionary.entity.Dictionary;
-import com.github.lit.dictionary.vo.DictionaryVo;
+import com.github.lit.dictionary.model.Dictionary;
+import com.github.lit.dictionary.model.DictionaryQo;
 
 import java.util.List;
 
@@ -19,7 +19,7 @@ public interface DictionaryService {
      * @param qo 查询对象
      * @return
      */
-    List<Dictionary> queryPageList(DictionaryVo qo);
+    List<Dictionary> queryPageList(DictionaryQo qo);
 
     /**
      * 添加字典对象

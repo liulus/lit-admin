@@ -1,7 +1,7 @@
 package com.github.lit.security.service;
 
-import com.github.lit.security.entity.Role;
-import com.github.lit.security.vo.RoleVo;
+import com.github.lit.security.model.Role;
+import com.github.lit.security.model.RoleQo;
 
 import java.util.List;
 
@@ -15,10 +15,10 @@ public interface RoleService {
     /**
      * 分页查询角色列表
      *
-     * @param roleVo 查询条件
+     * @param roleQo 查询条件
      * @return 角色列表
      */
-    List<Role> findPageList(RoleVo roleVo);
+    List<Role> findPageList(RoleQo roleQo);
 
     /**
      * 根据 roleId 查询角色

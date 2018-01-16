@@ -1,7 +1,7 @@
 package com.github.lit.security.service;
 
-import com.github.lit.security.entity.Authority;
-import com.github.lit.security.vo.AuthorityVo;
+import com.github.lit.security.model.Authority;
+import com.github.lit.security.model.AuthorityQo;
 
 import java.util.List;
 
@@ -15,10 +15,10 @@ public interface AuthorityService {
     /**
      * 分页查询权限列表
      *
-     * @param vo 查询条件
+     * @param qo 查询条件
      * @return 权限列表
      */
-    List<Authority> queryPageList(AuthorityVo vo);
+    List<Authority> findPageList(AuthorityQo qo);
 
     /**
      * 根据角色Id查询权限列表

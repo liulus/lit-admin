@@ -64,7 +64,7 @@
                 <th>URL</th>
                 <th>类型</th>
                 <th>状态</th>
-                <th>备注</th>
+                <#--<th>备注</th>-->
                 <th>操作</th>
             </tr>
             </thead>
@@ -93,7 +93,7 @@
                         </a>
                     </div>
                 </td>
-                <td>${item.memo!?html}</td>
+                <#--<td>${item.memo!?html}</td>-->
                 <td>
                     <a class="data-move btn btn-xs btn-primary">
                         <i class="fa fa-random"></i>&nbsp;移动

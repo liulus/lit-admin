@@ -3,12 +3,12 @@ package com.github.lit.security.service.impl;
 import com.github.lit.jdbc.JdbcTools;
 import com.github.lit.jdbc.enums.Logic;
 import com.github.lit.plugin.exception.AppException;
-import com.github.lit.security.entity.Authority;
-import com.github.lit.security.entity.Role;
-import com.github.lit.security.entity.RoleAuthority;
+import com.github.lit.security.model.Authority;
+import com.github.lit.security.model.AuthorityQo;
+import com.github.lit.security.model.Role;
+import com.github.lit.security.model.RoleAuthority;
 import com.github.lit.security.service.AuthorityService;
 import com.github.lit.security.service.RoleService;
-import com.github.lit.security.vo.AuthorityVo;
 import com.google.common.base.Strings;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -35,9 +35,9 @@ public class AuthorityServiceImpl implements AuthorityService {
 
 
     @Override
-    public List<Authority> queryPageList(AuthorityVo vo) {
+    public List<Authority> findPageList(AuthorityQo qo) {
 
-        return jdbcTools.createSelect(Authority.class).list();
+        return jdbcTools.createSelect(Authority.class).page(qo).list();
     }
 
     @Override

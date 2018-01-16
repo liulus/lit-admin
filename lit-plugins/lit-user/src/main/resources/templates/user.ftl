@@ -98,7 +98,7 @@
                 <td>${item?counter}</td>
                 <td>${item.userName!?html}</td>
                 <td>${item.nickName!?html}</td>
-                <td>${item.sex?string('男', '女')}</td>
+                <td>${item.gender?string('男', '女')}</td>
                 <td>${item.mobilePhone!}</td>
                 <td>${item.userStatus!}</td>
             </tr>

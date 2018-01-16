@@ -1,7 +1,7 @@
 package com.github.lit.security.context;
 
-import com.github.lit.security.entity.Authority;
-import com.github.lit.security.entity.Role;
+import com.github.lit.security.model.Authority;
+import com.github.lit.security.model.Role;
 import com.github.lit.user.context.LoginUser;
 import lombok.Getter;
 import lombok.Setter;

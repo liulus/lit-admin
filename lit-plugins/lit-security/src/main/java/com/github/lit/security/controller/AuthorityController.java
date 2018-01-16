@@ -2,9 +2,9 @@ package com.github.lit.security.controller;
 
 import com.github.lit.commons.context.ResultConst;
 import com.github.lit.plugin.context.PluginConst;
-import com.github.lit.security.entity.Authority;
+import com.github.lit.security.model.Authority;
+import com.github.lit.security.model.AuthorityQo;
 import com.github.lit.security.service.AuthorityService;
-import com.github.lit.security.vo.AuthorityVo;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,8 +25,8 @@ public class AuthorityController {
 
 
     @RequestMapping("/list")
-    public String list(AuthorityVo vo, Model model) {
-        model.addAttribute(ResultConst.RESULT, authorityService.queryPageList(vo));
+    public String list(AuthorityQo qo, Model model) {
+        model.addAttribute(ResultConst.RESULT, authorityService.findPageList(qo));
         return "authority";
     }
 

@@ -1,4 +1,4 @@
-package com.github.lit.security.entity;
+package com.github.lit.security.model;
 
 import com.github.lit.jdbc.annotation.GeneratedValue;
 import com.github.lit.jdbc.annotation.Id;
@@ -13,35 +13,39 @@ import java.io.Serializable;
 
 /**
  * User : liulu
- * Date : 2017/11/19 16:20
- * version $Id: Authority.java, v 0.1 Exp $
+ * Date : 2017/11/19 16:28
+ * version $Id: UserRole.java, v 0.1 Exp $
  */
 @Getter
 @Setter
 @ToString
-@Table(name = PluginConst.TABLE_PREFIX + "authority")
-public class Authority implements Serializable {
+@Table(name = PluginConst.TABLE_PREFIX + "user_role")
+public class UserRole implements Serializable {
 
-    private static final long serialVersionUID = 1650537028788209650L;
+    private static final long serialVersionUID = -8814219062642647147L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long authorityId;
+    private Long userRoleId;
 
     /**
-     * 权限码
+     * 用户Id
      */
-    private String authorityCode;
+    private Long userId;
 
     /**
-     * 权限码名称
+     * 角色Id
      */
-    private String authorityName;
+    private Long roleId;
 
     /**
-     * 备注
+     * 用户名
      */
-    private String memo;
+    private String userName;
 
+    /**
+     * 角色编号
+     */
+    private String roleCode;
 
 }

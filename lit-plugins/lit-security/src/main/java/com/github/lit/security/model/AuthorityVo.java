@@ -1,9 +1,10 @@
-package com.github.lit.security.vo;
+package com.github.lit.security.model;
 
-import com.github.lit.commons.page.Page;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+
+import java.io.Serializable;
 
 /**
  * User : liulu
@@ -13,7 +14,7 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-public class AuthorityVo extends Page {
+public class AuthorityVo implements Serializable {
 
     private static final long serialVersionUID = -5010568354608479443L;
 

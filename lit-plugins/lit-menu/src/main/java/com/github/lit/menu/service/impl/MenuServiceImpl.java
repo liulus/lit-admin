@@ -2,9 +2,12 @@ package com.github.lit.menu.service.impl;
 
 import com.github.lit.commons.bean.BeanUtils;
 import com.github.lit.commons.event.Event;
+import com.github.lit.dictionary.entity.Dictionary;
+import com.github.lit.dictionary.tool.DictionaryTools;
 import com.github.lit.jdbc.JdbcTools;
 import com.github.lit.jdbc.enums.Logic;
 import com.github.lit.jdbc.statement.Select;
+import com.github.lit.menu.context.MenuConst;
 import com.github.lit.menu.event.MenuUpdateEvent;
 import com.github.lit.menu.model.Menu;
 import com.github.lit.menu.model.MenuQo;
@@ -12,15 +15,13 @@ import com.github.lit.menu.model.MenuVo;
 import com.github.lit.menu.service.MenuService;
 import com.github.lit.plugin.exception.AppException;
 import com.google.common.base.Strings;
+import com.google.common.collect.Maps;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 /**
  * User : liulu
@@ -35,8 +36,19 @@ public class MenuServiceImpl implements MenuService {
     private JdbcTools jdbcTools;
 
     @Override
-    public List<Menu> findPageList(MenuQo qo) {
-        return buildSelect(qo).page(qo).list();
+    public List<MenuVo> findPageList(MenuQo qo) {
+        List<Menu> menus = buildSelect(qo).page(qo).list();
+
+        List<Dictionary> menuTypes = DictionaryTools.findChildByRootKey(MenuConst.MENU_TYPE);
+        Map<String, Dictionary> menuTypeMap = Maps.uniqueIndex(menuTypes, Dictionary::getDictKey);
+
+        return BeanUtils.convert(MenuVo.class, menus, (menuVo, menu) -> {
+            Dictionary dictionary = menuTypeMap.get(menu.getMenuType());
+            menuVo.setMenuTypeStr(dictionary == null ? "" : dictionary.getDictValue());
+
+            MenuQo menuQo = MenuQo.builder().parentId(menu.getMenuId()).build();
+            menuVo.setIsParent(buildSelect(menuQo).count() > 0);
+        });
     }
 
     @Override

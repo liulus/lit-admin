@@ -37,8 +37,9 @@ public class MenuController {
 
     @RequestMapping({"/list", ""})
     public String menuList(MenuQo qo, Model model) {
-        List<Menu> menus = menuService.findPageList(qo);
-        processResult(model, menus);
+        List<MenuVo> menuVos = menuService.findPageList(qo);
+        model.addAttribute(ResultConst.RESULT, menuVos);
+        model.addAttribute("menuType", DictionaryTools.findChildByRootKey(MenuConst.MENU_TYPE));
         return "menu";
     }
 
@@ -54,8 +55,9 @@ public class MenuController {
     public String childList(MenuQo qo, @PathVariable Long parentId, Model model) {
 
         qo.setParentId(parentId);
-        List<Menu> menus = menuService.findPageList(qo);
-        processResult(model, menus);
+        List<MenuVo> menuVos = menuService.findPageList(qo);
+        model.addAttribute(ResultConst.RESULT, menuVos);
+        model.addAttribute("menuType", DictionaryTools.findChildByRootKey(MenuConst.MENU_TYPE));
         return "menu";
     }
 

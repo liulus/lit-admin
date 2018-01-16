@@ -2,9 +2,9 @@ package com.github.lit.security.service.impl;
 
 import com.github.lit.jdbc.JdbcTools;
 import com.github.lit.plugin.exception.AppException;
-import com.github.lit.security.entity.Role;
+import com.github.lit.security.model.Role;
+import com.github.lit.security.model.RoleQo;
 import com.github.lit.security.service.RoleService;
-import com.github.lit.security.vo.RoleVo;
 import com.google.common.base.Strings;
 import org.springframework.stereotype.Service;
 
@@ -24,9 +24,9 @@ public class RoleServiceImpl implements RoleService {
     private JdbcTools jdbcTools;
 
     @Override
-    public List<Role> findPageList(RoleVo roleVo) {
+    public List<Role> findPageList(RoleQo roleQo) {
 
-        return jdbcTools.createSelect(Role.class).list();
+        return jdbcTools.createSelect(Role.class).page(roleQo).list();
     }
 
     @Override

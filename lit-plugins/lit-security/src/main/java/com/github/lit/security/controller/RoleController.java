@@ -2,9 +2,9 @@ package com.github.lit.security.controller;
 
 import com.github.lit.commons.context.ResultConst;
 import com.github.lit.plugin.context.PluginConst;
-import com.github.lit.security.entity.Role;
+import com.github.lit.security.model.Role;
+import com.github.lit.security.model.RoleQo;
 import com.github.lit.security.service.RoleService;
-import com.github.lit.security.vo.RoleVo;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,8 +24,8 @@ public class RoleController {
     private RoleService roleService;
 
     @RequestMapping("/list")
-    public String list(RoleVo roleVo, Model model) {
-        model.addAttribute(ResultConst.RESULT, roleService.findPageList(roleVo));
+    public String list(RoleQo roleQo, Model model) {
+        model.addAttribute(ResultConst.RESULT, roleService.findPageList(roleQo));
         return "role";
     }
 

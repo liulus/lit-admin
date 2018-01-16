@@ -19,7 +19,7 @@ public interface MenuService {
      * @param qo 查询条件
      * @return 菜单列表
      */
-    List<Menu> findPageList(MenuQo qo);
+    List<MenuVo> findPageList(MenuQo qo);
 
     /**
      * 根据Id查询菜单

@@ -58,4 +58,11 @@ public interface RoleService {
      * @return 受影响记录数
      */
     int delete(Long[] ids);
+
+    /**
+     * 绑定权限
+     * @param roleId 角色Id
+     * @param authorityIds 权限Id
+     */
+    void bindAuthority(Long roleId, Long[] authorityIds);
 }

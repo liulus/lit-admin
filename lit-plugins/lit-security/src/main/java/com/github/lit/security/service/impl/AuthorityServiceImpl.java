@@ -1,22 +1,23 @@
 package com.github.lit.security.service.impl;
 
+import com.github.lit.commons.bean.BeanUtils;
+import com.github.lit.dictionary.model.Dictionary;
+import com.github.lit.dictionary.tool.DictionaryTools;
 import com.github.lit.jdbc.JdbcTools;
 import com.github.lit.jdbc.enums.Logic;
 import com.github.lit.plugin.exception.AppException;
-import com.github.lit.security.model.Authority;
-import com.github.lit.security.model.AuthorityQo;
-import com.github.lit.security.model.Role;
-import com.github.lit.security.model.RoleAuthority;
+import com.github.lit.security.context.SecurityConst;
+import com.github.lit.security.model.*;
 import com.github.lit.security.service.AuthorityService;
 import com.github.lit.security.service.RoleService;
 import com.google.common.base.Strings;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * User : liulu
@@ -41,6 +42,46 @@ public class AuthorityServiceImpl implements AuthorityService {
     }
 
     @Override
+    public List<AuthorityVo> findAuthorityTree() {
+
+        List<Authority> authorities = jdbcTools.createSelect(Authority.class).list();
+
+        List<Dictionary> authorityTypes = DictionaryTools.findChildByRootKey(SecurityConst.AUTHORITY_TYPE);
+        if (CollectionUtils.isEmpty(authorityTypes)) {
+            return BeanUtils.convert(AuthorityVo.class, authorities);
+        }
+
+        List<AuthorityVo> result = new ArrayList<>();
+
+        Map<String, List<AuthorityVo>> typeMap = authorities.stream()
+                .filter(authority -> !Strings.isNullOrEmpty(authority.getAuthorityType()))
+                .map(authority -> BeanUtils.convert(new AuthorityVo(), authority))
+                .collect(Collectors.groupingBy(Authority::getAuthorityType));
+
+        authorityTypes.forEach(dictionary -> {
+            List<AuthorityVo> childVos = typeMap.get(dictionary.getDictKey());
+            if (!CollectionUtils.isEmpty(childVos)) {
+                AuthorityVo authorityVo = new AuthorityVo();
+                authorityVo.setIsParent(true);
+                authorityVo.setNocheck(true);
+                authorityVo.setAuthorityCode(dictionary.getDictKey());
+                authorityVo.setAuthorityName(dictionary.getDictValue());
+                authorityVo.setChildren(childVos);
+                result.add(authorityVo);
+            }
+        });
+
+        // 过滤没有权限类型的
+        List<AuthorityVo> other = authorities.stream()
+                .filter(authority -> Strings.isNullOrEmpty(authority.getAuthorityType()))
+                .map(authority -> BeanUtils.convert(new AuthorityVo(), authority))
+                .collect(Collectors.toList());
+        result.addAll(other);
+        return result;
+    }
+
+
+    @Override
     public List<Authority> findByRoleId(Long roleId) {
         Role role = roleService.findById(roleId);
         if (role == null) {
@@ -48,7 +89,7 @@ public class AuthorityServiceImpl implements AuthorityService {
         }
         return jdbcTools.createSelect(Authority.class)
                 .join(RoleAuthority.class)
-                .on(Authority.class, "roleId", Logic.EQ, RoleAuthority.class, "roleId")
+                .on(Authority.class, "authorityId", Logic.EQ, RoleAuthority.class, "authorityId")
                 .and(RoleAuthority.class, "roleId", Logic.EQ, role.getRoleId())
                 .list();
     }

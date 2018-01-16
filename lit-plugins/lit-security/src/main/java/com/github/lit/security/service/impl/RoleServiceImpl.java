@@ -1,8 +1,11 @@
 package com.github.lit.security.service.impl;
 
 import com.github.lit.jdbc.JdbcTools;
+import com.github.lit.jdbc.enums.Logic;
 import com.github.lit.plugin.exception.AppException;
+import com.github.lit.security.model.Authority;
 import com.github.lit.security.model.Role;
+import com.github.lit.security.model.RoleAuthority;
 import com.github.lit.security.model.RoleQo;
 import com.github.lit.security.service.RoleService;
 import com.google.common.base.Strings;
@@ -71,6 +74,26 @@ public class RoleServiceImpl implements RoleService {
         }
 
         return jdbcTools.deleteByIds(Role.class, ids);
+    }
+
+    @Override
+    public void bindAuthority(Long roleId, Long[] authorityIds) {
+        Role role = findById(roleId);
+        if (role == null) {
+            return;
+        }
+        jdbcTools.createDelete(RoleAuthority.class).where("roleId", roleId).execute();
+        List<Long> ids = jdbcTools.createSelect(Authority.class)
+                .include("authorityId")
+                .where("authorityId", Logic.IN, (Object[]) authorityIds)
+                .list(Long.class);
+        ids.forEach(id -> {
+            RoleAuthority roleAuthority = RoleAuthority.builder()
+                    .roleId(role.getRoleId())
+                    .authorityId(id)
+                    .build();
+            jdbcTools.insert(roleAuthority);
+        });
     }
 
 

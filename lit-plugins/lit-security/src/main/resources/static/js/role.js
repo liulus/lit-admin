@@ -28,7 +28,6 @@ $(function () {
         }, function (result) {
             openEdit('修改角色', compiledEditTpl.render(result.result), '#form-edit', urlPrefix + '/update.json')
         });
-
     });
 
     function openEdit(title, content, form, url) {
@@ -53,11 +52,81 @@ $(function () {
         })
     }
 
+
+    var authTreeConfig = {
+        data: {
+            key: {
+                name: "authorityName",
+                title: "authorityName"
+            }
+        },
+        check: {
+            enable: true
+        },
+        callback: {
+            onClick: function (e, treeId, treeNode) {
+                var zTreeObj = $.fn.zTree.getZTreeObj(treeId);
+                zTreeObj.checkNode(treeNode, !treeNode.checked);
+                zTreeObj.cancelSelectedNode();
+            }
+        }
+    };
+
+    var authTree;
+
     /** 分配权限 */
     $('.data-authorize').on('click', function (e) {
-
-
+        if (!authTree) {
+            initAuthTree();
+        }
+        authTree.checkAllNodes(false);
+        var id = getId(e);
+        layer.open({
+            type: 1,
+            title: '权限',
+            area: "280px",
+            offset: '20%',
+            content: $('#authority-tree'),
+            btn: ['确定', '取消'],
+            success: function (dom, index) {
+                $.post(path + '/plugin/authority/' + id + '/list.json', function (res) {
+                    $.each(res.result, function (index, value) {
+                        var node = authTree.getNodeByParam("authorityCode", value.authorityCode);
+                        authTree.checkNode(node, true);
+                    });
+                });
+            },
+            btn1: function (index) {
+                var checkedNodes = authTree.getCheckedNodes(true);
+                // 构建请求参数
+                var params = ['roleId=' + id];
+                if (checkedNodes.length !== 0) {
+                    $.each(checkedNodes, function (index, node) {
+                        params.push('authorityIds=' + node.authorityId);
+                    });
+                }
+                $.post(urlPrefix + '/bind/authority.json', params.join('&'), function (res) {
+                    if (res.success) {
+                        MsgUtils.success('分配权限成功!');
+                    } else {
+                        MsgUtils.error(res.message);
+                    }
+                });
+            }
+        });
     });
+
+    function initAuthTree() {
+        $.post(path + '/plugin/authority/tree.json', function (res) {
+            var data = {
+                authorityName: '权限',
+                nocheck: true,
+                children: res.result
+            };
+            authTree = $.fn.zTree.init($('.ztree'), authTreeConfig, data);
+            authTree.expandAll(true);
+        });
+    }
 
     /** 删除功能 */
     $('#data-del').on('click', function (e) {

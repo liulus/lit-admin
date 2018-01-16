@@ -4,7 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-import java.io.Serializable;
+import java.util.List;
 
 /**
  * User : liulu
@@ -14,8 +14,14 @@ import java.io.Serializable;
 @Getter
 @Setter
 @ToString
-public class AuthorityVo implements Serializable {
+public class AuthorityVo extends Authority {
 
     private static final long serialVersionUID = -5010568354608479443L;
 
+    // zTree 属性 隐藏选择框
+    private Boolean nocheck;
+
+    private Boolean isParent;
+
+    private List<AuthorityVo> children;
 }

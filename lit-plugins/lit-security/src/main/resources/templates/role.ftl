@@ -93,6 +93,10 @@
 </#if>
 </div>
 
+<div id="authority-tree" class="modal-body text-center" style="display: none">
+    <ul class="ztree"></ul>
+</div>
+
 <script type="text/template" id="edit-tpl">
     <div class="modal-body">
         <form id="form-edit" class="form-horizontal" action="">

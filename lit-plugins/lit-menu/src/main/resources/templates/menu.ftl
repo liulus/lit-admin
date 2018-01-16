@@ -164,7 +164,7 @@
                 <span class="control-label col-sm-6"><i class="text-danger">*&nbsp;</i>菜单类型 :</span>
                 <div class="col-sm-16">
                     <select name="menuType" class="form-control">
-                    <#list menuType as item>
+                    <#list menu_type as item>
                         <option value="${item.dictKey!}" {@if menuType===
                         '${item.dictKey!}'}selected {@/if}>${item.dictValue!}</option>
                     </#list>

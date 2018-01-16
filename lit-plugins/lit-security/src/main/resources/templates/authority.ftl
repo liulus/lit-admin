@@ -53,6 +53,7 @@
                 <th>行号</th>
                 <th>权限码</th>
                 <th>权限名</th>
+                <th>权限类型</th>
                 <th>备注</th>
                 <th>操作</th>
             </tr>
@@ -67,6 +68,7 @@
                 <td>${item?counter}</td>
                 <td>${item.authorityCode!?html}</td>
                 <td>${item.authorityName!?html}</td>
+                <td>${item.authorityType!?html}</td>
                 <td>${item.memo!?html}</td>
                 <td>
                     <a class="data-move btn btn-xs btn-primary">
@@ -107,6 +109,17 @@
                 <span class="control-label col-sm-6"><i class="text-danger">*&nbsp;</i>权限名 :</span>
                 <div class="col-sm-16">
                     <input type="text" name="authorityName" value="${r'${authorityName}'}" class="form-control">
+                </div>
+            </div>
+            <div class="form-group">
+                <span class="control-label col-sm-6"><i class="text-danger">*&nbsp;</i>菜单类型 :</span>
+                <div class="col-sm-16">
+                    <select name="authorityType" class="form-control">
+                    <#list authority_type as item>
+                        <option value="${item.dictKey!}" {@if authorityType===
+                        '${item.dictKey!}'}selected {@/if}>${item.dictValue!}</option>
+                    </#list>
+                    </select>
                 </div>
             </div>
             <div class="form-group">

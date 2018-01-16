@@ -1,8 +1,6 @@
 package com.github.lit.menu.controller;
 
-import com.github.lit.commons.bean.BeanUtils;
 import com.github.lit.commons.context.ResultConst;
-import com.github.lit.dictionary.model.Dictionary;
 import com.github.lit.dictionary.tool.DictionaryTools;
 import com.github.lit.menu.context.MenuConst;
 import com.github.lit.menu.model.Menu;
@@ -10,7 +8,6 @@ import com.github.lit.menu.model.MenuQo;
 import com.github.lit.menu.model.MenuVo;
 import com.github.lit.menu.service.MenuService;
 import com.github.lit.plugin.context.PluginConst;
-import com.google.common.collect.Maps;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.annotation.Resource;
 import java.util.List;
-import java.util.Map;
 
 /**
  * User : liulu
@@ -39,7 +35,7 @@ public class MenuController {
     public String menuList(MenuQo qo, Model model) {
         List<MenuVo> menuVos = menuService.findPageList(qo);
         model.addAttribute(ResultConst.RESULT, menuVos);
-        model.addAttribute("menuType", DictionaryTools.findChildByRootKey(MenuConst.MENU_TYPE));
+        model.addAttribute(MenuConst.MENU_TYPE, DictionaryTools.findChildByRootKey(MenuConst.MENU_TYPE));
         return "menu";
     }
 
@@ -57,21 +53,8 @@ public class MenuController {
         qo.setParentId(parentId);
         List<MenuVo> menuVos = menuService.findPageList(qo);
         model.addAttribute(ResultConst.RESULT, menuVos);
-        model.addAttribute("menuType", DictionaryTools.findChildByRootKey(MenuConst.MENU_TYPE));
+        model.addAttribute(MenuConst.MENU_TYPE, DictionaryTools.findChildByRootKey(MenuConst.MENU_TYPE));
         return "menu";
-    }
-
-    private void processResult(Model model, List<Menu> menus) {
-        List<Dictionary> dictionaries = DictionaryTools.findChildByRootKey(MenuConst.MENU_TYPE);
-
-        Map<String, Dictionary> dictionaryMap = Maps.uniqueIndex(dictionaries, Dictionary::getDictKey);
-        List<MenuVo> menuVos = BeanUtils.convert(MenuVo.class, menus, (menuVo, menu) -> {
-            Dictionary dictionary = dictionaryMap.get(menu.getMenuType());
-            menuVo.setMenuTypeStr(dictionary == null ? "" : dictionary.getDictValue());
-        });
-
-        model.addAttribute(ResultConst.RESULT, menuVos);
-        model.addAttribute("menuType", dictionaries);
     }
 
     /**

@@ -29,6 +29,12 @@ public class RoleController {
         return "role";
     }
 
+    @RequestMapping("/bind/authority")
+    public String bindAuthority(Long roleId, Long[] authorityIds) {
+        roleService.bindAuthority(roleId, authorityIds);
+        return "";
+    }
+
     @RequestMapping("/get")
     public String get(Long id, Model model) {
         model.addAttribute(ResultConst.RESULT, roleService.findById(id));

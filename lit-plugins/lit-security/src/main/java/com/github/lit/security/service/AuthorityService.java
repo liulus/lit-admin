@@ -2,6 +2,7 @@ package com.github.lit.security.service;
 
 import com.github.lit.security.model.Authority;
 import com.github.lit.security.model.AuthorityQo;
+import com.github.lit.security.model.AuthorityVo;
 
 import java.util.List;
 
@@ -19,6 +20,8 @@ public interface AuthorityService {
      * @return 权限列表
      */
     List<Authority> findPageList(AuthorityQo qo);
+
+    List<AuthorityVo> findAuthorityTree();
 
     /**
      * 根据角色Id查询权限列表

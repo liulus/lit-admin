@@ -67,7 +67,7 @@ $(function () {
             onClick: function (e, treeId, treeNode) {
                 var zTreeObj = $.fn.zTree.getZTreeObj(treeId);
                 zTreeObj.checkNode(treeNode, !treeNode.checked);
-                zTreeObj.cancelSelectedNode();
+                zTreeObj.cancelSelectedNode(); // 取消所有选中状态
             }
         }
     };
@@ -83,7 +83,7 @@ $(function () {
         var id = getId(e);
         layer.open({
             type: 1,
-            title: '权限',
+            title: '分配权限',
             area: "280px",
             offset: '20%',
             content: $('#authority-tree'),
@@ -112,19 +112,25 @@ $(function () {
                         MsgUtils.error(res.message);
                     }
                 });
+                layer.close(index);
             }
         });
     });
 
     function initAuthTree() {
-        $.post(path + '/plugin/authority/tree.json', function (res) {
-            var data = {
-                authorityName: '权限',
-                nocheck: true,
-                children: res.result
-            };
-            authTree = $.fn.zTree.init($('.ztree'), authTreeConfig, data);
-            authTree.expandAll(true);
+        $.ajax({
+            url: path + '/plugin/authority/tree.json',
+            contentType: 'application/json',
+            async: false,
+            success: function (res) {
+                var data = {
+                    authorityName: '权限',
+                    nocheck: true,
+                    children: res.result
+                };
+                authTree = $.fn.zTree.init($('.ztree'), authTreeConfig, data);
+                authTree.expandAll(true);
+            }
         });
     }
 

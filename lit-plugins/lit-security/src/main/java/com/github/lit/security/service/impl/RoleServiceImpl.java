@@ -10,10 +10,12 @@ import com.github.lit.security.model.RoleQo;
 import com.github.lit.security.service.RoleService;
 import com.google.common.base.Strings;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 /**
  * User : liulu
@@ -82,12 +84,23 @@ public class RoleServiceImpl implements RoleService {
         if (role == null) {
             return;
         }
-        jdbcTools.createDelete(RoleAuthority.class).where("roleId", roleId).execute();
         List<Long> ids = jdbcTools.createSelect(Authority.class)
                 .include("authorityId")
                 .where("authorityId", Logic.IN, (Object[]) authorityIds)
                 .list(Long.class);
-        ids.forEach(id -> {
+        List<Long> oldIds = jdbcTools.createSelect(RoleAuthority.class)
+                .include("authorityId")
+                .where("roleId", roleId)
+                .list(Long.class);
+        List<Long> deleteIds = oldIds.stream().filter(id -> !ids.contains(id)).collect(Collectors.toList());
+        if (!CollectionUtils.isEmpty(deleteIds)) {
+            jdbcTools.createDelete(RoleAuthority.class)
+                    .where("roleId", roleId)
+                    .and("authorityId", Logic.IN, deleteIds.toArray())
+                    .execute();
+        }
+        List<Long> insertIds = ids.stream().filter(id -> !oldIds.contains(id)).collect(Collectors.toList());
+        insertIds.forEach(id -> {
             RoleAuthority roleAuthority = RoleAuthority.builder()
                     .roleId(role.getRoleId())
                     .authorityId(id)

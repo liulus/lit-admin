@@ -112,7 +112,7 @@ $(function () {
         layer.open({
             type: 1,
             title: '菜单',
-            area: "400px",
+            area: "280px",
             offset: '20%',
             content: $('#menu-tree'),
             btn: ['确定', '取消'],

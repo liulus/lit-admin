@@ -55,7 +55,7 @@
                 <th>权限名</th>
                 <th>权限类型</th>
                 <th>备注</th>
-                <th>操作</th>
+                <#--<th>操作</th>-->
             </tr>
             </thead>
 
@@ -70,11 +70,11 @@
                 <td>${item.authorityName!?html}</td>
                 <td>${item.authorityType!?html}</td>
                 <td>${item.memo!?html}</td>
-                <td>
-                    <a class="data-move btn btn-xs btn-primary">
-                        <i class="fa fa-random"></i>&nbsp;移动
-                    </a>
-                </td>
+                <#--<td>-->
+                    <#--<a class="data-move btn btn-xs btn-primary">-->
+                        <#--<i class="fa fa-random"></i>&nbsp;移动-->
+                    <#--</a>-->
+                <#--</td>-->
             </tr>
             <#else>
             <tr>

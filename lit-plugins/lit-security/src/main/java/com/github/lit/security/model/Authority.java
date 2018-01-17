@@ -10,6 +10,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 /**
  * User : liulu
@@ -49,4 +50,17 @@ public class Authority implements Serializable {
     private String memo;
 
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Authority)) return false;
+        Authority authority = (Authority) o;
+        return Objects.equals(authorityId, authority.authorityId) &&
+                Objects.equals(authorityCode, authority.authorityCode);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(authorityId, authorityCode);
+    }
 }

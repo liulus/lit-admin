@@ -50,15 +50,10 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserVo findByName(String username) {
-        User user = jdbcTools.createSelect(User.class).where("userName", username)
+    public User findByName(String username) {
+        return jdbcTools.createSelect(User.class).where("userName", username)
                 .or("mobilePhone", username)
                 .single();
-        if (user == null) {
-            return null;
-        }
-
-        return BeanUtils.convert(new UserVo(), user);
     }
 
     @Override

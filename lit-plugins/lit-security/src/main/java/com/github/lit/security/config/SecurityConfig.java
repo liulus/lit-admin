@@ -62,11 +62,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             if (key.contains(",")) {
                 StringBuilder access = new StringBuilder();
                 for (String authCode : key.split(",")) {
-                    access.append("hasRole('").append(authCode).append("') and");
+                    access.append("hasAuthority('").append(authCode).append("') and");
                 }
                 http.authorizeRequests().antMatchers(entry.getValue()).access(access.substring(0, access.length() - 3));
             } else {
-                http.authorizeRequests().antMatchers(entry.getValue()).hasRole(key);
+                http.authorizeRequests().antMatchers(entry.getValue()).hasAuthority(key);
             }
         }
 

@@ -61,8 +61,17 @@ public interface RoleService {
 
     /**
      * 绑定权限
-     * @param roleId 角色Id
+     *
+     * @param roleId       角色Id
      * @param authorityIds 权限Id
      */
     void bindAuthority(Long roleId, Long[] authorityIds);
+
+    /**
+     * 根据用户Id查询角色列表
+     *
+     * @param userId userId
+     * @return List<Role>
+     */
+    List<Role> findByUserId(Long userId);
 }

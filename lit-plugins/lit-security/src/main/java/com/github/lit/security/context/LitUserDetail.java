@@ -1,6 +1,5 @@
 package com.github.lit.security.context;
 
-import com.github.lit.security.model.Authority;
 import com.github.lit.security.model.Role;
 import com.github.lit.user.model.LoginUser;
 import lombok.Getter;
@@ -27,11 +26,11 @@ public class LitUserDetail extends LoginUser implements UserDetails {
 
     private List<Role> roles;
 
-    private List<Authority> authorities;
+    private List<GrantedAuthority> authorities;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+        return authorities;
     }
 
     @Override
@@ -41,21 +40,21 @@ public class LitUserDetail extends LoginUser implements UserDetails {
 
     @Override
     public boolean isAccountNonExpired() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        return getLock();
+        return getLock() == null ? true : getLock();
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isEnabled() {
-        return false;
+        return true;
     }
 }

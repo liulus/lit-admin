@@ -3,10 +3,7 @@ package com.github.lit.security.service.impl;
 import com.github.lit.jdbc.JdbcTools;
 import com.github.lit.jdbc.enums.Logic;
 import com.github.lit.plugin.exception.AppException;
-import com.github.lit.security.model.Authority;
-import com.github.lit.security.model.Role;
-import com.github.lit.security.model.RoleAuthority;
-import com.github.lit.security.model.RoleQo;
+import com.github.lit.security.model.*;
 import com.github.lit.security.service.RoleService;
 import com.google.common.base.Strings;
 import org.springframework.stereotype.Service;
@@ -107,6 +104,16 @@ public class RoleServiceImpl implements RoleService {
                     .build();
             jdbcTools.insert(roleAuthority);
         });
+    }
+
+    @Override
+    public List<Role> findByUserId(Long userId) {
+
+        return jdbcTools.createSelect(Role.class)
+                .join(UserRole.class)
+                .on(Role.class, "roleId", Logic.EQ, UserRole.class, "roleId")
+                .and(UserRole.class, "userId", Logic.EQ, userId)
+                .list();
     }
 
 

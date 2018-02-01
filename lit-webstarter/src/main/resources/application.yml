@@ -1,8 +1,8 @@
 c3p0:
-  jdbcUrl: jdbc:mysql://120.78.47.145:3306/lit
+  jdbcUrl: jdbc:mysql://localhost:3306/lit
   driverClass: com.mysql.jdbc.Driver
   user: root
-  password: Lycd1993981!
+  password: 123456
 #  jdbcUrl: jdbc:oracle:thin:@localhost:49161:XE
 #  driverClass: oracle.jdbc.OracleDriver
 #  user: liulu
@@ -10,6 +10,8 @@ c3p0:
 
 
 spring:
+  profiles:
+    active: default
   thymeleaf:
     cache: false
   freemarker:
@@ -23,3 +25,12 @@ server:
   context-path: /lit
 
 
+---
+
+spring:
+  profiles: dev
+c3p0:
+  jdbcUrl: jdbc:mysql://120.78.47.145:3306/lit
+  driverClass: com.mysql.jdbc.Driver
+  user: root
+  password: Lycd1993981!

@@ -158,13 +158,26 @@ INSERT INTO lit_menu (menu_code, menu_name, menu_icon, menu_url, order_num, memo
 INSERT INTO lit_menu (menu_code, menu_name, menu_icon, menu_url, order_num, memo, menu_type, module, is_enable, parent_id) VALUES ('system_role', '角色管理', '12', '/plugin/role/list', 6, '角色管理', 'menu_type_left', null, 1, SELECT menu_id from menu where menu_code='system');
 INSERT INTO lit_menu (menu_code, menu_name, menu_icon, menu_url, order_num, memo, menu_type, module, is_enable, parent_id) VALUES ('system_authority', '权限管理', '1', '/plugin/authority/list', 7, '权限管理', 'menu_type_left', null, 1, SELECT menu_id from menu where menu_code='system');
 
-INSERT INTO lit_authority (authority_code, authority_name, memo) VALUES ('menu_manager', '菜单管理', '菜单管理');
-INSERT INTO lit_authority (authority_code, authority_name, memo) VALUES ('dictionary_manager', '字典管理', '字典管理');
-INSERT INTO lit_authority (authority_code, authority_name, memo) VALUES ('param_manager', '参数管理', '参数管理');
-INSERT INTO lit_authority (authority_code, authority_name, memo) VALUES ('user_manager', '用户管理', '用户管理');
-INSERT INTO lit_authority (authority_code, authority_name, memo) VALUES ('organization_manager', '机构管理', '机构管理');
-INSERT INTO lit_authority (authority_code, authority_name, memo) VALUES ('role_manager', '角色管理', '角色管理');
-INSERT INTO lit_authority (authority_code, authority_name, memo) VALUES ('authority_manager', '权限管理', '权限管理');
+INSERT INTO lit_authority (authority_id, authority_code, authority_name, authority_type, memo, sys_time) VALUES (1, 'menu_manager', '菜单管理', 'system_authority', '菜单管理', '2018-02-01 11:19:00');
+INSERT INTO lit_authority (authority_id, authority_code, authority_name, authority_type, memo, sys_time) VALUES (2, 'dictionary_manager', '字典管理', 'system_authority', '字典管理', '2018-02-01 11:19:00');
+INSERT INTO lit_authority (authority_id, authority_code, authority_name, authority_type, memo, sys_time) VALUES (3, 'param_manager', '参数管理', 'system_authority', '参数管理', '2018-02-01 11:19:00');
+INSERT INTO lit_authority (authority_id, authority_code, authority_name, authority_type, memo, sys_time) VALUES (4, 'user_manager', '用户管理', 'system_authority', '用户管理', '2018-02-01 11:19:00');
+INSERT INTO lit_authority (authority_id, authority_code, authority_name, authority_type, memo, sys_time) VALUES (5, 'organization_manager', '机构管理', 'system_authority', '机构管理', '2018-02-01 11:19:00');
+INSERT INTO lit_authority (authority_id, authority_code, authority_name, authority_type, memo, sys_time) VALUES (6, 'role_manager', '角色管理', 'system_authority', '角色管理', '2018-02-01 11:19:00');
+INSERT INTO lit_authority (authority_id, authority_code, authority_name, authority_type, memo, sys_time) VALUES (7, 'authority_manager', '权限管理', 'system_authority', '权限管理', '2018-02-01 11:19:00');
+
+INSERT INTO lit_role (role_id, role_code, role_name, memo, sys_time) VALUES (1, 'role_system', '系统管理员', '系统管理员', '2018-01-16 15:26:36');
+INSERT INTO lit_role (role_id, role_code, role_name, memo, sys_time) VALUES (2, 'role_user', '普通用户', '普通用户', '2018-01-16 20:13:41');
+
+INSERT INTO lit_role_authority (role_authority_id, role_id, role_code, authority_id, authority_code, sys_time) VALUES (1, 1, '', 1, '', '2018-02-01 11:10:23');
+INSERT INTO lit_role_authority (role_authority_id, role_id, role_code, authority_id, authority_code, sys_time) VALUES (2, 1, '', 2, '', '2018-02-01 11:10:23');
+INSERT INTO lit_role_authority (role_authority_id, role_id, role_code, authority_id, authority_code, sys_time) VALUES (3, 1, '', 3, '', '2018-02-01 11:10:23');
+INSERT INTO lit_role_authority (role_authority_id, role_id, role_code, authority_id, authority_code, sys_time) VALUES (4, 1, '', 4, '', '2018-02-01 11:10:23');
+INSERT INTO lit_role_authority (role_authority_id, role_id, role_code, authority_id, authority_code, sys_time) VALUES (5, 1, '', 5, '', '2018-02-01 11:10:23');
+INSERT INTO lit_role_authority (role_authority_id, role_id, role_code, authority_id, authority_code, sys_time) VALUES (6, 1, '', 6, '', '2018-02-01 11:10:23');
+INSERT INTO lit_role_authority (role_authority_id, role_id, role_code, authority_id, authority_code, sys_time) VALUES (7, 1, '', 7, '', '2018-02-01 11:10:23');
 
 
 INSERT INTO lit_user (org_id, user_code, user_name, nick_name, real_name, avatar, password, gender, email, mobile_phone, telephone, id_card_num, user_type, user_status, is_lock, creator, gmt_create, gmt_last_login) VALUES (null, 'liulu', 'liulu', 'liulu', null, null, '$2a$10$7yD3GA3WsqJllGuOCLhyturYJPiWwDP6D1Ix7/5VmOyx3uq.pWw2W', 1, null, '15267548275', null, null, null, null, null, null, '2017-12-17 14:22:02', null);
+
+INSERT INTO lit_user_role (user_role_id, user_id, user_name, role_id, role_code, sys_time) VALUES (1, 1, '', 1, '', '2018-02-01 11:11:22');

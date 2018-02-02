@@ -3,10 +3,6 @@ c3p0:
   driverClass: com.mysql.jdbc.Driver
   user: root
   password: 123456
-#  jdbcUrl: jdbc:oracle:thin:@localhost:49161:XE
-#  driverClass: oracle.jdbc.OracleDriver
-#  user: liulu
-#  password: 123456
 
 
 spring:
@@ -26,7 +22,16 @@ server:
 
 
 ---
+spring:
+  profiles: docker
+c3p0:
+  jdbcUrl: jdbc:mysql://${mysql-docker:mysql-server}:3306/lit
+  driverClass: com.mysql.jdbc.Driver
+  user: root
+  password: 123456
 
+
+---
 spring:
   profiles: dev
 c3p0:

@@ -17,16 +17,10 @@
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
-            <optional>true</optional>
         </dependency>
         <dependency>
             <groupId>c3p0</groupId>
             <artifactId>c3p0</artifactId>
-            <optional>true</optional>
-        </dependency>
-        <dependency>
-            <groupId>com.oracle</groupId>
-            <artifactId>ojdbc6</artifactId>
         </dependency>
 
         <dependency>
@@ -41,7 +35,6 @@
             <version>${spring.boot.version}</version>
         </dependency>
     </dependencies>
-
 
 
     <build>

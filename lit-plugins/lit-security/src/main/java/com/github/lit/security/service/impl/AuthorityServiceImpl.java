@@ -94,6 +94,18 @@ public class AuthorityServiceImpl implements AuthorityService {
                 .list();
     }
 
+    public List<Authority> findByUserId (Long userId) {
+        List<Role> roles = roleService.findByUserId(userId);
+        if (CollectionUtils.isEmpty(roles)) {
+            return Collections.emptyList();
+        }
+        return jdbcTools.createSelect(Authority.class)
+                .join(RoleAuthority.class)
+                .on(Authority.class, "authorityId", Logic.EQ, RoleAuthority.class, "authorityId")
+                .and(RoleAuthority.class, "roleId", Logic.IN, roles.stream().map(Role::getRoleId).distinct().collect(Collectors.toList()))
+                .list();
+    }
+
     @Override
     public Authority findById(Long authorityId) {
         return jdbcTools.get(Authority.class, authorityId);

@@ -52,7 +52,7 @@ public class DictionaryController {
             return "redirect:/plugin/dictionary/" + dictionary.getParentId();
         }
 
-        return "redirect:/plugin/dictionary";
+        return PluginConst.REDIRECT + PluginConst.URL_PREFIX + "/dictionary";
     }
 
     @RequestMapping("/get")

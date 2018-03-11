@@ -3,6 +3,7 @@ package com.github.lit.user.controller;
 import com.github.lit.commons.context.ResultConst;
 import com.github.lit.user.context.LoginErrorContext;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,6 +23,7 @@ public class LoginController {
     private LoginErrorContext loginErrorContext;
 
     @GetMapping("/register")
+    @Secured("ROLE_ADMIN")
     public String register() {
 
         return "default_register";
@@ -43,6 +45,7 @@ public class LoginController {
     }
 
     @PostMapping("/login")
+    @Secured("ROLE_ADMIN")
     public String doLogin(String userName, String password, Model model) {
 
         System.out.println(userName + "--" + password);

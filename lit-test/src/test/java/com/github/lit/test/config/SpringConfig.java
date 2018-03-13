@@ -1,10 +1,8 @@
 package com.github.lit.test.config;
 
+import com.github.lit.commons.event.guava.EventConfig;
 import com.mchange.v2.c3p0.ComboPooledDataSource;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.annotation.*;
 import org.springframework.core.env.Environment;
 import org.springframework.jdbc.core.JdbcOperations;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -23,7 +21,8 @@ import java.beans.PropertyVetoException;
 
 @Configuration
 @PropertySource("config.properties")
-@ComponentScan("net.skeyurt.lit")
+@ComponentScan("com.github.lit")
+@Import(EventConfig.class)
 public class SpringConfig {
 
     private static final String DB = "mysql.";

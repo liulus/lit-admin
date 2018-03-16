@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.github.liulus</groupId>
-    <artifactId>lit</artifactId>
+    <artifactId>lit-admin</artifactId>
     <packaging>pom</packaging>
     <version>1.0.1-SNAPSHOT</version>
 

@@ -17,6 +17,7 @@ public class ParamQo extends Page {
 
     private static final long serialVersionUID = -117622963182937153L;
 
+    private String keyword;
 
     private Boolean system;
 

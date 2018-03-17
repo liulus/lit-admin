@@ -18,6 +18,8 @@ public class DictionaryQo extends Page {
 
     private static final long serialVersionUID = -2144418218430870185L;
 
+    private String keyword;
+
     private String dictKey;
 
     private String dictValue;

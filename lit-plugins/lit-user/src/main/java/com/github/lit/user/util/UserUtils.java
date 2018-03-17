@@ -1,7 +1,7 @@
 package com.github.lit.user.util;
 
-import com.github.lit.commons.context.SpringContextUtils;
 import com.github.lit.commons.util.EncryptUtils;
+import com.github.lit.commons.util.SpringContextUtils;
 import com.github.lit.plugin.web.WebUtils;
 import com.github.lit.user.context.UserConst;
 import com.github.lit.user.model.LoginUser;

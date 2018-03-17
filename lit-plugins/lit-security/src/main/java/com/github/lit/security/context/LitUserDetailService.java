@@ -42,7 +42,7 @@ public class LitUserDetailService implements UserDetailsService {
         if (user == null) {
             throw new UsernameNotFoundException("用户 " + username + "不存在!");
         }
-        LitUserDetail userDetail = BeanUtils.convert(new LitUserDetail(), user);
+        LitUserDetail userDetail = BeanUtils.convert(user, new LitUserDetail());
 
         List<Role> roles = roleService.findByUserId(user.getUserId());
 

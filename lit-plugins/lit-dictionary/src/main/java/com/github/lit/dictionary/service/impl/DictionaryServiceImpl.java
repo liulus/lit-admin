@@ -4,8 +4,7 @@ import com.github.lit.dictionary.model.Dictionary;
 import com.github.lit.dictionary.model.DictionaryQo;
 import com.github.lit.dictionary.service.DictionaryService;
 import com.github.lit.jdbc.JdbcTools;
-import com.github.lit.jdbc.enums.Logic;
-import com.github.lit.jdbc.statement.Select;
+import com.github.lit.jdbc.statement.select.Select;
 import com.github.lit.plugin.exception.AppException;
 import com.google.common.base.Strings;
 import org.springframework.stereotype.Service;
@@ -38,21 +37,22 @@ public class DictionaryServiceImpl implements DictionaryService {
     }
 
     private Select<Dictionary> buildSelect(DictionaryQo qo) {
-        Select<Dictionary> select = jdbcTools.createSelect(Dictionary.class).where("parentId", qo.getParentId());
+        Select<Dictionary> select = jdbcTools.select(Dictionary.class).where("parentId").equalsTo(qo.getParentId());
 
-        if (!Strings.isNullOrEmpty(qo.getKeyWord())) {
-            select.and().parenthesis().condition("dictKey", Logic.LIKE, qo.getBlurKeyWord())
-                    .or("dictValue", Logic.LIKE, qo.getBlurKeyWord())
-                    .or("memo", Logic.LIKE, qo.getBlurKeyWord())
+        if (!Strings.isNullOrEmpty(qo.getKeyword())) {
+            select.and()
+                    .bracket("dictKey").like(qo.getKeyword())
+                    .or("dictValue").like(qo.getKeyword())
+                    .or("memo").like(qo.getKeyword())
                     .end();
         }
 
         if (qo.getSystem() != null) {
-            select.and("system", qo.getSystem());
+            select.and("system").equalsTo(qo.getSystem());
         }
 
         if (!Strings.isNullOrEmpty(qo.getDictKey())) {
-            select.and("dictKey", qo.getDictKey());
+            select.and("dictKey").equalsTo(qo.getDictKey());
         }
 
         select.asc("orderNum");
@@ -82,9 +82,9 @@ public class DictionaryServiceImpl implements DictionaryService {
             dictionary.setSystem(false);
         }
 
-        Integer maxOrder = jdbcTools.createSelect(Dictionary.class)
-                .addFunc("max", "orderNum")
-                .where("parentId", dictionary.getParentId())
+        Integer maxOrder = jdbcTools.select(Dictionary.class)
+                .function("max", "orderNum")
+                .where("parentId").equalsTo(dictionary.getParentId())
                 .single(int.class);
 
         dictionary.setOrderNum(maxOrder == null ? 1 : maxOrder + 1);
@@ -136,8 +136,8 @@ public class DictionaryServiceImpl implements DictionaryService {
             if (dictionary.getSystem()) {
                 throw new AppException(String.format("%s 是系统级字典, 不允许删除 !", dictionary.getDictKey()));
             }
-            int childDict = jdbcTools.createSelect(Dictionary.class)
-                    .where("parentId", id)
+            int childDict = jdbcTools.select(Dictionary.class)
+                    .where("parentId").equalsTo(id)
                     .count();
             if (childDict > 0) {
                 throw new AppException(String.format("请先删除 %s 的子字典数据 !", dictionary.getDictKey()));

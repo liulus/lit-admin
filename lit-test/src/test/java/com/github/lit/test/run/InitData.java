@@ -3,11 +3,9 @@ package com.github.lit.test.run;
 import com.github.lit.dictionary.model.Dictionary;
 import com.github.lit.dictionary.service.DictionaryService;
 import com.github.lit.jdbc.JdbcTools;
-import com.github.lit.jdbc.enums.Logic;
 import com.github.lit.test.base.BaseTest;
 import com.github.lit.test.bean.District;
 import com.github.lit.test.bean.Goods;
-import com.github.lit.test.bean.GoodsVo;
 import com.github.lit.test.bean.Supplier;
 import com.github.lit.test.config.TestConstants;
 import org.apache.commons.io.IOUtils;
@@ -167,17 +165,4 @@ public class InitData extends BaseTest {
         printUseTime(start);
     }
 
-    @Test
-    public void testJoin() {
-
-        List<GoodsVo> goodsVos = jdbcTools.createSelect(Goods.class)
-                .simpleJoin(Supplier.class)
-                .addField(Supplier.class, "name", "address")
-                .alias("supplierName", "supplier_Addr")
-                .joinCondition(Goods.class, "supplierCode", Logic.EQ, Supplier.class, "code")
-                .page(1, 20)
-                .list(GoodsVo.class);
-        System.out.println(goodsVos);
-
-    }
 }

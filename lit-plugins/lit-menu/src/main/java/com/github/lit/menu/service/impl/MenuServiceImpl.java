@@ -5,8 +5,7 @@ import com.github.lit.commons.event.Event;
 import com.github.lit.dictionary.model.Dictionary;
 import com.github.lit.dictionary.tool.DictionaryTools;
 import com.github.lit.jdbc.JdbcTools;
-import com.github.lit.jdbc.enums.Logic;
-import com.github.lit.jdbc.statement.Select;
+import com.github.lit.jdbc.statement.select.Select;
 import com.github.lit.menu.context.MenuConst;
 import com.github.lit.menu.event.MenuUpdateEvent;
 import com.github.lit.menu.model.Menu;
@@ -42,7 +41,7 @@ public class MenuServiceImpl implements MenuService {
         List<Dictionary> menuTypes = DictionaryTools.findChildByRootKey(MenuConst.MENU_TYPE);
         Map<String, Dictionary> menuTypeMap = Maps.uniqueIndex(menuTypes, Dictionary::getDictKey);
 
-        return BeanUtils.convert(MenuVo.class, menus, (menuVo, menu) -> {
+        return BeanUtils.convert(MenuVo.class, menus, (menu, menuVo) -> {
             Dictionary dictionary = menuTypeMap.get(menu.getMenuType());
             menuVo.setMenuTypeStr(dictionary == null ? "" : dictionary.getDictValue());
 
@@ -57,10 +56,10 @@ public class MenuServiceImpl implements MenuService {
     }
 
     private Select<Menu> buildSelect(MenuQo qo) {
-        Select<Menu> select = jdbcTools.createSelect(Menu.class).where("parentId", qo.getParentId());
+        Select<Menu> select = jdbcTools.select(Menu.class).where("parentId").equalsTo(qo.getParentId());
 
         if (!Strings.isNullOrEmpty(qo.getMenuCode())) {
-            select.and("menuCode", qo.getMenuCode());
+            select.and("menuCode").equalsTo(qo.getMenuCode());
         }
 
         select.asc("orderNum");
@@ -69,7 +68,7 @@ public class MenuServiceImpl implements MenuService {
     }
 
     @Override
-    @Event(eventClass = MenuUpdateEvent.class)
+    @Event(MenuUpdateEvent.class)
     public void add(MenuVo vo) {
 
         Menu oldMenu = findByCodeAndParentId(vo.getMenuCode(), vo.getParentId());
@@ -77,12 +76,12 @@ public class MenuServiceImpl implements MenuService {
             throw new AppException("菜单编码已经存在!");
         }
 
-        Menu menu = BeanUtils.convert(new Menu(), vo);
+        Menu menu = BeanUtils.convert(vo, new Menu());
         menu.setEnable(true);
 
-        Integer maxOrder = jdbcTools.createSelect(Menu.class)
-                .addFunc("max", "orderNum")
-                .where("parentId", vo.getParentId())
+        Integer maxOrder = jdbcTools.select(Menu.class)
+                .function("max", "orderNum")
+                .where("parentId").equalsTo(vo.getParentId())
                 .single(int.class);
 
         menu.setOrderNum(maxOrder == null ? 1 : maxOrder + 1);
@@ -91,7 +90,7 @@ public class MenuServiceImpl implements MenuService {
     }
 
     @Override
-    @Event(eventClass = MenuUpdateEvent.class)
+    @Event(MenuUpdateEvent.class)
     public void update(MenuVo vo) {
         Menu oldMenu = jdbcTools.get(Menu.class, vo.getMenuId());
         if (!Objects.equals(oldMenu.getMenuCode(), vo.getMenuCode())) {
@@ -112,7 +111,7 @@ public class MenuServiceImpl implements MenuService {
     }
 
     @Override
-    @Event(eventClass = MenuUpdateEvent.class)
+    @Event(MenuUpdateEvent.class)
     public void delete(Long... ids) {
         if (ids == null || ids.length == 0) {
             return;
@@ -134,7 +133,7 @@ public class MenuServiceImpl implements MenuService {
     }
 
     @Override
-    @Event(eventClass = MenuUpdateEvent.class)
+    @Event(MenuUpdateEvent.class)
     public void moveMenu(Long parentId, Long[] ids) {
 
 
@@ -156,12 +155,12 @@ public class MenuServiceImpl implements MenuService {
         // 执行更新
         jdbcTools.createUpdate(Menu.class)
                 .set("parentId", parentId)
-                .where("menuId", Logic.IN, (Object[]) ids)
+                .where("menuId").in((Object[]) ids)
                 .execute();
     }
 
     @Override
-    @Event(eventClass = MenuUpdateEvent.class)
+    @Event(MenuUpdateEvent.class)
     public void move(Long menuId, boolean isUp) {
         if (menuId == null) {
             throw new AppException("菜单id不能为空 !");
@@ -173,10 +172,15 @@ public class MenuServiceImpl implements MenuService {
         }
 
         String orderNum = "orderNum";
-        Select<Menu> select = jdbcTools.createSelect(Menu.class)
-                .where(orderNum, isUp ? Logic.LTEQ : Logic.GTEQ, menu.getOrderNum())
-                .and("menuId", Logic.NOT_EQ, menu.getMenuId())
-                .and("parentId", menu.getParentId());
+        Select<Menu> select = jdbcTools.select(Menu.class)
+//                .where(orderNum, isUp ? Logic.LTEQ : Logic.GTEQ, menu.getOrderNum())
+                .where("menuId").equalsTo(menu.getMenuId())
+                .and("parentId").equalsTo(menu.getParentId());
+        if (isUp) {
+            select.and(orderNum).lessThanOrEqual(menu.getOrderNum());
+        } else {
+            select.and(orderNum).graterThanOrEqual(menu.getOrderNum());
+        }
 
         select = isUp ? select.desc(orderNum) : select.asc(orderNum);
 
@@ -187,22 +191,22 @@ public class MenuServiceImpl implements MenuService {
 
         jdbcTools.createUpdate(Menu.class)
                 .set(orderNum, changeMenu.getOrderNum())
-                .where("menuId", menu.getMenuId())
+                .where("menuId").equalsTo(menu.getMenuId())
                 .execute();
         jdbcTools.createUpdate(Menu.class)
                 .set(orderNum, menu.getOrderNum())
-                .where("menuId", changeMenu.getMenuId())
+                .where("menuId").equalsTo(changeMenu.getMenuId())
                 .execute();
 
     }
 
     @Override
-    @Event(eventClass = MenuUpdateEvent.class)
+    @Event(MenuUpdateEvent.class)
     public void changeStatus(Long menuId, boolean isEnable) {
 
         jdbcTools.createUpdate(Menu.class)
                 .set("enable", isEnable)
-                .where("menuId", menuId)
+                .where("menuId").equalsTo(menuId)
                 .execute();
     }
 

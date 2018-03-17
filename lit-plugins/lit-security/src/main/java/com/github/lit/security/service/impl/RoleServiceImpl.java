@@ -1,7 +1,6 @@
 package com.github.lit.security.service.impl;
 
 import com.github.lit.jdbc.JdbcTools;
-import com.github.lit.jdbc.enums.Logic;
 import com.github.lit.plugin.exception.AppException;
 import com.github.lit.security.model.*;
 import com.github.lit.security.service.RoleService;
@@ -28,7 +27,7 @@ public class RoleServiceImpl implements RoleService {
     @Override
     public List<Role> findPageList(RoleQo roleQo) {
 
-        return jdbcTools.createSelect(Role.class).page(roleQo).list();
+        return jdbcTools.select(Role.class).page(roleQo).list();
     }
 
     @Override
@@ -60,7 +59,7 @@ public class RoleServiceImpl implements RoleService {
         if (Strings.isNullOrEmpty(roleCode)) {
             throw new AppException("角色码不能为空!");
         }
-        int count = jdbcTools.createSelect(Role.class).where("roleCode", roleCode).count();
+        int count = jdbcTools.select(Role.class).where("roleCode").equalsTo(roleCode).count();
         if (count > 0) {
             throw new AppException("角色码已经存在!");
         }
@@ -81,19 +80,19 @@ public class RoleServiceImpl implements RoleService {
         if (role == null) {
             return;
         }
-        List<Long> ids = jdbcTools.createSelect(Authority.class)
+        List<Long> ids = jdbcTools.select(Authority.class)
                 .include("authorityId")
-                .where("authorityId", Logic.IN, (Object[]) authorityIds)
+                .where("authorityId").in((Object[]) authorityIds)
                 .list(Long.class);
-        List<Long> oldIds = jdbcTools.createSelect(RoleAuthority.class)
+        List<Long> oldIds = jdbcTools.select(RoleAuthority.class)
                 .include("authorityId")
-                .where("roleId", roleId)
+                .where("roleId").equalsTo(roleId)
                 .list(Long.class);
         List<Long> deleteIds = oldIds.stream().filter(id -> !ids.contains(id)).collect(Collectors.toList());
         if (!CollectionUtils.isEmpty(deleteIds)) {
             jdbcTools.createDelete(RoleAuthority.class)
-                    .where("roleId", roleId)
-                    .and("authorityId", Logic.IN, deleteIds.toArray())
+                    .where("roleId").equalsTo(roleId)
+                    .and("authorityId").in(deleteIds.toArray())
                     .execute();
         }
         List<Long> insertIds = ids.stream().filter(id -> !oldIds.contains(id)).collect(Collectors.toList());
@@ -109,10 +108,10 @@ public class RoleServiceImpl implements RoleService {
     @Override
     public List<Role> findByUserId(Long userId) {
 
-        return jdbcTools.createSelect(Role.class)
+        return jdbcTools.select(Role.class)
                 .join(UserRole.class)
-                .on(Role.class, "roleId", Logic.EQ, UserRole.class, "roleId")
-                .and(UserRole.class, "userId", Logic.EQ, userId)
+                .on(Role.class, "roleId").equalsTo(UserRole.class, "roleId")
+                .and(UserRole.class, "userId").equalsTo(userId)
                 .list();
     }
 

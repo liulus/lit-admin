@@ -17,6 +17,7 @@ public class OrganizationQo extends Page {
 
     private static final long serialVersionUID = -3178668574403099542L;
 
+    private String keyword;
 
     private Long parentId;
 

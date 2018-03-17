@@ -3,8 +3,7 @@ package com.github.lit.user.service.impl;
 import com.github.lit.commons.bean.BeanUtils;
 import com.github.lit.jdbc.JdbcTools;
 import com.github.lit.jdbc.enums.JoinType;
-import com.github.lit.jdbc.enums.Logic;
-import com.github.lit.jdbc.statement.Select;
+import com.github.lit.jdbc.statement.select.Select;
 import com.github.lit.plugin.exception.AppException;
 import com.github.lit.user.model.*;
 import com.github.lit.user.service.UserService;
@@ -39,7 +38,7 @@ public class UserServiceImpl implements UserService {
             return null;
         }
 
-        UserVo userVo = BeanUtils.convert(new UserVo(), user);
+        UserVo userVo = BeanUtils.convert(user, new UserVo());
 
         if (user.getOrgId() != null) {
             Organization organization = jdbcTools.get(Organization.class, user.getOrgId());
@@ -51,8 +50,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User findByName(String username) {
-        return jdbcTools.createSelect(User.class).where("userName", username)
-                .or("mobilePhone", username)
+        return jdbcTools.select(User.class).where("userName").equalsTo(username)
+                .or("mobilePhone").equalsTo(username)
                 .single();
     }
 
@@ -86,7 +85,7 @@ public class UserServiceImpl implements UserService {
         if (Strings.isNullOrEmpty(userName)) {
             return;
         }
-        int count = jdbcTools.createSelect(User.class).where("userName", userName).count();
+        int count = jdbcTools.select(User.class).where("userName").equalsTo(userName).count();
         if (count >= 1) {
             throw new AppException("改用户名被使用 !");
         }
@@ -96,7 +95,7 @@ public class UserServiceImpl implements UserService {
         if (Strings.isNullOrEmpty(email)) {
             return;
         }
-        int count = jdbcTools.createSelect(User.class).where("email", email).count();
+        int count = jdbcTools.select(User.class).where("email").equalsTo(email).count();
         if (count >= 1) {
             throw new AppException("改邮箱已被使用 !");
         }
@@ -106,7 +105,7 @@ public class UserServiceImpl implements UserService {
         if (Strings.isNullOrEmpty(mobilePhone)) {
             return;
         }
-        int count = jdbcTools.createSelect(User.class).where("mobilePhone", mobilePhone).count();
+        int count = jdbcTools.select(User.class).where("mobilePhone").equalsTo(mobilePhone).count();
         if (count >= 1) {
             throw new AppException("改手机号已被使用 !");
         }
@@ -140,22 +139,22 @@ public class UserServiceImpl implements UserService {
 
     private Select<User> buildSelect(UserQo qo) {
 
-        Select<User> select = jdbcTools.createSelect(User.class);
+        Select<User> select = jdbcTools.select(User.class);
 
         if (qo.getUserId() != null) {
-            select.and("userId", qo.getUserId());
+            select.and("userId").equalsTo(qo.getUserId());
 
             if (!Strings.isNullOrEmpty(qo.getSerialNum())) {
                 select.join(JoinType.LEFT, Organization.class)
-                        .on(User.class, "orgId", Logic.EQ, Organization.class, "orgId")
-                        .addField(Organization.class, "orgCode", "orgName")
-                        .and(Organization.class, "serialNum", Logic.LIKE, qo.getSerialNum() + "%");
+                        .on(User.class, "orgId").equalsTo(Organization.class, "orgId")
+                        .additionalField(Organization.class, "orgCode", "orgName")
+                        .and(Organization.class, "serialNum").like(qo.getSerialNum() + "%");
             }
         } else if (qo.getOrgId() != null) {
-            select.and("orgId", qo.getOrgId());
+            select.and("orgId").equalsTo(qo.getOrgId());
         }
 
-        select.or("orgId", null).desc("orgId");
+        select.or("orgId").isNull().desc("orgId");
 
         return select;
     }

@@ -1,8 +1,7 @@
 package com.github.lit.user.service.impl;
 
 import com.github.lit.jdbc.JdbcTools;
-import com.github.lit.jdbc.enums.Logic;
-import com.github.lit.jdbc.statement.Select;
+import com.github.lit.jdbc.statement.select.Select;
 import com.github.lit.plugin.exception.AppException;
 import com.github.lit.user.model.Organization;
 import com.github.lit.user.model.OrganizationQo;
@@ -69,9 +68,9 @@ public class OrganizationServiceImpl implements OrganizationService {
         }
 
         // 处理 serialNum
-        List<String> serialNums = jdbcTools.createSelect(Organization.class)
+        List<String> serialNums = jdbcTools.select(Organization.class)
                 .include("serialNum")
-                .where("parentId", organization.getParentId())
+                .where("parentId").equalsTo(organization.getParentId())
                 .list(String.class);
 
         organization.setSerialNum(UserUtils.nextSerialNum(parentSerialNum, serialNums));
@@ -116,18 +115,18 @@ public class OrganizationServiceImpl implements OrganizationService {
         jdbcTools.deleteByIds(Organization.class, validIds.toArray(new Serializable[validIds.size()]));
     }
 
-    private Select<Organization> buildSelect(OrganizationQo vo) {
-        Select<Organization> select = jdbcTools.createSelect(Organization.class).where("parentId", vo.getParentId());
+    private Select<Organization> buildSelect(OrganizationQo qo) {
+        Select<Organization> select = jdbcTools.select(Organization.class).where("parentId").equalsTo(qo.getParentId());
 
-        if (!Strings.isNullOrEmpty(vo.getKeyWord())) {
-            select.and().parenthesis().condition("orgCode", Logic.LIKE, vo.getBlurKeyWord())
-                    .or("orgName", Logic.LIKE, vo.getBlurKeyWord())
-                    .or("memo", Logic.LIKE, vo.getBlurKeyWord())
+        if (!Strings.isNullOrEmpty(qo.getKeyword())) {
+            select.and().bracket("orgCode").like(qo.getKeyword())
+                    .or("orgName").like(qo.getKeyword())
+                    .or("memo").equalsTo(qo.getKeyword())
                     .end();
         }
 
-        if (!Strings.isNullOrEmpty(vo.getOrgCode())) {
-            select.and("orgCode", vo.getOrgCode());
+        if (!Strings.isNullOrEmpty(qo.getOrgCode())) {
+            select.and("orgCode").equalsTo(qo.getOrgCode());
         }
 
         return select;

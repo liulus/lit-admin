@@ -4,7 +4,6 @@ import com.github.lit.commons.bean.BeanUtils;
 import com.github.lit.dictionary.model.Dictionary;
 import com.github.lit.dictionary.tool.DictionaryTools;
 import com.github.lit.jdbc.JdbcTools;
-import com.github.lit.jdbc.enums.Logic;
 import com.github.lit.plugin.exception.AppException;
 import com.github.lit.security.context.SecurityConst;
 import com.github.lit.security.model.*;
@@ -38,13 +37,13 @@ public class AuthorityServiceImpl implements AuthorityService {
     @Override
     public List<Authority> findPageList(AuthorityQo qo) {
 
-        return jdbcTools.createSelect(Authority.class).page(qo).list();
+        return jdbcTools.select(Authority.class).page(qo).list();
     }
 
     @Override
     public List<AuthorityVo> findAuthorityTree() {
 
-        List<Authority> authorities = jdbcTools.createSelect(Authority.class).list();
+        List<Authority> authorities = jdbcTools.select(Authority.class).list();
 
         List<Dictionary> authorityTypes = DictionaryTools.findChildByRootKey(SecurityConst.AUTHORITY_TYPE);
         if (CollectionUtils.isEmpty(authorityTypes)) {
@@ -55,7 +54,7 @@ public class AuthorityServiceImpl implements AuthorityService {
 
         Map<String, List<AuthorityVo>> typeMap = authorities.stream()
                 .filter(authority -> !Strings.isNullOrEmpty(authority.getAuthorityType()))
-                .map(authority -> BeanUtils.convert(new AuthorityVo(), authority))
+                .map(authority -> BeanUtils.convert(authority, new AuthorityVo()))
                 .collect(Collectors.groupingBy(Authority::getAuthorityType));
 
         authorityTypes.forEach(dictionary -> {
@@ -74,7 +73,7 @@ public class AuthorityServiceImpl implements AuthorityService {
         // 过滤没有权限类型的
         List<AuthorityVo> other = authorities.stream()
                 .filter(authority -> Strings.isNullOrEmpty(authority.getAuthorityType()))
-                .map(authority -> BeanUtils.convert(new AuthorityVo(), authority))
+                .map(authority -> BeanUtils.convert(authority, new AuthorityVo()))
                 .collect(Collectors.toList());
         result.addAll(other);
         return result;
@@ -87,10 +86,10 @@ public class AuthorityServiceImpl implements AuthorityService {
         if (role == null) {
             return Collections.emptyList();
         }
-        return jdbcTools.createSelect(Authority.class)
+        return jdbcTools.select(Authority.class)
                 .join(RoleAuthority.class)
-                .on(Authority.class, "authorityId", Logic.EQ, RoleAuthority.class, "authorityId")
-                .and(RoleAuthority.class, "roleId", Logic.EQ, role.getRoleId())
+                .on(Authority.class, "authorityId").equalsTo(RoleAuthority.class, "authorityId")
+                .and(RoleAuthority.class, "roleId").equalsTo(role.getRoleId())
                 .list();
     }
 
@@ -99,10 +98,11 @@ public class AuthorityServiceImpl implements AuthorityService {
         if (CollectionUtils.isEmpty(roles)) {
             return Collections.emptyList();
         }
-        return jdbcTools.createSelect(Authority.class)
+        return jdbcTools.select(Authority.class)
                 .join(RoleAuthority.class)
-                .on(Authority.class, "authorityId", Logic.EQ, RoleAuthority.class, "authorityId")
-                .and(RoleAuthority.class, "roleId", Logic.IN, roles.stream().map(Role::getRoleId).distinct().collect(Collectors.toList()))
+                .on(Authority.class, "authorityId").equalsTo(RoleAuthority.class, "authorityId")
+                .and(RoleAuthority.class, "roleId")
+                .in(roles.stream().map(Role::getRoleId).distinct().collect(Collectors.toList()).toArray())
                 .list();
     }
 
@@ -136,7 +136,7 @@ public class AuthorityServiceImpl implements AuthorityService {
         if (Strings.isNullOrEmpty(authorityCode)) {
             throw new AppException("权限码不能为空!");
         }
-        int count = jdbcTools.createSelect(Authority.class).where("authorityCode", authorityCode).count();
+        int count = jdbcTools.select(Authority.class).where("authorityCode").equalsTo(authorityCode).count();
         if (count > 0) {
             throw new AppException("权限码已经存在!");
         }

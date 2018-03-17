@@ -1,8 +1,7 @@
 package com.github.lit.param.service.impl;
 
 import com.github.lit.jdbc.JdbcTools;
-import com.github.lit.jdbc.enums.Logic;
-import com.github.lit.jdbc.statement.Select;
+import com.github.lit.jdbc.statement.select.Select;
 import com.github.lit.param.model.Param;
 import com.github.lit.param.model.ParamQo;
 import com.github.lit.param.service.ParamService;
@@ -34,22 +33,22 @@ public class ParamServiceImpl implements ParamService {
     @Override
     public List<Param> queryPageList(ParamQo qo) {
 
-        Select<Param> select = jdbcTools.createSelect(Param.class);
+        Select<Param> select = jdbcTools.select(Param.class);
 
-        if (!Strings.isNullOrEmpty(qo.getKeyWord())) {
-            select.and().parenthesis()
-                    .condition("paramCode", Logic.LIKE, qo.getBlurKeyWord())
-                    .or("paramValue", Logic.LIKE, qo.getBlurKeyWord())
-                    .or("memo", Logic.LIKE, qo.getBlurKeyWord())
+        if (!Strings.isNullOrEmpty(qo.getKeyword())) {
+            select.and()
+                    .bracket("paramCode").like(qo.getKeyword())
+                    .or("paramValue").like(qo.getKeyword())
+                    .or("memo").like(qo.getKeyword())
                     .end();
         }
 
         if (qo.getSystem() != null) {
-            select.and("system", qo.getSystem());
+            select.and("system").equalsTo(qo.getSystem());
         }
 
         if (!Strings.isNullOrEmpty(qo.getParamCode())) {
-            select.and("paramCode", qo.getParamCode());
+            select.and("paramCode").equalsTo(qo.getParamCode());
         }
 
         return select.page(qo).list();

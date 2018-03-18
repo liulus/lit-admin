@@ -5,6 +5,7 @@ import com.github.lit.dictionary.model.Dictionary;
 import com.github.lit.dictionary.model.DictionaryQo;
 import com.github.lit.dictionary.service.DictionaryService;
 import com.github.lit.plugin.context.PluginConst;
+import com.github.lit.plugin.web.ViewName;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -28,11 +29,9 @@ public class DictionaryController {
     private DictionaryService dictionaryService;
 
     @RequestMapping({"/list", ""})
-    public String list(DictionaryQo vo, Model model) {
-        List<Dictionary> dictionaries = dictionaryService.findPageList(vo);
-        model.addAttribute(ResultConst.RESULT, dictionaries);
-
-        return "dictionary";
+    @ViewName("dictionary")
+    public List<Dictionary> list(DictionaryQo qo) {
+        return dictionaryService.findPageList(qo);
     }
 
     @RequestMapping("/{parentId}")
@@ -71,14 +70,13 @@ public class DictionaryController {
 
     @RequestMapping("/update")
     public String update(Dictionary dictionary, Model model) {
-
         dictionaryService.update(dictionary);
         return "";
     }
 
     @RequestMapping("/delete")
     public String delete(Long... ids) {
-        dictionaryService.delete(ids);
+        dictionaryService.deleteByIds(ids);
         return "";
     }
 

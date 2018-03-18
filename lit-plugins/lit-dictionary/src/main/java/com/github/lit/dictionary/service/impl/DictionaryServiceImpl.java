@@ -5,13 +5,11 @@ import com.github.lit.dictionary.dao.DictionaryDao;
 import com.github.lit.dictionary.model.Dictionary;
 import com.github.lit.dictionary.model.DictionaryQo;
 import com.github.lit.dictionary.service.DictionaryService;
-import com.github.lit.jdbc.JdbcTools;
 import com.github.lit.plugin.exception.AppException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -23,22 +21,14 @@ import java.util.Objects;
  * version $Id: DictionaryServiceImpl.java, v 0.1 Exp $
  */
 @Service
+@Transactional
 public class DictionaryServiceImpl implements DictionaryService {
-
-    @Resource
-    private JdbcTools jdbcTools;
 
     @Resource
     private DictionaryDao dictionaryDao;
 
     @Override
-    public List<Dictionary> findPageList(DictionaryQo qo) {
-        return dictionaryDao.findPageList(qo);
-    }
-
-    @Override
-    @Transactional
-    public void insert(Dictionary dict) {
+    public Long insert(Dictionary dict) {
 
         checkDictKey(dict.getDictKey(), dict.getParentId());
 
@@ -49,20 +39,18 @@ public class DictionaryServiceImpl implements DictionaryService {
         Integer maxOrder = dictionaryDao.findMaxOrder(dict.getParentId());
         dict.setOrderNum(maxOrder == null ? 1 : maxOrder + 1);
 
-        jdbcTools.insert(dict);
+        return dictionaryDao.insert(dict);
     }
 
     @Override
-    @Transactional
-    public void update(Dictionary dictionary) {
+    public int update(Dictionary dictionary) {
         Dictionary oldDict = findById(dictionary.getDictId());
 
         if (Objects.equals(dictionary.getDictKey(), oldDict.getDictKey())) {
-            jdbcTools.update(dictionary);
-            return;
+            return dictionaryDao.update(dictionary);
         }
         checkDictKey(dictionary.getDictKey(), dictionary.getParentId());
-        jdbcTools.update(dictionary);
+        return dictionaryDao.update(dictionary);
     }
 
     private void checkDictKey(String dictKey, Long parentId) {
@@ -72,17 +60,20 @@ public class DictionaryServiceImpl implements DictionaryService {
         }
     }
 
-
     @Override
     public Dictionary findById(Long dictId) {
-        return jdbcTools.get(Dictionary.class, dictId);
+        return dictionaryDao.findById(dictId);
     }
 
     @Override
-    @Transactional
-    public void delete(Long... ids) {
+    public List<Dictionary> findPageList(DictionaryQo qo) {
+        return dictionaryDao.findPageList(qo);
+    }
+
+    @Override
+    public int deleteByIds(Long... ids) {
         if (ids == null || ids.length == 0) {
-            return;
+            return 0;
         }
         List<Long> validIds = new ArrayList<>(ids.length);
         for (Long id : ids) {
@@ -93,15 +84,13 @@ public class DictionaryServiceImpl implements DictionaryService {
             if (dictionary.getSystem()) {
                 throw new AppException(String.format("%s 是系统级字典, 不允许删除 !", dictionary.getDictKey()));
             }
-            int childDict = jdbcTools.select(Dictionary.class)
-                    .where("parentId").equalsTo(id)
-                    .count();
+            int childDict = dictionaryDao.countByParentId(id);
             if (childDict > 0) {
                 throw new AppException(String.format("请先删除 %s 的子字典数据 !", dictionary.getDictKey()));
             }
             validIds.add(id);
         }
-        jdbcTools.deleteByIds(Dictionary.class, validIds.toArray(new Serializable[validIds.size()]));
+        return dictionaryDao.deleteByIds(validIds.toArray(new Long[validIds.size()]));
     }
 
 
@@ -115,7 +104,7 @@ public class DictionaryServiceImpl implements DictionaryService {
     @Override
     public Dictionary findByRootKey(String key) {
         DictionaryQo qo = DictionaryQo.builder().dictKey(key).build();
-        return dictionaryDao.buildSelect(qo).single();
+        return dictionaryDao.findSingle(qo);
     }
 
     @Override
@@ -156,7 +145,7 @@ public class DictionaryServiceImpl implements DictionaryService {
     @Override
     public List<Dictionary> findChildByParentId(Long parentId) {
         DictionaryQo qo = DictionaryQo.builder().parentId(parentId).build();
-        return dictionaryDao.buildSelect(qo).list();
+        return dictionaryDao.findList(qo);
     }
 
 

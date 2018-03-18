@@ -30,6 +30,11 @@ public class Dictionary implements Serializable {
     private Long dictId;
 
     /**
+     * 父字典 Id
+     */
+    private Long parentId;
+
+    /**
      * 字典 key
      */
     private String dictKey;
@@ -59,10 +64,4 @@ public class Dictionary implements Serializable {
      */
     @Column(name = "is_system")
     private Boolean system;
-
-    /**
-     * 父字典 Id
-     */
-    private Long parentId;
-
 }

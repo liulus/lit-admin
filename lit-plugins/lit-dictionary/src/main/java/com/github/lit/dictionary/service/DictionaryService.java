@@ -14,50 +14,49 @@ import java.util.List;
 public interface DictionaryService {
 
     /**
-     * 根据查询对象查询 字典列表
-     *
-     * @param qo 查询对象
-     * @return
-     */
-    List<Dictionary> findPageList(DictionaryQo qo);
-
-    /**
      * 添加字典对象
      *
-     * @param dictionary
+     * @param dictionary Dictionary
      */
-    void insert(Dictionary dictionary);
+    Long insert(Dictionary dictionary);
 
     /**
      * 更新字典对象
      *
-     * @param dictionary
+     * @param dictionary Dictionary
      */
-    void update(Dictionary dictionary);
-
+    int update(Dictionary dictionary);
 
     /**
      * 根据 Id 查询字典对象
      *
      * @param dictId Id
-     * @return
+     * @return Dictionary
      */
     Dictionary findById(Long dictId);
+
+    /**
+     * 根据查询对象查询 字典列表
+     *
+     * @param qo 查询对象
+     * @return Dictionary
+     */
+    List<Dictionary> findPageList(DictionaryQo qo);
 
     /**
      * 根据 Id 删除字典对象
      *
      * @param ids Id
-     * @return
+     * @return Dictionary
      */
-    void delete(Long... ids);
+    int deleteByIds(Long... ids);
 
 
     /**
      * 根据 根字典key 查询字典
      *
-     * @param key
-     * @return
+     * @param key key
+     * @return Dictionary
      */
     Dictionary findByRootKey(String key);
 
@@ -65,32 +64,32 @@ public interface DictionaryService {
     /**
      * 根据字典key 查询字典
      *
-     * @param keys
-     * @return
+     * @param keys keys
+     * @return Dictionary
      */
     Dictionary findByKeys(String... keys);
 
     /**
      * 查找根级字典的所有子字典
      *
-     * @param rootKey
-     * @return
+     * @param rootKey rootKey
+     * @return List<Dictionary>
      */
     List<Dictionary> findChildByRootKey(String rootKey);
 
     /**
      * 查找指定字典下的子字典
      *
-     * @param keys
-     * @return
+     * @param keys keys
+     * @return List<Dictionary>
      */
     List<Dictionary> findChildByKeys(String... keys);
 
     /**
      * 根据父字典Id查询所有子字典
      *
-     * @param parentId
+     * @param parentId parentId
      * @return
      */
-    List findChildByParentId(Long parentId);
+    List<Dictionary> findChildByParentId(Long parentId);
 }

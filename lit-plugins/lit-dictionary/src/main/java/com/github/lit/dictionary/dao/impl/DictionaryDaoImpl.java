@@ -3,13 +3,10 @@ package com.github.lit.dictionary.dao.impl;
 import com.github.lit.dictionary.dao.DictionaryDao;
 import com.github.lit.dictionary.model.Dictionary;
 import com.github.lit.dictionary.model.DictionaryQo;
-import com.github.lit.jdbc.JdbcTools;
 import com.github.lit.jdbc.statement.select.Select;
+import com.github.lit.plugin.dao.AbstractBaseDao;
 import com.google.common.base.Strings;
 import org.springframework.stereotype.Repository;
-
-import javax.annotation.Resource;
-import java.util.List;
 
 /**
  * User : liulu
@@ -17,34 +14,13 @@ import java.util.List;
  * version $Id: DictionaryDaoImpl.java, v 0.1 Exp $
  */
 @Repository
-public class DictionaryDaoImpl implements DictionaryDao {
+public class DictionaryDaoImpl extends AbstractBaseDao<Dictionary, DictionaryQo> implements DictionaryDao {
 
-    @Resource
-    private JdbcTools jdbcTools;
-
-    @Override
-    public List<Dictionary> findPageList(DictionaryQo qo) {
-        return buildSelect(qo).page(qo).list();
-    }
+    private static final String PARENT_ID = "parentId";
 
     @Override
-    public Dictionary findByKeyAndParentId(String dictKey, Long parentId) {
-        DictionaryQo qo = DictionaryQo.builder().dictKey(dictKey).parentId(parentId).build();
-        return buildSelect(qo).single();
-    }
-
-    @Override
-    public Integer findMaxOrder(Long parentId) {
-        return jdbcTools.select(Dictionary.class)
-                .function("max", "orderNum")
-                .where("parentId").equalsTo(parentId)
-                .single(Integer.class);
-    }
-
-    @Override
-    public Select<Dictionary> buildSelect(DictionaryQo qo) {
-        Select<Dictionary> select = jdbcTools.select(Dictionary.class)
-                .where("parentId").equalsTo(qo.getParentId());
+    protected void buildCondition(Select<Dictionary> select, DictionaryQo qo) {
+        select.where(PARENT_ID).equalsTo(qo.getParentId());
 
         if (!Strings.isNullOrEmpty(qo.getKeyword())) {
             select.and()
@@ -63,7 +39,27 @@ public class DictionaryDaoImpl implements DictionaryDao {
         }
 
         select.asc("orderNum");
-
-        return select;
     }
+
+    @Override
+    public Dictionary findByKeyAndParentId(String dictKey, Long parentId) {
+        return getSelect()
+                .where(PARENT_ID).equalsTo(parentId)
+                .and("dictKey").equalsTo(dictKey)
+                .single();
+    }
+
+    @Override
+    public Integer findMaxOrder(Long parentId) {
+        return getSelect()
+                .function("max", "orderNum")
+                .where(PARENT_ID).equalsTo(parentId)
+                .single(Integer.class);
+    }
+
+    @Override
+    public Integer countByParentId(Long parentId) {
+        return getSelect().where(PARENT_ID).equalsTo(parentId).count();
+    }
+
 }

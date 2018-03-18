@@ -9,3 +9,20 @@
 <link rel="stylesheet" href="${rc.contextPath}/css/lit-plugin.css"/>
 <link rel="stylesheet" href="${rc.contextPath}/css/top-nav.css"/>
 <link rel="stylesheet" href="${rc.contextPath}/css/left-menu.css"/>
+
+<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+<!--[if lt IE 9]>
+<script src="${rc.contextPath}/js/html5shiv.min.js"></script>
+<script src="${rc.contextPath}/js/respond.min.js"></script>
+<![endif]-->
+<script type="text/javascript">
+    var contextPath = '${rc.contextPath}';
+    var message = {
+    <#if RequestParameters['success']??>
+        success: ${RequestParameters['success']}
+    </#if>
+    <#if RequestParameters['message']??>
+        , content: '${RequestParameters['message']}'
+    </#if>}
+</script>

@@ -17,15 +17,6 @@
     ${r'${message}'}
     </div>
 </script>
-<script type="text/javascript">
-    var path = '${rc.contextPath}';
-</script>
-<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
-<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-<!--[if lt IE 9]>
-<script src="${rc.contextPath}/js/html5shiv.min.js"></script>
-<script src="${rc.contextPath}/js/respond.min.js"></script>
-<![endif]-->
 <script src="${rc.contextPath}/libs/jquery/1.12.4/jquery.min.js"></script>
 <script src="${rc.contextPath}/libs/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <script src="${rc.contextPath}/libs/juicer/0.6.8-stable/juicer-min.js"></script>

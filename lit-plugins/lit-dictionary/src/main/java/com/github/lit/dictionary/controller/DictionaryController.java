@@ -9,8 +9,7 @@ import com.github.lit.plugin.web.ViewName;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -20,64 +19,51 @@ import java.util.List;
  * Date : 2017/4/8 20:39
  * version $Id: DictionaryController.java, v 0.1 Exp $
  */
+@Slf4j
 @Controller
 @RequestMapping(PluginConst.URL_PREFIX + "/dictionary")
-@Slf4j
 public class DictionaryController {
 
     @Resource
     private DictionaryService dictionaryService;
 
-    @RequestMapping({"/list", ""})
+    @GetMapping({"/list", "/list/{parentId}"})
     @ViewName("dictionary")
-    public List<Dictionary> list(DictionaryQo qo) {
+    public List<Dictionary> childList(DictionaryQo qo, @PathVariable(required = false) Long parentId) {
+        qo.setParentId(parentId == null ? 0L : parentId);
+        qo.setOrder(true);
         return dictionaryService.findPageList(qo);
     }
 
-    @RequestMapping("/{parentId}")
-    public String childList(DictionaryQo vo, @PathVariable Long parentId, Model model) {
-
-        vo.setParentId(parentId);
-        List<Dictionary> dictionaries = dictionaryService.findPageList(vo);
-        model.addAttribute(ResultConst.RESULT, dictionaries);
-        return "dictionary";
-    }
-
-    @RequestMapping("/back/{dictId}")
-    public String back(@PathVariable Long dictId, Model model) {
-
+    @GetMapping("/back/{dictId}")
+    public String back(@PathVariable Long dictId) {
         Dictionary dictionary = dictionaryService.findById(dictId);
-        if (dictionary != null && dictionary.getParentId() != null) {
-            return "redirect:/plugin/dictionary/" + dictionary.getParentId();
-        }
-
-        return PluginConst.REDIRECT + PluginConst.URL_PREFIX + "/dictionary";
+        String suffix = dictionary.getParentId() == 0L ? "" : String.valueOf(dictionary.getParentId());
+        return "redirect:/plugin/dictionary/list" + suffix;
     }
 
-    @RequestMapping("/get")
-    public String get(Long id, Model model) {
-
-        model.addAttribute(ResultConst.RESULT, dictionaryService.findById(id));
-
-        return "";
+    @GetMapping("/{id}")
+    public Dictionary get(@PathVariable Long id) {
+        return dictionaryService.findById(id);
     }
 
-    @RequestMapping("/add")
-    public String add(Dictionary dictionary, Model model) {
-        dictionaryService.insert(dictionary);
-        return "";
+    @PostMapping
+    @ViewName(PluginConst.REDIRECT + "/dictionary/list")
+    public Long add(Dictionary dictionary, Model model) {
+        model.addAttribute(ResultConst.MASSAGE, "新增字典成功!");
+        return dictionaryService.insert(dictionary);
     }
 
-    @RequestMapping("/update")
-    public String update(Dictionary dictionary, Model model) {
+    @PutMapping("/update")
+    @ViewName(PluginConst.REDIRECT + "/dictionary/list")
+    public void update(Dictionary dictionary) {
         dictionaryService.update(dictionary);
-        return "";
     }
 
-    @RequestMapping("/delete")
-    public String delete(Long... ids) {
+    @DeleteMapping("/delete")
+    @ViewName(PluginConst.REDIRECT + "/dictionary/list")
+    public void delete(Long... ids) {
         dictionaryService.deleteByIds(ids);
-        return "";
     }
 
 

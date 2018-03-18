@@ -54,6 +54,9 @@ public class DictionaryServiceImpl implements DictionaryService {
     }
 
     private void checkDictKey(String dictKey, Long parentId) {
+        if (parentId == null) {
+            parentId = 0L;
+        }
         Dictionary dict = dictionaryDao.findByKeyAndParentId(dictKey, parentId);
         if (dict != null) {
             throw new BizException("字典Key已经存在!");

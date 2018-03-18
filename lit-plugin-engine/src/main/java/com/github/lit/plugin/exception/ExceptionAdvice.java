@@ -1,6 +1,10 @@
 package com.github.lit.plugin.exception;
 
 import com.github.lit.commons.context.ResultConst;
+import com.github.lit.commons.exception.BizException;
+import com.github.lit.plugin.web.ViewName;
+import com.github.lit.plugin.web.WebUtils;
+import com.google.common.base.Strings;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.ConversionNotSupportedException;
 import org.springframework.beans.TypeMismatchException;
@@ -24,10 +28,10 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.context.request.async.AsyncRequestTimeoutException;
+import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.multipart.support.MissingServletRequestPartException;
 import org.springframework.web.servlet.NoHandlerFoundException;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
@@ -53,28 +57,47 @@ public class ExceptionAdvice {
     }
 
     @ExceptionHandler(Exception.class)
-    public String exception(Model model, HttpServletRequest request, HttpServletResponse response, Exception ex) throws IOException {
+    public String exception(HandlerMethod handlerMethod, Model model, Exception ex) throws IOException {
         model.addAttribute(ResultConst.SUCCESS, false);
-        if (ex instanceof AppException) {
-            AppException checkedException = (AppException) ex;
-            model.addAttribute(ResultConst.CODE, checkedException.getErrorCode());
-            model.addAttribute(ResultConst.MASSAGE, checkedException.getMessage());
+
+        BizException bizException = findBizException(ex);
+        if (bizException != null) {
+            if (!Strings.isNullOrEmpty(bizException.getCode())) {
+                model.addAttribute(ResultConst.CODE, bizException.getCode());
+            }
+            model.addAttribute(ResultConst.MASSAGE, bizException.getMessage());
 
             StackTraceElement traceElement = ex.getStackTrace()[0];
-            log.warn("\n checked exception --> class: [{}], method: [{}], line: [{}], code: [{}],  message: [{}]",
+            log.warn("\n biz exception --> class: [{}], method: [{}], line: [{}], code: [{}],  message: [{}]",
                     traceElement.getClassName(), traceElement.getMethodName(), traceElement.getLineNumber(),
-                    checkedException.getErrorCode(), checkedException.getMessage());
+                    bizException.getCode(), bizException.getMessage());
         } else {
+            model.addAttribute(ResultConst.CODE, "9999");
             model.addAttribute(ResultConst.MASSAGE, errorMsg);
             model.addAttribute(ResultConst.ERROR, ex.getMessage());
-            model.addAttribute(ResultConst.URL, request.getRequestURI());
             log.error("unchecked exception", ex);
         }
-        handlerResponseStatus(response, ex);
 
-        model.addAttribute(ResultConst.STATUS, response.getStatus());
-
+        // json 请求直接返回空
+        if (WebUtils.getRequest().getRequestURI().endsWith(".json")) {
+            return "";
+        }
+        // 处理自定义视图名称
+        ViewName viewName = handlerMethod.getMethodAnnotation(ViewName.class);
+        if (viewName != null && !Strings.isNullOrEmpty(viewName.value())) {
+            return viewName.value();
+        }
         return "error";
+    }
+
+    private BizException findBizException(Throwable ex) {
+        while (ex != null) {
+            if (ex instanceof BizException) {
+                return (BizException) ex;
+            }
+            ex = ex.getCause();
+        }
+        return null;
     }
 
     private void handlerResponseStatus(HttpServletResponse response, Exception ex) {

@@ -20,17 +20,11 @@ public class DictionaryQo extends Page {
 
     private String keyword;
 
+    private Long parentId;
+
     private String dictKey;
 
     private String dictValue;
 
-    private String memo;
-
-    private Integer dictLevel;
-
-    private Long parentId;
-
-    private Boolean system;
-
-    private Boolean queryRoot;
+    private Boolean order = false;
 }

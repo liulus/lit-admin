@@ -1,6 +1,5 @@
 package com.github.lit.plugin.context;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -11,8 +10,8 @@ import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.view.ContentNegotiatingViewResolver;
 import org.springframework.web.servlet.view.json.MappingJackson2JsonView;
 
-import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 
 /**
  * User : liulu
@@ -25,7 +24,7 @@ public class PluginConfig {
 
 
     @Bean
-    public ContentNegotiatingViewResolver contentNegotiatingViewResolver(ViewResolver... viewResolvers) {
+    public ContentNegotiatingViewResolver contentNegotiatingViewResolver(List<ViewResolver> viewResolvers, ObjectMapper objectMapper) {
 
         ContentNegotiatingViewResolver viewResolver = new ContentNegotiatingViewResolver();
 
@@ -33,13 +32,11 @@ public class PluginConfig {
         bean.setIgnoreAcceptHeader(true);
         bean.setDefaultContentType(MediaType.TEXT_HTML);
 
-        MappingJackson2JsonView jackson2JsonView = new MappingJackson2JsonView();
-        ObjectMapper objectMapper = jackson2JsonView.getObjectMapper();
-        objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
+        View jackson2JsonView = new MappingJackson2JsonView(objectMapper);
 
         viewResolver.setContentNegotiationManager(bean.getObject());
-        viewResolver.setDefaultViews(Collections.<View>singletonList(jackson2JsonView));
-        viewResolver.setViewResolvers(Arrays.asList(viewResolvers));
+        viewResolver.setDefaultViews(Collections.singletonList(jackson2JsonView));
+        viewResolver.setViewResolvers(viewResolvers);
 
         return viewResolver;
     }

@@ -1,15 +1,35 @@
 $(function () {
 
+    if (message.content) {
+        if (message.success) {
+            MsgUtils.success(message.content);
+        } else {
+            MsgUtils.error(message.content);
+        }
+    }
+
     var compiledEditTpl = juicer($('#edit-tpl').html());
 
-    var urlPrefix = path + '/plugin/dictionary';
+    var urlPrefix = contextPath + '/plugin/dictionary';
 
     var $dataResult = $('#data-result');
 
 
     /** 新增弹出框 */
     $('#data-add').on('click', function (e) {
-        openEdit('增加字典', compiledEditTpl.render(), '#form-edit', urlPrefix + '/add.json')
+        layer.open({
+            type: 1,
+            title: '增加字典',
+            area: '650px',
+            content: compiledEditTpl.render({url: urlPrefix, method: 'post'}),
+            btn: ['确认', '取消'],
+            btn1: function (index) {
+                $('#form-edit').submit();
+            },
+            btn2: function (index) {
+                layer.close(index);
+            }
+        });
     });
 
     /** 修改弹出框 */
@@ -40,13 +60,17 @@ $(function () {
             content: content,
             btn: ['确认', '取消'],
             btn1: function (index) {
-                $.post(url, $(form).serialize(), function (result) {
-                    if (result.success) {
-                        $('#query-form').submit();
-                    } else {
-                        MsgUtils.error(result.message);
-                    }
-                });
+
+                $(form).submit();
+
+
+                // $.post(url, $(form).serialize(), function (result) {
+                //     if (result.success) {
+                //         $('#query-form').submit();
+                //     } else {
+                //         MsgUtils.error(result.message);
+                //     }
+                // });
             },
             btn2: function (index) {
                 layer.close(index);
@@ -61,7 +85,7 @@ $(function () {
             MsgUtils.warning('请至少选择一条数据 !');
             return;
         }
-        layer.confirm('确定要删除选中的数据吗?',{icon: 3}, function (index) {
+        layer.confirm('确定要删除选中的数据吗?', {icon: 3}, function (index) {
             $.post(urlPrefix + '/delete.json', checkedInputs.serialize(), function (result) {
                 if (result.success) {
                     $('#query-form').submit();

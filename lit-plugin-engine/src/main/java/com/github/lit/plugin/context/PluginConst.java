@@ -12,7 +12,7 @@ public class PluginConst {
 
     public static final String URL_PREFIX = "/plugin";
 
-    public static final String REDIRECT = "redirect:";
+    public static final String REDIRECT = "redirect:" + URL_PREFIX;
 
 
 }

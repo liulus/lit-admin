@@ -5,7 +5,8 @@ $(document).on('click', '.pagination .page-num', function (e) {
     var queryForm;
     if (pageContent.data('queryForm')) {
         queryForm = $(pageContent.data('queryForm'));
-    } else {
+    }
+    if (queryForm.length === 0) {
         queryForm = pageContent.find('form');
     }
 

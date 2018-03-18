@@ -34,11 +34,9 @@ public class DictionaryDaoImpl extends AbstractBaseDao<Dictionary, DictionaryQo>
             select.and("dictKey").equalsTo(qo.getDictKey());
         }
 
-        if (qo.getSystem() != null) {
-            select.and("system").equalsTo(qo.getSystem());
+        if (qo.getOrder()) {
+            select.asc("orderNum");
         }
-
-        select.asc("orderNum");
     }
 
     @Override

@@ -30,7 +30,7 @@
             <div class="col-sm-12 col-md-8 form-group">
                 <div class="col-sm-8 text-right control-label">关键字:</div>
                 <div class="col-sm-16 ">
-                    <input name="keyWord" class="form-control input-sm" type="text" value="${userQo.keyWord!}"
+                    <input name="keyword" class="form-control input-sm" type="text" value="${userQo.keyword!}"
                            placeholder="请输入">
                 </div>
             </div>

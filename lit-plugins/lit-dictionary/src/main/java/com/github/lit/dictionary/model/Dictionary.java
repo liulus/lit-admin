@@ -45,9 +45,9 @@ public class Dictionary implements Serializable {
     private Integer orderNum;
 
     /**
-     * 字典层级
+     * 层级索引
      */
-    private Integer dictLevel;
+    private String levelIndex;
 
     /**
      * 备注

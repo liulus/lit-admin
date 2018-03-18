@@ -29,7 +29,7 @@ public class DictionaryController {
 
     @RequestMapping({"/list", ""})
     public String list(DictionaryQo vo, Model model) {
-        List<Dictionary> dictionaries = dictionaryService.queryPageList(vo);
+        List<Dictionary> dictionaries = dictionaryService.findPageList(vo);
         model.addAttribute(ResultConst.RESULT, dictionaries);
 
         return "dictionary";
@@ -39,7 +39,7 @@ public class DictionaryController {
     public String childList(DictionaryQo vo, @PathVariable Long parentId, Model model) {
 
         vo.setParentId(parentId);
-        List<Dictionary> dictionaries = dictionaryService.queryPageList(vo);
+        List<Dictionary> dictionaries = dictionaryService.findPageList(vo);
         model.addAttribute(ResultConst.RESULT, dictionaries);
         return "dictionary";
     }

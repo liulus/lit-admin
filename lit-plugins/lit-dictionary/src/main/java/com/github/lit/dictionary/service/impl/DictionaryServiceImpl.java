@@ -1,12 +1,12 @@
 package com.github.lit.dictionary.service.impl;
 
+import com.github.lit.commons.exception.BizException;
+import com.github.lit.dictionary.dao.DictionaryDao;
 import com.github.lit.dictionary.model.Dictionary;
 import com.github.lit.dictionary.model.DictionaryQo;
 import com.github.lit.dictionary.service.DictionaryService;
 import com.github.lit.jdbc.JdbcTools;
-import com.github.lit.jdbc.statement.select.Select;
 import com.github.lit.plugin.exception.AppException;
-import com.google.common.base.Strings;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,91 +28,48 @@ public class DictionaryServiceImpl implements DictionaryService {
     @Resource
     private JdbcTools jdbcTools;
 
+    @Resource
+    private DictionaryDao dictionaryDao;
+
     @Override
-    public List<Dictionary> queryPageList(DictionaryQo vo) {
-
-        Select<Dictionary> select = buildSelect(vo);
-
-        return select.page(vo).list();
-    }
-
-    private Select<Dictionary> buildSelect(DictionaryQo qo) {
-        Select<Dictionary> select = jdbcTools.select(Dictionary.class).where("parentId").equalsTo(qo.getParentId());
-
-        if (!Strings.isNullOrEmpty(qo.getKeyword())) {
-            select.and()
-                    .bracket("dictKey").like(qo.getKeyword())
-                    .or("dictValue").like(qo.getKeyword())
-                    .or("memo").like(qo.getKeyword())
-                    .end();
-        }
-
-        if (qo.getSystem() != null) {
-            select.and("system").equalsTo(qo.getSystem());
-        }
-
-        if (!Strings.isNullOrEmpty(qo.getDictKey())) {
-            select.and("dictKey").equalsTo(qo.getDictKey());
-        }
-
-        select.asc("orderNum");
-
-        return select;
+    public List<Dictionary> findPageList(DictionaryQo qo) {
+        return dictionaryDao.findPageList(qo);
     }
 
     @Override
     @Transactional
-    public void insert(Dictionary dictionary) {
-        Dictionary dict = findByKeyAndParentId(dictionary.getDictKey(), dictionary.getParentId());
-        if (dict != null) {
-            throw new AppException("字典Key已经存在!");
-        }
+    public void insert(Dictionary dict) {
 
-        if (dictionary.getParentId() == null) {
-            dictionary.setDictLevel(1);
-        } else {
-            Dictionary parentDict = jdbcTools.get(Dictionary.class, dictionary.getParentId());
-            if (parentDict == null) {
-                throw new AppException("父字典信息丢失!");
-            }
-            dictionary.setDictLevel(parentDict.getDictLevel() + 1);
-        }
+        checkDictKey(dict.getDictKey(), dict.getParentId());
 
-        if (dictionary.getSystem() == null) {
-            dictionary.setSystem(false);
-        }
+        // todo 设置层级索引
 
-        Integer maxOrder = jdbcTools.select(Dictionary.class)
-                .function("max", "orderNum")
-                .where("parentId").equalsTo(dictionary.getParentId())
-                .single(int.class);
+        dict.setSystem(false);
 
-        dictionary.setOrderNum(maxOrder == null ? 1 : maxOrder + 1);
-        jdbcTools.insert(dictionary);
+        Integer maxOrder = dictionaryDao.findMaxOrder(dict.getParentId());
+        dict.setOrderNum(maxOrder == null ? 1 : maxOrder + 1);
+
+        jdbcTools.insert(dict);
     }
 
     @Override
     @Transactional
     public void update(Dictionary dictionary) {
         Dictionary oldDict = findById(dictionary.getDictId());
-        if (!Objects.equals(dictionary.getDictKey(), oldDict.getDictKey())) {
-            Dictionary dict = findByKeyAndParentId(dictionary.getDictKey(), dictionary.getParentId());
-            if (dict != null) {
-                throw new AppException("字典Key已经存在!");
-            }
-        }
 
+        if (Objects.equals(dictionary.getDictKey(), oldDict.getDictKey())) {
+            jdbcTools.update(dictionary);
+            return;
+        }
+        checkDictKey(dictionary.getDictKey(), dictionary.getParentId());
         jdbcTools.update(dictionary);
     }
 
-    private Dictionary findByKeyAndParentId(String dictKey, Long parentId) {
-
-        DictionaryQo qo = DictionaryQo.builder()
-                .dictKey(dictKey)
-                .parentId(parentId)
-                .build();
-
-        return buildSelect(qo).single();
+    private void checkDictKey(String dictKey, Long parentId) {
+        Dictionary dict = dictionaryDao.findByKeyAndParentId(dictKey, parentId);
+        if (dict != null) {
+            throw new BizException("字典Key已经存在!");
+        }
     }
 
 
@@ -158,7 +115,7 @@ public class DictionaryServiceImpl implements DictionaryService {
     @Override
     public Dictionary findByRootKey(String key) {
         DictionaryQo qo = DictionaryQo.builder().dictKey(key).build();
-        return buildSelect(qo).single();
+        return dictionaryDao.buildSelect(qo).single();
     }
 
     @Override
@@ -170,7 +127,7 @@ public class DictionaryServiceImpl implements DictionaryService {
         Dictionary result = new Dictionary();
 
         for (String key : keys) {
-            result = findByKeyAndParentId(key, result.getDictId());
+            result = dictionaryDao.findByKeyAndParentId(key, result.getDictId());
         }
         return result;
     }
@@ -183,9 +140,7 @@ public class DictionaryServiceImpl implements DictionaryService {
             return Collections.emptyList();
         }
 
-        DictionaryQo qo = DictionaryQo.builder().parentId(rootDict.getDictId()).build();
-
-        return buildSelect(qo).list();
+        return findChildByParentId(rootDict.getDictId());
     }
 
     @Override
@@ -195,22 +150,13 @@ public class DictionaryServiceImpl implements DictionaryService {
         if (parentDict == null) {
             return Collections.emptyList();
         }
-
-        DictionaryQo qo = DictionaryQo.builder().parentId(parentDict.getDictId()).build();
-
-        return buildSelect(qo).list();
+        return findChildByParentId(parentDict.getDictId());
     }
 
     @Override
     public List<Dictionary> findChildByParentId(Long parentId) {
-        Dictionary parentDict = findById(parentId);
-        if (parentDict == null) {
-            return Collections.emptyList();
-        }
-
-        DictionaryQo qo = DictionaryQo.builder().parentId(parentDict.getDictId()).build();
-
-        return buildSelect(qo).list();
+        DictionaryQo qo = DictionaryQo.builder().parentId(parentId).build();
+        return dictionaryDao.buildSelect(qo).list();
     }
 
 

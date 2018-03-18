@@ -19,7 +19,7 @@ public interface DictionaryService {
      * @param qo 查询对象
      * @return
      */
-    List<Dictionary> queryPageList(DictionaryQo qo);
+    List<Dictionary> findPageList(DictionaryQo qo);
 
     /**
      * 添加字典对象

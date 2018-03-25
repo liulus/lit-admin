@@ -2,6 +2,7 @@ package com.github.lit.plugin.exception;
 
 import com.github.lit.commons.context.ResultConst;
 import com.github.lit.commons.exception.BizException;
+import com.github.lit.plugin.util.SpelUtils;
 import com.github.lit.plugin.web.ViewName;
 import com.github.lit.plugin.web.WebUtils;
 import com.google.common.base.Strings;
@@ -26,7 +27,6 @@ import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.ServletRequestBindingException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.context.request.async.AsyncRequestTimeoutException;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.multipart.support.MissingServletRequestPartException;
@@ -50,11 +50,6 @@ public class ExceptionAdvice {
     @Value("${unchecked.error.message:系统错误}")
     private String errorMsg;
 
-
-    @ModelAttribute
-    public void success(Model model) {
-        model.addAttribute(ResultConst.SUCCESS, true);
-    }
 
     @ExceptionHandler(Exception.class)
     public String exception(HandlerMethod handlerMethod, Model model, Exception ex) throws IOException {
@@ -85,7 +80,9 @@ public class ExceptionAdvice {
         // 处理自定义视图名称
         ViewName viewName = handlerMethod.getMethodAnnotation(ViewName.class);
         if (viewName != null && !Strings.isNullOrEmpty(viewName.value())) {
-            return viewName.value();
+            if (!viewName.value().contains("#")) {
+                return SpelUtils.getExpressionValue(viewName.value(), model.asMap());
+            }
         }
         return "error";
     }

@@ -92,7 +92,7 @@
 
 <script type="text/template" id="edit-tpl">
     <div class="modal-body">
-        <form id="form-edit" class="form-horizontal" action="${r'${url}'}" method="${r'${method}'}">
+        <form id="form-edit" class="form-horizontal">
             <input type="hidden" name="parentId" value="${dictionaryQo.parentId?c}">
             <input type="hidden" name="dictId" value="${r'${dictId}'}">
             <div class="form-group">

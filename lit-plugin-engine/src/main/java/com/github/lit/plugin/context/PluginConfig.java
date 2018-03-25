@@ -1,6 +1,7 @@
 package com.github.lit.plugin.context;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.lit.commons.spring.condition.ConditionalOnClass;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.MediaType;
@@ -19,6 +20,7 @@ import java.util.List;
  * version $Id: PluginConfig.java, v 0.1 Exp $
  */
 @Configuration
+@ConditionalOnClass({ContentNegotiatingViewResolver.class, ObjectMapper.class})
 public class PluginConfig {
 
 

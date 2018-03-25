@@ -1,6 +1,6 @@
 package com.github.lit.menu.tool;
 
-import com.github.lit.commons.util.SpringContextUtils;
+import com.github.lit.commons.spring.SpringContextUtils;
 import com.github.lit.menu.model.MenuVo;
 import com.github.lit.menu.service.MenuService;
 

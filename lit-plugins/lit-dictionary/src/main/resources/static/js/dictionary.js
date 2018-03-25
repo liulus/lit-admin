@@ -1,13 +1,5 @@
 $(function () {
 
-    if (message.content) {
-        if (message.success) {
-            MsgUtils.success(message.content);
-        } else {
-            MsgUtils.error(message.content);
-        }
-    }
-
     var compiledEditTpl = juicer($('#edit-tpl').html());
 
     var urlPrefix = contextPath + '/plugin/dictionary';
@@ -19,12 +11,18 @@ $(function () {
     $('#data-add').on('click', function (e) {
         layer.open({
             type: 1,
-            title: '增加字典',
+            title: '新增字典',
             area: '650px',
-            content: compiledEditTpl.render({url: urlPrefix, method: 'post'}),
+            content: compiledEditTpl.render(),
             btn: ['确认', '取消'],
             btn1: function (index) {
-                $('#form-edit').submit();
+                Http.post(urlPrefix + ".json", $('#form-edit').serialize(), function (res) {
+                    if (res.success) {
+                        UrlUtils.addParamAndReload('message', '新增字典成功')
+                    } else {
+                        MsgUtils.error(res.message)
+                    }
+                })
             },
             btn2: function (index) {
                 layer.close(index);
@@ -44,39 +42,28 @@ $(function () {
             return;
         }
 
-        $.post(urlPrefix + '/get.json', {
-            id: checkedInputs.val()
-        }, function (result) {
-            openEdit('修改字典', compiledEditTpl.render(result.result), '#form-edit', urlPrefix + '/update.json')
+        Http.get(urlPrefix + '/' + checkedInputs.val() + '.json', function (res) {
+            layer.open({
+                type: 1,
+                title: '修改字典',
+                area: '650px',
+                content: compiledEditTpl.render(res.data),
+                btn: ['确认', '取消'],
+                btn1: function (index) {
+                    Http.put(urlPrefix + ".json", $('#form-edit').serialize(), function (res) {
+                        if (res.success) {
+                            UrlUtils.addParamAndReload('message', '修改字典成功')
+                        } else {
+                            MsgUtils.error(res.message)
+                        }
+                    })
+                },
+                btn2: function (index) {
+                    layer.close(index);
+                }
+            });
         });
-
     });
-
-    function openEdit(title, content, form, url) {
-        layer.open({
-            type: 1,
-            title: title,
-            area: '650px',
-            content: content,
-            btn: ['确认', '取消'],
-            btn1: function (index) {
-
-                $(form).submit();
-
-
-                // $.post(url, $(form).serialize(), function (result) {
-                //     if (result.success) {
-                //         $('#query-form').submit();
-                //     } else {
-                //         MsgUtils.error(result.message);
-                //     }
-                // });
-            },
-            btn2: function (index) {
-                layer.close(index);
-            }
-        })
-    }
 
     /** 删除功能 */
     $('#data-del').on('click', function (e) {
@@ -86,9 +73,9 @@ $(function () {
             return;
         }
         layer.confirm('确定要删除选中的数据吗?', {icon: 3}, function (index) {
-            $.post(urlPrefix + '/delete.json', checkedInputs.serialize(), function (result) {
+            Http.delete(urlPrefix + '/test.json', checkedInputs.serialize(), function (result) {
                 if (result.success) {
-                    $('#query-form').submit();
+                    UrlUtils.addParamAndReload('message', '删除字典成功')
                 } else {
                     layer.close(index);
                     MsgUtils.error(result.message);

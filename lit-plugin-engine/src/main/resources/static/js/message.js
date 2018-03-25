@@ -59,3 +59,6 @@ var MsgUtils = {
     }
 
 }
+if (message.content) {
+    MsgUtils.success(message.content);
+}

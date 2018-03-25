@@ -19,10 +19,7 @@
 <script type="text/javascript">
     var contextPath = '${rc.contextPath}';
     var message = {
-    <#if RequestParameters['success']??>
-        success: ${RequestParameters['success']}
-    </#if>
     <#if RequestParameters['message']??>
-        , content: '${RequestParameters['message']}'
+        content: '${RequestParameters['message']}'
     </#if>}
 </script>

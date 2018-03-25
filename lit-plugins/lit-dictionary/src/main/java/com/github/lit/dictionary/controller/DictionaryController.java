@@ -1,6 +1,5 @@
 package com.github.lit.dictionary.controller;
 
-import com.github.lit.commons.context.ResultConst;
 import com.github.lit.dictionary.model.Dictionary;
 import com.github.lit.dictionary.model.DictionaryQo;
 import com.github.lit.dictionary.service.DictionaryService;
@@ -8,7 +7,6 @@ import com.github.lit.plugin.context.PluginConst;
 import com.github.lit.plugin.web.ViewName;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -24,6 +22,8 @@ import java.util.List;
 @RequestMapping(PluginConst.URL_PREFIX + "/dictionary")
 public class DictionaryController {
 
+    private static final String REDIRECT_PREFIX = "'" + PluginConst.REDIRECT + "/dictionary/list'";
+
     @Resource
     private DictionaryService dictionaryService;
 
@@ -36,10 +36,10 @@ public class DictionaryController {
     }
 
     @GetMapping("/back/{dictId}")
-    public String back(@PathVariable Long dictId) {
+    @ViewName(REDIRECT_PREFIX + "+(#data == 0L? '' : '/' + #data)")
+    public Long back(@PathVariable Long dictId) {
         Dictionary dictionary = dictionaryService.findById(dictId);
-        String suffix = dictionary.getParentId() == 0L ? "" : String.valueOf(dictionary.getParentId());
-        return "redirect:/plugin/dictionary/list" + suffix;
+        return dictionary == null ? 0L : dictionary.getParentId();
     }
 
     @GetMapping("/{id}")
@@ -48,21 +48,20 @@ public class DictionaryController {
     }
 
     @PostMapping
-    @ViewName(PluginConst.REDIRECT + "/dictionary/list")
-    public Long add(Dictionary dictionary, Model model) {
-        model.addAttribute(ResultConst.MASSAGE, "新增字典成功!");
+    @ViewName(REDIRECT_PREFIX + "+(#dictionary.parentId == 0L? '' : '/' + #dictionary.parentId)")
+    public Long add(Dictionary dictionary) {
         return dictionaryService.insert(dictionary);
     }
 
-    @PutMapping("/update")
-    @ViewName(PluginConst.REDIRECT + "/dictionary/list")
+    @PutMapping
+    @ViewName(REDIRECT_PREFIX + "+(#dictionary.parentId == 0L? '' : '/' + #dictionary.parentId)")
     public void update(Dictionary dictionary) {
         dictionaryService.update(dictionary);
     }
 
-    @DeleteMapping("/delete")
-    @ViewName(PluginConst.REDIRECT + "/dictionary/list")
-    public void delete(Long... ids) {
+    @DeleteMapping("/test")
+    @ViewName(REDIRECT_PREFIX)
+    public void delete(Long[] ids) {
         dictionaryService.deleteByIds(ids);
     }
 

@@ -3,6 +3,7 @@ package com.github.lit.plugin.web;
 import com.github.lit.commons.context.ResultConst;
 import com.github.lit.commons.page.PageInfo;
 import com.github.lit.commons.page.PageList;
+import com.github.lit.plugin.util.SpelUtils;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -26,17 +27,24 @@ public class ModelAttributeInterceptor implements HandlerInterceptor {
 
     @Override
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
+        if (modelAndView == null) {
+            return;
+        }
+        ModelMap modelMap = modelAndView.getModelMap();
+        modelMap.put(ResultConst.SUCCESS, true);
 
         // 处理自定义视图名称
-        if (handler instanceof HandlerMethod) {
+        if (request.getRequestURI().endsWith(".json")) {
+            modelAndView.setViewName("");
+        } else if (handler instanceof HandlerMethod) {
             Method method = ((HandlerMethod) handler).getMethod();
             ViewName viewName = method.getAnnotation(ViewName.class);
             if (viewName != null) {
-                modelAndView.setViewName(viewName.value());
+                modelAndView.setViewName(SpelUtils.getExpressionValue(viewName.value(), modelMap));
             }
         }
+
         // 处理分页信息
-        ModelMap modelMap = modelAndView == null ? null : modelAndView.getModelMap();
         PageInfo pageInfo = null;
         for (Object obj : modelMap.values()) {
             if (obj instanceof PageList) {

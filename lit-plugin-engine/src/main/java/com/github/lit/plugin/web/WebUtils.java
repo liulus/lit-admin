@@ -1,6 +1,6 @@
 package com.github.lit.plugin.web;
 
-import com.github.lit.commons.util.SpringContextUtils;
+import com.github.lit.commons.spring.SpringContextUtils;
 import org.springframework.context.ApplicationContext;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.request.RequestContextHolder;

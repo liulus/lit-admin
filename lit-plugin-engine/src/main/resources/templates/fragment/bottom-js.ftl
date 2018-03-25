@@ -17,6 +17,7 @@
     ${r'${message}'}
     </div>
 </script>
+<#--<script src="${rc.contextPath}/libs/fetch/2.0.3/fetch.js"></script>-->
 <script src="${rc.contextPath}/libs/jquery/1.12.4/jquery.min.js"></script>
 <script src="${rc.contextPath}/libs/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <script src="${rc.contextPath}/libs/juicer/0.6.8-stable/juicer-min.js"></script>

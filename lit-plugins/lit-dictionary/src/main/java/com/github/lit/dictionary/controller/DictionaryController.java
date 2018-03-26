@@ -59,7 +59,7 @@ public class DictionaryController {
         dictionaryService.update(dictionary);
     }
 
-    @DeleteMapping("/test")
+    @DeleteMapping
     @ViewName(REDIRECT_PREFIX)
     public void delete(Long[] ids) {
         dictionaryService.deleteByIds(ids);

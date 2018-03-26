@@ -24,5 +24,5 @@
 <script src="${rc.contextPath}/libs/layer/3.0.3/layer.js"></script>
 <script src="${rc.contextPath}/js/left-menu.js"></script>
 <script src="${rc.contextPath}/js/page.js"></script>
-<script src="${rc.contextPath}/js/commons-func.js"></script>
 <script src="${rc.contextPath}/js/message.js"></script>
+<script src="${rc.contextPath}/js/commons-func.js"></script>

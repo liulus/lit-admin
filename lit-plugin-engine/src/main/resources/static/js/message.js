@@ -59,6 +59,6 @@ var MsgUtils = {
     }
 
 }
-if (message.content) {
-    MsgUtils.success(message.content);
+if ('undefined' !== typeof message) {
+    MsgUtils.success(message);
 }

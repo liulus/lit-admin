@@ -1,3 +1,111 @@
+$(function () {
+    var defaultPage = {
+        topic: '',
+        restUrl: '',
+        bindAdd: true,
+        bindUpdate: true,
+        bindDelete: true,
+        editTpl: '#edit-tpl',
+        editForm: '#edit-form'
+    }
+
+    var pageConfig = $.extend({}, defaultPage, page);
+
+    var compiledEditTpl = juicer($(pageConfig.editTpl).html());
+
+    var urlPrefix = contextPath + pageConfig.restUrl;
+
+    var $dataResult = $('#data-result');
+
+    if (pageConfig.bindAdd) {
+        /** 新增弹出框 */
+        $('#data-add').on('click', function (e) {
+            var title = $.trim($(this).text()) + pageConfig.topic;
+            layer.open({
+                type: 1,
+                title: title,
+                area: '45%',
+                content: compiledEditTpl.render(),
+                btn: ['确认', '取消'],
+                btn1: function (index) {
+                    Http.post(urlPrefix + ".json", $('#form-edit').serialize(), function (res) {
+                        if (res.success) {
+                            UrlUtils.addParamAndReload('message', title + '成功')
+                        } else {
+                            MsgUtils.error(res.message)
+                        }
+                    })
+                },
+                btn2: function (index) {
+                    layer.close(index);
+                }
+            });
+        });
+    }
+
+    if (pageConfig.bindUpdate) {
+        /** 修改弹出框 */
+        $('#data-update').on('click', function (e) {
+            var checkedInputs = $dataResult.find('.check-ls:checked');
+            if (checkedInputs.length <= 0) {
+                MsgUtils.warning('请选择一条数据 !');
+                return;
+            }
+            if (checkedInputs.length > 1) {
+                MsgUtils.warning('只能选择一条数据 !');
+                return;
+            }
+            var title = $.trim($(this).text()) + pageConfig.topic;
+            Http.get(urlPrefix + '/' + checkedInputs.val() + '.json', function (res) {
+                layer.open({
+                    type: 1,
+                    title: title,
+                    area: '45%',
+                    content: compiledEditTpl.render(res.data),
+                    btn: ['确认', '取消'],
+                    btn1: function (index) {
+                        Http.put(urlPrefix + ".json", $('#form-edit').serialize(), function (res) {
+                            if (res.success) {
+                                UrlUtils.addParamAndReload('message', title + '成功')
+                            } else {
+                                MsgUtils.error(res.message)
+                            }
+                        })
+                    },
+                    btn2: function (index) {
+                        layer.close(index);
+                    }
+                });
+            });
+        });
+    }
+
+
+    if (pageConfig.bindDelete) {
+        /** 删除功能 */
+        $('#data-del').on('click', function (e) {
+            var checkedInputs = $dataResult.find('.check-ls:checked');
+            if (checkedInputs.length <= 0) {
+                MsgUtils.warning('请至少选择一条数据 !');
+                return;
+            }
+            var title = $.trim($(this).text()) + pageConfig.topic;
+            layer.confirm('确定要删除选中的数据吗?', {icon: 3, title: title}, function (index) {
+                Http.delete(urlPrefix + '.json', checkedInputs.serialize(), function (result) {
+                    if (result.success) {
+                        UrlUtils.addParamAndReload('message', title + '成功')
+                    } else {
+                        layer.close(index);
+                        MsgUtils.error(result.message);
+                    }
+                });
+            })
+        })
+    }
+
+})
+
+
 /**
  * 全选功能
  */

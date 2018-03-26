@@ -30,7 +30,7 @@
     <!-- 数据操作 -->
     <div class="panel-heading">
         <button id="data-add" class="btn btn-sm btn-success">
-            <i class="fa fa-plus"></i>&nbsp;&nbsp;增加
+            <i class="fa fa-plus"></i>&nbsp;&nbsp;新增
         </button>
         <#if data?size &gt; 0>
             <button id="data-del" class="btn btn-sm btn-danger">

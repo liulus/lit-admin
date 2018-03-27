@@ -40,7 +40,8 @@ public class ModelAttributeInterceptor implements HandlerInterceptor {
             Method method = ((HandlerMethod) handler).getMethod();
             ViewName viewName = method.getAnnotation(ViewName.class);
             if (viewName != null) {
-                modelAndView.setViewName(SpelUtils.getExpressionValue(viewName.value(), modelMap));
+                String name = viewName.spel() ? SpelUtils.getExpressionValue(viewName.value(), modelMap) : viewName.value();
+                modelAndView.setViewName(name);
             }
         }
 

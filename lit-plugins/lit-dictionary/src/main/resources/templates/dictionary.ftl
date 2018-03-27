@@ -41,7 +41,7 @@
             </button>
         </#if>
         <#if dictionaryQo.parentId != 0>
-            <a href="${rc.contextPath}/plugin/dictionary/back/${dictionaryQo.parentId?c}"
+            <a href="${rc.contextPath}/plugin/dictionary?parentId=${returnId?c}"
                class="btn btn-sm btn-warning">
                 <i class="fa fa-reply"></i>&nbsp;&nbsp;返回上级
             </a>
@@ -58,7 +58,8 @@
             <th>行号</th>
             <th>字典Key</th>
             <th>字典值</th>
-            <th>是否系统级</th>
+            <th>顺序号</th>
+            <#--<th>是否系统级</th>-->
             <th>备注</th>
         </tr>
         </thead>
@@ -71,10 +72,11 @@
                 </td>
                 <td>${item?counter}</td>
                 <td>
-                    <a href="${rc.contextPath}/plugin/dictionary/list/${item.dictId?c}">${item.dictKey!?html}</a>
+                    <a href="${rc.contextPath}/plugin/dictionary?parentId=${item.dictId?c}">${item.dictKey!?html}</a>
                 </td>
                 <td>${item.dictValue!?html}</td>
-                <td>${item.system?string('是', '否')}</td>
+                <td>${item.orderNum!?c}</td>
+                <#--<td>${item.system?string('是', '否')}</td>-->
                 <td>${item.memo!?html}</td>
             </tr>
             <#else>

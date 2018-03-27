@@ -1,12 +1,15 @@
 package com.github.lit.dictionary.controller;
 
+import com.github.lit.commons.bean.BeanUtils;
 import com.github.lit.dictionary.model.Dictionary;
 import com.github.lit.dictionary.model.DictionaryQo;
+import com.github.lit.dictionary.model.DictionaryVo;
 import com.github.lit.dictionary.service.DictionaryService;
 import com.github.lit.plugin.context.PluginConst;
 import com.github.lit.plugin.web.ViewName;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -24,22 +27,22 @@ public class DictionaryController {
 
     private static final String REDIRECT_PREFIX = "'" + PluginConst.REDIRECT + "/dictionary/list'";
 
+    private static final String REDIRECT_EL = "+(#dictionary.parentId == 0L? '' : '?parentId=' + #dictionary.parentId)";
     @Resource
     private DictionaryService dictionaryService;
 
-    @GetMapping({"/list", "/list/{parentId}"})
+    @GetMapping
     @ViewName("dictionary")
-    public List<Dictionary> childList(DictionaryQo qo, @PathVariable(required = false) Long parentId) {
-        qo.setParentId(parentId == null ? 0L : parentId);
+    public List<DictionaryVo.List> childList(DictionaryQo qo, Model model) {
+        if (qo.getParentId() == null) {
+            qo.setParentId(0L);
+        }
+        if (qo.getParentId() != 0L) {
+            Dictionary dictionary = dictionaryService.findById(qo.getParentId());
+            model.addAttribute("returnId", dictionary == null ? 0 : dictionary.getParentId());
+        }
         qo.setOrder(true);
-        return dictionaryService.findPageList(qo);
-    }
-
-    @GetMapping("/back/{dictId}")
-    @ViewName(REDIRECT_PREFIX + "+(#data == 0L? '' : '/' + #data)")
-    public Long back(@PathVariable Long dictId) {
-        Dictionary dictionary = dictionaryService.findById(dictId);
-        return dictionary == null ? 0L : dictionary.getParentId();
+        return BeanUtils.convert(DictionaryVo.List.class, dictionaryService.findPageList(qo));
     }
 
     @GetMapping("/{id}")
@@ -48,15 +51,15 @@ public class DictionaryController {
     }
 
     @PostMapping
-    @ViewName(REDIRECT_PREFIX + "+(#dictionary.parentId == 0L? '' : '/' + #dictionary.parentId)")
-    public Long add(Dictionary dictionary) {
-        return dictionaryService.insert(dictionary);
+    @ViewName(value = REDIRECT_PREFIX + REDIRECT_EL, spel = true)
+    public Long add(DictionaryVo.Add dictionary) {
+        return dictionaryService.insert(BeanUtils.convert(dictionary, new Dictionary()));
     }
 
     @PutMapping
-    @ViewName(REDIRECT_PREFIX + "+(#dictionary.parentId == 0L? '' : '/' + #dictionary.parentId)")
-    public void update(Dictionary dictionary) {
-        dictionaryService.update(dictionary);
+    @ViewName(value = REDIRECT_PREFIX + REDIRECT_EL, spel = true)
+    public void update(DictionaryVo.Update dictionary) {
+        dictionaryService.update(BeanUtils.convert(dictionary, new Dictionary()));
     }
 
     @DeleteMapping

@@ -1,17 +1,18 @@
 package com.github.lit.dictionary.model;
 
 import com.github.lit.commons.page.Page;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * User : liulu
  * Date : 2017/4/8 20:52
  * version $Id: DictionaryVo.java, v 0.1 Exp $
  */
-@Getter
-@Setter
+@Data
 @Builder
-@ToString
 @NoArgsConstructor
 @AllArgsConstructor
 public class DictionaryQo extends Page {

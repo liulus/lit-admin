@@ -15,4 +15,11 @@ import java.lang.annotation.Target;
 public @interface ViewName {
 
     String value();
+
+    /**
+     * 是否是spring el 表达式
+     *
+     * @return boolean
+     */
+    boolean spel() default false;
 }

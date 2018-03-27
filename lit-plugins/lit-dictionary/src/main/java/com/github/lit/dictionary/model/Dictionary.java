@@ -50,17 +50,12 @@ public class Dictionary implements Serializable {
     private Integer orderNum;
 
     /**
-     * 层级索引
-     */
-    private String levelIndex;
-
-    /**
      * 备注
      */
     private String memo;
 
     /**
-     * 是否系统级别字典 （系统级不允许修改和删除）
+     * 是否系统级别字典 （系统级不允许删除）
      */
     @Column(name = "is_system")
     private Boolean system;

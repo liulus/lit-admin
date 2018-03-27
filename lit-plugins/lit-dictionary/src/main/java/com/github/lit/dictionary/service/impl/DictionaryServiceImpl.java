@@ -5,9 +5,9 @@ import com.github.lit.dictionary.dao.DictionaryDao;
 import com.github.lit.dictionary.model.Dictionary;
 import com.github.lit.dictionary.model.DictionaryQo;
 import com.github.lit.dictionary.service.DictionaryService;
-import com.github.lit.plugin.exception.AppException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
@@ -31,14 +31,10 @@ public class DictionaryServiceImpl implements DictionaryService {
     public Long insert(Dictionary dict) {
 
         checkDictKey(dict.getDictKey(), dict.getParentId());
-
-        // todo 设置层级索引
-
         dict.setSystem(false);
-
-        Integer maxOrder = dictionaryDao.findMaxOrder(dict.getParentId());
-        dict.setOrderNum(maxOrder == null ? 1 : maxOrder + 1);
-
+        if (dict.getOrderNum() == null) {
+            dict.setOrderNum(0);
+        }
         return dictionaryDao.insert(dict);
     }
 
@@ -78,20 +74,20 @@ public class DictionaryServiceImpl implements DictionaryService {
         if (ids == null || ids.length == 0) {
             return 0;
         }
-        List<Long> validIds = new ArrayList<>(ids.length);
-        for (Long id : ids) {
-            Dictionary dictionary = findById(id);
-            if (dictionary == null) {
-                continue;
-            }
+        List<Dictionary> dictionaries = dictionaryDao.findByIds(ids);
+        if (CollectionUtils.isEmpty(dictionaries)) {
+            return 0;
+        }
+        List<Long> validIds = new ArrayList<>(dictionaries.size());
+        for (Dictionary dictionary : dictionaries) {
             if (dictionary.getSystem()) {
-                throw new AppException(String.format("%s 是系统级字典, 不允许删除 !", dictionary.getDictKey()));
+                throw new BizException(String.format("%s 是系统级字典, 不允许删除 !", dictionary.getDictKey()));
             }
-            int childDict = dictionaryDao.countByParentId(id);
+            int childDict = dictionaryDao.countByParentId(dictionary.getDictId());
             if (childDict > 0) {
-                throw new AppException(String.format("请先删除 %s 的子字典数据 !", dictionary.getDictKey()));
+                throw new BizException(String.format("请先删除 %s 的子字典数据 !", dictionary.getDictKey()));
             }
-            validIds.add(id);
+            validIds.add(dictionary.getDictId());
         }
         return dictionaryDao.deleteByIds(validIds.toArray(new Long[validIds.size()]));
     }

@@ -2,7 +2,6 @@ package com.github.lit.plugin.exception;
 
 import com.github.lit.commons.context.ResultConst;
 import com.github.lit.commons.exception.BizException;
-import com.github.lit.plugin.util.SpelUtils;
 import com.github.lit.plugin.web.ViewName;
 import com.github.lit.plugin.web.WebUtils;
 import com.google.common.base.Strings;
@@ -79,10 +78,8 @@ public class ExceptionAdvice {
         }
         // 处理自定义视图名称
         ViewName viewName = handlerMethod.getMethodAnnotation(ViewName.class);
-        if (viewName != null && !Strings.isNullOrEmpty(viewName.value())) {
-            if (!viewName.value().contains("#")) {
-                return SpelUtils.getExpressionValue(viewName.value(), model.asMap());
-            }
+        if (viewName != null && !viewName.spel()) {
+            return viewName.value();
         }
         return "error";
     }

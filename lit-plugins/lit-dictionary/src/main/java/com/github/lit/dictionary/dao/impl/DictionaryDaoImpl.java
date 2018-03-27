@@ -8,6 +8,8 @@ import com.github.lit.plugin.dao.AbstractBaseDao;
 import com.google.common.base.Strings;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 /**
  * User : liulu
  * Date : 2018/3/17 20:03
@@ -48,11 +50,10 @@ public class DictionaryDaoImpl extends AbstractBaseDao<Dictionary, DictionaryQo>
     }
 
     @Override
-    public Integer findMaxOrder(Long parentId) {
+    public List<Dictionary> findByIds(Long[] ids) {
         return getSelect()
-                .function("max", "orderNum")
-                .where(PARENT_ID).equalsTo(parentId)
-                .single(Integer.class);
+                .where("dictId").in((Object[]) ids)
+                .list();
     }
 
     @Override

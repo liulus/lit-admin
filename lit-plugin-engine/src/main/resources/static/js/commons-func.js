@@ -144,12 +144,15 @@ var Http = {
         //     return res.json()
         // }).then(resCall)
 
-        $.ajax({
+        var ajaxParam = {
             url: url,
             type: method,
-            data: params,
             success: resCall
-        })
+        }
+        if (method !== 'delete') {
+            ajaxParam.data = params
+        }
+        $.ajax(ajaxParam)
     },
 
     get: function (url, resCall) {

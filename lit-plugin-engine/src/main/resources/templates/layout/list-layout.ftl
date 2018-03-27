@@ -1,5 +1,5 @@
+<#include "page-component.ftl">
 <#macro listLayout title importCss=[] importJs=[]>
-    <#include "../macro/plugin-macro.ftl">
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -24,7 +24,7 @@
 
     <!-- 分页条 -->
     <#if data?size &gt; 0>
-        <@pagebar pageInfo=pageInfo queryForm='#query-form'></@pagebar>
+        <@pagebar pageInfo=pageInfo queryForm='#query-form'/>
     </#if>
 </div>
 

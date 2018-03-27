@@ -1,5 +1,5 @@
 <#import "layout/list-layout.ftl" as AdminLayout>
-<@AdminLayout.listLayout title='字典管理' importJs=['js/dictionary.js']>
+<@AdminLayout.listLayout title='字典管理'importJs=['js/dictionary.js']>
 <!-- 导航条 -->
 <div class="row">
     <ol class="breadcrumb">
@@ -12,15 +12,15 @@
 <!-- 查询表单 -->
 <div class="row">
     <form class="form-horizontal " action="" method="get" id="query-form">
-        <div class="col-sm-12 col-md-9 form-group">
+        <div class="col-sm-12 col-md-10 form-group">
             <div class="col-sm-8 text-right control-label">关键字:</div>
             <div class="col-sm-16 ">
                 <input name="keyword" class="form-control input-sm" type="text" value="${dictionaryQo.keyword!}"
                        placeholder="请输入">
             </div>
         </div>
-        <div class="col-sm-24 col-md-5 text-center form-group">
-            <button id="data-query" class="btn btn-sm btn-primary">&nbsp;&nbsp;查询&nbsp;&nbsp;</button>
+        <div class="col-sm-12 col-md-4 text-center form-group">
+            <@AdminLayout.queryBtn/>
         </div>
     </form>
 </div>
@@ -29,16 +29,10 @@
 <div class="panel panel-default table-responsive">
     <!-- 数据操作 -->
     <div class="panel-heading">
-        <button id="data-add" class="btn btn-sm btn-success">
-            <i class="fa fa-plus"></i>&nbsp;&nbsp;新增
-        </button>
+        <@AdminLayout.addBtn/>
         <#if data?size &gt; 0>
-            <button id="data-del" class="btn btn-sm btn-danger">
-                <i class="fa fa-trash-o"></i>&nbsp;&nbsp;删除
-            </button>
-            <button id="data-update" class="btn btn-sm btn-info">
-                <i class="fa fa-pencil"></i>&nbsp;&nbsp;修改
-            </button>
+            <@AdminLayout.updateBtn/>
+            <@AdminLayout.deleteBtn/>
         </#if>
         <#if dictionaryQo.parentId != 0>
             <a href="${rc.contextPath}/plugin/dictionary?parentId=${returnId?c}"
@@ -59,7 +53,6 @@
             <th>字典Key</th>
             <th>字典值</th>
             <th>顺序号</th>
-            <#--<th>是否系统级</th>-->
             <th>备注</th>
         </tr>
         </thead>
@@ -76,17 +69,10 @@
                 </td>
                 <td>${item.dictValue!?html}</td>
                 <td>${item.orderNum!?c}</td>
-                <#--<td>${item.system?string('是', '否')}</td>-->
                 <td>${item.memo!?html}</td>
             </tr>
             <#else>
-            <tr>
-                <td colspan="6">
-                    <div class="no-data text-center">
-                        <span><i class="fa fa-info-circle fa-1g"></i>&nbsp;&nbsp;没有数据</span>
-                    </div>
-                </td>
-            </tr>
+                <@AdminLayout.emptyData 6/>
             </#list>
         </tbody>
     </table>

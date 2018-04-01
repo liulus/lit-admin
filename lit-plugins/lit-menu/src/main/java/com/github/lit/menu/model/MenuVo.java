@@ -1,8 +1,7 @@
 package com.github.lit.menu.model;
 
-import lombok.*;
+import lombok.Data;
 
-import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -10,76 +9,48 @@ import java.util.List;
  * Date : 2017/7/13 19:49
  * version $Id: MenuVo.java, v 0.1 Exp $
  */
-@Getter
-@Setter
-@Builder
-@ToString
-@NoArgsConstructor
-@AllArgsConstructor
-public class MenuVo implements Serializable {
+@Data
+public abstract class MenuVo {
 
-    private static final long serialVersionUID = -4104369004390601578L;
+    private String code;
 
+    private String name;
 
-    private Long menuId;
+    private String icon;
 
-    /**
-     * 菜单编码
-     */
-    private String menuCode;
+    private String url;
 
-    /**
-     * 菜单名称
-     */
-    private String menuName;
-
-    /**
-     * 菜单图标
-     */
-    private String menuIcon;
-
-    /**
-     * 菜单url
-     */
-    private String menuUrl;
-
-    /**
-     * 顺序号
-     */
     private Integer orderNum;
 
-    /**
-     * 备注
-     */
+    private String type;
+
     private String memo;
 
-    /**
-     * 菜单类型
-     */
-    private String menuType;
+    @Data
+    public static class Detail extends MenuVo{
 
-    /**
-     * 菜单类型中文
-     */
-    private String menuTypeStr;
+        private Long menuId;
 
-    /**
-     * 是否启用
-     */
-    private Boolean enable;
+        private Long parentId;
 
-    /**
-     * 父菜单Id
-     */
-    private Long parentId;
+        private Boolean enable;
 
-    /**
-     * 是否父节点, 菜单树需要
-     */
-    private Boolean isParent;
+        private Boolean isParent;
 
-    /**
-     * 子菜单
-     */
-    private List<MenuVo> children;
+        private List<Detail> children;
+
+    }
+
+    @Data
+    public static class Add extends MenuVo{
+        private Long parentId;
+    }
+
+    @Data
+    public static class Update extends MenuVo{
+        private Long menuId;
+    }
+
+
+
 }

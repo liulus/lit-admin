@@ -1,82 +1,22 @@
+var page = {
+    topic: '菜单',
+    restUrl: '/plugin/menu'
+}
+
 $(function () {
 
-    var urlPrefix = path + "/plugin/menu";
-
-    var compiledEditTpl = juicer($('#edit-tpl').html());
+    var urlPrefix = contextPath + '/plugin/menu';
 
     var $dataResult = $('#data-result');
 
 
-    /** 新增弹出框 */
-    $('#data-add').on('click', function (e) {
-        openEdit('增加菜单', compiledEditTpl.render(), '#form-edit', urlPrefix + '/add.json')
-    });
-
-    /** 修改弹出框 */
-    $('#data-update').on('click', function (e) {
-        var checkedInputs = $dataResult.find('.check-ls:checked');
-        if (!checkOnlyOne(checkedInputs.length)) {
-            return;
-        }
-
-        $.post(urlPrefix + '/get.json', {
-            id: checkedInputs.val()
-        }, function (result) {
-            openEdit('修改菜单', compiledEditTpl.render(result.result), '#form-edit', urlPrefix + '/update.json');
-        });
-
-    });
-
-    function openEdit(title, content, form, url) {
-        layer.open({
-            type: 1,
-            title: title,
-            area: '650px',
-            content: content,
-            btn: ['确认', '取消'],
-            btn1: function (index) {
-                $.post(url, $(form).serialize(), function (result) {
-                    if (result.success) {
-                        window.location.reload();
-                    } else {
-                        MsgUtils.error(result.message);
-                    }
-                });
-            },
-            btn2: function (index) {
-                layer.close(index);
-            }
-        })
-    }
-
-    /**
-     * 删除功能
-     */
-    $('#data-del').on('click', function (e) {
-        var checkedInputs = $dataResult.find('.check-ls:checked');
-        if (checkedInputs.length <= 0) {
-            MsgUtils.warning('请至少选择一条数据 !');
-            return;
-        }
-        layer.confirm('确定要删除选中的数据吗?', {icon: 3}, function (index) {
-            $.post(urlPrefix + '/delete.json', checkedInputs.serialize(), function (result) {
-                if (result.success) {
-                    window.location.reload();
-                } else {
-                    layer.close(index);
-                    MsgUtils.error(result.message);
-                }
-            });
-        })
-    });
-
-
     var menuTreeConfig = {
         async: {
-            url: urlPrefix + "/list.json",
-            dataType: "json",
+            url: urlPrefix + '.json',
+            dataType: 'json',
+            type: 'get',
             enable: true,
-            autoParam: ["menuId=parentId"],
+            autoParam: ['menuId=parentId'],
             dataFilter: function (treeId, parentNode, responseData) {
                 if (parentNode) {
                     return responseData.result;
@@ -91,8 +31,8 @@ $(function () {
         },
         data: {
             key: {
-                name: "menuName",
-                title: "menuName"
+                name: 'menuName',
+                title: 'menuName'
             }
         },
         view: {
@@ -112,7 +52,7 @@ $(function () {
         layer.open({
             type: 1,
             title: '菜单',
-            area: "280px",
+            area: '280px',
             offset: '20%',
             content: $('#menu-tree'),
             btn: ['确定', '取消'],
@@ -150,49 +90,6 @@ $(function () {
             }
         })
     });
-
-    /**
-     * 向上移动菜单
-     */
-    $dataResult.find('.data-move-up').on('click', function (e) {
-        $.post(urlPrefix + '/move/up.json', {
-            menuId: getId(e)
-        }, function (result) {
-            if (result.success) {
-                window.location.reload();
-            } else {
-                MsgUtils.error(result.message);
-            }
-        })
-    });
-
-    /**
-     * 向下移动菜单
-     */
-    $dataResult.find('.data-move-down').on('click', function (e) {
-        $.post(urlPrefix + '/move/down.json', {
-            menuId: getId(e)
-        }, function (result) {
-            if (result.success) {
-                window.location.reload();
-            } else {
-                MsgUtils.error(result.message);
-            }
-        })
-    });
-
-    function checkOnlyOne(checkedLength) {
-        if (checkedLength <= 0) {
-            MsgUtils.warning('请选择一条数据 !');
-            return false;
-        }
-        if (checkedLength > 1) {
-            MsgUtils.warning('只能选择一条数据 !');
-            return false;
-        }
-        return true;
-    }
-
 
     /**
      * 启用或禁用菜单

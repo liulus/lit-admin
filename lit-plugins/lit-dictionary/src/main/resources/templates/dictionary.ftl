@@ -1,5 +1,5 @@
 <#import "layout/list-layout.ftl" as AdminLayout>
-<@AdminLayout.listLayout title='字典管理'importJs=['js/dictionary.js']>
+<@AdminLayout.listLayout title='字典管理' importJs=['js/dictionary.js']>
 <!-- 导航条 -->
 <div class="row">
     <ol class="breadcrumb">

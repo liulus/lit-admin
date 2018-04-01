@@ -2,7 +2,6 @@ package com.github.lit.menu.service;
 
 import com.github.lit.menu.model.Menu;
 import com.github.lit.menu.model.MenuQo;
-import com.github.lit.menu.model.MenuVo;
 
 import java.util.List;
 
@@ -14,12 +13,12 @@ import java.util.List;
 public interface MenuService {
 
     /**
-     * 根据 vo 的条件查询菜单列表
+     * 根据 qo 的条件查询菜单列表
      *
      * @param qo 查询条件
      * @return 菜单列表
      */
-    List<MenuVo> findPageList(MenuQo qo);
+    List<Menu> findPageList(MenuQo qo);
 
     /**
      * 根据Id查询菜单
@@ -32,23 +31,23 @@ public interface MenuService {
     /**
      * 增加菜单
      *
-     * @param vo
+     * @param menu
      */
-    void add(MenuVo vo);
+    Long insert(Menu menu);
 
     /**
      * 更新菜单
      *
-     * @param vo
+     * @param menu
      */
-    void update(MenuVo vo);
+    int update(Menu menu);
 
     /**
      * 删除菜单
      *
      * @param ids
      */
-    void delete(Long... ids);
+    int delete(Long[] ids);
 
     /**
      * 移动菜单
@@ -77,6 +76,6 @@ public interface MenuService {
     /**
      * @return
      */
-    List<MenuVo> findAll();
+    List<Menu> findAll();
 
 }

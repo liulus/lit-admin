@@ -5,9 +5,10 @@
 <head>
     <title>${title}</title>
     <#include "../fragment/head-css.ftl">
+
     <#if importCss??>
         <#list importCss as css>
-            <script src="${rc.contextPath}/${css}"></script>
+<link rel="stylesheet" href="${rc.contextPath}/${css}"/>
         </#list>
     </#if>
 </head>

@@ -117,6 +117,7 @@ public class DictionaryServiceImpl implements DictionaryService {
         }
 
         Dictionary result = new Dictionary();
+        result.setDictId(0L);
 
         for (String key : keys) {
             result = dictionaryDao.findByKeyAndParentId(key, result.getDictId());

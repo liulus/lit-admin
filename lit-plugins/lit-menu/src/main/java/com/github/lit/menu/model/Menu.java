@@ -11,6 +11,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * User : liulu
@@ -33,24 +34,29 @@ public class Menu implements Serializable {
     private Long menuId;
 
     /**
+     * 父菜单Id
+     */
+    private Long parentId;
+
+    /**
      * 菜单编码
      */
-    private String menuCode;
+    private String code;
 
     /**
      * 菜单名称
      */
-    private String menuName;
+    private String name;
 
     /**
      * 菜单图标
      */
-    private String menuIcon;
+    private String icon;
 
     /**
      * 菜单url
      */
-    private String menuUrl;
+    private String url;
 
     /**
      * 顺序号
@@ -65,7 +71,7 @@ public class Menu implements Serializable {
     /**
      * 菜单类型
      */
-    private String menuType;
+    private String type;
 
     /**
      * 是否启用
@@ -73,10 +79,6 @@ public class Menu implements Serializable {
     @Column(name = "is_enable")
     private Boolean enable;
 
-    /**
-     * 父菜单Id
-     */
-    private Long parentId;
-
+    private List<Menu> children;
 
 }

@@ -21,16 +21,16 @@ public class MenuEventListener {
     @Subscribe
     public void appStartedEvent(AppStartedEvent event) {
 
-        List<MenuVo> menuVos = MenuTools.findAll();
-        WebUtils.setContextAttribute(MenuConst.MENUS, menuVos);
+        List<MenuVo.Detail> menus = MenuTools.findAll();
+        WebUtils.setContextAttribute(MenuConst.MENUS, menus);
     }
 
     @Subscribe
     public void menuUpdateListener(MenuUpdateEvent event) {
         WebUtils.removeContextAttribute(MenuConst.MENUS);
 
-        List<MenuVo> menuVos = MenuTools.findAll();
-        WebUtils.setContextAttribute(MenuConst.MENUS, menuVos);
+        List<MenuVo.Detail> menus = MenuTools.findAll();
+        WebUtils.setContextAttribute(MenuConst.MENUS, menus);
     }
 
 

@@ -130,10 +130,10 @@ CREATE TABLE lit_user_role(
   sys_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 )ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户角色关联表';
 
+INSERT INTO lit_dictionary (parent_id, dict_key, dict_value, order_num, memo, is_system) VALUES (0, 'menu_type', '菜单类型', 1, '', true);
+INSERT INTO lit_dictionary (parent_id, dict_key, dict_value, order_num, memo, is_system) VALUES (last_insert_id(), 'menu_type_top', '顶部导航菜单', 1, '', true);
+INSERT INTO lit_dictionary (parent_id, dict_key, dict_value, order_num, memo, is_system) VALUES (last_insert_id()-1 , 'menu_type_left', '左侧菜单', 2, '', false);
 
-INSERT INTO lit_dictionary (dict_key, dict_value, order_num, dict_level, memo, is_system, parent_id) VALUES ('menu_type', '菜单类型', 1, 1, '菜单类型', 0, null);
-INSERT INTO lit_dictionary (dict_key, dict_value, order_num, dict_level, memo, is_system, parent_id) VALUES ('menu_type_top', '顶部导航菜单', 1, 2, '顶部导航菜单', 0, last_insert_id());
-INSERT INTO lit_dictionary (dict_key, dict_value, order_num, dict_level, memo, is_system, parent_id) VALUES ('menu_type_left', '左侧菜单', 2, 2, '左侧菜单', 0, last_insert_id()-1);
 INSERT INTO lit_dictionary (dict_key, dict_value, order_num, dict_level, memo, is_system, parent_id) VALUES ('authority_type', '权限类型', 4, 1, '权限类型', 1, null);
 INSERT INTO lit_dictionary (dict_key, dict_value, order_num, dict_level, memo, is_system, parent_id) VALUES ('system_authority', '系统权限', 1, 2, '系统权限', 1, last_insert_id());
 INSERT INTO lit_dictionary (dict_key, dict_value, order_num, dict_level, memo, is_system, parent_id) VALUES ('other_authority', '其他权限', 2, 2, '其他权限', 0, last_insert_id()-1);

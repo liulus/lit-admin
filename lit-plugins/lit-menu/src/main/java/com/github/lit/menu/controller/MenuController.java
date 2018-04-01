@@ -1,18 +1,16 @@
 package com.github.lit.menu.controller;
 
-import com.github.lit.commons.context.ResultConst;
-import com.github.lit.dictionary.tool.DictionaryTools;
-import com.github.lit.menu.context.MenuConst;
+import com.github.lit.commons.bean.BeanUtils;
 import com.github.lit.menu.model.Menu;
 import com.github.lit.menu.model.MenuQo;
 import com.github.lit.menu.model.MenuVo;
 import com.github.lit.menu.service.MenuService;
 import com.github.lit.plugin.context.PluginConst;
+import com.github.lit.plugin.web.ViewName;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -31,48 +29,20 @@ public class MenuController {
     private MenuService menuService;
 
 
-    @RequestMapping({"/list", ""})
-    public String menuList(MenuQo qo, Model model) {
-        List<MenuVo> menuVos = menuService.findPageList(qo);
-        model.addAttribute(ResultConst.RESULT, menuVos);
-        model.addAttribute(MenuConst.MENU_TYPE, DictionaryTools.findChildByRootKey(MenuConst.MENU_TYPE));
-        return "menu";
-    }
-
-    /**
-     * 查询父菜单下的子菜单列表
-     *
-     * @param qo       查询条件
-     * @param parentId 父菜单Id
-     * @param model    视图
-     * @return String
-     */
-    @RequestMapping("/{parentId}")
-    public String childList(MenuQo qo, @PathVariable Long parentId, Model model) {
-
-        qo.setParentId(parentId);
-        List<MenuVo> menuVos = menuService.findPageList(qo);
-        model.addAttribute(ResultConst.RESULT, menuVos);
-        model.addAttribute(MenuConst.MENU_TYPE, DictionaryTools.findChildByRootKey(MenuConst.MENU_TYPE));
-        return "menu";
-    }
-
-    /**
-     * 返回上级按钮
-     *
-     * @param menuId
-     * @param model
-     * @return
-     */
-    @RequestMapping("/back/{menuId}")
-    public String back(@PathVariable Long menuId, Model model) {
-
-        Menu menu = menuService.findById(menuId);
-        if (menu != null && menu.getParentId() != null) {
-            return PluginConst.REDIRECT + PluginConst.URL_PREFIX + "/menu/" + menu.getParentId();
+    @GetMapping
+    @ViewName("menu")
+    public List<MenuVo.Detail> menuList(MenuQo qo, Model model) {
+        if (qo.getParentId() == null) {
+            qo.setParentId(0L);
+        }
+        if (qo.getParentId() != 0L) {
+            Menu menu = menuService.findById(qo.getParentId());
+            model.addAttribute("returnId", menu == null ? 0 : menu.getParentId());
         }
 
-        return PluginConst.REDIRECT + PluginConst.URL_PREFIX + "/menu";
+        List<Menu> menus = menuService.findPageList(qo);
+
+        return BeanUtils.convert(MenuVo.Detail.class, menus);
     }
 
     /**
@@ -83,7 +53,10 @@ public class MenuController {
      * @return
      */
     @RequestMapping("/move")
-    public String move(Long parentId, Long... ids) {
+    public String move(Long parentId, Long[] ids) {
+        if (parentId == null) {
+            parentId = 0L;
+        }
         menuService.moveMenu(parentId, ids);
         return "";
     }
@@ -136,28 +109,25 @@ public class MenuController {
         return "";
     }
 
-    @RequestMapping("/get")
-    public String get(Long id, Model model) {
-        model.addAttribute(ResultConst.RESULT, menuService.findById(id));
+    @GetMapping("/{id}")
+    public Menu get(@PathVariable Long id) {
+        return menuService.findById(id);
+    }
+
+    @PostMapping
+    public void add(MenuVo.Add add) {
+        menuService.insert(BeanUtils.convert(add, new Menu()));
+    }
+
+    @PutMapping
+    public String update(MenuVo.Update update) {
+        menuService.update(BeanUtils.convert(update, new Menu()));
         return "";
     }
 
-    @RequestMapping("/add")
-    public String add(MenuVo vo, Model model) {
-        menuService.add(vo);
-        return "";
-    }
-
-    @RequestMapping("/update")
-    public String update(MenuVo vo, Model model) {
-        menuService.update(vo);
-        return "";
-    }
-
-    @RequestMapping("/delete")
-    public String delete(Long... ids) {
+    @DeleteMapping
+    public void delete(Long[] ids) {
         menuService.delete(ids);
-        return "";
     }
 
 

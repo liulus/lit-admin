@@ -19,9 +19,7 @@ public class ParamQo extends Page {
 
     private String keyword;
 
-    private Boolean system;
-
-    private String paramCode;
+    private String code;
 
 
 

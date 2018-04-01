@@ -1,13 +1,12 @@
 package com.github.lit.param.controller;
 
-import com.github.lit.commons.context.ResultConst;
 import com.github.lit.param.model.Param;
 import com.github.lit.param.model.ParamQo;
 import com.github.lit.param.service.ParamService;
 import com.github.lit.plugin.context.PluginConst;
+import com.github.lit.plugin.web.ViewName;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -21,43 +20,37 @@ import java.util.List;
 @RequestMapping(PluginConst.URL_PREFIX + "/param")
 public class ParamController {
 
+    private static final String REDIRECT_URL = PluginConst.REDIRECT + "/param";
 
     @Resource
     private ParamService paramService;
 
-    @RequestMapping({"/list", ""})
-    public String list(ParamQo qo, Model model) {
-
-        List<Param> dictionaries = paramService.queryPageList(qo);
-        model.addAttribute(ResultConst.RESULT, dictionaries);
-
-        return "param";
+    @GetMapping
+    @ViewName("param")
+    public List<Param> list(ParamQo qo) {
+        return paramService.queryPageList(qo);
     }
 
-    @RequestMapping("/get")
-    public String get(Long id, Model model) {
-
-        model.addAttribute(ResultConst.RESULT, paramService.findById(id));
-
-        return "";
+    @GetMapping("/{id}")
+    public Param get(@PathVariable Long id) {
+        return paramService.findById(id);
     }
 
-    @RequestMapping("/add")
-    public String add(Param param, Model model) {
+    @PostMapping
+    @ViewName(REDIRECT_URL)
+    public void add(Param param) {
         paramService.insert(param);
-        return "";
     }
 
-    @RequestMapping("/update")
-    public String update(Param param, Model model) {
-
+    @PutMapping
+    @ViewName(REDIRECT_URL)
+    public void update(Param param) {
         paramService.update(param);
-        return "";
     }
 
-    @RequestMapping("/delete")
-    public String delete(Long... ids) {
+    @DeleteMapping
+    @ViewName(REDIRECT_URL)
+    public void delete(Long... ids) {
         paramService.delete(ids);
-        return "";
     }
 }

@@ -25,7 +25,7 @@ import java.util.List;
 @RequestMapping(PluginConst.URL_PREFIX + "/dictionary")
 public class DictionaryController {
 
-    private static final String REDIRECT_PREFIX = "'" + PluginConst.REDIRECT + "/dictionary/list'";
+    private static final String REDIRECT_PREFIX = "'" + PluginConst.REDIRECT + "/dictionary'";
 
     private static final String REDIRECT_EL = "+(#dictionary.parentId == 0L? '' : '?parentId=' + #dictionary.parentId)";
     @Resource

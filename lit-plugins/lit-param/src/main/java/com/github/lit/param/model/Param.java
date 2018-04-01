@@ -35,13 +35,12 @@ public class Param implements Serializable {
     /**
      * 参数编码
      */
-    private String paramCode;
+    private String code;
 
     /**
      * 参数值
      */
-    private String paramValue;
-
+    private String value;
 
     /**
      * 备注
@@ -53,11 +52,5 @@ public class Param implements Serializable {
      */
     @Column(name = "is_system")
     private Boolean system;
-
-    /**
-     * 是否启动加载
-     */
-    @Column(name = "is_load")
-    private Boolean load;
 
 }

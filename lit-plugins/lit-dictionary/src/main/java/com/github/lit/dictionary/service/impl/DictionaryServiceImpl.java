@@ -41,11 +41,15 @@ public class DictionaryServiceImpl implements DictionaryService {
     @Override
     public int update(Dictionary dictionary) {
         Dictionary oldDict = findById(dictionary.getDictId());
-
-        if (Objects.equals(dictionary.getDictKey(), oldDict.getDictKey())) {
-            return dictionaryDao.update(dictionary);
+        if (oldDict == null) {
+            return 0;
         }
-        checkDictKey(dictionary.getDictKey(), dictionary.getParentId());
+        if (!Objects.equals(dictionary.getDictKey(), oldDict.getDictKey())) {
+            if (oldDict.getSystem()) {
+                throw new BizException(String.format("%s 是系统级字典, 不允许修改", oldDict.getDictKey()));
+            }
+            checkDictKey(dictionary.getDictKey(), dictionary.getParentId());
+        }
         return dictionaryDao.update(dictionary);
     }
 
@@ -55,7 +59,7 @@ public class DictionaryServiceImpl implements DictionaryService {
         }
         Dictionary dict = dictionaryDao.findByKeyAndParentId(dictKey, parentId);
         if (dict != null) {
-            throw new BizException("字典Key已经存在!");
+            throw new BizException("字典Key已经存在");
         }
     }
 

@@ -1,11 +1,11 @@
 package com.github.lit.param.service.impl;
 
+import com.github.lit.commons.exception.BizException;
 import com.github.lit.jdbc.JdbcTools;
 import com.github.lit.jdbc.statement.select.Select;
 import com.github.lit.param.model.Param;
 import com.github.lit.param.model.ParamQo;
 import com.github.lit.param.service.ParamService;
-import com.github.lit.plugin.exception.AppException;
 import com.google.common.base.Strings;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -37,18 +37,14 @@ public class ParamServiceImpl implements ParamService {
 
         if (!Strings.isNullOrEmpty(qo.getKeyword())) {
             select.and()
-                    .bracket("paramCode").like(qo.getKeyword())
-                    .or("paramValue").like(qo.getKeyword())
+                    .bracket("code").like(qo.getKeyword())
+                    .or("value").like(qo.getKeyword())
                     .or("memo").like(qo.getKeyword())
                     .end();
         }
 
-        if (qo.getSystem() != null) {
-            select.and("system").equalsTo(qo.getSystem());
-        }
-
-        if (!Strings.isNullOrEmpty(qo.getParamCode())) {
-            select.and("paramCode").equalsTo(qo.getParamCode());
+        if (!Strings.isNullOrEmpty(qo.getCode())) {
+            select.and("code").equalsTo(qo.getCode());
         }
 
         return select.page(qo).list();
@@ -61,16 +57,13 @@ public class ParamServiceImpl implements ParamService {
 
     @Override
     public Param findByCode(String code) {
-        return jdbcTools.findByProperty(Param.class, "paramCode", code);
+        return jdbcTools.findByProperty(Param.class, "code", code);
     }
 
     @Override
     public void insert(Param param) {
-        Param oldParam = findByCode(param.getParamCode());
-
-        if (oldParam != null) {
-            throw new AppException("参数 code 已经存在!");
-        }
+        checkCode(param.getCode());
+        param.setSystem(false);
 
         jdbcTools.insert(param);
     }
@@ -78,14 +71,24 @@ public class ParamServiceImpl implements ParamService {
     @Override
     public void update(Param param) {
         Param oldParam = findById(param.getParamId());
-
-        if (!Objects.equals(param.getParamCode(), oldParam.getParamCode())) {
-            Param exist = findByCode(param.getParamCode());
-            if (exist != null){
-                throw new AppException("参数 code 已经存在!");
-            }
+        if (oldParam == null) {
+            return;
         }
+        if (!Objects.equals(param.getCode(), oldParam.getCode())) {
+            if (oldParam.getSystem()) {
+                throw new BizException(String.format("%s 是系统级参数, 不允许修改", oldParam.getCode()));
+            }
+            checkCode(param.getCode());
+        }
+        param.setSystem(null);
         jdbcTools.update(param);
+    }
+
+    private void checkCode(String code) {
+        Param param = findByCode(code);
+        if (param != null) {
+            throw new BizException("参数 code 已经存在");
+        }
     }
 
     @Override
@@ -93,16 +96,17 @@ public class ParamServiceImpl implements ParamService {
         if (ids == null || ids.length == 0) {
             return;
         }
-        List<Long> validIds = new ArrayList<>(ids.length);
-        for (Long id : ids) {
-            Param param = findById(id);
-            if (param == null) {
-                continue;
-            }
+        List<Param> params = jdbcTools.select(Param.class)
+                .where("paramId").in((Object[]) ids)
+                .list();
+
+        List<Long> validIds = new ArrayList<>(params.size());
+
+        for (Param param : params) {
             if (param.getSystem()) {
-                throw new AppException(String.format("%s 是系统级字典, 不允许删除 !", param.getParamCode()));
+                throw new BizException(String.format("%s 是系统级参数, 不允许删除", param.getCode()));
             }
-            validIds.add(id);
+            validIds.add(param.getParamId());
         }
         jdbcTools.deleteByIds(Param.class, validIds.toArray(new Serializable[validIds.size()]));
     }

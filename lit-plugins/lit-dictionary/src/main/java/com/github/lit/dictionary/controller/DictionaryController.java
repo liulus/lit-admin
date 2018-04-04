@@ -33,7 +33,7 @@ public class DictionaryController {
 
     @GetMapping
     @ViewName("dictionary")
-    public List<DictionaryVo.List> childList(DictionaryQo qo, Model model) {
+    public List<DictionaryVo.Detail> childList(DictionaryQo qo, Model model) {
         if (qo.getParentId() == null) {
             qo.setParentId(0L);
         }
@@ -42,12 +42,12 @@ public class DictionaryController {
             model.addAttribute("returnId", dictionary == null ? 0 : dictionary.getParentId());
         }
         qo.setOrder(true);
-        return BeanUtils.convert(DictionaryVo.List.class, dictionaryService.findPageList(qo));
+        return BeanUtils.convert(DictionaryVo.Detail.class, dictionaryService.findPageList(qo));
     }
 
     @GetMapping("/{id}")
-    public Dictionary get(@PathVariable Long id) {
-        return dictionaryService.findById(id);
+    public DictionaryVo.Detail get(@PathVariable Long id) {
+        return BeanUtils.convert(dictionaryService.findById(id), new DictionaryVo.Detail());
     }
 
     @PostMapping

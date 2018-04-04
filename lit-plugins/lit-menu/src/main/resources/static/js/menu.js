@@ -11,47 +11,36 @@ $(function () {
 
 
     var menuTreeConfig = {
-        async: {
-            url: urlPrefix + '.json',
-            dataType: 'json',
-            type: 'get',
-            enable: true,
-            autoParam: ['menuId=parentId'],
-            dataFilter: function (treeId, parentNode, responseData) {
-                if (parentNode) {
-                    return responseData.result;
-                }
-
-                var data = {
-                    menuName: '菜单',
-                    children: responseData.result
-                };
-                return data;
-            }
-        },
-        data: {
-            key: {
-                name: 'menuName',
-                title: 'menuName'
-            }
-        },
         view: {
             selectedMulti: false
         }
     };
 
-
     /**
      * 移动菜单
      */
-    var menuTree = $.fn.zTree.init($('.ztree'), menuTreeConfig, null);
+    var menuTree;
+
+    function initMenuTree() {
+        if (!menuTree) {
+            Http.get(contextPath + '/plugin/menu/tree.json', function (res) {
+                var menuData = {
+                    name: '菜单',
+                    children: res.data
+                };
+                menuTree = $.fn.zTree.init($('.ztree'), menuTreeConfig, menuData);
+                menuTree.expandAll(true)
+            })
+        }
+        return menuTree
+    }
 
     $dataResult.find('.data-move').on('click', function (e) {
-
+        initMenuTree()
         var id = getId(e);
         layer.open({
             type: 1,
-            title: '菜单',
+            title: '移动',
             area: '280px',
             offset: '20%',
             content: $('#menu-tree'),
@@ -67,7 +56,7 @@ $(function () {
                 var checkNode = selectedNodes[0];
                 var checked = true;
                 while (checkNode) {
-                    if (id.indexOf(checkNode.menuId) >= 0) {
+                    if (id === checkNode.menuId) {
                         checked = false;
                         break;
                     }
@@ -80,9 +69,9 @@ $(function () {
 
                 var parentId = selectedNodes[0].menuId;
                 var data = parentId ? 'parentId=' + parentId + '&ids=' + id : 'ids=' + id;
-                $.post(urlPrefix + '/move.json', data, function (result) {
+                Http.post(urlPrefix + '/move.json', data, function (result) {
                     if (result.success) {
-                        window.location.reload();
+                        UrlUtils.addParamAndReload('message', '移动菜单成功')
                     } else {
                         MsgUtils.error(result.message);
                     }
@@ -107,7 +96,7 @@ $(function () {
         other.toggleClass('btn-default', false).toggleClass(enable ? 'btn-danger' : 'btn-success', true);
         other.find('span').toggleClass('invisible', false);
 
-        $.post(urlPrefix + (enable ? '/disable' : '/enable') + '.json', {
+        Http.post(urlPrefix + (enable ? '/disable' : '/enable') + '.json', {
             menuId: getId(e)
         })
     });

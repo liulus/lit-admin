@@ -1,11 +1,16 @@
 package com.github.lit.plugin.web;
 
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.method.annotation.ModelAttributeMethodProcessor;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.HandlerMethodReturnValueHandler;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
+import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter;
+import org.springframework.web.servlet.mvc.method.annotation.RequestResponseBodyMethodProcessor;
 
+import javax.annotation.PostConstruct;
+import javax.annotation.Resource;
 import java.util.List;
 
 /**
@@ -15,6 +20,35 @@ import java.util.List;
  */
 @Configuration
 public class SpringMvcConfig extends WebMvcConfigurerAdapter {
+
+    @Resource
+    private RequestMappingHandlerAdapter requestMappingHandlerAdapter;
+
+    @PostConstruct
+    public void initJsonAndFormArgumentResolver() {
+
+        JsonAndFormArgumentResolver jsonAndFormArgumentResolver = null;
+        ModelAttributeMethodProcessor modelAttributeMethodProcessor = null;
+        RequestResponseBodyMethodProcessor requestResponseBodyMethodProcessor = null;
+
+        for (HandlerMethodArgumentResolver argumentResolver : requestMappingHandlerAdapter.getArgumentResolvers()) {
+            if (argumentResolver instanceof JsonAndFormArgumentResolver) {
+                jsonAndFormArgumentResolver = (JsonAndFormArgumentResolver) argumentResolver;
+                continue;
+            }
+            if (argumentResolver instanceof RequestResponseBodyMethodProcessor) {
+                requestResponseBodyMethodProcessor = (RequestResponseBodyMethodProcessor) argumentResolver;
+                continue;
+            }
+            if (argumentResolver instanceof ModelAttributeMethodProcessor) {
+                modelAttributeMethodProcessor = (ModelAttributeMethodProcessor) argumentResolver;
+            }
+        }
+        if (jsonAndFormArgumentResolver != null) {
+            jsonAndFormArgumentResolver.setModelAttributeMethodProcessor(modelAttributeMethodProcessor);
+            jsonAndFormArgumentResolver.setRequestResponseBodyMethodProcessor(requestResponseBodyMethodProcessor);
+        }
+    }
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
@@ -39,6 +73,8 @@ public class SpringMvcConfig extends WebMvcConfigurerAdapter {
      */
     @Override
     public void addArgumentResolvers(List<HandlerMethodArgumentResolver> argumentResolvers) {
-        argumentResolvers.add(new JsonBodyMethodProcessor());
+        argumentResolvers.add(new JsonAndFormArgumentResolver());
     }
+
+
 }

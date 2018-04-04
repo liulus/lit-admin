@@ -2,8 +2,6 @@ package com.github.lit.menu.service.impl;
 
 import com.github.lit.commons.event.Event;
 import com.github.lit.commons.exception.BizException;
-import com.github.lit.jdbc.JdbcTools;
-import com.github.lit.jdbc.statement.select.Select;
 import com.github.lit.menu.dao.MenuDao;
 import com.github.lit.menu.event.MenuUpdateEvent;
 import com.github.lit.menu.model.Menu;
@@ -31,9 +29,6 @@ public class MenuServiceImpl implements MenuService {
 
     @Resource
     private MenuDao menuDao;
-
-    @Resource
-    private JdbcTools jdbcTools;
 
     @Override
     public List<Menu> findPageList(MenuQo qo) {
@@ -125,53 +120,11 @@ public class MenuServiceImpl implements MenuService {
 
     @Override
     @Event(MenuUpdateEvent.class)
-    public void move(Long menuId, boolean isUp) {
-        if (menuId == null) {
-            throw new AppException("菜单id不能为空 !");
-        }
-
-        Menu menu = jdbcTools.get(Menu.class, menuId);
-        if (menu == null) {
-            throw new AppException("被移动菜单不存在 !");
-        }
-
-        String orderNum = "orderNum";
-        Select<Menu> select = jdbcTools.select(Menu.class)
-//                .where(orderNum, isUp ? Logic.LTEQ : Logic.GTEQ, menu.getOrderNum())
-                .where("menuId").equalsTo(menu.getMenuId())
-                .and("parentId").equalsTo(menu.getParentId());
-        if (isUp) {
-            select.and(orderNum).lessThanOrEqual(menu.getOrderNum());
-        } else {
-            select.and(orderNum).graterThanOrEqual(menu.getOrderNum());
-        }
-
-        select = isUp ? select.desc(orderNum) : select.asc(orderNum);
-
-        Menu changeMenu = select.page(1, 1).single();
-        if (changeMenu == null) {
-            throw new AppException("无法移动!");
-        }
-
-        jdbcTools.createUpdate(Menu.class)
-                .set(orderNum, changeMenu.getOrderNum())
-                .where("menuId").equalsTo(menu.getMenuId())
-                .execute();
-        jdbcTools.createUpdate(Menu.class)
-                .set(orderNum, menu.getOrderNum())
-                .where("menuId").equalsTo(changeMenu.getMenuId())
-                .execute();
-
-    }
-
-    @Override
-    @Event(MenuUpdateEvent.class)
     public void changeStatus(Long menuId, boolean isEnable) {
-
-        jdbcTools.createUpdate(Menu.class)
-                .set("enable", isEnable)
-                .where("menuId").equalsTo(menuId)
-                .execute();
+        Menu menu = new Menu();
+        menu.setMenuId(menuId);
+        menu.setEnable(isEnable);
+        menuDao.update(menu);
     }
 
     @Override

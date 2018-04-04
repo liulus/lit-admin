@@ -10,10 +10,13 @@ import com.github.lit.plugin.web.ViewName;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * User : liulu
@@ -45,6 +48,35 @@ public class MenuController {
         return BeanUtils.convert(MenuVo.Detail.class, menus);
     }
 
+    @GetMapping("/tree")
+    public List<MenuVo.Tree> menuTree() {
+        List<Menu> allMenus = menuService.findAll();
+        List<MenuVo.Tree> rootMenus = allMenus.stream()
+                .filter(menu -> menu.getParentId() == 0L)
+                .map(menu -> BeanUtils.convert(menu, new MenuVo.Tree()))
+                .collect(Collectors.toList());
+        Map<Long, List<MenuVo.Tree>> menuMap = allMenus.stream()
+                .filter(menu -> menu.getParentId() != 0L)
+                .map(menu -> BeanUtils.convert(menu, new MenuVo.Tree()))
+                .collect(Collectors.groupingBy(MenuVo.Tree::getParentId));
+        setChildMenu(rootMenus, menuMap);
+
+        return rootMenus;
+    }
+
+    private void setChildMenu(List<MenuVo.Tree> parentMenus, Map<Long, List<MenuVo.Tree>> menuMap) {
+        if (CollectionUtils.isEmpty(parentMenus)) {
+            return;
+        }
+        for (MenuVo.Tree menu : parentMenus) {
+            List<MenuVo.Tree> children = menuMap.get(menu.getMenuId());
+            if (!CollectionUtils.isEmpty(children)) {
+                menu.setChildren(children);
+                setChildMenu(children, menuMap);
+            }
+        }
+    }
+
     /**
      * 移动菜单,改变父节点
      *
@@ -52,7 +84,7 @@ public class MenuController {
      * @param ids
      * @return
      */
-    @RequestMapping("/move")
+    @PostMapping("/move")
     public String move(Long parentId, Long[] ids) {
         if (parentId == null) {
             parentId = 0L;
@@ -62,36 +94,12 @@ public class MenuController {
     }
 
     /**
-     * 同级向上移动菜单
-     *
-     * @param menuId
-     * @return
-     */
-    @RequestMapping("/move/up")
-    public String moveUp(Long menuId) {
-        menuService.move(menuId, true);
-        return "";
-    }
-
-    /**
-     * 同级向下移动菜单
-     *
-     * @param menuId
-     * @return
-     */
-    @RequestMapping("/move/down")
-    public String moveDown(Long menuId) {
-        menuService.move(menuId, false);
-        return "";
-    }
-
-    /**
      * 启用菜单
      *
      * @param menuId
      * @return
      */
-    @RequestMapping("/enable")
+    @PostMapping("/enable")
     public String enable(Long menuId) {
         menuService.changeStatus(menuId, true);
         return "";
@@ -103,7 +111,7 @@ public class MenuController {
      * @param menuId
      * @return
      */
-    @RequestMapping("/disable")
+    @PostMapping("/disable")
     public String disable(Long menuId) {
         menuService.changeStatus(menuId, false);
         return "";

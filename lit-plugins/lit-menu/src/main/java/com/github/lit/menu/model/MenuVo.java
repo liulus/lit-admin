@@ -1,6 +1,7 @@
 package com.github.lit.menu.model;
 
 import lombok.Data;
+import org.springframework.util.CollectionUtils;
 
 import java.util.List;
 
@@ -27,7 +28,7 @@ public abstract class MenuVo {
     private String memo;
 
     @Data
-    public static class Detail extends MenuVo{
+    public static class Detail extends MenuVo {
 
         private Long menuId;
 
@@ -42,15 +43,29 @@ public abstract class MenuVo {
     }
 
     @Data
-    public static class Add extends MenuVo{
+    public static class Add extends MenuVo {
         private Long parentId;
     }
 
     @Data
-    public static class Update extends MenuVo{
+    public static class Update extends MenuVo {
         private Long menuId;
     }
 
+    @Data
+    public static class Tree {
+        private Long menuId;
+
+        private Long parentId;
+
+        private String name;
+
+        private List<Tree> children;
+
+        private Boolean getIsParent() {
+            return !CollectionUtils.isEmpty(children);
+        }
+    }
 
 
 }

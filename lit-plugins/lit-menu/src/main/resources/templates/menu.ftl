@@ -41,6 +41,7 @@ importJs=['libs/zTree/3.5/js/ztree.all.min.js', "js/menu.js"]>
             <th>图标</th>
             <th>URL</th>
             <th>类型</th>
+            <th>顺序号</th>
             <th>状态</th>
         <#--<th>备注</th>-->
             <th>操作</th>
@@ -58,9 +59,10 @@ importJs=['libs/zTree/3.5/js/ztree.all.min.js', "js/menu.js"]>
                     <a href="${rc.contextPath}/plugin/menu?parentId=${item.menuId?c}">${item.code!?html}</a>
                 </td>
                 <td>${item.name!?html}</td>
-                <td>${item.icon!}</td>
+                <td><i class="fa ${item.icon}"></i></td>
                 <td>${item.url!?html}</td>
                 <td>${item.type!?html}</td>
+                <td>${item.orderNum?c}</td>
                 <td>
                     <div class="btn-group btn-group-xs" role="group">
                         <a class="data-enable btn ${item.enable?string('btn-success', 'btn-default')}">

@@ -29,7 +29,7 @@ public abstract class DictionaryVo {
     }
 
     @Data
-    public static class List extends DictionaryVo {
+    public static class Detail extends DictionaryVo {
         private Long dictId;
     }
 

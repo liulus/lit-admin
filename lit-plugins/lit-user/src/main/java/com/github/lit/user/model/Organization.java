@@ -33,30 +33,27 @@ public class Organization implements Serializable{
     private Long parentId;
 
     /** 机构号 */
-    private String orgCode;
+    private String code;
 
     /** 机构名 */
-    private String orgName;
+    private String fullName;
 
     /** 机构简称 */
     private String shortName;
 
     /** 机构类型 */
-    private String orgType;
-
-    /** 机构层级 从 1 开始 */
-    private Integer orgLevel;
+    private String type;
 
     /**
      * 特殊序号, 用于查询
      * 一个层级 3 位数字, 从 001 开始, 子机构: 父机构 serialNum + 3位数字
      * 例: 010 -> 层级为 1 的第 10 个机构, 没有父机构
-     * 例: 007003 -> 层级为 2 且父机构 serialNum 为 007 的第 3 个机构
+     * 例: 007003 -> 层级为 2 且父机构 levelIndex 为 007 的第 3 个机构
      */
-    private String serialNum;
+    private String levelIndex;
 
     /** 地址 */
-    private String orgAddress;
+    private String address;
 
     /** 备注 */
     private String memo;

@@ -33,7 +33,10 @@ public class User implements Serializable {
     private Long orgId;
 
     /** 用户编码 */
-    private String userCode;
+    private String code;
+
+    /** 工号 */
+    private String jobNum;
 
     /** 用户名 */
     private String userName;
@@ -57,7 +60,7 @@ public class User implements Serializable {
     private String email;
 
     /** 手机号 */
-    private String mobilePhone;
+    private String mobileNum;
 
     /** 电话 */
     private String telephone;
@@ -66,10 +69,10 @@ public class User implements Serializable {
     private String idCardNum;
 
     /** 用户类型 */
-    private String userType;
+    private String type;
 
     /** 用户状态 */
-    private String userStatus;
+    private String status;
 
     /** 是否锁定 */
     @Column(name = "is_lock")
@@ -81,8 +84,6 @@ public class User implements Serializable {
     /** 创建时间 */
     private Date gmtCreate;
 
-    /** 上次登录时间 */
-    private Date gmtLastLogin;
 
 
 }

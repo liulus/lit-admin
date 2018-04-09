@@ -2,9 +2,7 @@ package com.github.lit.user.service;
 
 import com.github.lit.user.model.User;
 import com.github.lit.user.model.UserQo;
-import com.github.lit.user.model.UserVo;
 
-import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -18,9 +16,9 @@ public interface UserService {
      * 根据用户 Id 查询用户
      *
      * @param id 用户Id
-     * @return
+     * @return User
      */
-    UserVo findById(Long id);
+    User findById(Long id);
 
     /**
      * 根据用户名查询用户
@@ -37,27 +35,27 @@ public interface UserService {
      * @param qo 查询条件
      * @return 用户列表
      */
-    List<UserVo> findPageList(UserQo qo);
+    List<User> findPageList(UserQo qo);
 
     /**
      * 新增用户
      *
-     * @param userVo user
+     * @param user user
      */
-    void insert(UserVo userVo);
+    Long insert(User user);
 
     /**
      * 修改用户
      *
-     * @param userVo user
+     * @param user user
      */
-    void update(UserVo userVo);
+    void update(User user);
 
     /**
      * 删除用户
      *
      * @param ids ids
      */
-    void delete(Serializable[] ids);
+    void delete(Long[] ids);
 
 }

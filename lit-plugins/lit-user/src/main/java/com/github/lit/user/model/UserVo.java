@@ -1,11 +1,6 @@
 package com.github.lit.user.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
-
-import java.util.Date;
 
 /**
  * User : liulu
@@ -13,107 +8,45 @@ import java.util.Date;
  * version $Id: UserVo.java, v 0.1 Exp $
  */
 @Data
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
-public class UserVo {
+public abstract class UserVo {
 
-    private static final long serialVersionUID = -7054655578166527259L;
-
-    private Long userId;
-
-    /**
-     * 用户编码
-     */
-    private String userCode;
-
-    /**
-     * 用户名
-     */
+    private String code;
     private String userName;
-
-    /**
-     * 昵称
-     */
+    private String jobNum;
     private String nickName;
-
-    /**
-     * 真实名称
-     */
     private String realName;
-
-    /**
-     * 头像
-     */
+    private String idCardNum;
     private String avatar;
-
-    /**
-     * 密码
-     */
-    private String password;
-
-    /**
-     * 性别 true: 男, false: 女
-     */
+    private String email;
+    private String mobileNum;
+    private String telephone;
     private Boolean gender;
 
-    /**
-     * 邮箱
-     */
-    private String email;
 
-    /**
-     * 手机号
-     */
-    private String mobilePhone;
+    @Data
+    public static class List {
+        private Long userId;
+        private String userName;
+        private String mobileNum;
+        private Boolean gender;
+        private Boolean lock;
+    }
 
-    /**
-     * 电话
-     */
-    private String telephone;
+    @Data
+    public static class Detail extends UserVo {
+        private Long userId;
+        private String type;
+        private Boolean lock;
+    }
 
-    /**
-     * 身份证号
-     */
-    private String idCardNum;
+    @Data
+    public static class Add extends UserVo {
+    }
 
-    /**
-     * 用户类型
-     */
-    private String userType;
-
-    /**
-     * 用户状态
-     */
-    private String userStatus;
-
-    /**
-     * 是否锁定
-     */
-    private Boolean lock;
-
-    /**
-     * 创建人
-     */
-    private String creator;
-
-    /**
-     * 创建时间
-     */
-    private Date gmtCreate;
-
-    /**
-     * 上次登录时间
-     */
-    private Date gmtLastLogin;
-
-    private Long orgId;
-
-    private String orgCode;
-
-    private String orgName;
-
-    private String serialNum;
+    @Data
+    public static class Update extends UserVo {
+        private Long userId;
+    }
 
 
 }

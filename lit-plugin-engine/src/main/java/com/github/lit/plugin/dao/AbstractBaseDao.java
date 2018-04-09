@@ -58,6 +58,11 @@ public abstract class AbstractBaseDao<PO, QO extends Page> implements BaseDao<PO
     }
 
     @Override
+    public Select<PO> getSelect() {
+        return jdbcTools.select(poClass);
+    }
+
+    @Override
     public PO findById(Long id) {
         return jdbcTools.get(poClass, id);
     }
@@ -93,10 +98,6 @@ public abstract class AbstractBaseDao<PO, QO extends Page> implements BaseDao<PO
         Select<PO> select = getSelect();
         this.buildCondition(select, qo);
         return select.count();
-    }
-
-    protected Select<PO> getSelect() {
-        return jdbcTools.select(poClass);
     }
 
     protected void buildCondition(Select<PO> select, QO qo) {

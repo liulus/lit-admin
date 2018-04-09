@@ -1,13 +1,14 @@
 package com.github.lit.user.controller;
 
-import com.github.lit.commons.context.ResultConst;
+import com.github.lit.commons.bean.BeanUtils;
 import com.github.lit.plugin.context.PluginConst;
+import com.github.lit.plugin.web.ViewName;
+import com.github.lit.user.model.User;
 import com.github.lit.user.model.UserQo;
 import com.github.lit.user.model.UserVo;
 import com.github.lit.user.service.UserService;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -24,37 +25,32 @@ public class UserController {
     @Resource
     private UserService userService;
 
-    @RequestMapping({"/list", ""})
-    public String userList(UserQo qo, Model model) {
-
-        List<UserVo> userVos = userService.findPageList(qo);
-        model.addAttribute(ResultConst.RESULT, userVos);
-        return "user";
+    @GetMapping
+    @ViewName("user")
+    public List<UserVo.List> userList(UserQo qo) {
+        List<User> pageList = userService.findPageList(qo);
+        return BeanUtils.convert(UserVo.List.class, pageList);
     }
 
-    @RequestMapping("get")
-    public String get(Long id, Model model) {
-        UserVo userVo = userService.findById(id);
-        model.addAttribute(ResultConst.RESULT, userVo);
-        return "";
+    @GetMapping("/{id}")
+    public User get(@PathVariable Long id) {
+        return userService.findById(id);
     }
 
-    @RequestMapping("/add")
-    public String add(UserVo userVo, Model model) {
-        userService.insert(userVo);
-        return "";
+    @PostMapping
+    public Long add(UserVo.Add add) {
+        return userService.insert(BeanUtils.convert(add, new User()));
+
     }
 
-    @RequestMapping("/update")
-    public String update(UserVo userVo) {
-        userService.update(userVo);
-        return "";
+    @PutMapping
+    public void update(UserVo.Update update) {
+        userService.update(BeanUtils.convert(update, new User()));
     }
 
-    @RequestMapping("/delete")
-    public String delete(Long... ids) {
+    @DeleteMapping
+    public void delete(Long[] ids) {
         userService.delete(ids);
-        return "";
     }
 
 

@@ -35,9 +35,6 @@ public class MenuController {
     @GetMapping
     @ViewName("menu")
     public List<MenuVo.Detail> menuList(MenuQo qo, Model model) {
-        if (qo.getParentId() == null) {
-            qo.setParentId(0L);
-        }
         if (qo.getParentId() != 0L) {
             Menu menu = menuService.findById(qo.getParentId());
             model.addAttribute("returnId", menu == null ? 0 : menu.getParentId());
@@ -128,9 +125,8 @@ public class MenuController {
     }
 
     @PutMapping
-    public String update(MenuVo.Update update) {
+    public void update(MenuVo.Update update) {
         menuService.update(BeanUtils.convert(update, new Menu()));
-        return "";
     }
 
     @DeleteMapping

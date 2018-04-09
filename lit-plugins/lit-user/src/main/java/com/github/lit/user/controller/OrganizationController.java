@@ -35,15 +35,7 @@ public class OrganizationController {
         model.addAttribute("orgType", DictionaryTools.findChildByRootKey(UserConst.ORGANIZATION_TYPE));
         return "organization";
     }
-
-    /**
-     * 查询父菜单下的子菜单列表
-     *
-     * @param vo
-     * @param parentId
-     * @param model
-     * @return
-     */
+    
     @RequestMapping("/{parentId}")
     public String childList(OrganizationQo vo, @PathVariable Long parentId, Model model) {
 

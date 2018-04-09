@@ -48,23 +48,20 @@ public class OrganizationServiceImpl implements OrganizationService {
     @Override
     public void insert(Organization organization) {
 
-        String parentSerialNum = "";
+        String parentLevelIndex = "";
 
-        Organization oldOrg = findByCode(organization.getOrgCode());
+        Organization oldOrg = findByCode(organization.getCode());
         if (oldOrg != null) {
             throw new AppException("机构号已经存在!");
         }
 
         // 处理 orgLevel
-        if (organization.getParentId() == null) {
-            organization.setOrgLevel(1);
-        } else {
+        if (organization.getParentId() != 0L) {
             Organization parentOrg = findById(organization.getParentId());
             if (parentOrg == null) {
                 throw new AppException("父机构信息丢失!");
             }
-            parentSerialNum = parentOrg.getSerialNum();
-            organization.setOrgLevel(parentOrg.getOrgLevel() + 1);
+            parentLevelIndex = parentOrg.getLevelIndex();
         }
 
         // 处理 serialNum
@@ -73,7 +70,7 @@ public class OrganizationServiceImpl implements OrganizationService {
                 .where("parentId").equalsTo(organization.getParentId())
                 .list(String.class);
 
-        organization.setSerialNum(UserUtils.nextSerialNum(parentSerialNum, serialNums));
+        organization.setLevelIndex(UserUtils.nextSerialNum(parentLevelIndex, serialNums));
 
         jdbcTools.insert(organization);
     }
@@ -82,15 +79,12 @@ public class OrganizationServiceImpl implements OrganizationService {
     public void update(Organization organization) {
 
         Organization oldOrg = findById(organization.getOrgId());
-        if (!Objects.equals(oldOrg.getOrgCode(), organization.getOrgCode())) {
-            Organization checkOrg = findByCode(organization.getOrgCode());
+        if (!Objects.equals(oldOrg.getCode(), organization.getCode())) {
+            Organization checkOrg = findByCode(organization.getCode());
             if (checkOrg != null) {
                 throw new AppException("机构号已经存在!");
             }
         }
-        // 不允许更新的属性
-        organization.setOrgLevel(null);
-        organization.setSerialNum(null);
 
         jdbcTools.update(organization);
     }
@@ -108,7 +102,7 @@ public class OrganizationServiceImpl implements OrganizationService {
             }
             int count = buildSelect(OrganizationQo.builder().parentId(organization.getOrgId()).build()).count();
             if (count > 0) {
-                throw new AppException(String.format("请先删除 %s 的子机构数据 !", organization.getOrgName()));
+                throw new AppException(String.format("请先删除 %s 的子机构数据 !", organization.getFullName()));
             }
             validIds.add(id);
         }

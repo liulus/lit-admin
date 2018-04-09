@@ -1,6 +1,7 @@
 package com.github.lit.plugin.dao;
 
 import com.github.lit.commons.page.Page;
+import com.github.lit.jdbc.statement.select.Select;
 
 import java.util.List;
 
@@ -19,6 +20,8 @@ public interface BaseDao<PO, QO extends Page> {
 
     int deleteByIds(Long...ids);
 
+    Select<PO> getSelect();
+
     PO findById(Long id);
 
     PO findByProperty(String property, Object value);
@@ -28,8 +31,6 @@ public interface BaseDao<PO, QO extends Page> {
     List<PO> findPageList(QO qo);
 
     List<PO> findList(QO qo);
-
-
 
     int count(QO qo);
 

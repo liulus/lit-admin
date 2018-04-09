@@ -34,9 +34,6 @@ public class DictionaryController {
     @GetMapping
     @ViewName("dictionary")
     public List<DictionaryVo.Detail> childList(DictionaryQo qo, Model model) {
-        if (qo.getParentId() == null) {
-            qo.setParentId(0L);
-        }
         if (qo.getParentId() != 0L) {
             Dictionary dictionary = dictionaryService.findById(qo.getParentId());
             model.addAttribute("returnId", dictionary == null ? 0 : dictionary.getParentId());

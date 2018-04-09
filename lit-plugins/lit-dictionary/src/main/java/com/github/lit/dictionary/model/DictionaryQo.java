@@ -21,7 +21,7 @@ public class DictionaryQo extends Page {
 
     private String keyword;
 
-    private Long parentId;
+    private Long parentId = 0L;
 
     private String dictKey;
 

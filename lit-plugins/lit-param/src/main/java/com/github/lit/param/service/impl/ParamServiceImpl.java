@@ -37,14 +37,14 @@ public class ParamServiceImpl implements ParamService {
 
         if (!Strings.isNullOrEmpty(qo.getKeyword())) {
             select.and()
-                    .bracket("code").like(qo.getKeyword())
-                    .or("value").like(qo.getKeyword())
-                    .or("memo").like(qo.getKeyword())
+                    .bracket(Param::getCode).like(qo.getKeyword())
+                    .or(Param::getValue).like(qo.getKeyword())
+                    .or(Param::getMemo).like(qo.getKeyword())
                     .end();
         }
 
         if (!Strings.isNullOrEmpty(qo.getCode())) {
-            select.and("code").equalsTo(qo.getCode());
+            select.and(Param::getCode).equalsTo(qo.getCode());
         }
 
         return select.page(qo).list();
@@ -57,7 +57,7 @@ public class ParamServiceImpl implements ParamService {
 
     @Override
     public Param findByCode(String code) {
-        return jdbcTools.findByProperty(Param.class, "code", code);
+        return jdbcTools.select(Param.class).where(Param::getCode).equalsTo(code).single();
     }
 
     @Override
@@ -97,7 +97,7 @@ public class ParamServiceImpl implements ParamService {
             return;
         }
         List<Param> params = jdbcTools.select(Param.class)
-                .where("paramId").in((Object[]) ids)
+                .where(Param::getParamId).in((Object[]) ids)
                 .list();
 
         List<Long> validIds = new ArrayList<>(params.size());

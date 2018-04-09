@@ -18,45 +18,43 @@ import java.util.List;
 @Repository
 public class DictionaryDaoImpl extends AbstractBaseDao<Dictionary, DictionaryQo> implements DictionaryDao {
 
-    private static final String PARENT_ID = "parentId";
-
     @Override
     protected void buildCondition(Select<Dictionary> select, DictionaryQo qo) {
-        select.where(PARENT_ID).equalsTo(qo.getParentId());
+        select.where(Dictionary::getParentId).equalsTo(qo.getParentId());
 
         if (!Strings.isNullOrEmpty(qo.getKeyword())) {
             select.and()
-                    .bracket("dictKey").like(qo.getKeyword())
-                    .or("dictValue").like(qo.getKeyword())
-                    .or("memo").like(qo.getKeyword())
+                    .bracket(Dictionary::getDictKey).like(qo.getKeyword())
+                    .or(Dictionary::getDictValue).like(qo.getKeyword())
+                    .or(Dictionary::getMemo).like(qo.getKeyword())
                     .end();
         }
 
         if (!Strings.isNullOrEmpty(qo.getDictKey())) {
-            select.and("dictKey").equalsTo(qo.getDictKey());
+            select.and(Dictionary::getDictKey).equalsTo(qo.getDictKey());
         }
 
-        select.asc("orderNum");
+        select.asc(Dictionary::getOrderNum);
     }
 
     @Override
     public Dictionary findByKeyAndParentId(String dictKey, Long parentId) {
         return getSelect()
-                .where(PARENT_ID).equalsTo(parentId)
-                .and("dictKey").equalsTo(dictKey)
+                .where(Dictionary::getParentId).equalsTo(parentId)
+                .and(Dictionary::getDictKey).equalsTo(dictKey)
                 .single();
     }
 
     @Override
     public List<Dictionary> findByIds(Long[] ids) {
         return getSelect()
-                .where("dictId").in((Object[]) ids)
+                .where(Dictionary::getDictId).in((Object[]) ids)
                 .list();
     }
 
     @Override
     public Integer countByParentId(Long parentId) {
-        return getSelect().where(PARENT_ID).equalsTo(parentId).count();
+        return getSelect().where(Dictionary::getParentId).equalsTo(parentId).count();
     }
 
 }

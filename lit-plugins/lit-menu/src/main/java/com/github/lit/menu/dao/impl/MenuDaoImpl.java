@@ -22,37 +22,40 @@ public class MenuDaoImpl extends AbstractBaseDao<Menu, MenuQo> implements MenuDa
     @Override
     protected void buildCondition(Select<Menu> select, MenuQo menuQo) {
 
-        if (menuQo.getParentId() != null) {
-            select.where("parentId").equalsTo(menuQo.getParentId());
-        }
+        select.where(Menu::getParentId).equalsTo(menuQo.getParentId());
 
         if (!Strings.isNullOrEmpty(menuQo.getMenuCode())) {
-            select.and("menuCode").equalsTo(menuQo.getMenuCode());
+            select.and(Menu::getCode).equalsTo(menuQo.getMenuCode());
         }
 
-        select.asc("orderNum");
+        select.asc(Menu::getOrderNum);
     }
 
     @Override
     public Menu findByCodeAndParentId(String code, Long parentId) {
         return getSelect()
-                .where("parentId").equalsTo(parentId)
-                .and("code").equalsTo(code)
+                .where(Menu::getParentId).equalsTo(parentId)
+                .and(Menu::getCode).equalsTo(code)
                 .single();
     }
 
     @Override
     public List<Menu> findByIds(Long[] ids) {
         return getSelect()
-                .where("menuId").in((Object[]) ids)
+                .where(Menu::getMenuId).in((Object[]) ids)
                 .list();
     }
 
     @Override
     public void move(Long parentId, Long[] ids) {
         jdbcTools.createUpdate(Menu.class)
-                .set("parentId", parentId)
-                .where("menuId").in((Object[]) ids)
+                .set(Menu::getParentId, parentId)
+                .where(Menu::getMenuId).in((Object[]) ids)
                 .execute();
+    }
+
+    @Override
+    public List<Menu> findAll() {
+        return getSelect().list();
     }
 }

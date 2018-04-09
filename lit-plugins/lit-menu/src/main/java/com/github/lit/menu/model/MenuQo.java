@@ -21,7 +21,7 @@ public class MenuQo extends Page{
 
     private Long id;
 
-    private Long parentId;
+    private Long parentId = 0L;
 
     private String menuCode;
 

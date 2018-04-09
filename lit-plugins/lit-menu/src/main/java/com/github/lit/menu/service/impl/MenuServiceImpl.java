@@ -99,7 +99,6 @@ public class MenuServiceImpl implements MenuService {
     @Event(MenuUpdateEvent.class)
     public void moveMenu(Long parentId, Long[] ids) {
 
-
         Arrays.sort(ids);
         // 验证新的 parentId 不是 被移动菜单本身
         if (parentId != null && Arrays.binarySearch(ids, parentId) >= 0) {
@@ -129,7 +128,7 @@ public class MenuServiceImpl implements MenuService {
 
     @Override
     public List<Menu> findAll() {
-        return menuDao.findList(new MenuQo());
+        return menuDao.findAll();
     }
 
 }

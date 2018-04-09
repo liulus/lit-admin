@@ -18,4 +18,7 @@ public interface MenuDao extends BaseDao<Menu, MenuQo> {
     List<Menu> findByIds(Long[] ids);
 
     void move(Long parentId, Long[] ids);
+
+    List<Menu> findAll();
+
 }

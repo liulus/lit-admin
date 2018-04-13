@@ -60,10 +60,10 @@ public interface MenuService {
     /**
      * 改变菜单状态
      *
-     * @param menuId
+     * @param id
      * @param isEnable 是否启用
      */
-    void changeStatus(Long menuId, boolean isEnable);
+    void changeStatus(Long id, boolean isEnable);
 
     /**
      * @return

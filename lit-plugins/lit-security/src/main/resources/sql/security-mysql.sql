@@ -1,35 +1,68 @@
 CREATE TABLE lit_authority
 (
-  authority_id    INT UNSIGNED PRIMARY KEY NOT NULL AUTO_INCREMENT COMMENT '权限码ID',
-  authority_code  VARCHAR(32) NOT NULL DEFAULT '' COMMENT '权限码',
-  authority_name  VARCHAR(128) NOT NULL DEFAULT '' COMMENT '权限码名称',
-  authority_type  VARCHAR(32)  NOT NULL DEFAULT '' COMMENT '权限类型',
-  memo   VARCHAR(256) NOT NULL DEFAULT '' COMMENT '备注',
-  sys_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-)ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='权限码';
+    id       INT UNSIGNED PRIMARY KEY            NOT NULL AUTO_INCREMENT
+    COMMENT 'id',
+    code     VARCHAR(32) DEFAULT ''              NOT NULL
+    COMMENT '权限码',
+    name     VARCHAR(128) DEFAULT ''             NOT NULL
+    COMMENT '权限码名称',
+    module   VARCHAR(64) DEFAULT ''              NOT NULL
+    COMMENT '权限类型',
+    remark     VARCHAR(512) DEFAULT ''             NOT NULL
+    COMMENT '备注',
+    sys_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
+    ON UPDATE CURRENT_TIMESTAMP
+)
+    ENGINE = InnoDB
+    COMMENT ='权限码';
 
-CREATE TABLE lit_role(
-  role_id INT UNSIGNED PRIMARY KEY NOT NULL AUTO_INCREMENT COMMENT '角色Id',
-  role_code VARCHAR(32) NOT NULL DEFAULT '' COMMENT '角色编号',
-  role_name VARCHAR(128) NOT NULL DEFAULT '' COMMENT '角色名',
-  memo VARCHAR(512) DEFAULT '' COMMENT '备注',
-  sys_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-)ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='角色';
+CREATE UNIQUE INDEX uk_code
+    ON lit_authority (code);
 
-CREATE TABLE lit_role_authority(
-  role_authority_id INT UNSIGNED PRIMARY KEY NOT NULL AUTO_INCREMENT,
-  role_id INT UNSIGNED NOT NULL COMMENT '角色Id',
-  role_code VARCHAR(32) DEFAULT '' COMMENT '角色编号',
-  authority_id INT UNSIGNED NOT NULL COMMENT '权限码Id',
-  authority_code VARCHAR(32) DEFAULT '' COMMENT '权限码',
-  sys_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
- )ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='角色权限关联表';
+CREATE TABLE lit_role (
+    id       INT UNSIGNED PRIMARY KEY                     NOT NULL AUTO_INCREMENT
+    COMMENT '角色Id',
+    code     VARCHAR(32) DEFAULT ''                       NOT NULL
+    COMMENT '角色编号',
+    name     VARCHAR(64) DEFAULT ''                       NOT NULL
+    COMMENT '角色名',
+    remark     VARCHAR(512) DEFAULT ''                      NOT NULL
+    COMMENT '备注',
+    sys_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP          NOT NULL
+    ON UPDATE CURRENT_TIMESTAMP
+)
+    ENGINE = InnoDB
+    COMMENT ='角色';
 
-CREATE TABLE lit_user_role(
-  user_role_id INT UNSIGNED PRIMARY KEY NOT NULL AUTO_INCREMENT,
-  user_id INT UNSIGNED NOT NULL COMMENT '用户Id',
-  user_name VARCHAR(64) DEFAULT '' COMMENT '用户名',
-  role_id INT UNSIGNED NOT NULL COMMENT '角色Id',
-  role_code VARCHAR(32) DEFAULT '' COMMENT '角色code',
-  sys_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-)ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户角色关联表';
+CREATE UNIQUE INDEX uk_code
+    ON lit_role (code);
+
+
+CREATE TABLE lit_role_authority (
+    id           INT UNSIGNED PRIMARY KEY                        NOT NULL AUTO_INCREMENT,
+    role_id      INT UNSIGNED DEFAULT 0                          NOT NULL
+    COMMENT '角色Id',
+    authority_id INT UNSIGNED DEFAULT 0                          NOT NULL
+    COMMENT '权限码Id',
+    sys_time     TIMESTAMP DEFAULT CURRENT_TIMESTAMP             NOT NULL
+    ON UPDATE CURRENT_TIMESTAMP
+)
+    ENGINE = InnoDB
+    COMMENT ='角色权限关联表';
+
+CREATE UNIQUE INDEX uk_role_auth
+    ON lit_role_authority (role_id, authority_id);
+
+CREATE TABLE lit_user_role (
+    id       INT UNSIGNED PRIMARY KEY                     NOT NULL AUTO_INCREMENT,
+    user_id  INT UNSIGNED DEFAULT 0                       NOT NULL
+    COMMENT '用户Id',
+    role_id  INT UNSIGNED DEFAULT 0                       NOT NULL
+    COMMENT '角色Id',
+    sys_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP          NOT NULL
+    ON UPDATE CURRENT_TIMESTAMP
+)
+    ENGINE = InnoDB
+    COMMENT ='用户角色关联表';
+CREATE UNIQUE INDEX uk_user_role
+    ON lit_user_role (user_id, role_id);

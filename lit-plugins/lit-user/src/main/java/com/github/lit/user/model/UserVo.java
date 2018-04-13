@@ -25,7 +25,7 @@ public abstract class UserVo {
 
     @Data
     public static class List {
-        private Long userId;
+        private Long id;
         private String userName;
         private String mobileNum;
         private Boolean gender;
@@ -34,7 +34,7 @@ public abstract class UserVo {
 
     @Data
     public static class Detail extends UserVo {
-        private Long userId;
+        private Long id;
         private String type;
         private Boolean lock;
     }
@@ -45,7 +45,7 @@ public abstract class UserVo {
 
     @Data
     public static class Update extends UserVo {
-        private Long userId;
+        private Long id;
     }
 
 

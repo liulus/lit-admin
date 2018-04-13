@@ -11,7 +11,7 @@ CREATE TABLE lit_dictionary
   COMMENT '字典值',
   order_num  SMALLINT UNSIGNED        NOT NULL DEFAULT 0
   COMMENT '顺序号',
-  memo       VARCHAR(256)             NOT NULL DEFAULT ''
+  remark       VARCHAR(256)             NOT NULL DEFAULT ''
   COMMENT '备注',
   is_system  TINYINT(1)               NOT NULL DEFAULT 0
   COMMENT '是否系统字典数据',

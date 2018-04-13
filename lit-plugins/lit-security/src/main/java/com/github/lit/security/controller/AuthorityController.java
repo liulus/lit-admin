@@ -1,18 +1,16 @@
 package com.github.lit.security.controller;
 
-import com.github.lit.commons.context.ResultConst;
-import com.github.lit.dictionary.tool.DictionaryTools;
 import com.github.lit.plugin.context.PluginConst;
-import com.github.lit.security.context.SecurityConst;
+import com.github.lit.plugin.web.ViewName;
 import com.github.lit.security.model.Authority;
 import com.github.lit.security.model.AuthorityQo;
+import com.github.lit.security.model.AuthorityVo;
 import com.github.lit.security.service.AuthorityService;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * User : liulu
@@ -27,47 +25,35 @@ public class AuthorityController {
     private AuthorityService authorityService;
 
 
-    @RequestMapping("/list")
-    public String list(AuthorityQo qo, Model model) {
-        model.addAttribute(ResultConst.RESULT, authorityService.findPageList(qo));
-        model.addAttribute(SecurityConst.AUTHORITY_TYPE, DictionaryTools.findChildByRootKey(SecurityConst.AUTHORITY_TYPE));
-        return "authority";
+    @GetMapping
+    @ViewName("authority")
+    public List<Authority> list(AuthorityQo qo) {
+        return authorityService.findPageList(qo);
     }
 
-    @RequestMapping("/tree")
-    public String tree(Model model) {
-        model.addAttribute(ResultConst.RESULT, authorityService.findAuthorityTree());
-        return "";
+    @GetMapping("/tree")
+    public List<AuthorityVo> tree() {
+        return authorityService.findAuthorityTree();
     }
 
-    @RequestMapping("/{roleId}/list")
-    public String findByRoleId(@PathVariable Long roleId, Model model) {
-        model.addAttribute(ResultConst.RESULT, authorityService.findByRoleId(roleId));
-        return "";
+    @GetMapping("/{id}")
+    public Authority get(@PathVariable Long id) {
+        return authorityService.findById(id);
     }
 
-    @RequestMapping("/get")
-    public String get(Long id, Model model) {
-        model.addAttribute(ResultConst.RESULT, authorityService.findById(id));
-        return "";
+    @PostMapping
+    public Long add(Authority authority) {
+        return authorityService.insert(authority);
     }
 
-    @RequestMapping("/add")
-    public String add(Authority authority, Model model) {
-        model.addAttribute(ResultConst.RESULT, authorityService.insert(authority));
-        return "";
-    }
-
-    @RequestMapping("/update")
-    public String update(Authority authority, Model model) {
+    @PutMapping
+    public void update(Authority authority) {
         authorityService.update(authority);
-        return "";
     }
 
-    @RequestMapping("/delete")
-    public String delete(Long[] ids) {
+    @DeleteMapping
+    public void delete(Long[] ids) {
         authorityService.delete(ids);
-        return "";
     }
 
 

@@ -44,7 +44,7 @@ public class LitUserDetailService implements UserDetailsService {
         }
         LitUserDetail userDetail = BeanUtils.convert(user, new LitUserDetail());
 
-        List<Role> roles = roleService.findByUserId(user.getUserId());
+        List<Role> roles = roleService.findByUserId(user.getId());
 
         List<Authority> authorities = new ArrayList<>();
         for (Role role : roles) {

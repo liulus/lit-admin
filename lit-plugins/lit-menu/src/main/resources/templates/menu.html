@@ -77,11 +77,11 @@
             <tbody>
             <tr th:if="!${emptyResult}" th:each="item : ${result}">
                 <td class="text-center">
-                    <input class="check-ls" name="ids" type="checkbox" th:value="${item.menuId}">
+                    <input class="check-ls" name="ids" type="checkbox" th:value="${item.id}">
                 </td>
                 <!--<td th:text="${itemStat.count}"></td>-->
                 <td>
-                    <a th:href="@{'/plugin/menu/'+${item.menuId}+'/child'}" th:text="${item.menuCode}"></a>
+                    <a th:href="@{'/plugin/menu/'+${item.id}+'/child'}" th:text="${item.menuCode}"></a>
                 </td>
                 <td th:text="${item.menuName}"></td>
                 <td th:text="${item.menuIcon}"></td>
@@ -97,7 +97,7 @@
                         </a>
                     </div>
                 </td>
-                <td th:text="${item.memo}"></td>
+                <td th:text="${item.remark}"></td>
             </tr>
             <tr th:if="${emptyResult}">
                 <td colspan="9">
@@ -132,7 +132,7 @@
     <div class="modal-body">
         <form id="form-edit" class="form-horizontal" action="">
             <input type="hidden" name="parentId" th:value="${menuVo.parentId}">
-            <input type="hidden" name="menuId" value="${menuId}">
+            <input type="hidden" name="id" value="${id}">
             <div class="form-group">
                 <span class="control-label col-sm-6"><i class="text-danger">*&nbsp;</i>菜单编码 :</span>
                 <div class="col-sm-16">
@@ -169,7 +169,7 @@
             <div class="form-group">
                 <span class="control-label col-sm-6"><i class="text-danger">*&nbsp;</i>备注 :</span>
                 <div class="col-sm-16">
-                    <textarea name="memo" class="form-control" rows="3">${memo}</textarea>
+                    <textarea name="remark" class="form-control" rows="3">${remark}</textarea>
                 </div>
             </div>
         </form>

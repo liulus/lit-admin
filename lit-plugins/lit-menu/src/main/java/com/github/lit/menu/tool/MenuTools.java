@@ -42,7 +42,7 @@ public class MenuTools {
             return;
         }
         for (MenuVo.Detail menu : parentMenus) {
-            List<MenuVo.Detail> children = menuMap.get(menu.getMenuId());
+            List<MenuVo.Detail> children = menuMap.get(menu.getId());
             if (CollectionUtils.isEmpty(children)) {
                 menu.setIsParent(false);
             } else {

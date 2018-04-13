@@ -147,7 +147,7 @@ public class InitData extends BaseTest {
                 Dictionary child = new Dictionary();
                 child.setDictKey(categoryCode);
                 child.setDictValue(goodsInfo[9]);
-                child.setParentId(goodsCategory.getDictId());
+                child.setParentId(goodsCategory.getId());
                 dictionaryService.insert(child);
             }
 

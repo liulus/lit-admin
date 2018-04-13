@@ -18,7 +18,7 @@ CREATE TABLE lit_organization (
     COMMENT '特殊编号, 用于查询',
     address     VARCHAR(512) DEFAULT ''  NOT NULL
     COMMENT '地址',
-    memo        VARCHAR(512) DEFAULT ''  NOT NULL
+    remark        VARCHAR(512) DEFAULT ''  NOT NULL
     COMMENT '备注',
     sys_time    TIMESTAMP                NOT NULL DEFAULT CURRENT_TIMESTAMP
     ON UPDATE CURRENT_TIMESTAMP

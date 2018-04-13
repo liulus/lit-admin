@@ -17,21 +17,21 @@ public interface OrganizationService {
      * @param vo 查询条件
      * @return
      */
-    List<Organization> queryPageList(OrganizationQo vo);
+    List<Organization> findPageList(OrganizationQo vo);
 
     /**
      * 查询单个机构
      *
-     * @param orgId
+     * @param id
      * @return
      */
-    Organization findById(Long orgId);
+    Organization findById(Long id);
 
     Organization findByCode(String orgCode);
 
-    void insert(Organization organization);
+    Long insert(Organization organization);
 
     void update(Organization organization);
 
-    void delete(Long... ids);
+    void delete(Long[] ids);
 }

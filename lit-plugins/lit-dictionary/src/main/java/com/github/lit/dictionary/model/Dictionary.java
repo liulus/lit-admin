@@ -27,7 +27,7 @@ public class Dictionary implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long dictId;
+    private Long id;
 
     /**
      * 父字典 Id
@@ -52,7 +52,7 @@ public class Dictionary implements Serializable {
     /**
      * 备注
      */
-    private String memo;
+    private String remark;
 
     /**
      * 是否系统级别字典 （系统级不允许删除）

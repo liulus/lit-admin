@@ -1,10 +1,7 @@
 package com.github.lit.security.model;
 
 import com.github.lit.commons.page.Page;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 /**
  * User : liulu
@@ -13,6 +10,7 @@ import lombok.NoArgsConstructor;
  */
 @Data
 @Builder
+@EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
 @AllArgsConstructor
 public class AuthorityQo extends Page {

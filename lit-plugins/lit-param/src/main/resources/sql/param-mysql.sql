@@ -6,7 +6,7 @@ CREATE TABLE lit_param
   COMMENT '参数编码',
   value     VARCHAR(64)              NOT NULL DEFAULT ''
   COMMENT '参数值',
-  memo      VARCHAR(256)             NOT NULL DEFAULT ''
+  remark      VARCHAR(256)             NOT NULL DEFAULT ''
   COMMENT '备注',
   is_system TINYINT(1)               NOT NULL DEFAULT 0
   COMMENT '是否系统级',

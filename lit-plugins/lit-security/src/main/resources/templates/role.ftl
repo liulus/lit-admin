@@ -67,7 +67,7 @@
                 <td>${item?counter}</td>
                 <td>${item.roleCode!?html}</td>
                 <td>${item.roleName!?html}</td>
-                <td>${item.memo!?html}</td>
+                <td>${item.remark!?html}</td>
                 <td>
                     <a class="data-authorize btn btn-xs btn-primary">
                         <i class="fa fa-random"></i>&nbsp;分配权限
@@ -116,7 +116,7 @@
             <div class="form-group">
                 <span class="control-label col-sm-6"><i class="text-danger">*&nbsp;</i>备注 :</span>
                 <div class="col-sm-16">
-                    <textarea name="memo" class="form-control" rows="3">${r'${memo}'}</textarea>
+                    <textarea name="remark" class="form-control" rows="3">${r'${remark}'}</textarea>
                 </div>
             </div>
         </form>

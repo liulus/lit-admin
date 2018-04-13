@@ -26,7 +26,7 @@ public class UserRole implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long userRoleId;
+    private Long id;
 
     /**
      * 用户Id
@@ -37,15 +37,5 @@ public class UserRole implements Serializable {
      * 角色Id
      */
     private Long roleId;
-
-    /**
-     * 用户名
-     */
-    private String userName;
-
-    /**
-     * 角色编号
-     */
-    private String roleCode;
 
 }

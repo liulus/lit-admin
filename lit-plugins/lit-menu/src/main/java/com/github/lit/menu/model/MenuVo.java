@@ -25,12 +25,12 @@ public abstract class MenuVo {
 
     private String type;
 
-    private String memo;
+    private String remark;
 
     @Data
     public static class Detail extends MenuVo {
 
-        private Long menuId;
+        private Long id;
 
         private Long parentId;
 
@@ -49,12 +49,12 @@ public abstract class MenuVo {
 
     @Data
     public static class Update extends MenuVo {
-        private Long menuId;
+        private Long id;
     }
 
     @Data
     public static class Tree {
-        private Long menuId;
+        private Long id;
 
         private Long parentId;
 

@@ -13,13 +13,14 @@ import org.springframework.stereotype.Repository;
  * version $Id: UserDaoImpl.java, v 0.1 Exp $
  */
 @Repository
-public class UserDaoImpl extends AbstractBaseDao<User, UserQo> implements UserDao {
+public class UserDaoImpl extends AbstractBaseDao<User> implements UserDao {
 
     @Override
-    protected void buildCondition(Select<User> select, UserQo qo) {
+    protected void buildCondition(Select<User> select, Object obj) {
+        UserQo qo = (UserQo) obj;
 
-        if (qo.getUserId() != null) {
-            select.and(User::getUserId).equalsTo(qo.getUserId());
+        if (qo.getId() != null) {
+            select.and(User::getId).equalsTo(qo.getId());
         }
     }
 }

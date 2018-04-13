@@ -56,7 +56,7 @@ $(function () {
                 var checkNode = selectedNodes[0];
                 var checked = true;
                 while (checkNode) {
-                    if (id === checkNode.menuId) {
+                    if (id === checkNode.id) {
                         checked = false;
                         break;
                     }
@@ -67,7 +67,7 @@ $(function () {
                     return;
                 }
 
-                var parentId = selectedNodes[0].menuId;
+                var parentId = selectedNodes[0].id;
                 var data = parentId ? 'parentId=' + parentId + '&ids=' + id : 'ids=' + id;
                 Http.post(urlPrefix + '/move.json', data, function (result) {
                     if (result.success) {
@@ -97,7 +97,7 @@ $(function () {
         other.find('span').toggleClass('invisible', false);
 
         Http.post(urlPrefix + (enable ? '/disable' : '/enable') + '.json', {
-            menuId: getId(e)
+            id: getId(e)
         })
     });
 

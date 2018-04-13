@@ -16,7 +16,7 @@ public abstract class DictionaryVo {
 
     private Integer orderNum;
 
-    private String memo;
+    private String remark;
 
     @Data
     public static class Add extends DictionaryVo {
@@ -25,12 +25,12 @@ public abstract class DictionaryVo {
 
     @Data
     public static class Update extends DictionaryVo {
-        private Long dictId;
+        private Long id;
     }
 
     @Data
     public static class Detail extends DictionaryVo {
-        private Long dictId;
+        private Long id;
     }
 
 }

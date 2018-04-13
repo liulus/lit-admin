@@ -16,11 +16,13 @@ import java.util.List;
  * version $Id: MenuDaoImpl.java, v 0.1 Exp $
  */
 @Repository
-public class MenuDaoImpl extends AbstractBaseDao<Menu, MenuQo> implements MenuDao {
+public class MenuDaoImpl extends AbstractBaseDao<Menu> implements MenuDao {
 
 
     @Override
-    protected void buildCondition(Select<Menu> select, MenuQo menuQo) {
+    protected void buildCondition(Select<Menu> select, Object obj) {
+
+        MenuQo menuQo = (MenuQo) obj;
 
         select.where(Menu::getParentId).equalsTo(menuQo.getParentId());
 
@@ -40,22 +42,15 @@ public class MenuDaoImpl extends AbstractBaseDao<Menu, MenuQo> implements MenuDa
     }
 
     @Override
-    public List<Menu> findByIds(Long[] ids) {
-        return getSelect()
-                .where(Menu::getMenuId).in((Object[]) ids)
-                .list();
-    }
-
-    @Override
     public void move(Long parentId, Long[] ids) {
         jdbcTools.createUpdate(Menu.class)
                 .set(Menu::getParentId, parentId)
-                .where(Menu::getMenuId).in((Object[]) ids)
+                .where(Menu::getId).in((Object[]) ids)
                 .execute();
     }
 
     @Override
     public List<Menu> findAll() {
-        return getSelect().list();
+        return getSelect().asc(Menu::getOrderNum).list();
     }
 }

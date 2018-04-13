@@ -30,10 +30,10 @@ public interface DictionaryService {
     /**
      * 根据 Id 查询字典对象
      *
-     * @param dictId Id
+     * @param id Id
      * @return Dictionary
      */
-    Dictionary findById(Long dictId);
+    Dictionary findById(Long id);
 
     /**
      * 根据查询对象查询 字典列表

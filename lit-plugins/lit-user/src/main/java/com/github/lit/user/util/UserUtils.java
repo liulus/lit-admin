@@ -40,28 +40,28 @@ public class UserUtils {
         return loginUser;
     }
 
-    public static String nextSerialNum(String parentSerialNum, List<String> existSerialNums) {
+    public static String nextLevelIndex(String parentLevelIndex, List<String> existLevelIndexes) {
 
-        if (existSerialNums == null || existSerialNums.isEmpty()) {
-            return parentSerialNum + Strings.padStart("1", 3, '0');
+        if (existLevelIndexes == null || existLevelIndexes.isEmpty()) {
+            return parentLevelIndex + Strings.padStart("1", 3, '0');
         }
-        Collections.sort(existSerialNums);
+        Collections.sort(existLevelIndexes);
 
-        int count = existSerialNums.size();
-        int maxSerialNum = Integer.parseInt(existSerialNums.get(count - 1).substring(parentSerialNum.length()));
+        int count = existLevelIndexes.size();
+        int maxSerialNum = Integer.parseInt(existLevelIndexes.get(count - 1).substring(parentLevelIndex.length()));
 
         if (maxSerialNum <= count) {
             int next = maxSerialNum + 1;
             String nextStr = Strings.padStart(String.valueOf(next), 3, '0');
-            return parentSerialNum + nextStr;
+            return parentLevelIndex + nextStr;
         }
 
         int i = 1;
-        for (String serialNum : existSerialNums) {
-            int currentNum = Integer.parseInt(serialNum.substring(parentSerialNum.length()));
+        for (String serialNum : existLevelIndexes) {
+            int currentNum = Integer.parseInt(serialNum.substring(parentLevelIndex.length()));
             if (!Objects.equals(i, currentNum)) {
                 String nextStr = Strings.padStart(String.valueOf(i), 3, '0');
-                return parentSerialNum + nextStr;
+                return parentLevelIndex + nextStr;
             }
             i++;
         }

@@ -40,7 +40,7 @@ public class DictionaryServiceImpl implements DictionaryService {
 
     @Override
     public int update(Dictionary dictionary) {
-        Dictionary oldDict = findById(dictionary.getDictId());
+        Dictionary oldDict = findById(dictionary.getId());
         if (oldDict == null) {
             return 0;
         }
@@ -64,8 +64,8 @@ public class DictionaryServiceImpl implements DictionaryService {
     }
 
     @Override
-    public Dictionary findById(Long dictId) {
-        return dictionaryDao.findById(dictId);
+    public Dictionary findById(Long id) {
+        return dictionaryDao.findById(id);
     }
 
     @Override
@@ -87,11 +87,11 @@ public class DictionaryServiceImpl implements DictionaryService {
             if (dictionary.getSystem()) {
                 throw new BizException(String.format("%s 是系统级字典, 不允许删除 !", dictionary.getDictKey()));
             }
-            int childDict = dictionaryDao.countByParentId(dictionary.getDictId());
+            int childDict = dictionaryDao.countByParentId(dictionary.getId());
             if (childDict > 0) {
                 throw new BizException(String.format("请先删除 %s 的子字典数据 !", dictionary.getDictKey()));
             }
-            validIds.add(dictionary.getDictId());
+            validIds.add(dictionary.getId());
         }
         return dictionaryDao.deleteByIds(validIds.toArray(new Long[validIds.size()]));
     }
@@ -117,10 +117,10 @@ public class DictionaryServiceImpl implements DictionaryService {
         }
 
         Dictionary result = new Dictionary();
-        result.setDictId(0L);
+        result.setId(0L);
 
         for (String key : keys) {
-            result = dictionaryDao.findByKeyAndParentId(key, result.getDictId());
+            result = dictionaryDao.findByKeyAndParentId(key, result.getId());
         }
         return result;
     }
@@ -133,7 +133,7 @@ public class DictionaryServiceImpl implements DictionaryService {
             return Collections.emptyList();
         }
 
-        return findChildByParentId(rootDict.getDictId());
+        return findChildByParentId(rootDict.getId());
     }
 
     @Override
@@ -143,7 +143,7 @@ public class DictionaryServiceImpl implements DictionaryService {
         if (parentDict == null) {
             return Collections.emptyList();
         }
-        return findChildByParentId(parentDict.getDictId());
+        return findChildByParentId(parentDict.getId());
     }
 
     @Override

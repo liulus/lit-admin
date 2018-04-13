@@ -1,15 +1,15 @@
 package com.github.lit.security.controller;
 
-import com.github.lit.commons.context.ResultConst;
 import com.github.lit.plugin.context.PluginConst;
+import com.github.lit.plugin.web.ViewName;
 import com.github.lit.security.model.Role;
 import com.github.lit.security.model.RoleQo;
 import com.github.lit.security.service.RoleService;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * User : liulu
@@ -23,41 +23,35 @@ public class RoleController {
     @Resource
     private RoleService roleService;
 
-    @RequestMapping("/list")
-    public String list(RoleQo roleQo, Model model) {
-        model.addAttribute(ResultConst.RESULT, roleService.findPageList(roleQo));
-        return "role";
+    @GetMapping
+    @ViewName("role")
+    public List<Role> list(RoleQo roleQo) {
+        return roleService.findPageList(roleQo);
     }
 
-    @RequestMapping("/bind/authority")
-    public String bindAuthority(Long roleId, Long[] authorityIds) {
+    @PostMapping("/bind/authority")
+    public void bindAuthority(Long roleId, Long[] authorityIds) {
         roleService.bindAuthority(roleId, authorityIds);
-        return "";
     }
 
-    @RequestMapping("/get")
-    public String get(Long id, Model model) {
-        model.addAttribute(ResultConst.RESULT, roleService.findById(id));
-        return "";
+    @GetMapping("/{id}")
+    public Role get(Long id) {
+        return roleService.findById(id);
     }
 
-    @RequestMapping("/add")
-    public String add(Role role, Model model) {
-        roleService.insert(role);
-        return "";
+    @PostMapping
+    public Long add(Role role) {
+        return roleService.insert(role);
     }
 
-    @RequestMapping("/update")
-    public String update(Role role, Model model) {
-
+    @PutMapping
+    public void update(Role role) {
         roleService.update(role);
-        return "";
     }
 
-    @RequestMapping("/delete")
-    public String delete(Long... ids) {
+    @DeleteMapping("/delete")
+    public void delete(Long[] ids) {
         roleService.delete(ids);
-        return "";
     }
 
 }

@@ -61,15 +61,15 @@
             <#list data as item>
             <tr>
                 <td class="text-center">
-                    <input class="check-ls" name="ids" type="checkbox" value="${item.dictId?c}">
+                    <input class="check-ls" name="ids" type="checkbox" value="${item.id?c}">
                 </td>
                 <td>${item?counter}</td>
                 <td>
-                    <a href="${rc.contextPath}/plugin/dictionary?parentId=${item.dictId?c}">${item.dictKey!?html}</a>
+                    <a href="${rc.contextPath}/plugin/dictionary?parentId=${item.id?c}">${item.dictKey!?html}</a>
                 </td>
                 <td>${item.dictValue!?html}</td>
                 <td>${item.orderNum!?c}</td>
-                <td>${item.memo!?html}</td>
+                <td>${item.remark!?html}</td>
             </tr>
             <#else>
                 <@AdminLayout.emptyData 6/>
@@ -82,7 +82,7 @@
     <div class="modal-body">
         <form id="form-edit" class="form-horizontal">
             <input type="hidden" name="parentId" value="${dictionaryQo.parentId?c}">
-            <input type="hidden" name="dictId" value="${r'${dictId}'}">
+            <input type="hidden" name="id" value="${r'${id}'}">
             <div class="form-group">
                 <span class="control-label col-sm-6"><i class="text-danger">*&nbsp;</i>字典key :</span>
                 <div class="col-sm-16">
@@ -104,7 +104,7 @@
             <div class="form-group">
                 <span class="control-label col-sm-6"><i class="text-danger">*&nbsp;</i>备注 :</span>
                 <div class="col-sm-16">
-                    <textarea name="memo" class="form-control" rows="3">${r'${memo}'}</textarea>
+                    <textarea name="remark" class="form-control" rows="3">${r'${remark}'}</textarea>
                 </div>
             </div>
         </form>

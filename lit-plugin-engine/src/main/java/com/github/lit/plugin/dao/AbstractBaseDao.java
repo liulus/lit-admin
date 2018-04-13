@@ -21,7 +21,7 @@ import java.util.List;
  * Date : 2018-03-18 11:41
  * version $Id: AbstractBaseDao.java, v 0.1 Exp $
  */
-public abstract class AbstractBaseDao<PO, QO extends Page> implements BaseDao<PO, QO> {
+public abstract class AbstractBaseDao<PO> implements BaseDao<PO> {
 
     @Resource
     protected JdbcTools jdbcTools;
@@ -68,39 +68,44 @@ public abstract class AbstractBaseDao<PO, QO extends Page> implements BaseDao<PO
     }
 
     @Override
-    public PO findByProperty(String property, Object value) {
-        return jdbcTools.select(poClass).where(property).equalsTo(value).single();
+    public List<PO> findByIds(Long[] ids) {
+        return jdbcTools.findByIds(poClass, ids);
     }
 
     @Override
-    public PO findSingle(QO qo) {
+    public PO findByProperty(String property, Object value) {
+        return getSelect().where(property).equalsTo(value).single();
+    }
+
+    @Override
+    public <QO> PO findSingle(QO qo) {
         Select<PO> select = getSelect();
         buildCondition(select, qo);
         return select.single();
     }
 
     @Override
-    public List<PO> findPageList(QO qo) {
+    public <QO extends Page> List<PO> findPageList(QO qo) {
         Select<PO> select = getSelect();
         this.buildCondition(select, qo);
         return select.page(qo).list();
     }
 
     @Override
-    public List<PO> findList(QO qo) {
+    public <QO> List<PO> findList(QO qo) {
         Select<PO> select = getSelect();
         this.buildCondition(select, qo);
         return select.list();
     }
 
     @Override
-    public int count(QO qo) {
+    public <QO> int count(QO qo) {
         Select<PO> select = getSelect();
         this.buildCondition(select, qo);
         return select.count();
     }
 
-    protected void buildCondition(Select<PO> select, QO qo) {
+    protected void buildCondition(Select<PO> select, Object qo) {
 
         Field[] poFields = poClass.getDeclaredFields();
 

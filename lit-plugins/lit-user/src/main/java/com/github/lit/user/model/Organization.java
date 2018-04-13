@@ -27,7 +27,7 @@ public class Organization implements Serializable{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long orgId;
+    private Long id;
 
     /** 父机构 Id */
     private Long parentId;
@@ -56,6 +56,6 @@ public class Organization implements Serializable{
     private String address;
 
     /** 备注 */
-    private String memo;
+    private String remark;
 
 }

@@ -10,7 +10,7 @@ import java.util.List;
  * Date : 2018-03-18 11:35
  * version $Id: BaseDao.java, v 0.1 Exp $
  */
-public interface BaseDao<PO, QO extends Page> {
+public interface BaseDao<PO> {
 
     Long insert(PO po);
 
@@ -24,15 +24,17 @@ public interface BaseDao<PO, QO extends Page> {
 
     PO findById(Long id);
 
+    List<PO> findByIds(Long[] ids);
+
     PO findByProperty(String property, Object value);
 
-    PO findSingle(QO qo);
+    <QO> PO findSingle(QO qo);
 
-    List<PO> findPageList(QO qo);
+    <QO extends Page> List<PO> findPageList(QO qo);
 
-    List<PO> findList(QO qo);
+    <QO> List<PO> findList(QO qo);
 
-    int count(QO qo);
+    <QO> int count(QO qo);
 
 
 

@@ -67,7 +67,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public void update(User user) {
 
-        User oldUser = userDao.findById(user.getUserId());
+        User oldUser = userDao.findById(user.getId());
 
         if (!Objects.equals(oldUser.getUserName(), user.getUserName())) {
             checkUserName(user.getUserName());

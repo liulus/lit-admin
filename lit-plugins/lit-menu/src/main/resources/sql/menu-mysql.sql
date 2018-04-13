@@ -8,7 +8,7 @@ CREATE TABLE lit_menu
     icon VARCHAR(64) NOT NULL DEFAULT '' COMMENT '菜单图标',
     url VARCHAR (256) NOT NULL  DEFAULT '' COMMENT '链接',
     order_num SMALLINT UNSIGNED NOT NULL DEFAULT 0 COMMENT '顺序号',
-    memo VARCHAR(512) NOT NULL  DEFAULT '' COMMENT '备注',
+    remark VARCHAR(512) NOT NULL  DEFAULT '' COMMENT '备注',
     type VARCHAR(64) NOT NULL DEFAULT ''  COMMENT '菜单类型',
     module VARCHAR(64) NOT NULL  DEFAULT '' COMMENT '所属模块',
     is_enable TINYINT(1) NOT NULL default 1 COMMENT '是否启用',

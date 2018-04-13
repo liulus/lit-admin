@@ -55,7 +55,7 @@
             <#list data as item>
             <tr>
                 <td class="text-center">
-                    <input class="check-ls" name="ids" type="checkbox" value="${item.userId?c}">
+                    <input class="check-ls" name="ids" type="checkbox" value="${item.id?c}">
                 </td>
                 <td>${item?counter}</td>
                 <td>${item.userName?html}</td>
@@ -73,7 +73,7 @@
 <script type="text/template" id="edit-tpl">
     <div class="modal-body">
         <form id="form-edit" class="form-horizontal" action="">
-            <input type="hidden" name="userId" value="${r'${userId}'}">
+            <input type="hidden" name="id" value="${r'${id}'}">
             <div class="form-group">
                 <span class="control-label col-sm-6"><i class="text-danger">*&nbsp;</i>编号 :</span>
                 <div class="col-sm-16">

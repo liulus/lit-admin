@@ -52,11 +52,11 @@ importJs=['libs/zTree/3.5/js/ztree.all.min.js', "js/menu.js"]>
             <#list data as item>
             <tr>
                 <td class="text-center">
-                    <input class="check-ls" name="ids" type="checkbox" value="${item.menuId?c}">
+                    <input class="check-ls" name="ids" type="checkbox" value="${item.id?c}">
                 </td>
             <#--<td text="${item?counter}"></td>-->
                 <td>
-                    <a href="${rc.contextPath}/plugin/menu?parentId=${item.menuId?c}">${item.code!?html}</a>
+                    <a href="${rc.contextPath}/plugin/menu?parentId=${item.id?c}">${item.code!?html}</a>
                 </td>
                 <td>${item.name!?html}</td>
                 <td><i class="fa ${item.icon}"></i></td>
@@ -73,7 +73,7 @@ importJs=['libs/zTree/3.5/js/ztree.all.min.js', "js/menu.js"]>
                         </a>
                     </div>
                 </td>
-            <#--<td>${item.memo!?html}</td>-->
+            <#--<td>${item.remark!?html}</td>-->
                 <td>
                     <a class="data-move btn btn-xs btn-primary">
                         <i class="fa fa-random"></i>&nbsp;移动
@@ -95,7 +95,7 @@ importJs=['libs/zTree/3.5/js/ztree.all.min.js', "js/menu.js"]>
     <div class="modal-body">
         <form id="form-edit" class="form-horizontal" action="">
             <input type="hidden" name="parentId" value="${menuQo.parentId?c}">
-            <input type="hidden" name="menuId" value="${r'${menuId}'}">
+            <input type="hidden" name="id" value="${r'${id}'}">
             <div class="form-group">
                 <span class="control-label col-sm-6"><i class="text-danger">*&nbsp;</i>菜单编码 :</span>
                 <div class="col-sm-16">
@@ -141,7 +141,7 @@ importJs=['libs/zTree/3.5/js/ztree.all.min.js', "js/menu.js"]>
             <div class="form-group">
                 <span class="control-label col-sm-6"><i class="text-danger">*&nbsp;</i>备注 :</span>
                 <div class="col-sm-16">
-                    <textarea name="memo" class="form-control" rows="3">${r'${memo}'}</textarea>
+                    <textarea name="remark" class="form-control" rows="3">${r'${remark}'}</textarea>
                 </div>
             </div>
         </form>

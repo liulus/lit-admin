@@ -66,7 +66,7 @@ public class MenuController {
             return;
         }
         for (MenuVo.Tree menu : parentMenus) {
-            List<MenuVo.Tree> children = menuMap.get(menu.getMenuId());
+            List<MenuVo.Tree> children = menuMap.get(menu.getId());
             if (!CollectionUtils.isEmpty(children)) {
                 menu.setChildren(children);
                 setChildMenu(children, menuMap);
@@ -93,24 +93,24 @@ public class MenuController {
     /**
      * 启用菜单
      *
-     * @param menuId
+     * @param id
      * @return
      */
     @PostMapping("/enable")
-    public String enable(Long menuId) {
-        menuService.changeStatus(menuId, true);
+    public String enable(Long id) {
+        menuService.changeStatus(id, true);
         return "";
     }
 
     /**
      * 禁用菜单
      *
-     * @param menuId
+     * @param id
      * @return
      */
     @PostMapping("/disable")
-    public String disable(Long menuId) {
-        menuService.changeStatus(menuId, false);
+    public String disable(Long id) {
+        menuService.changeStatus(id, false);
         return "";
     }
 

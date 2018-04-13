@@ -19,7 +19,7 @@ public class UserQo extends Page{
 
     private static final long serialVersionUID = 3920536469407790559L;
 
-    private Long userId;
+    private Long id;
     
     private String keyword;
 

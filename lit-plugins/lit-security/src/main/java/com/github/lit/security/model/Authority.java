@@ -10,7 +10,6 @@ import lombok.Setter;
 import lombok.ToString;
 
 import java.io.Serializable;
-import java.util.Objects;
 
 /**
  * User : liulu
@@ -27,40 +26,26 @@ public class Authority implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long authorityId;
+    private Long id;
 
     /**
      * 权限码
      */
-    private String authorityCode;
+    private String code;
 
     /**
      * 权限码名称
      */
-    private String authorityName;
+    private String name;
 
     /**
      * 权限类型
      */
-    private String authorityType;
+    private String module;
 
     /**
      * 备注
      */
-    private String memo;
+    private String remark;
 
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Authority)) return false;
-        Authority authority = (Authority) o;
-        return Objects.equals(authorityId, authority.authorityId) &&
-                Objects.equals(authorityCode, authority.authorityCode);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(authorityId, authorityCode);
-    }
 }

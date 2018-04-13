@@ -14,7 +14,7 @@ import java.util.List;
 public class AbstractBaseService<PO, QO extends Page> implements BaseService<PO, QO> {
 
     @Resource
-    private BaseDao<PO, QO> baseDao;
+    private BaseDao<PO> baseDao;
 
     @Override
     public Long insert(PO po) {

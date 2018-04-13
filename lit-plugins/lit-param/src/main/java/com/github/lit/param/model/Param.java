@@ -45,7 +45,7 @@ public class Param implements Serializable {
     /**
      * 备注
      */
-    private String memo;
+    private String remark;
 
     /**
      * 是否系统级

@@ -26,22 +26,22 @@ public class Role implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long roleId;
+    private Long id;
 
     /**
      * 角色编号
      */
-    private String roleCode;
+    private String code;
 
     /**
      * 角色名
      */
-    private String roleName;
+    private String name;
 
     /**
      * 角色备注
      */
-    private String memo;
+    private String remark;
 
 
 }

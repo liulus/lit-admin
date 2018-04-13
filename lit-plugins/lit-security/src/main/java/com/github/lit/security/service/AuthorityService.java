@@ -42,10 +42,10 @@ public interface AuthorityService {
     /**
      * 根据权限码查询权限
      *
-     * @param authorityCode 权限码
+     * @param code 权限码
      * @return 权限
      */
-    Authority findByCode(String authorityCode);
+    Authority findByCode(String code);
 
     /**
      * 插入一条权限记录

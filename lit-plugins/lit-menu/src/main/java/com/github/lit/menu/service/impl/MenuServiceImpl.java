@@ -26,7 +26,6 @@ import java.util.Objects;
 @Transactional
 public class MenuServiceImpl implements MenuService {
 
-
     @Resource
     private MenuDao menuDao;
 
@@ -54,7 +53,7 @@ public class MenuServiceImpl implements MenuService {
     @Event(MenuUpdateEvent.class)
     public int update(Menu menu) {
 
-        Menu old = menuDao.findById(menu.getMenuId());
+        Menu old = menuDao.findById(menu.getId());
         if (old == null) {
             return 0;
         }
@@ -86,11 +85,11 @@ public class MenuServiceImpl implements MenuService {
         List<Long> validIds = new ArrayList<>(menus.size());
 
         for (Menu menu : menus) {
-            int count = menuDao.count(MenuQo.builder().parentId(menu.getMenuId()).build());
+            int count = menuDao.count(MenuQo.builder().parentId(menu.getId()).build());
             if (count > 0) {
                 throw new AppException(String.format("请先删除 %s 的子菜单数据 !", menu.getName()));
             }
-            validIds.add(menu.getMenuId());
+            validIds.add(menu.getId());
         }
         return menuDao.deleteByIds(validIds.toArray(new Long[validIds.size()]));
     }
@@ -119,9 +118,9 @@ public class MenuServiceImpl implements MenuService {
 
     @Override
     @Event(MenuUpdateEvent.class)
-    public void changeStatus(Long menuId, boolean isEnable) {
+    public void changeStatus(Long id, boolean isEnable) {
         Menu menu = new Menu();
-        menu.setMenuId(menuId);
+        menu.setId(id);
         menu.setEnable(isEnable);
         menuDao.update(menu);
     }

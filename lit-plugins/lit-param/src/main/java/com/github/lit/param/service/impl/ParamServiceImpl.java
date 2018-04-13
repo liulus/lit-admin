@@ -39,7 +39,7 @@ public class ParamServiceImpl implements ParamService {
             select.and()
                     .bracket(Param::getCode).like(qo.getKeyword())
                     .or(Param::getValue).like(qo.getKeyword())
-                    .or(Param::getMemo).like(qo.getKeyword())
+                    .or(Param::getRemark).like(qo.getKeyword())
                     .end();
         }
 

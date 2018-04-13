@@ -31,7 +31,7 @@ public class Menu implements Serializable {
      */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long menuId;
+    private Long id;
 
     /**
      * 父菜单Id
@@ -66,7 +66,7 @@ public class Menu implements Serializable {
     /**
      * 备注
      */
-    private String memo;
+    private String remark;
 
     /**
      * 菜单类型

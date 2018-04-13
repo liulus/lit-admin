@@ -80,7 +80,6 @@ $(function () {
         });
     }
 
-
     if (pageConfig.bindDelete) {
         /** 删除功能 */
         $('#data-del').on('click', function (e) {
@@ -126,7 +125,7 @@ function getId(e) {
 
 var Http = {
 
-    request: function (url, params, resCall, method) {
+    request: function (url, params, resCall, method, async) {
 
         if (method === 'delete') {
             var processed = url.indexOf('?') >= 0 ? params : '?' + params
@@ -149,14 +148,17 @@ var Http = {
             type: method,
             success: resCall
         }
+        if (async) {
+            ajaxParam.async = async
+        }
         if (method !== 'delete') {
             ajaxParam.data = params
         }
         $.ajax(ajaxParam)
     },
 
-    get: function (url, resCall) {
-        this.request(url, null, resCall, 'get')
+    get: function (url, resCall, async) {
+        this.request(url, null, resCall, 'get', async)
     },
 
     post: function (url, params, resCall) {

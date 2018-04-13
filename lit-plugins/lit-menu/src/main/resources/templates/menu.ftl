@@ -123,7 +123,7 @@ importJs=['libs/zTree/3.5/js/ztree.all.min.js', "js/menu.js"]>
             <div class="form-group">
                 <span class="control-label col-sm-6">顺序号 :</span>
                 <div class="col-sm-16">
-                    <input type="text" name="orderNum" value="${r'${orderNum}'}" class="form-control">
+                    <input type="number" name="orderNum" value="${r'${orderNum}'}" class="form-control">
                 </div>
             </div>
             <div class="form-group">

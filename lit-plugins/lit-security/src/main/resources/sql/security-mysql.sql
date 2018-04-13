@@ -8,7 +8,7 @@ CREATE TABLE lit_authority
     COMMENT '权限码名称',
     module   VARCHAR(64) DEFAULT ''              NOT NULL
     COMMENT '权限类型',
-    remark     VARCHAR(512) DEFAULT ''             NOT NULL
+    remark   VARCHAR(512) DEFAULT ''             NOT NULL
     COMMENT '备注',
     sys_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
     ON UPDATE CURRENT_TIMESTAMP
@@ -26,7 +26,7 @@ CREATE TABLE lit_role (
     COMMENT '角色编号',
     name     VARCHAR(64) DEFAULT ''                       NOT NULL
     COMMENT '角色名',
-    remark     VARCHAR(512) DEFAULT ''                      NOT NULL
+    remark   VARCHAR(512) DEFAULT ''                      NOT NULL
     COMMENT '备注',
     sys_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP          NOT NULL
     ON UPDATE CURRENT_TIMESTAMP

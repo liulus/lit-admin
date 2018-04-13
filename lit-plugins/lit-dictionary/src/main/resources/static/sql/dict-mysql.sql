@@ -1,7 +1,7 @@
 -- dictionary
 CREATE TABLE lit_dictionary
 (
-  dict_id    INT UNSIGNED PRIMARY KEY NOT NULL AUTO_INCREMENT
+  id    INT UNSIGNED PRIMARY KEY NOT NULL AUTO_INCREMENT
   COMMENT '字典Id',
   parent_id  INT UNSIGNED             NOT NULL DEFAULT 0
   COMMENT '上级字典Id',

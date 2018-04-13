@@ -2,7 +2,7 @@ DROP TABLE IF EXISTS lit_organization;
 DROP TABLE IF EXISTS lit_user;
 
 CREATE TABLE lit_organization (
-    org_id      INT UNSIGNED PRIMARY KEY NOT NULL AUTO_INCREMENT
+    id      INT UNSIGNED PRIMARY KEY NOT NULL AUTO_INCREMENT
     COMMENT '机构id',
     parent_id   INT UNSIGNED DEFAULT 0   NOT NULL
     COMMENT '父机构Id',
@@ -37,7 +37,7 @@ CREATE INDEX idx_pid_level
 
 CREATE TABLE lit_user
 (
-    user_id     INT UNSIGNED PRIMARY KEY           NOT NULL AUTO_INCREMENT
+    id     INT UNSIGNED PRIMARY KEY           NOT NULL AUTO_INCREMENT
     COMMENT '用户Id',
     org_id      INT UNSIGNED DEFAULT 0             NOT NULL
     COMMENT '机构Id',

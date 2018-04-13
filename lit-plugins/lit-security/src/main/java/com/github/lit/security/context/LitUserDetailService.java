@@ -48,12 +48,12 @@ public class LitUserDetailService implements UserDetailsService {
 
         List<Authority> authorities = new ArrayList<>();
         for (Role role : roles) {
-            authorities.addAll(authorityService.findByRoleId(role.getRoleId()));
+            authorities.addAll(authorityService.findByRoleId(role.getId()));
         }
 
         List<GrantedAuthority> auths = authorities.stream()
                 .distinct()
-                .map(authority -> new SimpleGrantedAuthority(authority.getAuthorityCode()))
+                .map(authority -> new SimpleGrantedAuthority(authority.getCode()))
                 .collect(Collectors.toList());
 
         userDetail.setRoles(roles);

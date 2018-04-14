@@ -44,6 +44,11 @@ public class Authority implements Serializable {
     private String module;
 
     /**
+     * 类型
+     */
+    private String function;
+
+    /**
      * 备注
      */
     private String remark;

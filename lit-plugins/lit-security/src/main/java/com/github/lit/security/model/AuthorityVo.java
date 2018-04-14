@@ -1,5 +1,6 @@
 package com.github.lit.security.model;
 
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -24,4 +25,25 @@ public class AuthorityVo extends Authority {
     private Boolean isParent;
 
     private List<AuthorityVo> children;
+
+
+    @Data
+    public static class TreeNode {
+
+        private Long id;
+
+        private String code;
+
+        private String name;
+
+        private String module;
+
+        private String function;
+
+        private Boolean checked;
+
+        private List<TreeNode> children;
+
+    }
+
 }

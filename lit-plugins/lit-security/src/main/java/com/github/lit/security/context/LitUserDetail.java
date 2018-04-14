@@ -45,7 +45,7 @@ public class LitUserDetail extends LoginUser implements UserDetails {
 
     @Override
     public boolean isAccountNonLocked() {
-        return getLock() == null ? true : getLock();
+        return getLock() != null && !getLock();
     }
 
     @Override

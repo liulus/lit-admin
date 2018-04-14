@@ -1,6 +1,6 @@
 var page = {
     topic: '角色',
-    restUrl: 'plugin/role'
+    restUrl: '/plugin/role'
 }
 
 $(function () {
@@ -31,7 +31,7 @@ $(function () {
                 };
                 authTree = $.fn.zTree.init($('#authority-tree'), authTreeConfig, authData);
                 authTree.expandAll(true)
-            }, true)
+            }, false)
         }
         return authTree
     }
@@ -54,7 +54,9 @@ $(function () {
                 Http.get(contextPath + '/plugin/role.json?roleId=' + roleId, function (res) {
                     $.each(res.data, function (index, value) {
                         var node = authTree.getNodeByParam('code', value.code)
-                        authTree.checkNode(node, true)
+                        if (node) {
+                            authTree.checkNode(node, true)
+                        }
                     })
                 })
             },

@@ -1,5 +1,6 @@
 package com.github.lit.security.service;
 
+import com.github.lit.security.model.AuthorityVo;
 import com.github.lit.security.model.Role;
 import com.github.lit.security.model.RoleQo;
 
@@ -74,4 +75,6 @@ public interface RoleService {
      * @return List<Role>
      */
     List<Role> findByUserId(Long userId);
+
+    List<AuthorityVo.TreeNode> findAuthorityTree(Long roleId);
 }

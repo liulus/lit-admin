@@ -1,13 +1,13 @@
 <#import "layout/list-layout.ftl" as AdminLayout>
 <@AdminLayout.listLayout title='角色管理'
-importCss==['libs/zTree/3.5/css/metroStyle/metroStyle.css']
+importCss=['libs/zTree/3.5/css/metroStyle/metroStyle.css']
 importJs=['libs/zTree/3.5/js/ztree.all.min.js', 'js/role.js']>
 <!-- 导航条 -->
 <div class="row">
     <ol class="breadcrumb">
         <li><a href="#"><i class="glyphicon glyphicon-home"></i></a></li>
         <li class="active">系统管理</li>
-        <li class="active">参数管理</li>
+        <li class="active">角色管理</li>
     </ol>
 </div>
 
@@ -48,7 +48,8 @@ importJs=['libs/zTree/3.5/js/ztree.all.min.js', 'js/role.js']>
                 <td>${item.name!?html}</td>
                 <td>${item.remark!?html}</td>
                 <td>
-                    <a class="data-authorize btn btn-xs btn-primary">
+                    <a href="${rc.contextPath}/plugin/role/bind/authority?roleId=${item.id?c}"
+                       class="btn btn-xs btn-primary">
                         <i class="fa fa-random"></i>&nbsp;分配权限
                     </a>
                 </td>

@@ -24,8 +24,10 @@
     <#nested>
 
     <!-- 分页条 -->
-    <#if data?size &gt; 0>
-        <@pagebar pageInfo=pageInfo queryForm='#query-form'/>
+    <#if data!?size &gt; 0>
+        <#if pageInfo??>
+            <@pagebar pageInfo=pageInfo queryForm='#query-form'/>
+        </#if>
     </#if>
 </div>
 

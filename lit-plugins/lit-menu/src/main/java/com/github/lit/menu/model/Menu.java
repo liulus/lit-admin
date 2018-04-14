@@ -11,7 +11,6 @@ import lombok.Setter;
 import lombok.ToString;
 
 import java.io.Serializable;
-import java.util.List;
 
 /**
  * User : liulu
@@ -79,6 +78,9 @@ public class Menu implements Serializable {
     @Column(name = "is_enable")
     private Boolean enable;
 
-    private List<Menu> children;
+    /**
+     * 权限码
+     */
+    private String authCode;
 
 }

@@ -7,7 +7,9 @@ CREATE TABLE lit_authority
     name     VARCHAR(128) DEFAULT ''             NOT NULL
     COMMENT '权限码名称',
     module   VARCHAR(64) DEFAULT ''              NOT NULL
-    COMMENT '权限类型',
+    COMMENT '所属模块',
+    function VARCHAR(64) DEFAULT ''              NOT NULL
+    COMMENT '所属功能',
     remark   VARCHAR(512) DEFAULT ''             NOT NULL
     COMMENT '备注',
     sys_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL

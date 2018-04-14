@@ -1,22 +1,20 @@
 package com.github.lit.security.service.impl;
 
+import com.github.lit.commons.bean.BeanUtils;
 import com.github.lit.commons.exception.BizException;
 import com.github.lit.security.dao.AuthorityDao;
 import com.github.lit.security.dao.RoleAuthorityDao;
 import com.github.lit.security.dao.RoleDao;
-import com.github.lit.security.model.Authority;
-import com.github.lit.security.model.Role;
-import com.github.lit.security.model.RoleAuthority;
-import com.github.lit.security.model.RoleQo;
+import com.github.lit.security.model.*;
 import com.github.lit.security.service.RoleService;
+import com.github.lit.security.util.AuthorityUtils;
 import com.google.common.base.Strings;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -135,6 +133,80 @@ public class RoleServiceImpl implements RoleService {
     @Override
     public List<Role> findByUserId(Long userId) {
         return roleDao.findByUserId(userId);
+    }
+
+    @Override
+    public List<AuthorityVo.TreeNode> findAuthorityTree(Long roleId) {
+
+        List<Authority> allAuthorities = authorityDao.getSelect().list();
+        if (CollectionUtils.isEmpty(allAuthorities)) {
+            return Collections.emptyList();
+        }
+
+        List<AuthorityVo.TreeNode> result = new ArrayList<>();
+
+        List<Long> roleAuthIds = roleAuthorityDao.findByRoleId(roleId).stream()
+                .map(RoleAuthority::getAuthorityId)
+                .collect(Collectors.toList());
+
+        // 按 module 分组, 并设置节点是否选中
+        Map<String, List<AuthorityVo.TreeNode>> moduleMap = allAuthorities.stream()
+                .map(auth -> BeanUtils.convert(auth, new AuthorityVo.TreeNode()))
+                .peek(auth -> auth.setChecked(roleAuthIds.contains(auth.getId())))
+                .collect(Collectors.groupingBy(AuthorityVo.TreeNode::getModule));
+
+
+        for (Map.Entry<String, List<AuthorityVo.TreeNode>> moduleEntry : moduleMap.entrySet()) {
+            List<AuthorityVo.TreeNode> moduleEntryValue = moduleEntry.getValue();
+            if (CollectionUtils.isEmpty(moduleEntryValue)) {
+                continue;
+            }
+            AuthorityVo.TreeNode moduleNode = new AuthorityVo.TreeNode();
+            moduleNode.setChecked(true);
+            moduleNode.setCode(moduleEntry.getKey());
+            moduleNode.setName(AuthorityUtils.getModuleName(moduleEntry.getKey()));
+
+            // 按 function 进行分组, 并设置moduleNode 是否选中
+            Map<String, List<AuthorityVo.TreeNode>> funcMap = moduleEntryValue.stream()
+                    .peek(funcAuth -> {
+                        if (!funcAuth.getChecked()) {
+                            moduleNode.setChecked(false);
+                        }
+                    })
+                    .filter(funcAuth -> !StringUtils.isEmpty(funcAuth.getFunction()))
+                    .collect(Collectors.groupingBy(AuthorityVo.TreeNode::getFunction));
+
+            List<AuthorityVo.TreeNode> moduleChild = new ArrayList<>();
+            for (Map.Entry<String, List<AuthorityVo.TreeNode>> funcEntry : funcMap.entrySet()) {
+                List<AuthorityVo.TreeNode> funcChild = funcEntry.getValue();
+                if (CollectionUtils.isEmpty(funcChild)) {
+                    continue;
+                }
+                AuthorityVo.TreeNode funcNode = new AuthorityVo.TreeNode();
+                funcNode.setChecked(true);
+                funcNode.setCode(funcEntry.getKey());
+                funcNode.setName(AuthorityUtils.getFunctionName(funcEntry.getKey()));
+
+                funcNode.setChildren(funcChild);
+                // funcNode 子节点有一个未选中 就是未选中
+                for (AuthorityVo.TreeNode treeNode : funcChild) {
+                    if (!treeNode.getChecked()) {
+                        funcNode.setChecked(false);
+                        break;
+                    }
+                }
+                moduleChild.add(funcNode);
+            }
+            // 添加所有 没有function的节点
+            moduleChild.addAll(moduleEntryValue.stream()
+                    .filter(funcAuth -> StringUtils.isEmpty(funcAuth.getFunction()))
+                    .collect(Collectors.toList()));
+
+            moduleNode.setChildren(moduleChild);
+            result.add(moduleNode);
+        }
+
+        return result;
     }
 
 

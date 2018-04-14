@@ -74,6 +74,8 @@ CREATE TABLE lit_menu
     COMMENT '所属模块',
     is_enable TINYINT(1)                NOT NULL  DEFAULT 1
     COMMENT '是否启用',
+    auth_code VARCHAR(64)               NOT NULL  DEFAULT ''
+    COMMENT '权限码',
     sys_time  TIMESTAMP                 NOT NULL  DEFAULT CURRENT_TIMESTAMP
     ON UPDATE CURRENT_TIMESTAMP
 )
@@ -198,8 +200,10 @@ CREATE TABLE lit_authority
     COMMENT '权限码',
     name     VARCHAR(128) DEFAULT ''             NOT NULL
     COMMENT '权限码名称',
+    function VARCHAR(64) DEFAULT ''              NOT NULL
+    COMMENT '所属功能',
     module   VARCHAR(64) DEFAULT ''              NOT NULL
-    COMMENT '权限类型',
+    COMMENT '所属模块',
     remark   VARCHAR(512) DEFAULT ''             NOT NULL
     COMMENT '备注',
     sys_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
@@ -261,32 +265,61 @@ CREATE UNIQUE INDEX uk_user_role
 
 DELETE FROM lit_menu
 WHERE code LIKE 'system%';
-INSERT INTO lit_menu (parent_id, code, name, icon, url, order_num, remark, type, module, is_enable)
-VALUES (0, 'system', '系统管理', 'fa-cog', '', 1, '', 'menu_type_left', '', TRUE);
-INSERT INTO lit_menu (parent_id, code, name, icon, url, order_num, remark, type, module, is_enable) VALUES
-    (last_insert_id(), 'system_dictionary', '字典管理', 'fa-book', '/plugin/dictionary', 3, '', 'menu_type_left', '', TRUE);
-INSERT INTO lit_menu (parent_id, code, name, icon, url, order_num, remark, type, module, is_enable)
-VALUES (last_insert_id() - 1, 'system_menu', '菜单管理', 'fa-list-ul', '/plugin/menu', 1, '', 'menu_type_left', '', TRUE);
-INSERT INTO lit_menu (parent_id, code, name, icon, url, order_num, remark, type, module, is_enable)
-VALUES (last_insert_id() - 2, 'system_param', '参数管理', 'fa-wrench', '/plugin/param', 2, '', 'menu_type_left', '', TRUE);
-INSERT INTO lit_menu (parent_id, code, name, icon, url, order_num, remark, type, module, is_enable)
-VALUES (last_insert_id() - 3, 'system_user', '用户管理', 'fa-user', '/plugin/user', 5, '', 'menu_type_left', '', TRUE);
-INSERT INTO lit_menu (parent_id, code, name, icon, url, order_num, remark, type, module, is_enable) VALUES
-    (last_insert_id() - 4, 'system_organization', '组织管理', 'fa-sitemap', '/plugin/org', 4, '', 'menu_type_left', '',
-     TRUE);
-INSERT INTO lit_menu (parent_id, code, name, icon, url, order_num, remark, type, module, is_enable)
-VALUES (last_insert_id() - 5, 'system_role', '角色管理', 'fa-lock', '/plugin/role', 6, '', 'menu_type_left', '', TRUE);
-INSERT INTO lit_menu (parent_id, code, name, icon, url, order_num, remark, type, module, is_enable) VALUES
-    (last_insert_id() - 6, 'system_authority', '权限管理', 'fa-key', '/plugin/authority', 7, '', 'menu_type_left', '',
-     TRUE);
+
+INSERT INTO lit_menu (parent_id, code, name, icon, url, order_num, type, auth_code)
+VALUES (0, 'system', '系统管理', 'fa-cog', '', 1, 'menu_type_left', '');
+INSERT INTO lit_menu (parent_id, code, name, icon, url, order_num, type, auth_code)
+VALUES (last_insert_id(), 'system_dictionary', '字典管理', 'fa-book', '/plugin/dictionary', 3, 'menu_type_left',
+        'view_dictionary');
+INSERT INTO lit_menu (parent_id, code, name, icon, url, order_num, type, auth_code)
+VALUES (last_insert_id() - 1, 'system_menu', '菜单管理', 'fa-list-ul', '/plugin/menu', 1, 'menu_type_left', 'view_menu');
+INSERT INTO lit_menu (parent_id, code, name, icon, url, order_num, type, auth_code)
+VALUES (last_insert_id() - 2, 'system_param', '参数管理', 'fa-wrench', '/plugin/param', 2, 'menu_type_left', 'view_param');
+INSERT INTO lit_menu (parent_id, code, name, icon, url, order_num, type, auth_code)
+VALUES (last_insert_id() - 3, 'system_user', '用户管理', 'fa-user', '/plugin/user', 5, 'menu_type_left', 'view_user');
+INSERT INTO lit_menu (parent_id, code, name, icon, url, order_num, type, auth_code)
+VALUES
+    (last_insert_id() - 4, 'system_organization', '组织管理', 'fa-sitemap', '/plugin/org', 4, 'menu_type_left', 'view_org');
+INSERT INTO lit_menu (parent_id, code, name, icon, url, order_num, type, auth_code)
+VALUES (last_insert_id() - 5, 'system_role', '角色管理', 'fa-lock', '/plugin/role', 6, 'menu_type_left', 'view_role');
+INSERT INTO lit_menu (parent_id, code, name, icon, url, order_num, type, auth_code)
+VALUES (last_insert_id() - 6, 'system_authority', '权限管理', 'fa-key', '/plugin/authority', 7, 'menu_type_left',
+        'view_authority');
+
 
 DELETE FROM lit_authority;
-INSERT INTO lit_authority (code, name, module) VALUES ('dictionary_manager', '字典管理', 'system');
-INSERT INTO lit_authority (code, name, module) VALUES ('param_manager', '参数管理', 'system');
-INSERT INTO lit_authority (code, name, module) VALUES ('menu_manager', '菜单管理', 'system');
-INSERT INTO lit_authority (code, name, module) VALUES ('user_manager', '用户管理', 'system');
-INSERT INTO lit_authority (code, name, module) VALUES ('org_manager', '组织管理', 'system');
-INSERT INTO lit_authority (code, name, module) VALUES ('role_manager', '角色管理', 'system');
+INSERT INTO lit_authority (code, name, function, module)
+VALUES ('view_dictionary', '查看字典', 'dictionary_manager', 'system');
+INSERT INTO lit_authority (code, name, function, module)
+VALUES ('add_dictionary', '新增字典', 'dictionary_manager', 'system');
+INSERT INTO lit_authority (code, name, function, module)
+VALUES ('modify_dictionary', '修改字典', 'dictionary_manager', 'system');
+INSERT INTO lit_authority (code, name, function, module)
+VALUES ('remove_dictionary', '删除字典', 'dictionary_manager', 'system');
+INSERT INTO lit_authority (code, name, function, module) VALUES ('view_param', '查看参数', 'param_manager', 'system');
+INSERT INTO lit_authority (code, name, function, module) VALUES ('add_param', '新增参数', 'param_manager', 'system');
+INSERT INTO lit_authority (code, name, function, module) VALUES ('modify_param', '修改参数', 'param_manager', 'system');
+INSERT INTO lit_authority (code, name, function, module) VALUES ('remove_param', '删除参数', 'param_manager', 'system');
+INSERT INTO lit_authority (code, name, function, module) VALUES ('view_menu', '查看菜单', 'menu_manager', 'system');
+INSERT INTO lit_authority (code, name, function, module) VALUES ('add_menu', '新增菜单', 'menu_manager', 'system');
+INSERT INTO lit_authority (code, name, function, module) VALUES ('modify_menu', '修改菜单', 'menu_manager', 'system');
+INSERT INTO lit_authority (code, name, function, module) VALUES ('remove_menu', '删除菜单', 'menu_manager', 'system');
+INSERT INTO lit_authority (code, name, function, module) VALUES ('view_user', '查看菜单', 'user_manager', 'system');
+INSERT INTO lit_authority (code, name, function, module) VALUES ('add_user', '新增菜单', 'user_manager', 'system');
+INSERT INTO lit_authority (code, name, function, module) VALUES ('modify_user', '修改菜单', 'user_manager', 'system');
+INSERT INTO lit_authority (code, name, function, module) VALUES ('remove_user', '删除菜单', 'user_manager', 'system');
+INSERT INTO lit_authority (code, name, function, module) VALUES ('view_org', '查看组织', 'org_manager', 'system');
+INSERT INTO lit_authority (code, name, function, module) VALUES ('add_org', '新增组织', 'org_manager', 'system');
+INSERT INTO lit_authority (code, name, function, module) VALUES ('modify_org', '修改组织', 'org_manager', 'system');
+INSERT INTO lit_authority (code, name, function, module) VALUES ('remove_org', '删除组织', 'org_manager', 'system');
+INSERT INTO lit_authority (code, name, function, module) VALUES ('view_role', '查看角色', 'role_manager', 'system');
+INSERT INTO lit_authority (code, name, function, module) VALUES ('add_role', '新增角色', 'role_manager', 'system');
+INSERT INTO lit_authority (code, name, function, module) VALUES ('modify_role', '修改角色', 'role_manager', 'system');
+INSERT INTO lit_authority (code, name, function, module) VALUES ('remove_role', '删除角色', 'role_manager', 'system');
+INSERT INTO lit_authority (code, name, function, module) VALUES ('view_authority', '查看权限', 'role_manager', 'system');
 
 DELETE FROM lit_user;
-INSERT INTO lit_user (org_id, code, job_num, user_name, nick_name, mobile_num, avatar, password, gender, email) VALUES (0, '001', '', 'liulu', '', '15267548275', '', '$2a$10$4d.sZRSu0mNup8TKQtamM.K4CBf9ZIwC7gMuN4B5MROP9iykCnLRC', true, '');
+INSERT INTO lit_user (org_id, code, job_num, user_name, mobile_num, avatar, password, gender)
+VALUES (0, '001', '', 'liulu', '', '15267548275', '$2a$10$4d.sZRSu0mNup8TKQtamM.K4CBf9ZIwC7gMuN4B5MROP9iykCnLRC', TRUE);
+
+

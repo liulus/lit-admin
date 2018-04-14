@@ -1,5 +1,5 @@
 <#import "layout/list-layout.ftl" as AdminLayout>
-<@AdminLayout.listLayout title='权限管理' 'js/authority.js']>
+<@AdminLayout.listLayout title='权限管理'>
 <!-- 导航条 -->
 <div class="row">
     <ol class="breadcrumb">

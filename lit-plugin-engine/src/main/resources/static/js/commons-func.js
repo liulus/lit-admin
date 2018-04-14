@@ -1,17 +1,8 @@
 $(function () {
-    var defaultPage = {
-        topic: '',
-        restUrl: '',
-        bindAdd: true,
-        bindUpdate: true,
-        bindDelete: true,
-        editTpl: '#edit-tpl',
-        editForm: '#edit-form'
-    }
 
-    var pageConfig = $.extend({}, defaultPage, page);
+    var pageConfig = getPageConfig();
 
-    var compiledEditTpl = juicer($(pageConfig.editTpl).html());
+    var compiledEditTpl = $(pageConfig.editTpl).length > 0 && juicer($(pageConfig.editTpl).html());
 
     var urlPrefix = contextPath + pageConfig.restUrl;
 
@@ -104,6 +95,27 @@ $(function () {
 
 })
 
+function getPageConfig() {
+    var defaultPage = {
+        topic: '',
+        restUrl: '',
+        bindAdd: false,
+        bindUpdate: false,
+        bindDelete: false,
+        editTpl: '#edit-tpl',
+        editForm: '#edit-form'
+    }
+
+    if (typeof page !== 'undefined') {
+        defaultPage.bindAdd = true
+        defaultPage.bindUpdate = true
+        defaultPage.bindDelete = true
+        return $.extend({}, defaultPage, page)
+    }
+
+    return defaultPage
+}
+
 
 /**
  * 全选功能
@@ -148,7 +160,7 @@ var Http = {
             type: method,
             success: resCall
         }
-        if (async) {
+        if (async !== undefined) {
             ajaxParam.async = async
         }
         if (method !== 'delete') {

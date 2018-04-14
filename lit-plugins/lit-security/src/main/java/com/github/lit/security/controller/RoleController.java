@@ -2,6 +2,7 @@ package com.github.lit.security.controller;
 
 import com.github.lit.plugin.context.PluginConst;
 import com.github.lit.plugin.web.ViewName;
+import com.github.lit.security.model.AuthorityVo;
 import com.github.lit.security.model.Role;
 import com.github.lit.security.model.RoleQo;
 import com.github.lit.security.service.RoleService;
@@ -29,8 +30,15 @@ public class RoleController {
         return roleService.findPageList(roleQo);
     }
 
+    @GetMapping("/bind/authority")
+    @ViewName("bind-authority")
+    public List<AuthorityVo.TreeNode> bindAuthority(Long roleId) {
+        return roleService.findAuthorityTree(roleId);
+    }
+
     @PostMapping("/bind/authority")
-    public void bindAuthority(Long roleId, Long[] authorityIds) {
+    @ViewName(PluginConst.REDIRECT + "/role")
+    public void doBindAuthority(Long roleId, Long[] authorityIds) {
         roleService.bindAuthority(roleId, authorityIds);
     }
 

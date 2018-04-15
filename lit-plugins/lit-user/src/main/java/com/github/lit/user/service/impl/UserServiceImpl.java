@@ -1,6 +1,6 @@
 package com.github.lit.user.service.impl;
 
-import com.github.lit.plugin.exception.AppException;
+import com.github.lit.commons.exception.BizException;
 import com.github.lit.user.dao.UserDao;
 import com.github.lit.user.model.LoginUser;
 import com.github.lit.user.model.User;
@@ -46,9 +46,9 @@ public class UserServiceImpl implements UserService {
         LoginUser loginUser = UserUtils.getLoginUser();
 
         if (loginUser != null && loginUser.hasOrg()) {
-            qo.setSerialNum(loginUser.getSerialNum());
+            qo.setSerialNum(loginUser.getOrg().getLevelIndex());
             if (Strings.isNullOrEmpty(qo.getOrgCode())) {
-                qo.setOrgCode(loginUser.getOrgCode());
+                qo.setOrgCode(loginUser.getOrg().getCode());
             }
         }
 
@@ -60,7 +60,12 @@ public class UserServiceImpl implements UserService {
         checkUserName(user.getUserName());
         checkEmail(user.getEmail());
         checkMobilePhone(user.getMobileNum());
+
+        // 设置默认值
+        user.setLock(false);
+        user.setCreator(UserUtils.getLoginUser().getUserName());
         user.setPassword(UserUtils.encode("123456"));
+
         return userDao.insert(user);
     }
 
@@ -89,7 +94,7 @@ public class UserServiceImpl implements UserService {
         }
         int count = userDao.getSelect().where(User::getUserName).equalsTo(userName).count();
         if (count >= 1) {
-            throw new AppException("该用户名被使用");
+            throw new BizException("该用户名被使用");
         }
     }
 
@@ -99,7 +104,7 @@ public class UserServiceImpl implements UserService {
         }
         int count = userDao.getSelect().where(User::getEmail).equalsTo(email).count();
         if (count >= 1) {
-            throw new AppException("该邮箱已被使用");
+            throw new BizException("该邮箱已被使用");
         }
     }
 
@@ -109,7 +114,7 @@ public class UserServiceImpl implements UserService {
         }
         int count = userDao.getSelect().where(User::getMobileNum).equalsTo(mobileNum).count();
         if (count >= 1) {
-            throw new AppException("该手机号已被使用");
+            throw new BizException("该手机号已被使用");
         }
     }
 

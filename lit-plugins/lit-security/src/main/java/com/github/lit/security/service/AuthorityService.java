@@ -23,6 +23,7 @@ public interface AuthorityService {
 
     List<AuthorityVo> findAuthorityTree();
 
+    List<Authority> findAll();
     /**
      * 根据角色Id查询权限列表
      *
@@ -30,6 +31,8 @@ public interface AuthorityService {
      * @return 权限列表
      */
     List<Authority> findByRoleId(Long roleId);
+
+    List<Authority> findByRoleIds(Long[] roleIds);
 
     /**
      * 根据 authorityId 查询权限

@@ -12,7 +12,7 @@ import java.util.List;
  */
 public interface AuthorityDao extends BaseDao<Authority> {
 
-    List<Authority> findByRoleId(Long roleId);
+    List<Authority> findByRoleIds(Long... roleIds);
 
     int countByRoleId(Long roleId);
 

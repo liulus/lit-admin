@@ -289,34 +289,34 @@ VALUES (last_insert_id() - 6, 'system_authority', '权限管理', 'fa-key', '/pl
 
 DELETE FROM lit_authority;
 INSERT INTO lit_authority (code, name, function, module)
-VALUES ('view_dictionary', '查看字典', 'dictionary_manager', 'system');
+VALUES ('VIEW_DICTIONARY', '查看字典', 'dictionary_manager', 'system');
 INSERT INTO lit_authority (code, name, function, module)
-VALUES ('add_dictionary', '新增字典', 'dictionary_manager', 'system');
+VALUES ('ADD_DICTIONARY', '新增字典', 'dictionary_manager', 'system');
 INSERT INTO lit_authority (code, name, function, module)
-VALUES ('modify_dictionary', '修改字典', 'dictionary_manager', 'system');
+VALUES ('MODIFY_DICTIONARY', '修改字典', 'dictionary_manager', 'system');
 INSERT INTO lit_authority (code, name, function, module)
-VALUES ('remove_dictionary', '删除字典', 'dictionary_manager', 'system');
-INSERT INTO lit_authority (code, name, function, module) VALUES ('view_param', '查看参数', 'param_manager', 'system');
-INSERT INTO lit_authority (code, name, function, module) VALUES ('add_param', '新增参数', 'param_manager', 'system');
-INSERT INTO lit_authority (code, name, function, module) VALUES ('modify_param', '修改参数', 'param_manager', 'system');
-INSERT INTO lit_authority (code, name, function, module) VALUES ('remove_param', '删除参数', 'param_manager', 'system');
-INSERT INTO lit_authority (code, name, function, module) VALUES ('view_menu', '查看菜单', 'menu_manager', 'system');
-INSERT INTO lit_authority (code, name, function, module) VALUES ('add_menu', '新增菜单', 'menu_manager', 'system');
-INSERT INTO lit_authority (code, name, function, module) VALUES ('modify_menu', '修改菜单', 'menu_manager', 'system');
-INSERT INTO lit_authority (code, name, function, module) VALUES ('remove_menu', '删除菜单', 'menu_manager', 'system');
-INSERT INTO lit_authority (code, name, function, module) VALUES ('view_user', '查看菜单', 'user_manager', 'system');
-INSERT INTO lit_authority (code, name, function, module) VALUES ('add_user', '新增菜单', 'user_manager', 'system');
-INSERT INTO lit_authority (code, name, function, module) VALUES ('modify_user', '修改菜单', 'user_manager', 'system');
-INSERT INTO lit_authority (code, name, function, module) VALUES ('remove_user', '删除菜单', 'user_manager', 'system');
-INSERT INTO lit_authority (code, name, function, module) VALUES ('view_org', '查看组织', 'org_manager', 'system');
-INSERT INTO lit_authority (code, name, function, module) VALUES ('add_org', '新增组织', 'org_manager', 'system');
-INSERT INTO lit_authority (code, name, function, module) VALUES ('modify_org', '修改组织', 'org_manager', 'system');
-INSERT INTO lit_authority (code, name, function, module) VALUES ('remove_org', '删除组织', 'org_manager', 'system');
-INSERT INTO lit_authority (code, name, function, module) VALUES ('view_role', '查看角色', 'role_manager', 'system');
-INSERT INTO lit_authority (code, name, function, module) VALUES ('add_role', '新增角色', 'role_manager', 'system');
-INSERT INTO lit_authority (code, name, function, module) VALUES ('modify_role', '修改角色', 'role_manager', 'system');
-INSERT INTO lit_authority (code, name, function, module) VALUES ('remove_role', '删除角色', 'role_manager', 'system');
-INSERT INTO lit_authority (code, name, function, module) VALUES ('view_authority', '查看权限', 'role_manager', 'system');
+VALUES ('REMOVE_DICTIONARY', '删除字典', 'dictionary_manager', 'system');
+INSERT INTO lit_authority (code, name, function, module) VALUES ('VIEW_PARAM', '查看参数', 'param_manager', 'system');
+INSERT INTO lit_authority (code, name, function, module) VALUES ('ADD_PARAM', '新增参数', 'param_manager', 'system');
+INSERT INTO lit_authority (code, name, function, module) VALUES ('MODIFY_PARAM', '修改参数', 'param_manager', 'system');
+INSERT INTO lit_authority (code, name, function, module) VALUES ('REMOVE_PARAM', '删除参数', 'param_manager', 'system');
+INSERT INTO lit_authority (code, name, function, module) VALUES ('VIEW_MENU', '查看菜单', 'menu_manager', 'system');
+INSERT INTO lit_authority (code, name, function, module) VALUES ('ADD_MENU', '新增菜单', 'menu_manager', 'system');
+INSERT INTO lit_authority (code, name, function, module) VALUES ('MODIFY_MENU', '修改菜单', 'menu_manager', 'system');
+INSERT INTO lit_authority (code, name, function, module) VALUES ('REMOVE_MENU', '删除菜单', 'menu_manager', 'system');
+INSERT INTO lit_authority (code, name, function, module) VALUES ('VIEW_USER', '查看菜单', 'user_manager', 'system');
+INSERT INTO lit_authority (code, name, function, module) VALUES ('ADD_USER', '新增菜单', 'user_manager', 'system');
+INSERT INTO lit_authority (code, name, function, module) VALUES ('MODIFY_USER', '修改菜单', 'user_manager', 'system');
+INSERT INTO lit_authority (code, name, function, module) VALUES ('REMOVE_USER', '删除菜单', 'user_manager', 'system');
+INSERT INTO lit_authority (code, name, function, module) VALUES ('VIEW_ORG', '查看组织', 'org_manager', 'system');
+INSERT INTO lit_authority (code, name, function, module) VALUES ('ADD_ORG', '新增组织', 'org_manager', 'system');
+INSERT INTO lit_authority (code, name, function, module) VALUES ('MODIFY_ORG', '修改组织', 'org_manager', 'system');
+INSERT INTO lit_authority (code, name, function, module) VALUES ('REMOVE_ORG', '删除组织', 'org_manager', 'system');
+INSERT INTO lit_authority (code, name, function, module) VALUES ('VIEW_ROLE', '查看角色', 'role_manager', 'system');
+INSERT INTO lit_authority (code, name, function, module) VALUES ('ADD_ROLE', '新增角色', 'role_manager', 'system');
+INSERT INTO lit_authority (code, name, function, module) VALUES ('MODIFY_ROLE', '修改角色', 'role_manager', 'system');
+INSERT INTO lit_authority (code, name, function, module) VALUES ('REMOVE_ROLE', '删除角色', 'role_manager', 'system');
+INSERT INTO lit_authority (code, name, function, module) VALUES ('VIEW_AUTHORITY', '查看权限', 'role_manager', 'system');
 
 DELETE FROM lit_user;
 INSERT INTO lit_user (org_id, code, job_num, user_name, mobile_num, avatar, password, gender)

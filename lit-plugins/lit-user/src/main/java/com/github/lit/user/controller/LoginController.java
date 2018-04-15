@@ -1,7 +1,7 @@
 package com.github.lit.user.controller;
 
 import com.github.lit.commons.context.ResultConst;
-import com.github.lit.user.context.LoginErrorContext;
+import com.github.lit.user.context.LoginMessageProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class LoginController {
 
     @Autowired(required = false)
-    private LoginErrorContext loginErrorContext;
+    private LoginMessageProvider loginMessageProvider;
 
     @GetMapping("/register")
     @Secured("ROLE_ADMIN")
@@ -38,8 +38,8 @@ public class LoginController {
 
     @GetMapping("/login")
     public String login(Model model) {
-        if (loginErrorContext != null) {
-            model.addAttribute(ResultConst.MASSAGE, loginErrorContext.getLoginError());
+        if (loginMessageProvider != null) {
+            model.addAttribute(ResultConst.MASSAGE, loginMessageProvider.getMessage());
         }
         return "default-login";
     }

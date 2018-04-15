@@ -40,7 +40,6 @@ public class UserController {
     @PostMapping
     public Long add(UserVo.Add add) {
         return userService.insert(BeanUtils.convert(add, new User()));
-
     }
 
     @PutMapping

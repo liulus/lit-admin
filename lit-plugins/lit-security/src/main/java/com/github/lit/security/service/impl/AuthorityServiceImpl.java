@@ -77,10 +77,20 @@ public class AuthorityServiceImpl implements AuthorityService {
         return result;
     }
 
+    @Override
+    public List<Authority> findAll() {
+        return authorityDao.getSelect().list();
+    }
+
 
     @Override
     public List<Authority> findByRoleId(Long roleId) {
-        return authorityDao.findByRoleId(roleId);
+        return authorityDao.findByRoleIds(roleId);
+    }
+
+    @Override
+    public List<Authority> findByRoleIds(Long[] roleIds) {
+        return authorityDao.findByRoleIds(roleIds);
     }
 
     @Override

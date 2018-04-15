@@ -20,11 +20,11 @@ public class AuthorityDaoImpl extends AbstractBaseDao<Authority> implements Auth
 
 
     @Override
-    public List<Authority> findByRoleId(Long roleId) {
+    public List<Authority> findByRoleIds(Long[] roleIds) {
 
         List<Long> authIds = jdbcTools.select(RoleAuthority.class)
                 .include(RoleAuthority::getAuthorityId)
-                .where(RoleAuthority::getRoleId).equalsTo(roleId)
+                .where(RoleAuthority::getRoleId).in((Object[]) roleIds)
                 .list(Long.class);
         if (CollectionUtils.isEmpty(authIds)) {
             return Collections.emptyList();

@@ -7,7 +7,6 @@ import com.github.lit.menu.event.MenuUpdateEvent;
 import com.github.lit.menu.model.Menu;
 import com.github.lit.menu.model.MenuQo;
 import com.github.lit.menu.service.MenuService;
-import com.github.lit.plugin.exception.AppException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -87,7 +86,7 @@ public class MenuServiceImpl implements MenuService {
         for (Menu menu : menus) {
             int count = menuDao.count(MenuQo.builder().parentId(menu.getId()).build());
             if (count > 0) {
-                throw new AppException(String.format("请先删除 %s 的子菜单数据 !", menu.getName()));
+                throw new BizException(String.format("请先删除 %s 的子菜单数据 !", menu.getName()));
             }
             validIds.add(menu.getId());
         }

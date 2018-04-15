@@ -20,7 +20,7 @@ import java.util.List;
 @Getter
 @Setter
 @ToString
-public class LitUserDetail extends LoginUser implements UserDetails {
+public class LoginUserDetail extends LoginUser implements UserDetails {
 
     private static final long serialVersionUID = 6501124930968849319L;
 
@@ -45,7 +45,7 @@ public class LitUserDetail extends LoginUser implements UserDetails {
 
     @Override
     public boolean isAccountNonLocked() {
-        return getLock() != null && !getLock();
+        return !getLock();
     }
 
     @Override

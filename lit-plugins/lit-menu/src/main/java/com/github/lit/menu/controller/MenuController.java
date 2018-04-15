@@ -30,8 +30,7 @@ public class MenuController {
 
     @Resource
     private MenuService menuService;
-
-
+    
     @GetMapping
     @ViewName("menu")
     public List<MenuVo.Detail> menuList(MenuQo qo, Model model) {
@@ -39,9 +38,7 @@ public class MenuController {
             Menu menu = menuService.findById(qo.getParentId());
             model.addAttribute("returnId", menu == null ? 0 : menu.getParentId());
         }
-
         List<Menu> menus = menuService.findPageList(qo);
-
         return BeanUtils.convert(MenuVo.Detail.class, menus);
     }
 
@@ -133,6 +130,5 @@ public class MenuController {
     public void delete(Long[] ids) {
         menuService.delete(ids);
     }
-
-
+    
 }

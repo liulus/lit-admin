@@ -1,7 +1,7 @@
 package com.github.lit.security.context;
 
 import com.github.lit.plugin.web.WebUtils;
-import com.github.lit.user.context.LoginErrorContext;
+import com.github.lit.user.context.LoginMessageProvider;
 import org.springframework.security.authentication.*;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.web.WebAttributes;
@@ -11,13 +11,13 @@ import org.springframework.stereotype.Component;
 /**
  * User : liulu
  * Date : 2017/12/31 16:32
- * version $Id: SpringLoginErrorContext.java, v 0.1 Exp $
+ * version $Id: SecurityMessageProvider.java, v 0.1 Exp $
  */
 @Component
-public class SpringLoginErrorContext implements LoginErrorContext {
+public class SecurityMessageProvider implements LoginMessageProvider {
 
     @Override
-    public String getLoginError() {
+    public String getMessage() {
 
         Exception loginException = (Exception) WebUtils.getSessionAttribute(WebAttributes.AUTHENTICATION_EXCEPTION);
         if (loginException == null) {
@@ -43,6 +43,6 @@ public class SpringLoginErrorContext implements LoginErrorContext {
         if (loginException instanceof SessionAuthenticationException) {
             return "该用户已登录!";
         }
-        return "未知异常";
+        return "系统异常";
     }
 }

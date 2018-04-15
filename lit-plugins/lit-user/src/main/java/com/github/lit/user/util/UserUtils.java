@@ -6,6 +6,7 @@ import com.github.lit.commons.util.EncryptUtils;
 import com.github.lit.plugin.web.WebUtils;
 import com.github.lit.user.context.UserConst;
 import com.github.lit.user.model.LoginUser;
+import com.github.lit.user.model.Organization;
 import com.google.common.base.Strings;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -33,8 +34,11 @@ public class UserUtils {
         // todo 测试使用
         if (loginUser == null) {
             loginUser = new LoginUser();
-            loginUser.setOrgCode("999000");
-            loginUser.setSerialNum("001");
+            Organization org = new Organization();
+            loginUser.setUserName("liulu");
+            org.setLevelIndex("001");
+            org.setCode("999000");
+            loginUser.setOrg(org);
         }
 
         return loginUser;

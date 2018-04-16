@@ -37,6 +37,7 @@ public class DictionaryController {
     @ViewName("dictionary")
     @Secured(AuthorityConst.VIEW_DICTIONARY)
     public List<DictionaryVo.Detail> childList(DictionaryQo qo, Model model) {
+        int i = 1/0;
         if (qo.getParentId() != 0L) {
             Dictionary dictionary = dictionaryService.findById(qo.getParentId());
             model.addAttribute("returnId", dictionary == null ? 0 : dictionary.getParentId());

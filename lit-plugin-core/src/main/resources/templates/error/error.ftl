@@ -6,9 +6,9 @@
 </head>
 <body>
 
-这是默认异常页面
+这是默认error页面
 
-<div>${message}</div>
+<div></div>
 
 
 </div>

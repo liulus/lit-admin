@@ -30,8 +30,10 @@ import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.multipart.support.MissingServletRequestPartException;
 import org.springframework.web.servlet.NoHandlerFoundException;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * User : liulu
@@ -62,6 +64,11 @@ public class ExceptionAdvice {
             log.warn("\n biz exception --> class: [{}], method: [{}], line: [{}], code: [{}],  message: [{}]",
                     traceElement.getClassName(), traceElement.getMethodName(), traceElement.getLineNumber(),
                     bizException.getCode(), bizException.getMessage());
+            // 处理自定义视图名称
+            ViewName viewName = handlerMethod.getMethodAnnotation(ViewName.class);
+            if (viewName != null && !viewName.spel()) {
+                return viewName.value();
+            }
         } else {
             model.addAttribute(ResultConst.CODE, "9999");
             model.addAttribute(ResultConst.MASSAGE, errorMsg);
@@ -70,15 +77,14 @@ public class ExceptionAdvice {
         }
 
         // json 请求直接返回空
-        if (WebUtils.getRequest().getRequestURI().endsWith(".json")) {
+        HttpServletRequest request = WebUtils.getRequest();
+        boolean isJsonContentType = Optional.ofNullable(request.getContentType())
+                .map(contentType -> contentType.contains(MediaType.APPLICATION_JSON_VALUE))
+                .orElse(false);
+        if (request.getRequestURI().endsWith(".json") || isJsonContentType) {
             return "";
         }
-        // 处理自定义视图名称
-        ViewName viewName = handlerMethod.getMethodAnnotation(ViewName.class);
-        if (viewName != null && !viewName.spel()) {
-            return viewName.value();
-        }
-        return "error";
+        return "error/error";
     }
 
     private BizException findBizException(Throwable ex) {

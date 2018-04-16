@@ -1,7 +1,7 @@
 package com.github.lit.user.dao;
 
-import com.github.lit.plugin.dao.BaseDao;
 import com.github.lit.user.model.Organization;
+import com.github.lit.web.dao.BaseDao;
 
 /**
  * User : liulu

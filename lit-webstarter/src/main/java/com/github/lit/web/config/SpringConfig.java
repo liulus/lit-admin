@@ -1,36 +1,22 @@
 package com.github.lit.web.config;
 
-import com.github.lit.commons.event.guava.EventConfig;
-import com.github.lit.jdbc.spring.config.EnableLitJdbc;
 import com.mchange.v2.c3p0.ComboPooledDataSource;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.EnableCaching;
-import org.springframework.cache.concurrent.ConcurrentMapCache;
-import org.springframework.cache.guava.GuavaCacheManager;
-import org.springframework.cache.support.SimpleCacheManager;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
 import javax.sql.DataSource;
 import java.beans.PropertyVetoException;
-import java.util.Arrays;
-import java.util.Collections;
 
 /**
  * User : liulu
  * Date : 2017/3/19 14:39
  * version $Id: config.java, v 0.1 Exp $
  */
-@EnableLitJdbc
 @Configuration
-@EnableCaching
-@Import(EventConfig.class)
-@ComponentScan(basePackages = "com.github.lit")
 public class SpringConfig extends WebMvcConfigurerAdapter {
 
     @Autowired
@@ -59,23 +45,6 @@ public class SpringConfig extends WebMvcConfigurerAdapter {
     public PlatformTransactionManager transactionManager(DataSource dataSource) {
         return new DataSourceTransactionManager(dataSource);
     }
-
-
-    public SimpleCacheManager cacheManager() {
-
-        GuavaCacheManager guavaCacheManager = new GuavaCacheManager();
-        guavaCacheManager.setCacheNames(Collections.singleton("dictionary"));
-
-
-
-        SimpleCacheManager cacheManager = new SimpleCacheManager();
-
-        cacheManager.setCaches(Arrays.asList(new ConcurrentMapCache("default"), new ConcurrentMapCache("dictionary")));
-
-        return cacheManager;
-    }
-
-
 
 
 }

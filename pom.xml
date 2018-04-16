@@ -11,7 +11,7 @@
 
     <modules>
         <module>lit-plugins</module>
-        <module>lit-plugin-engine</module>
+        <module>lit-web</module>
         <module>lit-test</module>
         <module>lit-webstarter</module>
         <module>lit-spring-boot-atuoconfigure</module>

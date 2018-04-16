@@ -4,7 +4,7 @@ import com.github.lit.dictionary.dao.DictionaryDao;
 import com.github.lit.dictionary.model.Dictionary;
 import com.github.lit.dictionary.model.DictionaryQo;
 import com.github.lit.jdbc.statement.select.Select;
-import com.github.lit.plugin.dao.AbstractBaseDao;
+import com.github.lit.web.dao.AbstractBaseDao;
 import com.google.common.base.Strings;
 import org.springframework.stereotype.Repository;
 

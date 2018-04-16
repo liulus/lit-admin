@@ -1,7 +1,7 @@
 package com.github.lit.security.dao;
 
-import com.github.lit.plugin.dao.BaseDao;
 import com.github.lit.security.model.Authority;
+import com.github.lit.web.dao.BaseDao;
 
 import java.util.List;
 

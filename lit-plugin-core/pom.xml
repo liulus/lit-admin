@@ -14,7 +14,7 @@
     <dependencies>
         <dependency>
             <groupId>com.github.liulus</groupId>
-            <artifactId>lit-plugin-engine</artifactId>
+            <artifactId>lit-web</artifactId>
             <version>${project.version}</version>
         </dependency>
     </dependencies>

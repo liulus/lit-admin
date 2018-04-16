@@ -1,11 +1,11 @@
 package com.github.lit.security.controller;
 
 import com.github.lit.plugin.core.constant.PluginConst;
-import com.github.lit.plugin.web.ViewName;
 import com.github.lit.security.model.Authority;
 import com.github.lit.security.model.AuthorityQo;
 import com.github.lit.security.model.AuthorityVo;
 import com.github.lit.security.service.AuthorityService;
+import com.github.lit.web.annotation.ViewName;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 

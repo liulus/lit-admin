@@ -4,7 +4,7 @@
 <html lang="en">
 <head>
     <title>${title}</title>
-    <#include "../fragment/head-css.ftl">
+    <#include "/fragment/head-css.ftl">
 
     <#if importCss??>
         <#list importCss as css>
@@ -13,16 +13,23 @@
     </#if>
 </head>
 <body>
-<!-- 固定头部 -->
-    <#include "../fragment/top-nav.ftl">
+<#if Application.renderHeader>
+    <!-- 固定头部 -->
+    <#include "${Application.pageHeader}">
+</#if>
 
-<!-- 左侧菜单 -->
-    <#include "../fragment/left-menu.ftl">
+<#if Application.renderLeft>
+    <!-- 左侧菜单 -->
+    <#include "${Application.pageLeft}">
+</#if>
 
 <!-- 主页面 -->
+<#if Application.renderLeft>
 <div class="main col-sm-18 col-sm-offset-6 col-md-20 col-md-offset-4">
+<#else>
+<div class="main col-sm-24">
+</#if>
     <#nested>
-
     <!-- 分页条 -->
     <#if data!?size &gt; 0>
         <#if pageInfo??>
@@ -31,7 +38,7 @@
     </#if>
 </div>
 
-    <#include "../fragment/bottom-js.ftl">
+    <#include "/fragment/bottom-js.ftl">
 
     <#if importJs??>
         <#list importJs as js>

@@ -74,7 +74,7 @@ $(function () {
                 }
                 Http.post(contextPath + '/plugin/role/bind/user.json', params.join('&'), function (res) {
                     if (res.success) {
-                        UrlUtils.addParamAndReload('message', '分配角色成功')
+                        MsgUtils.success('分配角色成功')
                     } else {
                         MsgUtils.error(res.message);
                     }

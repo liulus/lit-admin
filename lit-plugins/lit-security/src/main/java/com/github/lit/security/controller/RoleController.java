@@ -1,12 +1,12 @@
 package com.github.lit.security.controller;
 
 import com.github.lit.plugin.core.constant.PluginConst;
-import com.github.lit.plugin.web.ViewName;
 import com.github.lit.security.model.AuthorityVo;
 import com.github.lit.security.model.Role;
 import com.github.lit.security.model.RoleQo;
 import com.github.lit.security.model.RoleVo;
 import com.github.lit.security.service.RoleService;
+import com.github.lit.web.annotation.ViewName;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 

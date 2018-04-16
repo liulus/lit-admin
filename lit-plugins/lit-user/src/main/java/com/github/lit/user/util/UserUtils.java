@@ -4,8 +4,8 @@ import com.github.lit.commons.spring.SpringContextUtils;
 import com.github.lit.commons.util.ClassUtils;
 import com.github.lit.commons.util.EncryptUtils;
 import com.github.lit.plugin.core.model.LoginUser;
-import com.github.lit.plugin.web.WebUtils;
 import com.github.lit.user.context.UserConst;
+import com.github.lit.web.util.WebUtils;
 import com.google.common.base.Strings;
 import org.springframework.security.crypto.password.PasswordEncoder;
 

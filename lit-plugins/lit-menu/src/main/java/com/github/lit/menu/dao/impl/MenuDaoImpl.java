@@ -4,7 +4,7 @@ import com.github.lit.jdbc.statement.select.Select;
 import com.github.lit.menu.dao.MenuDao;
 import com.github.lit.menu.model.Menu;
 import com.github.lit.menu.model.MenuQo;
-import com.github.lit.plugin.dao.AbstractBaseDao;
+import com.github.lit.web.dao.AbstractBaseDao;
 import com.google.common.base.Strings;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.CollectionUtils;

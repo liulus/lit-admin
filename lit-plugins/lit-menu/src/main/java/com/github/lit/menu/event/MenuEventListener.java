@@ -7,7 +7,7 @@ import com.github.lit.menu.model.MenuVo;
 import com.github.lit.menu.tool.MenuTools;
 import com.github.lit.plugin.core.event.user.LoginEvent;
 import com.github.lit.plugin.core.util.PluginUtils;
-import com.github.lit.plugin.web.WebUtils;
+import com.github.lit.web.util.WebUtils;
 import com.google.common.eventbus.Subscribe;
 
 import java.util.List;

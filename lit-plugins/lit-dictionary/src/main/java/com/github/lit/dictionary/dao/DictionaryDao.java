@@ -1,7 +1,7 @@
 package com.github.lit.dictionary.dao;
 
 import com.github.lit.dictionary.model.Dictionary;
-import com.github.lit.plugin.dao.BaseDao;
+import com.github.lit.web.dao.BaseDao;
 
 /**
  * User : liulu

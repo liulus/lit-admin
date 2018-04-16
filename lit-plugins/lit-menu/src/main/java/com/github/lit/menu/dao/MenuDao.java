@@ -1,7 +1,7 @@
 package com.github.lit.menu.dao;
 
 import com.github.lit.menu.model.Menu;
-import com.github.lit.plugin.dao.BaseDao;
+import com.github.lit.web.dao.BaseDao;
 
 import java.util.List;
 

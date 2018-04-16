@@ -15,6 +15,10 @@ spring:
     prefer-file-system-access: false
   jackson:
     default-property-inclusion: non_empty
+lit:
+  render:
+    header: false
+    left: false
 
 
 server:
@@ -30,12 +34,3 @@ c3p0:
   user: root
   password: 123456
 
-
----
-spring:
-  profiles: dev
-c3p0:
-  jdbcUrl: jdbc:mysql://120.78.47.145:3306/lit
-  driverClass: com.mysql.jdbc.Driver
-  user: root
-  password: Lycd1993981!

@@ -1,11 +1,11 @@
 package com.github.lit.security.dao.impl;
 
 import com.github.lit.jdbc.statement.select.Select;
-import com.github.lit.plugin.dao.AbstractBaseDao;
 import com.github.lit.security.dao.RoleDao;
 import com.github.lit.security.model.Role;
 import com.github.lit.security.model.RoleQo;
 import com.github.lit.security.model.UserRole;
+import com.github.lit.web.dao.AbstractBaseDao;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.CollectionUtils;
 

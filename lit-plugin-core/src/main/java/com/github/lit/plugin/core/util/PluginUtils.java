@@ -3,7 +3,7 @@ package com.github.lit.plugin.core.util;
 import com.github.lit.commons.util.ClassUtils;
 import com.github.lit.plugin.core.constant.PluginConst;
 import com.github.lit.plugin.core.model.LoginUser;
-import com.github.lit.plugin.web.WebUtils;
+import com.github.lit.web.util.WebUtils;
 
 /**
  * User : liulu

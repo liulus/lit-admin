@@ -1,5 +1,5 @@
 <#import "layout/list-layout.ftl" as AdminLayout>
-<#assign securityPresent=Application.security_present!false/>
+<#assign securityPresent=Application.securityPresent!false/>
 <#assign js = ['js/user.js'], css=[] />
 <#if securityPresent>
     <#assign js = ['libs/zTree/3.5/js/ztree.all.min.js', 'js/user.js'], css=['libs/zTree/3.5/css/metroStyle/metroStyle.css'] />

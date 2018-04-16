@@ -22,7 +22,9 @@
 <script src="${rc.contextPath}/libs/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <script src="${rc.contextPath}/libs/juicer/0.6.8-stable/juicer-min.js"></script>
 <script src="${rc.contextPath}/libs/layer/3.0.3/layer.js"></script>
+<#if Application.renderLeft>
 <script src="${rc.contextPath}/js/left-menu.js"></script>
+</#if>
 <script src="${rc.contextPath}/js/page.js"></script>
 <script src="${rc.contextPath}/js/message.js"></script>
 <script src="${rc.contextPath}/js/commons-func.js"></script>

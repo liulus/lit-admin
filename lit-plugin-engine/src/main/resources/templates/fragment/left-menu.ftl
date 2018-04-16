@@ -1,6 +1,7 @@
 <div class="col-sm-6 col-md-4 sidebar">
-<#if Application.menus??>
-    <#list Application.menus>
+    <#assign menus = Application._menus!Session._menus!/>
+<#if menus??>
+    <#list menus>
         <ul class="nav nav-sidebar">
             <#items as menu>
                 <#if menu.enable>

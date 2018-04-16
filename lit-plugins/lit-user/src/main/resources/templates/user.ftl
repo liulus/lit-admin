@@ -1,5 +1,10 @@
 <#import "layout/list-layout.ftl" as AdminLayout>
-<@AdminLayout.listLayout title='用户管理'importJs=['js/user.js']>
+<#assign securityPresent=Application.security_present!false/>
+<#assign js = ['js/user.js'], css=[] />
+<#if securityPresent>
+    <#assign js = ['libs/zTree/3.5/js/ztree.all.min.js', 'js/user.js'], css=['libs/zTree/3.5/css/metroStyle/metroStyle.css'] />
+</#if>
+<@AdminLayout.listLayout title='用户管理' importJs=js importCss=css>
 <!-- 导航条 -->
 <div class="row">
     <ol class="breadcrumb">
@@ -33,6 +38,11 @@
         <#if data?size &gt; 0>
             <@AdminLayout.updateBtn/>
             <@AdminLayout.deleteBtn/>
+        </#if>
+        <#if securityPresent!>
+            <a href="#" class="data-authorize btn btn-sm btn-warning">
+                <i class="fa fa-random"></i>&nbsp;&nbsp;分配角色
+            </a>
         </#if>
     </div>
 
@@ -68,6 +78,10 @@
             </#list>
         </tbody>
     </table>
+</div>
+
+<div id="role-tree" class="modal-body text-center" style="display: none">
+    <ul class="ztree"></ul>
 </div>
 
 <script type="text/template" id="edit-tpl">

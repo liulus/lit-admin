@@ -69,6 +69,14 @@ public interface RoleService {
     void bindAuthority(Long roleId, Long[] authorityIds);
 
     /**
+     * 绑定角色
+     *
+     * @param userId  userId
+     * @param roleIds roleIds
+     */
+    void bindUser(Long userId, Long[] roleIds);
+
+    /**
      * 根据用户Id查询角色列表
      *
      * @param userId userId
@@ -77,4 +85,6 @@ public interface RoleService {
     List<Role> findByUserId(Long userId);
 
     List<AuthorityVo.TreeNode> findAuthorityTree(Long roleId);
+
+
 }

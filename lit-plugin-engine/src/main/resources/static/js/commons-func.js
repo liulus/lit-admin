@@ -37,17 +37,12 @@ $(function () {
     if (pageConfig.bindUpdate) {
         /** 修改弹出框 */
         $('#data-update').on('click', function (e) {
-            var checkedInputs = $dataResult.find('.check-ls:checked');
-            if (checkedInputs.length <= 0) {
-                MsgUtils.warning('请选择一条数据 !');
-                return;
-            }
-            if (checkedInputs.length > 1) {
-                MsgUtils.warning('只能选择一条数据 !');
-                return;
+            var id = checkOneAndGetValue($dataResult);
+            if (!id) {
+                return
             }
             var title = $.trim($(this).text()) + pageConfig.topic;
-            Http.get(urlPrefix + '/' + checkedInputs.val() + '.json', function (res) {
+            Http.get(urlPrefix + '/' + id + '.json', function (res) {
                 layer.open({
                     type: 1,
                     title: title,
@@ -124,6 +119,19 @@ $('.check-all').on('click', function (e) {
     var checked = $(this).prop('checked');
     $(e.target).parents('table').find('.check-ls').prop('checked', checked);
 });
+
+function checkOneAndGetValue(dataResult) {
+    var checkedInputs = dataResult.find('.check-ls:checked');
+    if (checkedInputs.length <= 0) {
+        MsgUtils.warning('请选择一条数据 !');
+        return false;
+    }
+    if (checkedInputs.length > 1) {
+        MsgUtils.warning('只能选择一条数据 !');
+        return false;
+    }
+    return checkedInputs.val();
+}
 
 /**
  * 获取点击当前行数据的 id

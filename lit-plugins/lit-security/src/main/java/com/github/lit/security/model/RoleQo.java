@@ -15,4 +15,6 @@ public class RoleQo extends Page {
 
     private static final long serialVersionUID = -1895536277221625300L;
 
+    private Long userId;
+
 }

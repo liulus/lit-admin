@@ -5,6 +5,7 @@ import com.github.lit.plugin.web.ViewName;
 import com.github.lit.security.model.AuthorityVo;
 import com.github.lit.security.model.Role;
 import com.github.lit.security.model.RoleQo;
+import com.github.lit.security.model.RoleVo;
 import com.github.lit.security.service.RoleService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -36,10 +37,15 @@ public class RoleController {
         return roleService.findAuthorityTree(roleId);
     }
 
+    @PostMapping("/bind/user")
+    public void bindUser(RoleVo.BindUser bindUser) {
+        roleService.bindUser(bindUser.getUserId(), bindUser.getRoleIds());
+    }
+
     @PostMapping("/bind/authority")
     @ViewName(PluginConst.REDIRECT + "/role")
-    public void doBindAuthority(Long roleId, Long[] authorityIds) {
-        roleService.bindAuthority(roleId, authorityIds);
+    public void doBindAuthority(RoleVo.BindAuthority bindAuthority) {
+        roleService.bindAuthority(bindAuthority.getRoleId(), bindAuthority.getAuthorityIds());
     }
 
     @GetMapping("/{id}")

@@ -1,8 +1,10 @@
 package com.github.lit.security.dao.impl;
 
+import com.github.lit.jdbc.statement.select.Select;
 import com.github.lit.plugin.dao.AbstractBaseDao;
 import com.github.lit.security.dao.RoleDao;
 import com.github.lit.security.model.Role;
+import com.github.lit.security.model.RoleQo;
 import com.github.lit.security.model.UserRole;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.CollectionUtils;
@@ -20,14 +22,28 @@ public class RoleDaoImpl extends AbstractBaseDao<Role> implements RoleDao {
 
 
     @Override
+    protected void buildCondition(Select<Role> select, Object obj) {
+        RoleQo qo = (RoleQo) obj;
+
+        if (qo.getUserId() != null) {
+            List<Long> roleIds = getRoleIdsByUserId(qo.getUserId());
+            select.and(Role::getId).in(roleIds.toArray());
+        }
+    }
+
+    @Override
     public List<Role> findByUserId(Long userId) {
-        List<Long> roleIds = jdbcTools.select(UserRole.class)
-                .include(UserRole::getRoleId)
-                .where(UserRole::getUserId).equalsTo(userId)
-                .list(Long.class);
+        List<Long> roleIds = getRoleIdsByUserId(userId);
         if (CollectionUtils.isEmpty(roleIds)) {
             return Collections.emptyList();
         }
         return getSelect().where(Role::getId).in(roleIds.toArray()).list();
+    }
+
+    private List<Long> getRoleIdsByUserId(Long userId) {
+        return jdbcTools.select(UserRole.class)
+                .include(UserRole::getRoleId)
+                .where(UserRole::getUserId).equalsTo(userId)
+                .list(Long.class);
     }
 }

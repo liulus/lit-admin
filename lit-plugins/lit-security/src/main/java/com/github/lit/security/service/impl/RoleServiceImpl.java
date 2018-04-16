@@ -5,6 +5,7 @@ import com.github.lit.commons.exception.BizException;
 import com.github.lit.security.dao.AuthorityDao;
 import com.github.lit.security.dao.RoleAuthorityDao;
 import com.github.lit.security.dao.RoleDao;
+import com.github.lit.security.dao.UserRoleDao;
 import com.github.lit.security.model.*;
 import com.github.lit.security.service.RoleService;
 import com.github.lit.security.util.AuthorityUtils;
@@ -33,6 +34,9 @@ public class RoleServiceImpl implements RoleService {
 
     @Resource
     private RoleAuthorityDao roleAuthorityDao;
+
+    @Resource
+    private UserRoleDao userRoleDao;
 
     @Override
     public List<Role> findPageList(RoleQo roleQo) {
@@ -127,6 +131,34 @@ public class RoleServiceImpl implements RoleService {
             roleAuthority.setRoleId(roleId);
             roleAuthority.setAuthorityId(authId);
             roleAuthorityDao.insert(roleAuthority);
+        });
+    }
+
+    @Override
+    public void bindUser(Long userId, Long[] roleIds) {
+        // 需要新增的有效 roleId
+        List<Long> newRoleIds = roleDao.getSelect().include(Role::getId).where(Role::getId).in((Object[]) roleIds).list(Long.class);
+        // 当前用户下的 旧的角色
+        List<UserRole> oldRoles = userRoleDao.findByUserId(userId);
+
+        // 对比找出需删除的 用户角色Id
+        Long[] deleteUserRoleIds = oldRoles.stream()
+                .filter(oldRole -> !newRoleIds.contains(oldRole.getRoleId()))
+                .map(UserRole::getId)
+                .toArray(Long[]::new);
+        Optional.ofNullable(deleteUserRoleIds)
+                .filter(idArray -> idArray.length > 0)
+                .ifPresent(idArray -> userRoleDao.deleteByIds(idArray));
+
+        // 对比找出需要新增的 roleId
+        List<Long> oldRoleIds = oldRoles.stream().map(UserRole::getRoleId).collect(Collectors.toList());
+        List<Long> insertRoleIds = newRoleIds.stream().filter(newRoleId -> !oldRoleIds.contains(newRoleId)).collect(Collectors.toList());
+
+        insertRoleIds.forEach(roleId -> {
+            UserRole userRole = new UserRole();
+            userRole.setUserId(userId);
+            userRole.setRoleId(roleId);
+            userRoleDao.insert(userRole);
         });
     }
 

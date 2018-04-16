@@ -1,6 +1,5 @@
-package com.github.lit.web;
+package com.github.lit.starter;
 
-import com.github.lit.web.annotation.EnableLitWeb;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
@@ -11,7 +10,6 @@ import org.springframework.boot.web.support.SpringBootServletInitializer;
  * Date : 2017/3/19 14:17
  * version $Id: WebStarter.java, v 0.1 Exp $
  */
-@EnableLitWeb
 @SpringBootApplication
 public class WebStarter extends SpringBootServletInitializer {
 

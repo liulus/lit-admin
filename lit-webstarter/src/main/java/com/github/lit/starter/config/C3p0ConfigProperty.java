@@ -1,4 +1,4 @@
-package com.github.lit.web.config;
+package com.github.lit.starter.config;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;

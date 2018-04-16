@@ -1,4 +1,4 @@
-package com.github.lit.web.config;
+package com.github.lit.starter.config;
 
 import com.mchange.v2.c3p0.ComboPooledDataSource;
 import org.springframework.beans.factory.annotation.Autowired;

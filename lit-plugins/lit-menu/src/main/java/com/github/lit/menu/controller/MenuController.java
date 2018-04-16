@@ -5,7 +5,7 @@ import com.github.lit.menu.model.Menu;
 import com.github.lit.menu.model.MenuQo;
 import com.github.lit.menu.model.MenuVo;
 import com.github.lit.menu.service.MenuService;
-import com.github.lit.plugin.context.PluginConst;
+import com.github.lit.plugin.core.constant.PluginConst;
 import com.github.lit.plugin.web.ViewName;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;

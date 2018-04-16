@@ -16,6 +16,7 @@
         <module>lit-webstarter</module>
         <module>lit-spring-boot-atuoconfigure</module>
         <module>lit-spring-boot-starter</module>
+        <module>lit-plugin-core</module>
     </modules>
 
     <properties>

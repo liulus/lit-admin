@@ -1,4 +1,4 @@
-package com.github.lit.plugin.context;
+package com.github.lit.plugin.core.constant;
 
 /**
  * User : liulu
@@ -13,6 +13,9 @@ public class PluginConst {
     public static final String URL_PREFIX = "/plugin";
 
     public static final String REDIRECT = "redirect:" + URL_PREFIX;
+
+    // session 中登录用户 key
+    public static final String LOGIN_USER = "_login_user";
 
 
 }

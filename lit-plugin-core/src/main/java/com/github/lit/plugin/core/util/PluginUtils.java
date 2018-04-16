@@ -1,6 +1,9 @@
-package com.github.lit.plugin.util;
+package com.github.lit.plugin.core.util;
 
 import com.github.lit.commons.util.ClassUtils;
+import com.github.lit.plugin.core.constant.PluginConst;
+import com.github.lit.plugin.core.model.LoginUser;
+import com.github.lit.plugin.web.WebUtils;
 
 /**
  * User : liulu
@@ -38,5 +41,9 @@ public abstract class PluginUtils {
 
     public static boolean isUserPresent() {
         return USER_PRESENT;
+    }
+
+    public static LoginUser getLoginUser() {
+        return (LoginUser) WebUtils.getSessionAttribute(PluginConst.LOGIN_USER);
     }
 }

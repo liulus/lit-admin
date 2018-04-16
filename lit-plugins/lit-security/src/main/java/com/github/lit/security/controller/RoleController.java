@@ -1,6 +1,6 @@
 package com.github.lit.security.controller;
 
-import com.github.lit.plugin.context.PluginConst;
+import com.github.lit.plugin.core.constant.PluginConst;
 import com.github.lit.plugin.web.ViewName;
 import com.github.lit.security.model.AuthorityVo;
 import com.github.lit.security.model.Role;

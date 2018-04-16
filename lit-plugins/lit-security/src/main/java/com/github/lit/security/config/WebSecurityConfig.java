@@ -55,8 +55,9 @@ public class WebSecurityConfig {
             protected void configure(HttpSecurity http) throws Exception {
                 //        http.authorizeRequests().antMatchers("/libs/**").permitAll();
 
-                http.formLogin().loginPage("/user/login").usernameParameter("userName").passwordParameter("password")
-                        .defaultSuccessUrl("/user/pass", true).permitAll()
+                http.formLogin().loginPage("/user/login").permitAll()
+                        .usernameParameter("userName").passwordParameter("password")
+                        .successHandler(new SessionAuthenticationSuccessHandler())
                         .and().csrf().disable()
                         .authorizeRequests().anyRequest().authenticated();
             }

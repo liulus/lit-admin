@@ -129,4 +129,9 @@ public class MenuServiceImpl implements MenuService {
         return menuDao.findAll();
     }
 
+    @Override
+    public List<Menu> findByAuthorities(List<String> authorities) {
+        return menuDao.findByAuthorities(authorities);
+    }
+
 }

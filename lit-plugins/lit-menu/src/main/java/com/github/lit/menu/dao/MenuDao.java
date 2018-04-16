@@ -18,4 +18,5 @@ public interface MenuDao extends BaseDao<Menu> {
 
     List<Menu> findAll();
 
+    List<Menu> findByAuthorities(List<String> authorities);
 }

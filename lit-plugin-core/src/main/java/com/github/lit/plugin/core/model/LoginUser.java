@@ -1,20 +1,19 @@
-package com.github.lit.user.model;
+package com.github.lit.plugin.core.model;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * User : liulu
- * Date : 2017/8/12 11:42
+ * Date : 2018/4/15 21:34
  * version $Id: LoginUser.java, v 0.1 Exp $
  */
-@Getter
-@Setter
+@Data
 public class LoginUser implements Serializable {
 
-    private static final long serialVersionUID = 4254995122049457520L;
+    private static final long serialVersionUID = 6675934947596333693L;
 
     private Long id;
 
@@ -78,13 +77,23 @@ public class LoginUser implements Serializable {
      */
     private Boolean lock;
 
-    /**
-     * 机构信息
-     */
-    private Organization org;
+    /**** Organization ****/
+
+    private Long orgId;
+
+    private String orgCode;
+
+    private String orgName;
+
+    private String levelIndex;
+
+
+    /*********** 权限信息 ************/
+    List<String> auths;
+
 
     public boolean hasOrg() {
-        return org != null && org.getId() != null;
+        return orgId != null;
     }
 
 }

@@ -70,4 +70,10 @@ public interface MenuService {
      */
     List<Menu> findAll();
 
+    /**
+     * 根据权限码查询菜单
+     * @param authorities 权限码
+     * @return
+     */
+    List<Menu> findByAuthorities(List<String> authorities);
 }

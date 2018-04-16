@@ -1,7 +1,10 @@
 package com.github.lit.user.controller;
 
 import com.github.lit.commons.context.ResultConst;
+import com.github.lit.commons.event.Event;
+import com.github.lit.plugin.core.event.user.LoginEvent;
 import com.github.lit.user.context.LoginMessageProvider;
+import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
@@ -17,10 +20,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
  */
 @Controller
 @RequestMapping("/user")
+@NoArgsConstructor
 public class LoginController {
 
-    @Autowired(required = false)
     private LoginMessageProvider loginMessageProvider;
+
+    @Autowired(required = false)
+    public LoginController(LoginMessageProvider loginMessageProvider) {
+        this.loginMessageProvider = loginMessageProvider;
+    }
 
     @GetMapping("/register")
     @Secured("ROLE_ADMIN")
@@ -50,10 +58,11 @@ public class LoginController {
 
         System.out.println(userName + "--" + password);
 //        userService.login
-        return "redirect:/plugin/user";
+        return "redirect:/user/pass";
     }
 
     @RequestMapping("/pass")
+    @Event(LoginEvent.class)
     public String pass() {
         System.out.println("----------------");
         return "redirect:/plugin/user";

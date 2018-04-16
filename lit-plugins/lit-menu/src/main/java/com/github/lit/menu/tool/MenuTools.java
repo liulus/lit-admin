@@ -22,19 +22,30 @@ public class MenuTools {
 
     public static List<MenuVo.Detail> findAll() {
         List<Menu> allMenus = MENU_SERVICE.findAll();
-        List<MenuVo.Detail> rootMenus = allMenus.stream()
+        return buildMenuLevek(allMenus);
+    }
+
+    public static List<MenuVo.Detail> findMenuByAuth(List<String> auths) {
+        List<Menu> menus = MENU_SERVICE.findByAuthorities(auths);
+        return buildMenuLevek(menus);
+    }
+
+    private static List<MenuVo.Detail> buildMenuLevek(List<Menu> menus) {
+        List<MenuVo.Detail> rootMenus = menus.stream()
                 .filter(menu -> menu.getParentId() == 0L)
                 .map(menu -> BeanUtils.convert(menu, new MenuVo.Detail()))
                 .collect(Collectors.toList());
 
-        Map<Long, List<MenuVo.Detail>> menuMap = allMenus.stream()
+        Map<Long, List<MenuVo.Detail>> menuMap = menus.stream()
                 .filter(menu -> menu.getParentId() != 0L)
                 .map(menu -> BeanUtils.convert(menu, new MenuVo.Detail()))
                 .collect(Collectors.groupingBy(MenuVo.Detail::getParentId));
-
         setChildMenu(rootMenus, menuMap);
 
-        return rootMenus;
+        return rootMenus.stream()
+                .filter(menu -> menu.getIsParent() || (!menu.getIsParent() && !menu.getUrl().isEmpty()))
+                .filter(MenuVo.Detail::getEnable)
+                .collect(Collectors.toList());
     }
 
     private static void setChildMenu(List<MenuVo.Detail> parentMenus, Map<Long, List<MenuVo.Detail>> menuMap) {

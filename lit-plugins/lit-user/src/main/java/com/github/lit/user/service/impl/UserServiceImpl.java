@@ -1,8 +1,8 @@
 package com.github.lit.user.service.impl;
 
 import com.github.lit.commons.exception.BizException;
+import com.github.lit.plugin.core.model.LoginUser;
 import com.github.lit.user.dao.UserDao;
-import com.github.lit.user.model.LoginUser;
 import com.github.lit.user.model.User;
 import com.github.lit.user.model.UserQo;
 import com.github.lit.user.service.UserService;
@@ -46,9 +46,9 @@ public class UserServiceImpl implements UserService {
         LoginUser loginUser = UserUtils.getLoginUser();
 
         if (loginUser != null && loginUser.hasOrg()) {
-            qo.setSerialNum(loginUser.getOrg().getLevelIndex());
+            qo.setSerialNum(loginUser.getLevelIndex());
             if (Strings.isNullOrEmpty(qo.getOrgCode())) {
-                qo.setOrgCode(loginUser.getOrg().getCode());
+                qo.setOrgCode(loginUser.getOrgCode());
             }
         }
 

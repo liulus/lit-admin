@@ -7,6 +7,7 @@ import com.github.lit.menu.model.MenuQo;
 import com.github.lit.plugin.dao.AbstractBaseDao;
 import com.google.common.base.Strings;
 import org.springframework.stereotype.Repository;
+import org.springframework.util.CollectionUtils;
 
 import java.util.List;
 
@@ -52,5 +53,14 @@ public class MenuDaoImpl extends AbstractBaseDao<Menu> implements MenuDao {
     @Override
     public List<Menu> findAll() {
         return getSelect().asc(Menu::getOrderNum).list();
+    }
+
+    @Override
+    public List<Menu> findByAuthorities(List<String> authorities) {
+        Select<Menu> select = getSelect().where(Menu::getAuthCode).equalsTo("");
+        if (!CollectionUtils.isEmpty(authorities)) {
+            select.or(Menu::getAuthCode).in(authorities.toArray());
+        }
+        return select.list();
     }
 }

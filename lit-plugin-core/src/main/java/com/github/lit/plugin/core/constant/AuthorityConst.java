@@ -1,4 +1,4 @@
-package com.github.lit.plugin.context;
+package com.github.lit.plugin.core.constant;
 
 /**
  * User : liulu

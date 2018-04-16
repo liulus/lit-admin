@@ -11,7 +11,7 @@ public class MenuConst {
     public static final String MENU_TYPE = "menu_type";
 
     /** 系统初始化 Application 中菜单属性 */
-    public static final String MENUS = "menus";
+    public static final String MENUS = "_menus";
 
 
 }

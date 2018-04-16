@@ -8,7 +8,6 @@ import com.github.lit.security.service.RoleService;
 import com.github.lit.user.model.User;
 import com.github.lit.user.service.OrganizationService;
 import com.github.lit.user.service.UserService;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -18,6 +17,7 @@ import org.springframework.util.CollectionUtils;
 import javax.annotation.Resource;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -52,16 +52,19 @@ public class LoginUserDetailService implements UserDetailsService {
         }
         // 构建 loginUser
         LoginUserDetail userDetail = BeanUtils.convert(user, new LoginUserDetail());
-        if (user.getOrgId() != null && user.getOrgId() != 0L) {
-            userDetail.setOrg(organizationService.findById(user.getId()));
-        }
+        Optional.ofNullable(userDetail.getOrgId())
+                .filter(orgId -> orgId != 0L)
+                .map(orgId -> organizationService.findById(orgId))
+                .ifPresent(org -> {
+                    userDetail.setOrgCode(org.getCode());
+                    userDetail.setOrgName(org.getFullName());
+                    userDetail.setLevelIndex(org.getLevelIndex());
+                });
 
         // 超级管理员拥有所有权限
         if (Arrays.binarySearch(ADMIN_USER, user.getUserName()) >= 0) {
             List<Authority> authorities = authorityService.findAll();
-            userDetail.setAuthorities(authorities.stream()
-                    .map(authority -> new SimpleGrantedAuthority(authority.getCode()))
-                    .collect(Collectors.toList()));
+            userDetail.setAuths(authorities.stream().map(Authority::getCode).collect(Collectors.toList()));
             return userDetail;
         }
 
@@ -73,9 +76,7 @@ public class LoginUserDetailService implements UserDetailsService {
         List<Authority> roleAuthorities = authorityService.findByRoleIds(roles.stream().map(Role::getId).toArray(Long[]::new));
 
         userDetail.setRoles(roles);
-        userDetail.setAuthorities(roleAuthorities.stream()
-                .map(authority -> new SimpleGrantedAuthority(authority.getCode()))
-                .collect(Collectors.toList()));
+        userDetail.setAuths(roleAuthorities.stream().map(Authority::getCode).collect(Collectors.toList()));
         return userDetail;
     }
 

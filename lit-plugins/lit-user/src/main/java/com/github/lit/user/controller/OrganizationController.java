@@ -1,7 +1,7 @@
 package com.github.lit.user.controller;
 
 import com.github.lit.commons.bean.BeanUtils;
-import com.github.lit.plugin.context.PluginConst;
+import com.github.lit.plugin.core.constant.PluginConst;
 import com.github.lit.plugin.web.ViewName;
 import com.github.lit.user.model.Organization;
 import com.github.lit.user.model.OrganizationQo;

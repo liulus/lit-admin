@@ -5,6 +5,9 @@ import com.github.lit.commons.event.EventComponent;
 import com.github.lit.menu.context.MenuConst;
 import com.github.lit.menu.model.MenuVo;
 import com.github.lit.menu.tool.MenuTools;
+import com.github.lit.plugin.core.event.user.LoginEvent;
+import com.github.lit.plugin.core.model.LoginUser;
+import com.github.lit.plugin.core.util.PluginUtils;
 import com.github.lit.plugin.web.WebUtils;
 import com.google.common.eventbus.Subscribe;
 
@@ -20,19 +23,30 @@ public class MenuEventListener {
 
     @Subscribe
     public void appStartedEvent(AppStartedEvent event) {
-
+        if (PluginUtils.isSecurityPresent()) {
+            return;
+        }
         List<MenuVo.Detail> menus = MenuTools.findAll();
         WebUtils.setContextAttribute(MenuConst.MENUS, menus);
     }
 
     @Subscribe
     public void menuUpdateListener(MenuUpdateEvent event) {
+        if (PluginUtils.isSecurityPresent()) {
+            return;
+        }
         WebUtils.removeContextAttribute(MenuConst.MENUS);
-
         List<MenuVo.Detail> menus = MenuTools.findAll();
         WebUtils.setContextAttribute(MenuConst.MENUS, menus);
     }
 
-
+    @Subscribe
+    public void userLoginListener(LoginEvent event){
+        if (PluginUtils.isSecurityPresent()) {
+            LoginUser loginUser = PluginUtils.getLoginUser();
+            List<MenuVo.Detail> menus = MenuTools.findMenuByAuth(loginUser.getAuths());
+            WebUtils.setSessionAttribute(MenuConst.MENUS, menus);
+        }
+    }
 
 }

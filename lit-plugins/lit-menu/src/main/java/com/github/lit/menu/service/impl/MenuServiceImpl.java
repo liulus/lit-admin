@@ -7,6 +7,8 @@ import com.github.lit.menu.event.MenuUpdateEvent;
 import com.github.lit.menu.model.Menu;
 import com.github.lit.menu.model.MenuQo;
 import com.github.lit.menu.service.MenuService;
+import com.github.lit.plugin.core.model.LoginUser;
+import com.github.lit.plugin.core.util.PluginUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -132,6 +134,12 @@ public class MenuServiceImpl implements MenuService {
     @Override
     public List<Menu> findByAuthorities(List<String> authorities) {
         return menuDao.findByAuthorities(authorities);
+    }
+
+    @Override
+    public List<Menu> findMyMenus() {
+        LoginUser loginUser = PluginUtils.getLoginUser();
+        return menuDao.findByAuthorities(loginUser.getAuths());
     }
 
 }

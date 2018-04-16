@@ -22,15 +22,15 @@ public class MenuTools {
 
     public static List<MenuVo.Detail> findAll() {
         List<Menu> allMenus = MENU_SERVICE.findAll();
-        return buildMenuLevek(allMenus);
+        return buildMenuLevel(allMenus);
     }
 
-    public static List<MenuVo.Detail> findMenuByAuth(List<String> auths) {
-        List<Menu> menus = MENU_SERVICE.findByAuthorities(auths);
-        return buildMenuLevek(menus);
+    public static List<MenuVo.Detail> findMyMenus() {
+        List<Menu> menus = MENU_SERVICE.findMyMenus();
+        return buildMenuLevel(menus);
     }
 
-    private static List<MenuVo.Detail> buildMenuLevek(List<Menu> menus) {
+    private static List<MenuVo.Detail> buildMenuLevel(List<Menu> menus) {
         List<MenuVo.Detail> rootMenus = menus.stream()
                 .filter(menu -> menu.getParentId() == 0L)
                 .map(menu -> BeanUtils.convert(menu, new MenuVo.Detail()))

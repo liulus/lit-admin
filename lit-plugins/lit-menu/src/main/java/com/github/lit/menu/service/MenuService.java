@@ -31,14 +31,14 @@ public interface MenuService {
     /**
      * 增加菜单
      *
-     * @param menu
+     * @param menu Menu
      */
     Long insert(Menu menu);
 
     /**
      * 更新菜单
      *
-     * @param menu
+     * @param menu Menu
      */
     int update(Menu menu);
 
@@ -60,20 +60,29 @@ public interface MenuService {
     /**
      * 改变菜单状态
      *
-     * @param id
+     * @param id       id
      * @param isEnable 是否启用
      */
     void changeStatus(Long id, boolean isEnable);
 
     /**
-     * @return
+     * @return List<Menu>
      */
     List<Menu> findAll();
 
     /**
      * 根据权限码查询菜单
+     *
      * @param authorities 权限码
-     * @return
+     * @return List<Menu>
      */
     List<Menu> findByAuthorities(List<String> authorities);
+
+    /**
+     * 查询当前登录用户的菜单
+     *
+     * @return List<Menu>
+     */
+    List<Menu> findMyMenus();
+
 }

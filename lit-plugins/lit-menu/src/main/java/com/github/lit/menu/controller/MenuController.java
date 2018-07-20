@@ -1,12 +1,12 @@
 package com.github.lit.menu.controller;
 
-import com.github.lit.commons.bean.BeanUtils;
+import com.github.lit.bean.BeanUtils;
 import com.github.lit.menu.model.Menu;
 import com.github.lit.menu.model.MenuQo;
 import com.github.lit.menu.model.MenuVo;
 import com.github.lit.menu.service.MenuService;
 import com.github.lit.plugin.core.constant.PluginConst;
-import com.github.lit.web.annotation.ViewName;
+import com.github.lit.spring.web.annotation.ViewName;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

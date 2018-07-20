@@ -1,11 +1,11 @@
-package com.github.lit.web.dao;
+package com.github.lit.plugin.core.dao;
 
-import com.github.lit.commons.bean.BeanUtils;
-import com.github.lit.commons.page.Page;
-import com.github.lit.commons.util.ClassUtils;
+import com.github.lit.bean.BeanUtils;
 import com.github.lit.jdbc.JdbcTools;
 import com.github.lit.jdbc.annotation.Transient;
 import com.github.lit.jdbc.statement.select.Select;
+import com.github.lit.page.Page;
+import com.github.lit.util.ClassUtils;
 import com.google.common.base.Strings;
 
 import javax.annotation.Resource;

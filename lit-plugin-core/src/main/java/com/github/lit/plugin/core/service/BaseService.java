@@ -1,6 +1,6 @@
-package com.github.lit.web.service;
+package com.github.lit.plugin.core.service;
 
-import com.github.lit.commons.page.Page;
+import com.github.lit.page.Page;
 
 import java.util.List;
 

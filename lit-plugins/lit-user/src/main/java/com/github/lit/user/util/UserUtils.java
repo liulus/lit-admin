@@ -1,11 +1,11 @@
 package com.github.lit.user.util;
 
-import com.github.lit.commons.spring.SpringContextUtils;
-import com.github.lit.commons.util.ClassUtils;
-import com.github.lit.commons.util.EncryptUtils;
 import com.github.lit.plugin.core.model.LoginUser;
+import com.github.lit.spring.util.SpringContextUtils;
+import com.github.lit.spring.util.WebUtils;
 import com.github.lit.user.context.UserConst;
-import com.github.lit.web.util.WebUtils;
+import com.github.lit.util.ClassUtils;
+import com.github.lit.util.EncryptUtils;
 import com.google.common.base.Strings;
 import org.springframework.security.crypto.password.PasswordEncoder;
 

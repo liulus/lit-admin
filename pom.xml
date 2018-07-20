@@ -11,7 +11,7 @@
 
     <modules>
         <module>lit-plugins</module>
-        <module>lit-web</module>
+        <!--<module>lit-web</module>-->
         <module>lit-test</module>
         <module>lit-webstarter</module>
         <module>lit-spring-boot-atuoconfigure</module>
@@ -76,17 +76,6 @@
         </pluginRepository>
     </pluginRepositories>
 
-    <distributionManagement>
-        <snapshotRepository>
-            <id>nexus</id>
-            <url>http://repo.ipampas.net/repository/maven-snapshots/</url>
-            <uniqueVersion>true</uniqueVersion>
-        </snapshotRepository>
-        <repository>
-            <id>nexus</id>
-            <url>http://repo.ipampas.net/repository/maven-releases/</url>
-        </repository>
-    </distributionManagement>
 
 
     <dependencyManagement>

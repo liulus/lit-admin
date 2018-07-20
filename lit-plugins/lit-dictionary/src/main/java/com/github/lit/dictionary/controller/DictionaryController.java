@@ -1,13 +1,13 @@
 package com.github.lit.dictionary.controller;
 
-import com.github.lit.commons.bean.BeanUtils;
+import com.github.lit.bean.BeanUtils;
 import com.github.lit.dictionary.model.Dictionary;
 import com.github.lit.dictionary.model.DictionaryQo;
 import com.github.lit.dictionary.model.DictionaryVo;
 import com.github.lit.dictionary.service.DictionaryService;
 import com.github.lit.plugin.core.constant.AuthorityConst;
 import com.github.lit.plugin.core.constant.PluginConst;
-import com.github.lit.web.annotation.ViewName;
+import com.github.lit.spring.web.annotation.ViewName;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;

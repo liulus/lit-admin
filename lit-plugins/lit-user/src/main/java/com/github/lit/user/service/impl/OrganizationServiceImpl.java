@@ -1,6 +1,6 @@
 package com.github.lit.user.service.impl;
 
-import com.github.lit.commons.exception.BizException;
+import com.github.lit.exception.BizException;
 import com.github.lit.jdbc.JdbcTools;
 import com.github.lit.user.dao.OrganizationDao;
 import com.github.lit.user.model.Organization;

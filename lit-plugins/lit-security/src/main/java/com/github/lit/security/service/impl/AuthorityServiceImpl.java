@@ -1,9 +1,9 @@
 package com.github.lit.security.service.impl;
 
-import com.github.lit.commons.bean.BeanUtils;
-import com.github.lit.commons.exception.BizException;
+import com.github.lit.bean.BeanUtils;
 import com.github.lit.dictionary.model.Dictionary;
 import com.github.lit.dictionary.tool.DictionaryTools;
+import com.github.lit.exception.BizException;
 import com.github.lit.security.context.SecurityConst;
 import com.github.lit.security.dao.AuthorityDao;
 import com.github.lit.security.model.Authority;

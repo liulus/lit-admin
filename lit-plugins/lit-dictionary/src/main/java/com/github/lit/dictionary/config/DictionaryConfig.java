@@ -1,6 +1,5 @@
 package com.github.lit.dictionary.config;
 
-import com.github.lit.commons.spring.condition.ConditionalOnClass;
 import org.springframework.context.annotation.Configuration;
 
 import javax.annotation.PostConstruct;
@@ -12,7 +11,6 @@ import javax.annotation.Resource;
  * version $Id: DictionaryConfig.java, v 0.1 Exp $
  */
 @Configuration
-@ConditionalOnClass(freemarker.template.Configuration.class)
 public class DictionaryConfig {
 
     @Resource

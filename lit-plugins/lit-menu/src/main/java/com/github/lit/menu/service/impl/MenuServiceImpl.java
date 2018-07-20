@@ -1,7 +1,6 @@
 package com.github.lit.menu.service.impl;
 
-import com.github.lit.commons.event.Event;
-import com.github.lit.commons.exception.BizException;
+import com.github.lit.exception.BizException;
 import com.github.lit.menu.dao.MenuDao;
 import com.github.lit.menu.event.MenuUpdateEvent;
 import com.github.lit.menu.model.Menu;
@@ -9,6 +8,7 @@ import com.github.lit.menu.model.MenuQo;
 import com.github.lit.menu.service.MenuService;
 import com.github.lit.plugin.core.model.LoginUser;
 import com.github.lit.plugin.core.util.PluginUtils;
+import com.github.lit.spring.event.Event;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

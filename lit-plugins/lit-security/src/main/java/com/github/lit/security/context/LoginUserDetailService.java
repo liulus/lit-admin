@@ -1,6 +1,6 @@
 package com.github.lit.security.context;
 
-import com.github.lit.commons.bean.BeanUtils;
+import com.github.lit.bean.BeanUtils;
 import com.github.lit.security.model.Authority;
 import com.github.lit.security.model.Role;
 import com.github.lit.security.service.AuthorityService;

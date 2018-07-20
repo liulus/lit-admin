@@ -4,7 +4,7 @@ import com.github.lit.param.model.Param;
 import com.github.lit.param.model.ParamQo;
 import com.github.lit.param.service.ParamService;
 import com.github.lit.plugin.core.constant.PluginConst;
-import com.github.lit.web.annotation.ViewName;
+import com.github.lit.spring.web.annotation.ViewName;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 

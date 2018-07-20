@@ -1,6 +1,6 @@
 package com.github.lit.menu.model;
 
-import com.github.lit.commons.page.Page;
+import com.github.lit.page.Page;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

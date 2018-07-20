@@ -1,8 +1,8 @@
 package com.github.lit.security.dao.impl;
 
+import com.github.lit.plugin.core.dao.AbstractBaseDao;
 import com.github.lit.security.dao.RoleAuthorityDao;
 import com.github.lit.security.model.RoleAuthority;
-import com.github.lit.web.dao.AbstractBaseDao;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;

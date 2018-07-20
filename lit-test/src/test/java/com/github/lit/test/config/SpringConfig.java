@@ -1,6 +1,6 @@
 package com.github.lit.test.config;
 
-import com.github.lit.commons.event.guava.EventConfig;
+import com.github.lit.event.guava.EventConfig;
 import com.mchange.v2.c3p0.ComboPooledDataSource;
 import org.springframework.context.annotation.*;
 import org.springframework.core.env.Environment;

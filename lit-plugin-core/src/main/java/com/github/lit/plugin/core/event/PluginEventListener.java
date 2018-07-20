@@ -1,9 +1,9 @@
 package com.github.lit.plugin.core.event;
 
-import com.github.lit.commons.event.AppStartedEvent;
-import com.github.lit.commons.event.EventComponent;
 import com.github.lit.plugin.core.util.PluginUtils;
-import com.github.lit.web.util.WebUtils;
+import com.github.lit.spring.event.AppStartedEvent;
+import com.github.lit.spring.event.EventComponent;
+import com.github.lit.spring.util.WebUtils;
 import com.google.common.eventbus.Subscribe;
 import org.springframework.beans.factory.annotation.Value;
 

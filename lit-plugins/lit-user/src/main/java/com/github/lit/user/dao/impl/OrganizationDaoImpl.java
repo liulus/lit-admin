@@ -1,10 +1,10 @@
 package com.github.lit.user.dao.impl;
 
 import com.github.lit.jdbc.statement.select.Select;
+import com.github.lit.plugin.core.dao.AbstractBaseDao;
 import com.github.lit.user.dao.OrganizationDao;
 import com.github.lit.user.model.Organization;
 import com.github.lit.user.model.OrganizationQo;
-import com.github.lit.web.dao.AbstractBaseDao;
 import com.google.common.base.Strings;
 import org.springframework.stereotype.Repository;
 

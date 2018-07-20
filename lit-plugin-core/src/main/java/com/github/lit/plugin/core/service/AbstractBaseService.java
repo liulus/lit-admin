@@ -1,7 +1,7 @@
-package com.github.lit.web.service;
+package com.github.lit.plugin.core.service;
 
-import com.github.lit.commons.page.Page;
-import com.github.lit.web.dao.BaseDao;
+import com.github.lit.page.Page;
+import com.github.lit.plugin.core.dao.BaseDao;
 
 import javax.annotation.Resource;
 import java.util.List;

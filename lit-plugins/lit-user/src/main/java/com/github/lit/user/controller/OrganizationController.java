@@ -1,12 +1,12 @@
 package com.github.lit.user.controller;
 
-import com.github.lit.commons.bean.BeanUtils;
+import com.github.lit.bean.BeanUtils;
 import com.github.lit.plugin.core.constant.PluginConst;
+import com.github.lit.spring.web.annotation.ViewName;
 import com.github.lit.user.model.Organization;
 import com.github.lit.user.model.OrganizationQo;
 import com.github.lit.user.model.OrganizationVo;
 import com.github.lit.user.service.OrganizationService;
-import com.github.lit.web.annotation.ViewName;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;

@@ -1,6 +1,6 @@
 package com.github.lit.user.service.impl;
 
-import com.github.lit.commons.exception.BizException;
+import com.github.lit.exception.BizException;
 import com.github.lit.plugin.core.model.LoginUser;
 import com.github.lit.user.dao.UserDao;
 import com.github.lit.user.model.User;

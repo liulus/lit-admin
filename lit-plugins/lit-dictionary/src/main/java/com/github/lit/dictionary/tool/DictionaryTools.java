@@ -1,8 +1,8 @@
 package com.github.lit.dictionary.tool;
 
-import com.github.lit.commons.spring.SpringContextUtils;
 import com.github.lit.dictionary.model.Dictionary;
 import com.github.lit.dictionary.service.DictionaryService;
+import com.github.lit.spring.util.SpringContextUtils;
 
 import java.util.List;
 

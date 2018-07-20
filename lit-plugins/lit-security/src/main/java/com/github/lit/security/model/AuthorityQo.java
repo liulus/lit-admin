@@ -1,6 +1,6 @@
 package com.github.lit.security.model;
 
-import com.github.lit.commons.page.Page;
+import com.github.lit.page.Page;
 import lombok.*;
 
 /**

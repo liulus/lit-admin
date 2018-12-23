@@ -1,18 +1,17 @@
 package com.github.lit.param.service.impl;
 
-import com.github.lit.exception.BizException;
-import com.github.lit.jdbc.JdbcTools;
-import com.github.lit.jdbc.statement.select.Select;
-import com.github.lit.param.model.Param;
-import com.github.lit.param.model.ParamQo;
+import com.github.lit.param.model.SysParam;
+import com.github.lit.param.model.SysParamQo;
 import com.github.lit.param.service.ParamService;
-import com.google.common.base.Strings;
+import com.github.lit.support.exception.BizException;
+import com.github.lit.support.jdbc.JdbcRepository;
+import com.github.lit.support.page.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
-import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -26,51 +25,39 @@ import java.util.Objects;
 public class ParamServiceImpl implements ParamService {
 
 
+//    @Resource
+//    private JdbcTools jdbcTools;
+
     @Resource
-    private JdbcTools jdbcTools;
+    private JdbcRepository jdbcRepository;
 
 
     @Override
-    public List<Param> queryPageList(ParamQo qo) {
-
-        Select<Param> select = jdbcTools.select(Param.class);
-
-        if (!Strings.isNullOrEmpty(qo.getKeyword())) {
-            select.and()
-                    .bracket(Param::getCode).like(qo.getKeyword())
-                    .or(Param::getValue).like(qo.getKeyword())
-                    .or(Param::getRemark).like(qo.getKeyword())
-                    .end();
-        }
-
-        if (!Strings.isNullOrEmpty(qo.getCode())) {
-            select.and(Param::getCode).equalsTo(qo.getCode());
-        }
-
-        return select.page(qo).list();
+    public Page<SysParam> findPageList(SysParamQo qo) {
+        return jdbcRepository.selectPageList(SysParam.class, qo);
     }
 
     @Override
-    public Param findById(Long id) {
-        return jdbcTools.get(Param.class, id);
+    public SysParam findById(Long id) {
+        return jdbcRepository.selectById(SysParam.class, id);
     }
 
     @Override
-    public Param findByCode(String code) {
-        return jdbcTools.select(Param.class).where(Param::getCode).equalsTo(code).single();
+    public SysParam findByCode(String code) {
+        return jdbcRepository.selectByProperty(SysParam::getCode, code);
     }
 
     @Override
-    public void insert(Param param) {
+    public void insert(SysParam param) {
         checkCode(param.getCode());
         param.setSystem(false);
 
-        jdbcTools.insert(param);
+        jdbcRepository.insert(param);
     }
 
     @Override
-    public void update(Param param) {
-        Param oldParam = findById(param.getParamId());
+    public void update(SysParam param) {
+        SysParam oldParam = findById(param.getParamId());
         if (oldParam == null) {
             return;
         }
@@ -81,11 +68,11 @@ public class ParamServiceImpl implements ParamService {
             checkCode(param.getCode());
         }
         param.setSystem(null);
-        jdbcTools.update(param);
+        jdbcRepository.updateSelective(param);
     }
 
     private void checkCode(String code) {
-        Param param = findByCode(code);
+        SysParam param = findByCode(code);
         if (param != null) {
             throw new BizException("参数 code 已经存在");
         }
@@ -96,18 +83,17 @@ public class ParamServiceImpl implements ParamService {
         if (ids == null || ids.length == 0) {
             return;
         }
-        List<Param> params = jdbcTools.select(Param.class)
-                .where(Param::getParamId).in((Object[]) ids)
-                .list();
+
+        List<SysParam> params = jdbcRepository.selectByIds(SysParam.class, Arrays.asList(ids));
 
         List<Long> validIds = new ArrayList<>(params.size());
 
-        for (Param param : params) {
+        for (SysParam param : params) {
             if (param.getSystem()) {
                 throw new BizException(String.format("%s 是系统级参数, 不允许删除", param.getCode()));
             }
             validIds.add(param.getParamId());
         }
-        jdbcTools.deleteByIds(Param.class, validIds.toArray(new Serializable[validIds.size()]));
+        jdbcRepository.deleteByIds(SysParam.class, validIds);
     }
 }

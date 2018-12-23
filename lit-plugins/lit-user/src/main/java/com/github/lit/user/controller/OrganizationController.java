@@ -1,18 +1,18 @@
 package com.github.lit.user.controller;
 
-import com.github.lit.bean.BeanUtils;
 import com.github.lit.plugin.core.constant.PluginConst;
-import com.github.lit.spring.web.annotation.ViewName;
+import com.github.lit.support.annotation.ViewName;
+import com.github.lit.support.page.Page;
+import com.github.lit.support.page.PageUtils;
+import com.github.lit.support.util.BeanUtils;
 import com.github.lit.user.model.Organization;
 import com.github.lit.user.model.OrganizationQo;
 import com.github.lit.user.model.OrganizationVo;
 import com.github.lit.user.service.OrganizationService;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import java.util.List;
 
 /**
  * User : liulu
@@ -29,12 +29,13 @@ public class OrganizationController {
 
     @GetMapping
     @ViewName("organization")
-    public List<OrganizationVo.List> orgList(OrganizationQo qo, Model model) {
+    public Page<OrganizationVo.List> orgList(OrganizationQo qo) {
+        Page<Organization> organizationPage = organizationService.findPageList(qo);
         if (qo.getParentId() != 0L) {
             Organization org = organizationService.findById(qo.getParentId());
-            model.addAttribute("returnId", org == null ? 0 : org.getParentId());
+            organizationPage.add("returnId", org == null ? 0 : org.getParentId());
         }
-        return BeanUtils.convert(OrganizationVo.List.class, organizationService.findPageList(qo));
+        return PageUtils.convert(organizationPage, OrganizationVo.List.class, null);
     }
 
     @GetMapping("/{id}")

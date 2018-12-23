@@ -1,6 +1,6 @@
 package com.github.lit.user.model;
 
-import com.github.lit.page.Page;
+import com.github.lit.support.page.PageRequest;
 import lombok.*;
 
 /**
@@ -13,7 +13,7 @@ import lombok.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class OrganizationQo extends Page {
+public class OrganizationQo extends PageRequest {
 
     private static final long serialVersionUID = -3178668574403099542L;
 

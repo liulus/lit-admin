@@ -1,7 +1,11 @@
 package com.github.lit.security.model;
 
-import com.github.lit.page.Page;
+import com.github.lit.support.annotation.Condition;
+import com.github.lit.support.page.PageRequest;
+import com.github.lit.support.sql.Logic;
 import lombok.*;
+
+import java.util.List;
 
 /**
  * User : liulu
@@ -13,9 +17,12 @@ import lombok.*;
 @EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
 @AllArgsConstructor
-public class AuthorityQo extends Page {
+public class AuthorityQo extends PageRequest {
 
     private static final long serialVersionUID = 8174220538849445482L;
 
     private String authorityType;
+
+    @Condition(logic = Logic.IN, property = "userId")
+    private List<Long> userIds;
 }

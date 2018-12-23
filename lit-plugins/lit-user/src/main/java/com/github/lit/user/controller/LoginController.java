@@ -1,8 +1,7 @@
 package com.github.lit.user.controller;
 
-import com.github.lit.constant.ResultConst;
 import com.github.lit.plugin.core.event.user.LoginEvent;
-import com.github.lit.spring.event.Event;
+import com.github.lit.support.event.Event;
 import com.github.lit.user.context.LoginMessageProvider;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,7 +46,7 @@ public class LoginController {
     @GetMapping("/login")
     public String login(Model model) {
         if (loginMessageProvider != null) {
-            model.addAttribute(ResultConst.MESSAGE, loginMessageProvider.getMessage());
+            model.addAttribute("message", loginMessageProvider.getMessage());
         }
         return "default-login";
     }

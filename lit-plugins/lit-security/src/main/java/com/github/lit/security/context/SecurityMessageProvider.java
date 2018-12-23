@@ -1,6 +1,6 @@
 package com.github.lit.security.context;
 
-import com.github.lit.spring.util.WebUtils;
+import com.github.lit.support.util.WebUtils;
 import com.github.lit.user.context.LoginMessageProvider;
 import org.springframework.security.authentication.*;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;

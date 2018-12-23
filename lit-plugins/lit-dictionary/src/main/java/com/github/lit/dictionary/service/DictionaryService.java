@@ -2,6 +2,7 @@ package com.github.lit.dictionary.service;
 
 import com.github.lit.dictionary.model.Dictionary;
 import com.github.lit.dictionary.model.DictionaryQo;
+import com.github.lit.support.page.Page;
 
 import java.util.List;
 
@@ -41,7 +42,7 @@ public interface DictionaryService {
      * @param qo 查询对象
      * @return Dictionary
      */
-    List<Dictionary> findPageList(DictionaryQo qo);
+    Page<Dictionary> findPageList(DictionaryQo qo);
 
     /**
      * 根据 Id 删除字典对象

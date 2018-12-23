@@ -1,15 +1,11 @@
 package com.github.lit.user.model;
 
-import com.github.lit.jdbc.annotation.Column;
-import com.github.lit.jdbc.annotation.GeneratedValue;
-import com.github.lit.jdbc.annotation.Id;
-import com.github.lit.jdbc.annotation.Table;
-import com.github.lit.jdbc.enums.GenerationType;
 import com.github.lit.plugin.core.constant.PluginConst;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
 

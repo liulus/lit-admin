@@ -1,6 +1,6 @@
 package com.github.lit.user.model;
 
-import com.github.lit.page.Page;
+import com.github.lit.support.page.PageRequest;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserQo extends Page{
+public class UserQo extends PageRequest {
 
     private static final long serialVersionUID = 3920536469407790559L;
 

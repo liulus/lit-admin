@@ -1,10 +1,10 @@
 package com.github.lit.menu.tool;
 
-import com.github.lit.bean.BeanUtils;
 import com.github.lit.menu.model.Menu;
 import com.github.lit.menu.model.MenuVo;
 import com.github.lit.menu.service.MenuService;
-import com.github.lit.spring.util.SpringContextUtils;
+import com.github.lit.support.util.BeanUtils;
+import com.github.lit.support.util.SpringContextUtils;
 import org.springframework.util.CollectionUtils;
 
 import java.util.List;

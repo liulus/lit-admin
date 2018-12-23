@@ -1,9 +1,8 @@
 package com.github.lit.user.service;
 
+import com.github.lit.support.page.Page;
 import com.github.lit.user.model.User;
 import com.github.lit.user.model.UserQo;
-
-import java.util.List;
 
 /**
  * User : liulu
@@ -35,7 +34,7 @@ public interface UserService {
      * @param qo 查询条件
      * @return 用户列表
      */
-    List<User> findPageList(UserQo qo);
+    Page<User> findPageList(UserQo qo);
 
     /**
      * 新增用户

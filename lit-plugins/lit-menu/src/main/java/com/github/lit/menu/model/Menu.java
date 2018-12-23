@@ -1,15 +1,13 @@
 package com.github.lit.menu.model;
 
-import com.github.lit.jdbc.annotation.Column;
-import com.github.lit.jdbc.annotation.GeneratedValue;
-import com.github.lit.jdbc.annotation.Id;
-import com.github.lit.jdbc.annotation.Table;
-import com.github.lit.jdbc.enums.GenerationType;
 import com.github.lit.plugin.core.constant.PluginConst;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import javax.persistence.Column;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.io.Serializable;
 
 /**
@@ -29,7 +27,6 @@ public class Menu implements Serializable {
      * 菜单Id
      */
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     /**

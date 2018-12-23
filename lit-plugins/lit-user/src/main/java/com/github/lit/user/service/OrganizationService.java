@@ -1,9 +1,8 @@
 package com.github.lit.user.service;
 
+import com.github.lit.support.page.Page;
 import com.github.lit.user.model.Organization;
 import com.github.lit.user.model.OrganizationQo;
-
-import java.util.List;
 
 /**
  * User : liulu
@@ -17,7 +16,7 @@ public interface OrganizationService {
      * @param vo 查询条件
      * @return
      */
-    List<Organization> findPageList(OrganizationQo vo);
+    Page<Organization> findPageList(OrganizationQo vo);
 
     /**
      * 查询单个机构

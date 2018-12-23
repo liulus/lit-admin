@@ -1,8 +1,10 @@
 package com.github.lit.user.controller;
 
-import com.github.lit.bean.BeanUtils;
 import com.github.lit.plugin.core.constant.PluginConst;
-import com.github.lit.spring.web.annotation.ViewName;
+import com.github.lit.support.annotation.ViewName;
+import com.github.lit.support.page.Page;
+import com.github.lit.support.page.PageUtils;
+import com.github.lit.support.util.BeanUtils;
 import com.github.lit.user.model.User;
 import com.github.lit.user.model.UserQo;
 import com.github.lit.user.model.UserVo;
@@ -11,7 +13,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import java.util.List;
 
 /**
  * User : liulu
@@ -27,9 +28,9 @@ public class UserController {
 
     @GetMapping
     @ViewName("user")
-    public List<UserVo.List> userList(UserQo qo) {
-        List<User> pageList = userService.findPageList(qo);
-        return BeanUtils.convert(UserVo.List.class, pageList);
+    public Page<UserVo.List> userList(UserQo qo) {
+        Page<User> pageList = userService.findPageList(qo);
+        return PageUtils.convert(pageList, UserVo.List.class, null);
     }
 
     @GetMapping("/{id}")

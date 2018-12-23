@@ -1,22 +1,22 @@
 package com.github.lit.menu.service.impl;
 
-import com.github.lit.exception.BizException;
-import com.github.lit.menu.dao.MenuDao;
 import com.github.lit.menu.event.MenuUpdateEvent;
 import com.github.lit.menu.model.Menu;
 import com.github.lit.menu.model.MenuQo;
 import com.github.lit.menu.service.MenuService;
 import com.github.lit.plugin.core.model.LoginUser;
 import com.github.lit.plugin.core.util.PluginUtils;
-import com.github.lit.spring.event.Event;
+import com.github.lit.support.event.Event;
+import com.github.lit.support.exception.BizException;
+import com.github.lit.support.jdbc.JdbcRepository;
+import com.github.lit.support.page.Page;
+import com.github.lit.support.sql.SQL;
+import com.github.lit.support.sql.TableMetaDate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 /**
  * User : liulu
@@ -28,16 +28,16 @@ import java.util.Objects;
 public class MenuServiceImpl implements MenuService {
 
     @Resource
-    private MenuDao menuDao;
+    private JdbcRepository jdbcRepository;
 
     @Override
-    public List<Menu> findPageList(MenuQo qo) {
-        return menuDao.findPageList(qo);
+    public Page<Menu> findPageList(MenuQo qo) {
+        return jdbcRepository.selectPageList(Menu.class, qo);
     }
 
     @Override
     public Menu findById(Long id) {
-        return menuDao.findById(id);
+        return jdbcRepository.selectById(Menu.class, id);
     }
 
     @Override
@@ -45,16 +45,17 @@ public class MenuServiceImpl implements MenuService {
     public Long insert(Menu menu) {
 
         checkMenuCode(menu.getCode(), menu.getParentId());
-
         menu.setEnable(true);
-        return menuDao.insert(menu);
+
+        jdbcRepository.insert(menu);
+        return menu.getId();
     }
 
     @Override
     @Event(MenuUpdateEvent.class)
     public int update(Menu menu) {
 
-        Menu old = menuDao.findById(menu.getId());
+        Menu old = findById(menu.getId());
         if (old == null) {
             return 0;
         }
@@ -62,17 +63,28 @@ public class MenuServiceImpl implements MenuService {
             checkMenuCode(menu.getCode(), menu.getParentId());
         }
 
-        return menuDao.update(menu);
+        return jdbcRepository.updateSelective(menu);
     }
 
     private void checkMenuCode(String code, Long parentId) {
-        if (parentId == null) {
-            parentId = 0L;
-        }
-        Menu menu = menuDao.findByCodeAndParentId(code, parentId);
+        Menu menu = findByCodeAndParentId(code, parentId);
         if (menu != null) {
             throw new BizException("菜单编码已经存在");
         }
+    }
+
+    private Menu findByCodeAndParentId(String code, Long parentId) {
+        TableMetaDate metaDate = TableMetaDate.forClass(Menu.class);
+        SQL sql = SQL.init().SELECT(metaDate.getAllColumns())
+                .FROM(metaDate.getTableName())
+                .WHERE("parent_id = :parentId")
+                .WHERE("code = :code");
+
+        Map<String, Object> params = new HashMap<>(2);
+        params.put("parentId", parentId == null ? 0L : parentId);
+        params.put("code", code);
+
+        return jdbcRepository.selectForObject(sql, params, Menu.class);
     }
 
     @Override
@@ -82,17 +94,26 @@ public class MenuServiceImpl implements MenuService {
             return 0;
         }
 
-        List<Menu> menus = menuDao.findByIds(ids);
+        List<Menu> menus = jdbcRepository.selectByIds(Menu.class, Arrays.asList(ids));
         List<Long> validIds = new ArrayList<>(menus.size());
 
         for (Menu menu : menus) {
-            int count = menuDao.count(MenuQo.builder().parentId(menu.getId()).build());
+            int count = countByParentId(menu.getId());
             if (count > 0) {
                 throw new BizException(String.format("请先删除 %s 的子菜单数据 !", menu.getName()));
             }
             validIds.add(menu.getId());
         }
-        return menuDao.deleteByIds(validIds.toArray(new Long[validIds.size()]));
+        return jdbcRepository.deleteByIds(Menu.class, validIds);
+    }
+
+    private int countByParentId(Long parentId) {
+        TableMetaDate metaDate = TableMetaDate.forClass(Menu.class);
+        SQL sql = SQL.init().SELECT("count(*)")
+                .FROM(metaDate.getTableName())
+                .WHERE("parent_id = :parentId");
+        Map<String, Long> params = Collections.singletonMap("parentId", parentId == null ? 0L : parentId);
+        return jdbcRepository.selectForObject(sql, params, int.class);
     }
 
     @Override
@@ -106,15 +127,15 @@ public class MenuServiceImpl implements MenuService {
         }
 
         // 验证新的 parentId 不是 被移动菜单的子菜单
-        Menu menu = menuDao.findById(parentId);
+        Menu menu = findById(parentId);
         while (menu != null) {
             if (menu.getParentId() != null && Arrays.binarySearch(ids, menu.getParentId()) >= 0) {
                 throw new BizException("无法移动到子菜单下 !");
             }
-            menu = menuDao.findById(menu.getParentId());
+            menu = findById(menu.getParentId());
         }
 
-        menuDao.move(parentId, ids);
+//        menuDao.move(parentId, ids);
     }
 
     @Override
@@ -123,23 +144,28 @@ public class MenuServiceImpl implements MenuService {
         Menu menu = new Menu();
         menu.setId(id);
         menu.setEnable(isEnable);
-        menuDao.update(menu);
+        jdbcRepository.updateSelective(menu);
     }
 
     @Override
     public List<Menu> findAll() {
-        return menuDao.findAll();
+        return jdbcRepository.selectAll(Menu.class);
     }
 
     @Override
     public List<Menu> findByAuthorities(List<String> authorities) {
-        return menuDao.findByAuthorities(authorities);
+        TableMetaDate metaDate = TableMetaDate.forClass(Menu.class);
+        SQL sql = SQL.init().SELECT(metaDate.getAllColumns())
+                .FROM(metaDate.getTableName())
+                .WHERE("auth_code = '' or auth_code in (:authorities)");
+
+        return jdbcRepository.selectForList(sql, Collections.singletonMap("authorities", authorities), Menu.class);
     }
 
     @Override
     public List<Menu> findMyMenus() {
         LoginUser loginUser = PluginUtils.getLoginUser();
-        return menuDao.findByAuthorities(loginUser.getAuths());
+        return findByAuthorities(loginUser.getAuths());
     }
 
 }

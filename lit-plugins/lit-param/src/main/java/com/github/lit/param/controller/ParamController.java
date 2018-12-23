@@ -1,15 +1,15 @@
 package com.github.lit.param.controller;
 
-import com.github.lit.param.model.Param;
-import com.github.lit.param.model.ParamQo;
+import com.github.lit.param.model.SysParam;
+import com.github.lit.param.model.SysParamQo;
 import com.github.lit.param.service.ParamService;
 import com.github.lit.plugin.core.constant.PluginConst;
-import com.github.lit.spring.web.annotation.ViewName;
+import com.github.lit.support.annotation.ViewName;
+import com.github.lit.support.page.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import java.util.List;
 
 /**
  * User : liulu
@@ -27,24 +27,24 @@ public class ParamController {
 
     @GetMapping
     @ViewName("param")
-    public List<Param> list(ParamQo qo) {
-        return paramService.queryPageList(qo);
+    public Page<SysParam> list(SysParamQo qo) {
+        return paramService.findPageList(qo);
     }
 
     @GetMapping("/{id}")
-    public Param get(@PathVariable Long id) {
+    public SysParam get(@PathVariable Long id) {
         return paramService.findById(id);
     }
 
     @PostMapping
     @ViewName(REDIRECT_URL)
-    public void add(Param param) {
+    public void add(SysParam param) {
         paramService.insert(param);
     }
 
     @PutMapping
     @ViewName(REDIRECT_URL)
-    public void update(Param param) {
+    public void update(SysParam param) {
         paramService.update(param);
     }
 

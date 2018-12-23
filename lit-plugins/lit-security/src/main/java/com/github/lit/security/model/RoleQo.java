@@ -1,6 +1,6 @@
 package com.github.lit.security.model;
 
-import com.github.lit.page.Page;
+import com.github.lit.support.page.PageRequest;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -11,7 +11,7 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-public class RoleQo extends Page {
+public class RoleQo extends PageRequest {
 
     private static final long serialVersionUID = -1895536277221625300L;
 

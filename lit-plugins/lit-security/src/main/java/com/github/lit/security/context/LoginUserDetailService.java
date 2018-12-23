@@ -1,10 +1,10 @@
 package com.github.lit.security.context;
 
-import com.github.lit.bean.BeanUtils;
 import com.github.lit.security.model.Authority;
 import com.github.lit.security.model.Role;
 import com.github.lit.security.service.AuthorityService;
 import com.github.lit.security.service.RoleService;
+import com.github.lit.support.util.BeanUtils;
 import com.github.lit.user.model.User;
 import com.github.lit.user.service.OrganizationService;
 import com.github.lit.user.service.UserService;
@@ -73,7 +73,7 @@ public class LoginUserDetailService implements UserDetailsService {
             return userDetail;
         }
         // 查询用户权限
-        List<Authority> roleAuthorities = authorityService.findByRoleIds(roles.stream().map(Role::getId).toArray(Long[]::new));
+        List<Authority> roleAuthorities = authorityService.findByRoleIds(roles.stream().map(Role::getId).collect(Collectors.toList()));
 
         userDetail.setRoles(roles);
         userDetail.setAuths(roleAuthorities.stream().map(Authority::getCode).collect(Collectors.toList()));

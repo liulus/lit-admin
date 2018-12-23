@@ -1,14 +1,14 @@
 package com.github.lit.security.service.impl;
 
-import com.github.lit.bean.BeanUtils;
-import com.github.lit.exception.BizException;
-import com.github.lit.security.dao.AuthorityDao;
-import com.github.lit.security.dao.RoleAuthorityDao;
-import com.github.lit.security.dao.RoleDao;
-import com.github.lit.security.dao.UserRoleDao;
 import com.github.lit.security.model.*;
 import com.github.lit.security.service.RoleService;
 import com.github.lit.security.util.AuthorityUtils;
+import com.github.lit.support.exception.BizException;
+import com.github.lit.support.jdbc.JdbcRepository;
+import com.github.lit.support.page.Page;
+import com.github.lit.support.sql.SQL;
+import com.github.lit.support.sql.TableMetaDate;
+import com.github.lit.support.util.BeanUtils;
 import com.google.common.base.Strings;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
@@ -27,36 +27,28 @@ import java.util.stream.Collectors;
 public class RoleServiceImpl implements RoleService {
 
     @Resource
-    private RoleDao roleDao;
-
-    @Resource
-    private AuthorityDao authorityDao;
-
-    @Resource
-    private RoleAuthorityDao roleAuthorityDao;
-
-    @Resource
-    private UserRoleDao userRoleDao;
+    private JdbcRepository jdbcRepository;
 
     @Override
-    public List<Role> findPageList(RoleQo roleQo) {
-        return roleDao.findPageList(roleQo);
+    public Page<Role> findPageList(RoleQo roleQo) {
+        return jdbcRepository.selectPageList(Role.class, roleQo);
     }
 
     @Override
     public Role findById(Long roleId) {
-        return roleDao.findById(roleId);
+        return jdbcRepository.selectById(Role.class, roleId);
     }
 
     @Override
     public Role findByCode(String code) {
-        return roleDao.findByProperty("code", code);
+        return jdbcRepository.selectByProperty(Role::getCode, code);
     }
 
     @Override
     public Long insert(Role role) {
         checkCode(role.getCode());
-        return roleDao.insert(role);
+        jdbcRepository.insert(role);
+        return role.getId();
     }
 
     @Override
@@ -67,15 +59,15 @@ public class RoleServiceImpl implements RoleService {
                 .map(Role::getCode)
                 .filter(code -> !Objects.equals(code, role.getCode()))
                 .ifPresent(this::checkCode);
-        roleDao.update(role);
+        jdbcRepository.updateSelective(role);
     }
 
     private void checkCode(String code) {
         if (Strings.isNullOrEmpty(code)) {
             return;
         }
-        int count = roleDao.getSelect().where(Role::getCode).equalsTo(code).count();
-        if (count > 0) {
+        Role role = findByCode(code);
+        if (role != null) {
             throw new BizException("角色码已经存在");
         }
     }
@@ -85,99 +77,118 @@ public class RoleServiceImpl implements RoleService {
         if (ids == null || ids.length == 0) {
             return 0;
         }
-        List<Role> roles = roleDao.findByIds(ids);
+        List<Role> roles = jdbcRepository.selectByIds(Role.class, Arrays.asList(ids));
         List<Long> validIds = new ArrayList<>(roles.size());
 
         for (Role role : roles) {
-            int count = authorityDao.countByRoleId(role.getId());
+            int count = jdbcRepository.countByProperty(RoleAuthority::getRoleId, role.getId());
             if (count > 0) {
                 throw new BizException(String.format("请先取消角色 %s 绑定的 %d 个权限", role.getName(), count));
             }
             validIds.add(role.getId());
         }
 
-        return roleDao.deleteByIds(validIds.toArray(new Long[validIds.size()]));
+        return jdbcRepository.deleteByIds(Role.class, validIds);
     }
 
     @Override
     public void bindAuthority(Long roleId, Long[] authorityIds) {
-        Role role = roleDao.findById(roleId);
+        Role role = findById(roleId);
         if (role == null) {
             return;
         }
+        TableMetaDate authMetaData = TableMetaDate.forClass(Authority.class);
         // 需要新增的有效 authId
-        List<Long> newAuthIds = authorityDao.getSelect()
-                .include(Authority::getId)
-                .where(Authority::getId).in((Object[]) authorityIds)
-                .list(Long.class);
+        SQL newAuthIdsSql = SQL.init().SELECT(authMetaData.getColumn(Authority::getId))
+                .FROM(authMetaData.getTableName())
+                .WHERE("id in (:ids)");
+        List<Long> newAuthIds = jdbcRepository
+                .selectForList(newAuthIdsSql, Collections.singletonMap("ids", authorityIds), Long.class);
+
         // 当前角色下的 旧的权限
-        List<RoleAuthority> oldAuths = roleAuthorityDao.findByRoleId(roleId);
+        List<RoleAuthority> oldAuths = jdbcRepository.selectListByProperty(RoleAuthority::getRoleId, roleId);
 
         // 对比找出需删除的 角色权限Id
         Long[] deleteRoleAuthIds = oldAuths.stream()
                 .filter(oldAuth -> !newAuthIds.contains(oldAuth.getAuthorityId()))
                 .map(RoleAuthority::getId)
                 .toArray(Long[]::new);
-        Optional.ofNullable(deleteRoleAuthIds)
+        Optional.of(deleteRoleAuthIds)
                 .filter(idArray -> idArray.length > 0)
-                .ifPresent(idArray -> roleAuthorityDao.deleteByIds(idArray));
+                .ifPresent(idArray -> jdbcRepository.deleteByIds(RoleAuthority.class, Arrays.asList(idArray)));
 
         // 对比找出需要新增的 authId
         List<Long> oldAuthIds = oldAuths.stream().map(RoleAuthority::getAuthorityId).collect(Collectors.toList());
-        List<Long> insertAuthIds = newAuthIds.stream().filter(newAuthId -> !oldAuthIds.contains(newAuthId)).collect(Collectors.toList());
+        List<RoleAuthority> insertAuths = newAuthIds.stream()
+                .filter(newAuthId -> !oldAuthIds.contains(newAuthId))
+                .map(newAuthId -> {
+                    RoleAuthority roleAuthority = new RoleAuthority();
+                    roleAuthority.setRoleId(roleId);
+                    roleAuthority.setAuthorityId(newAuthId);
+                    return roleAuthority;
+                }).collect(Collectors.toList());
 
-        insertAuthIds.forEach(authId -> {
-            RoleAuthority roleAuthority = new RoleAuthority();
-            roleAuthority.setRoleId(roleId);
-            roleAuthority.setAuthorityId(authId);
-            roleAuthorityDao.insert(roleAuthority);
-        });
+        jdbcRepository.batchInsert(insertAuths);
     }
 
     @Override
     public void bindUser(Long userId, Long[] roleIds) {
         // 需要新增的有效 roleId
-        List<Long> newRoleIds = roleDao.getSelect().include(Role::getId).where(Role::getId).in((Object[]) roleIds).list(Long.class);
+        TableMetaDate roleMetaData = TableMetaDate.forClass(Role.class);
+        SQL newAuthIdsSql = SQL.init().SELECT(roleMetaData.getColumn(Role::getId))
+                .FROM(roleMetaData.getTableName())
+                .WHERE("id in (:ids)");
+        List<Long> newRoleIds = jdbcRepository
+                .selectForList(newAuthIdsSql, Collections.singletonMap("ids", roleIds), Long.class);
+
         // 当前用户下的 旧的角色
-        List<UserRole> oldRoles = userRoleDao.findByUserId(userId);
+        List<UserRole> oldRoles = jdbcRepository.selectListByProperty(UserRole::getUserId, userId);
 
         // 对比找出需删除的 用户角色Id
         Long[] deleteUserRoleIds = oldRoles.stream()
                 .filter(oldRole -> !newRoleIds.contains(oldRole.getRoleId()))
                 .map(UserRole::getId)
                 .toArray(Long[]::new);
-        Optional.ofNullable(deleteUserRoleIds)
+        Optional.of(deleteUserRoleIds)
                 .filter(idArray -> idArray.length > 0)
-                .ifPresent(idArray -> userRoleDao.deleteByIds(idArray));
+                .ifPresent(idArray -> jdbcRepository.deleteByIds(UserRole.class, Arrays.asList(idArray)));
 
         // 对比找出需要新增的 roleId
         List<Long> oldRoleIds = oldRoles.stream().map(UserRole::getRoleId).collect(Collectors.toList());
-        List<Long> insertRoleIds = newRoleIds.stream().filter(newRoleId -> !oldRoleIds.contains(newRoleId)).collect(Collectors.toList());
-
-        insertRoleIds.forEach(roleId -> {
-            UserRole userRole = new UserRole();
-            userRole.setUserId(userId);
-            userRole.setRoleId(roleId);
-            userRoleDao.insert(userRole);
-        });
+        List<UserRole> insertRoles = newRoleIds.stream()
+                .filter(newRoleId -> !oldRoleIds.contains(newRoleId))
+                .map(newRoleId -> {
+                    UserRole userRole = new UserRole();
+                    userRole.setUserId(userId);
+                    userRole.setRoleId(newRoleId);
+                    return userRole;
+                }).collect(Collectors.toList());
+        jdbcRepository.batchInsert(insertRoles);
     }
 
     @Override
     public List<Role> findByUserId(Long userId) {
-        return roleDao.findByUserId(userId);
+        List<UserRole> userRoles = jdbcRepository.selectListByProperty(UserRole::getUserId, userId);
+        if (CollectionUtils.isEmpty(userRoles)) {
+            return Collections.emptyList();
+        }
+        List<Long> roleIds = userRoles.stream().map(UserRole::getRoleId).collect(Collectors.toList());
+        return jdbcRepository.selectByIds(Role.class, roleIds);
     }
 
     @Override
     public List<AuthorityVo.TreeNode> findAuthorityTree(Long roleId) {
 
-        List<Authority> allAuthorities = authorityDao.getSelect().list();
+        List<Authority> allAuthorities = jdbcRepository.selectAll(Authority.class);
         if (CollectionUtils.isEmpty(allAuthorities)) {
             return Collections.emptyList();
         }
 
         List<AuthorityVo.TreeNode> result = new ArrayList<>();
 
-        List<Long> roleAuthIds = roleAuthorityDao.findByRoleId(roleId).stream()
+
+        List<Long> roleAuthIds = jdbcRepository.selectListByProperty(RoleAuthority::getRoleId, roleId)
+                .stream()
                 .map(RoleAuthority::getAuthorityId)
                 .collect(Collectors.toList());
 

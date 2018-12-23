@@ -1,21 +1,21 @@
 package com.github.lit.dictionary.controller;
 
-import com.github.lit.bean.BeanUtils;
 import com.github.lit.dictionary.model.Dictionary;
 import com.github.lit.dictionary.model.DictionaryQo;
 import com.github.lit.dictionary.model.DictionaryVo;
 import com.github.lit.dictionary.service.DictionaryService;
 import com.github.lit.plugin.core.constant.AuthorityConst;
 import com.github.lit.plugin.core.constant.PluginConst;
-import com.github.lit.spring.web.annotation.ViewName;
+import com.github.lit.support.annotation.ViewName;
+import com.github.lit.support.page.Page;
+import com.github.lit.support.page.PageUtils;
+import com.github.lit.support.util.BeanUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import java.util.List;
 
 /**
  * User : liulu
@@ -36,14 +36,13 @@ public class DictionaryController {
     @GetMapping
     @ViewName("dictionary")
     @Secured(AuthorityConst.VIEW_DICTIONARY)
-    public List<DictionaryVo.Detail> childList(DictionaryQo qo, Model model) {
-        int i = 1/0;
+    public Page<DictionaryVo.Detail> childList(DictionaryQo qo) {
+        Page<Dictionary> pageList = dictionaryService.findPageList(qo);
         if (qo.getParentId() != 0L) {
             Dictionary dictionary = dictionaryService.findById(qo.getParentId());
-            model.addAttribute("returnId", dictionary == null ? 0 : dictionary.getParentId());
+            pageList.add("returnId", dictionary == null ? 0 : dictionary.getParentId());
         }
-        qo.setOrder(true);
-        return BeanUtils.convert(DictionaryVo.Detail.class, dictionaryService.findPageList(qo));
+        return PageUtils.convert(pageList, DictionaryVo.Detail.class, null);
     }
 
     @GetMapping("/{id}")

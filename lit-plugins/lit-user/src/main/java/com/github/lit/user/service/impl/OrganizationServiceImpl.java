@@ -1,21 +1,18 @@
 package com.github.lit.user.service.impl;
 
-import com.github.lit.exception.BizException;
-import com.github.lit.jdbc.JdbcTools;
-import com.github.lit.user.dao.OrganizationDao;
+import com.github.lit.support.exception.BizException;
+import com.github.lit.support.jdbc.JdbcRepository;
+import com.github.lit.support.page.Page;
 import com.github.lit.user.model.Organization;
 import com.github.lit.user.model.OrganizationQo;
 import com.github.lit.user.service.OrganizationService;
 import com.github.lit.user.util.UserUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * User : liulu
@@ -27,29 +24,22 @@ import java.util.Optional;
 public class OrganizationServiceImpl implements OrganizationService {
 
     @Resource
-    private JdbcTools jdbcTools;
-
-    private final OrganizationDao organizationDao;
-
-    @Autowired
-    public OrganizationServiceImpl(OrganizationDao organizationDao) {
-        this.organizationDao = organizationDao;
-    }
+    private JdbcRepository jdbcRepository;
 
 
     @Override
-    public List<Organization> findPageList(OrganizationQo qo) {
-        return organizationDao.findPageList(qo);
+    public Page<Organization> findPageList(OrganizationQo qo) {
+        return jdbcRepository.selectPageList(Organization.class, qo);
     }
 
     @Override
     public Organization findById(Long id) {
-        return organizationDao.findById(id);
+        return jdbcRepository.selectById(Organization.class, id);
     }
 
     @Override
     public Organization findByCode(String orgCode) {
-        return organizationDao.findByProperty("code", orgCode);
+        return jdbcRepository.selectByProperty(Organization::getCode, orgCode);
     }
 
     @Override
@@ -64,14 +54,12 @@ public class OrganizationServiceImpl implements OrganizationService {
                 .orElse("");
 
         // 处理 levelIndex
-        List<String> levelIndexes = organizationDao.getSelect()
-                .include(Organization::getLevelIndex)
-                .where(Organization::getParentId).equalsTo(Optional.ofNullable(organization.getParentId()).orElse(0L))
-                .list(String.class);
+        List<Organization> organizations = jdbcRepository.selectListByProperty(Organization::getParentId, organization.getParentId());
+        List<String> levelIndexes = organizations.stream().map(Organization::getLevelIndex).collect(Collectors.toList());
 
         organization.setLevelIndex(UserUtils.nextLevelIndex(parentLevelIndex, levelIndexes));
-
-        return jdbcTools.insert(organization);
+        jdbcRepository.insert(organization);
+        return organization.getId();
     }
 
     @Override
@@ -84,7 +72,7 @@ public class OrganizationServiceImpl implements OrganizationService {
                 .filter(code -> !Objects.equals(code, organization.getCode()))
                 .ifPresent(this::checkOrgCode);
 
-        organizationDao.update(organization);
+        jdbcRepository.updateSelective(organization);
     }
 
     private void checkOrgCode(String orgCode) {
@@ -99,16 +87,16 @@ public class OrganizationServiceImpl implements OrganizationService {
         if (ids == null || ids.length == 0) {
             return;
         }
-        List<Organization> orgs = organizationDao.findByIds(ids);
+        List<Organization> orgs = jdbcRepository.selectByIds(Organization.class, Arrays.asList(ids));
         List<Long> validIds = new ArrayList<>(orgs.size());
         for (Organization org : orgs) {
-            int count = organizationDao.countByParentId(org.getParentId());
+            int count = jdbcRepository.countByProperty(Organization::getParentId, org.getParentId());
             if (count > 0) {
                 throw new BizException(String.format("请先删除 %s 的子机构数据 ", org.getFullName()));
             }
             validIds.add(org.getId());
         }
-        organizationDao.deleteByIds(validIds.toArray(new Long[validIds.size()]));
+        jdbcRepository.deleteByIds(Organization.class, validIds);
     }
 
 

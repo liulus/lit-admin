@@ -1,9 +1,8 @@
 package com.github.lit.param.service;
 
-import com.github.lit.param.model.Param;
-import com.github.lit.param.model.ParamQo;
-
-import java.util.List;
+import com.github.lit.param.model.SysParam;
+import com.github.lit.param.model.SysParamQo;
+import com.github.lit.support.page.Page;
 
 /**
  * User : liulu
@@ -12,15 +11,15 @@ import java.util.List;
  */
 public interface ParamService {
 
-    List<Param> queryPageList(ParamQo qo);
+    Page<SysParam> findPageList(SysParamQo qo);
 
-    Param findById(Long id);
+    SysParam findById(Long id);
 
-    Param findByCode(String code);
+    SysParam findByCode(String code);
 
-    void insert(Param param);
+    void insert(SysParam param);
 
-    void update(Param param);
+    void update(SysParam param);
 
     void delete(Long... ids);
 }

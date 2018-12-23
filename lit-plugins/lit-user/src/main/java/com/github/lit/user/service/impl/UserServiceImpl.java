@@ -1,18 +1,19 @@
 package com.github.lit.user.service.impl;
 
-import com.github.lit.exception.BizException;
 import com.github.lit.plugin.core.model.LoginUser;
-import com.github.lit.user.dao.UserDao;
+import com.github.lit.support.exception.BizException;
+import com.github.lit.support.jdbc.JdbcRepository;
+import com.github.lit.support.page.Page;
 import com.github.lit.user.model.User;
 import com.github.lit.user.model.UserQo;
 import com.github.lit.user.service.UserService;
 import com.github.lit.user.util.UserUtils;
 import com.google.common.base.Strings;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
+import javax.annotation.Resource;
+import java.util.Arrays;
 import java.util.Objects;
 
 /**
@@ -24,25 +25,22 @@ import java.util.Objects;
 @Transactional
 public class UserServiceImpl implements UserService {
 
-    private final UserDao userDao;
 
-    @Autowired
-    public UserServiceImpl(UserDao userDao) {
-        this.userDao = userDao;
-    }
+    @Resource
+    private JdbcRepository jdbcRepository;
 
     @Override
     public User findById(Long id) {
-        return userDao.findById(id);
+        return jdbcRepository.selectById(User.class, id);
     }
 
     @Override
     public User findByName(String username) {
-        return userDao.findByProperty("userName", username);
+        return jdbcRepository.selectByProperty(User::getUserName, username);
     }
 
     @Override
-    public List<User> findPageList(UserQo qo) {
+    public Page<User> findPageList(UserQo qo) {
         LoginUser loginUser = UserUtils.getLoginUser();
 
         if (loginUser != null && loginUser.hasOrg()) {
@@ -51,8 +49,7 @@ public class UserServiceImpl implements UserService {
                 qo.setOrgCode(loginUser.getOrgCode());
             }
         }
-
-        return userDao.findPageList(qo);
+        return jdbcRepository.selectPageList(User.class, qo);
     }
 
     @Override
@@ -65,14 +62,14 @@ public class UserServiceImpl implements UserService {
         user.setLock(false);
         user.setCreator(UserUtils.getLoginUser().getUserName());
         user.setPassword(UserUtils.encode("123456"));
-
-        return userDao.insert(user);
+        jdbcRepository.insert(user);
+        return user.getId();
     }
 
     @Override
     public void update(User user) {
 
-        User oldUser = userDao.findById(user.getId());
+        User oldUser = findById(user.getId());
 
         if (!Objects.equals(oldUser.getUserName(), user.getUserName())) {
             checkUserName(user.getUserName());
@@ -84,7 +81,7 @@ public class UserServiceImpl implements UserService {
             checkMobilePhone(user.getMobileNum());
         }
 
-        userDao.update(user);
+        jdbcRepository.updateSelective(user);
     }
 
     private void checkUserName(String userName) {
@@ -92,7 +89,7 @@ public class UserServiceImpl implements UserService {
         if (Strings.isNullOrEmpty(userName)) {
             return;
         }
-        int count = userDao.getSelect().where(User::getUserName).equalsTo(userName).count();
+        int count = jdbcRepository.countByProperty(User::getUserName, userName);
         if (count >= 1) {
             throw new BizException("该用户名被使用");
         }
@@ -102,7 +99,7 @@ public class UserServiceImpl implements UserService {
         if (Strings.isNullOrEmpty(email)) {
             return;
         }
-        int count = userDao.getSelect().where(User::getEmail).equalsTo(email).count();
+        int count = jdbcRepository.countByProperty(User::getEmail, email);
         if (count >= 1) {
             throw new BizException("该邮箱已被使用");
         }
@@ -112,7 +109,7 @@ public class UserServiceImpl implements UserService {
         if (Strings.isNullOrEmpty(mobileNum)) {
             return;
         }
-        int count = userDao.getSelect().where(User::getMobileNum).equalsTo(mobileNum).count();
+        int count = jdbcRepository.countByProperty(User::getMobileNum, mobileNum);
         if (count >= 1) {
             throw new BizException("该手机号已被使用");
         }
@@ -120,7 +117,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void delete(Long[] ids) {
-        userDao.deleteByIds(ids);
+        jdbcRepository.deleteByIds(User.class, Arrays.asList(ids));
     }
 
 

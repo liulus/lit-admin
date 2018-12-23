@@ -1,6 +1,6 @@
 package com.github.lit.param.model;
 
-import com.github.lit.page.Page;
+import com.github.lit.support.page.PageRequest;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -13,7 +13,7 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-public class ParamQo extends Page {
+public class SysParamQo extends PageRequest {
 
     private static final long serialVersionUID = -117622963182937153L;
 

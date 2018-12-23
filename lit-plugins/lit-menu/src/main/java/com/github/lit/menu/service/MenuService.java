@@ -2,6 +2,7 @@ package com.github.lit.menu.service;
 
 import com.github.lit.menu.model.Menu;
 import com.github.lit.menu.model.MenuQo;
+import com.github.lit.support.page.Page;
 
 import java.util.List;
 
@@ -18,7 +19,7 @@ public interface MenuService {
      * @param qo 查询条件
      * @return 菜单列表
      */
-    List<Menu> findPageList(MenuQo qo);
+    Page<Menu> findPageList(MenuQo qo);
 
     /**
      * 根据Id查询菜单

@@ -1,15 +1,13 @@
 package com.github.lit.dictionary.model;
 
-import com.github.lit.jdbc.annotation.Column;
-import com.github.lit.jdbc.annotation.GeneratedValue;
-import com.github.lit.jdbc.annotation.Id;
-import com.github.lit.jdbc.annotation.Table;
-import com.github.lit.jdbc.enums.GenerationType;
 import com.github.lit.plugin.core.constant.PluginConst;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import javax.persistence.Column;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.io.Serializable;
 
 /**
@@ -26,7 +24,6 @@ public class Dictionary implements Serializable {
     private static final long serialVersionUID = -8733548251351142793L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     /**

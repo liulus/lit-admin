@@ -68,12 +68,6 @@
             <groupId>org.springframework</groupId>
             <artifactId>spring-webmvc</artifactId>
             <version>${spring.version}</version>
-            <exclusions>
-                <exclusion>
-                    <artifactId>commons-logging</artifactId>
-                    <groupId>commons-logging</groupId>
-                </exclusion>
-            </exclusions>
         </dependency>
 
         <!-- freemarker -->
@@ -86,15 +80,10 @@
         <!-- lit -->
         <dependency>
             <groupId>com.github.liulus</groupId>
-            <artifactId>lit-jdbc</artifactId>
+            <artifactId>lit-starter-jdbc</artifactId>
             <version>${lit.version}</version>
         </dependency>
 
-        <dependency>
-            <groupId>com.github.liulus</groupId>
-            <artifactId>lit-spring</artifactId>
-            <version>${lit.version}</version>
-        </dependency>
     </dependencies>
 
 </project>

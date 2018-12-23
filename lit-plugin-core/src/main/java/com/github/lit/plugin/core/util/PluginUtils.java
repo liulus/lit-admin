@@ -2,8 +2,8 @@ package com.github.lit.plugin.core.util;
 
 import com.github.lit.plugin.core.constant.PluginConst;
 import com.github.lit.plugin.core.model.LoginUser;
-import com.github.lit.spring.util.WebUtils;
-import com.github.lit.util.ClassUtils;
+import com.github.lit.support.util.ClassUtils;
+import com.github.lit.support.util.WebUtils;
 
 /**
  * User : liulu

@@ -1,6 +1,6 @@
 package com.github.lit.menu.model;
 
-import com.github.lit.page.Page;
+import com.github.lit.support.page.PageRequest;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class MenuQo extends Page{
+public class MenuQo extends PageRequest {
 
     private static final long serialVersionUID = 1204535134806916841L;
 
@@ -24,8 +24,6 @@ public class MenuQo extends Page{
     private Long parentId = 0L;
 
     private String menuCode;
-
-
 
 
 }

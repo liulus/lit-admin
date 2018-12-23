@@ -1,15 +1,16 @@
 package com.github.lit.menu.controller;
 
-import com.github.lit.bean.BeanUtils;
 import com.github.lit.menu.model.Menu;
 import com.github.lit.menu.model.MenuQo;
 import com.github.lit.menu.model.MenuVo;
 import com.github.lit.menu.service.MenuService;
 import com.github.lit.plugin.core.constant.PluginConst;
-import com.github.lit.spring.web.annotation.ViewName;
+import com.github.lit.support.annotation.ViewName;
+import com.github.lit.support.page.Page;
+import com.github.lit.support.page.PageUtils;
+import com.github.lit.support.util.BeanUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 
@@ -33,13 +34,14 @@ public class MenuController {
     
     @GetMapping
     @ViewName("menu")
-    public List<MenuVo.Detail> menuList(MenuQo qo, Model model) {
+    public Page<MenuVo.Detail> menuList(MenuQo qo) {
+        Page<Menu> menuPage = menuService.findPageList(qo);
         if (qo.getParentId() != 0L) {
             Menu menu = menuService.findById(qo.getParentId());
-            model.addAttribute("returnId", menu == null ? 0 : menu.getParentId());
+            menuPage.add("returnId", menu == null ? 0 : menu.getParentId());
         }
-        List<Menu> menus = menuService.findPageList(qo);
-        return BeanUtils.convert(MenuVo.Detail.class, menus);
+
+        return PageUtils.convert(menuPage, MenuVo.Detail.class, null);
     }
 
     @GetMapping("/tree")

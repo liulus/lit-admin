@@ -1,19 +1,19 @@
 package com.github.lit.dictionary.service.impl;
 
-import com.github.lit.dictionary.dao.DictionaryDao;
 import com.github.lit.dictionary.model.Dictionary;
 import com.github.lit.dictionary.model.DictionaryQo;
 import com.github.lit.dictionary.service.DictionaryService;
-import com.github.lit.exception.BizException;
+import com.github.lit.support.exception.BizException;
+import com.github.lit.support.jdbc.JdbcRepository;
+import com.github.lit.support.page.Page;
+import com.github.lit.support.sql.SQL;
+import com.github.lit.support.sql.TableMetaDate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 /**
  * User : liulu
@@ -25,7 +25,7 @@ import java.util.Objects;
 public class DictionaryServiceImpl implements DictionaryService {
 
     @Resource
-    private DictionaryDao dictionaryDao;
+    private JdbcRepository jdbcRepository;
 
     @Override
     public Long insert(Dictionary dict) {
@@ -35,7 +35,8 @@ public class DictionaryServiceImpl implements DictionaryService {
         if (dict.getOrderNum() == null) {
             dict.setOrderNum(0);
         }
-        return dictionaryDao.insert(dict);
+        jdbcRepository.insert(dict);
+        return dict.getId();
     }
 
     @Override
@@ -50,27 +51,39 @@ public class DictionaryServiceImpl implements DictionaryService {
             }
             checkDictKey(dictionary.getDictKey(), dictionary.getParentId());
         }
-        return dictionaryDao.update(dictionary);
+        return jdbcRepository.updateSelective(dictionary);
     }
 
     private void checkDictKey(String dictKey, Long parentId) {
-        if (parentId == null) {
-            parentId = 0L;
-        }
-        Dictionary dict = dictionaryDao.findByKeyAndParentId(dictKey, parentId);
+        Dictionary dict = findByKeyAndParentId(dictKey, parentId);
         if (dict != null) {
             throw new BizException("字典Key已经存在");
         }
     }
 
-    @Override
-    public Dictionary findById(Long id) {
-        return dictionaryDao.findById(id);
+    private Dictionary findByKeyAndParentId(String dictKey, Long parentId) {
+        if (parentId == null) {
+            parentId = 0L;
+        }
+        TableMetaDate metaDate = TableMetaDate.forClass(Dictionary.class);
+        SQL sql = SQL.init().SELECT(metaDate.getAllColumns())
+                .FROM(metaDate.getTableName())
+                .WHERE("parent_id = :parentId")
+                .WHERE("dict_key = :dictKey");
+        Map<String, Object> params = new HashMap<>(2);
+        params.put("parentId", parentId);
+        params.put("dictKey", dictKey);
+        return jdbcRepository.selectForObject(sql, params, Dictionary.class);
     }
 
     @Override
-    public List<Dictionary> findPageList(DictionaryQo qo) {
-        return dictionaryDao.findPageList(qo);
+    public Dictionary findById(Long id) {
+        return jdbcRepository.selectById(Dictionary.class, id);
+    }
+
+    @Override
+    public Page<Dictionary> findPageList(DictionaryQo qo) {
+        return jdbcRepository.selectPageList(Dictionary.class, qo);
     }
 
     @Override
@@ -78,7 +91,7 @@ public class DictionaryServiceImpl implements DictionaryService {
         if (ids == null || ids.length == 0) {
             return 0;
         }
-        List<Dictionary> dictionaries = dictionaryDao.findByIds(ids);
+        List<Dictionary> dictionaries = jdbcRepository.selectByIds(Dictionary.class, Arrays.asList(ids));
         if (CollectionUtils.isEmpty(dictionaries)) {
             return 0;
         }
@@ -87,13 +100,13 @@ public class DictionaryServiceImpl implements DictionaryService {
             if (dictionary.getSystem()) {
                 throw new BizException(String.format("%s 是系统级字典, 不允许删除 !", dictionary.getDictKey()));
             }
-            int childDict = dictionaryDao.countByParentId(dictionary.getId());
+            int childDict = countByParentId(dictionary.getId());
             if (childDict > 0) {
                 throw new BizException(String.format("请先删除 %s 的子字典数据 !", dictionary.getDictKey()));
             }
             validIds.add(dictionary.getId());
         }
-        return dictionaryDao.deleteByIds(validIds.toArray(new Long[validIds.size()]));
+        return jdbcRepository.deleteByIds(Dictionary.class, validIds);
     }
 
 
@@ -106,8 +119,7 @@ public class DictionaryServiceImpl implements DictionaryService {
 
     @Override
     public Dictionary findByRootKey(String key) {
-        DictionaryQo qo = DictionaryQo.builder().dictKey(key).build();
-        return dictionaryDao.findSingle(qo);
+        return findByKeyAndParentId(key, 0L);
     }
 
     @Override
@@ -120,7 +132,7 @@ public class DictionaryServiceImpl implements DictionaryService {
         result.setId(0L);
 
         for (String key : keys) {
-            result = dictionaryDao.findByKeyAndParentId(key, result.getId());
+            result = findByKeyAndParentId(key, result.getId());
         }
         return result;
     }
@@ -148,9 +160,16 @@ public class DictionaryServiceImpl implements DictionaryService {
 
     @Override
     public List<Dictionary> findChildByParentId(Long parentId) {
-        DictionaryQo qo = DictionaryQo.builder().parentId(parentId).build();
-        return dictionaryDao.findList(qo);
+        return jdbcRepository.selectListByProperty(Dictionary::getParentId, parentId);
     }
 
+
+    private int countByParentId(Long parentId) {
+        TableMetaDate metaDate = TableMetaDate.forClass(Dictionary.class);
+        SQL sql = SQL.init().SELECT("count(*)")
+                .FROM(metaDate.getTableName())
+                .WHERE("parent_id = :parentId");
+        return jdbcRepository.selectForObject(sql, Collections.singletonMap("parentId", parentId), int.class);
+    }
 
 }

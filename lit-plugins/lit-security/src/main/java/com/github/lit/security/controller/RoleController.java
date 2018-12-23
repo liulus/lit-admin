@@ -6,7 +6,8 @@ import com.github.lit.security.model.Role;
 import com.github.lit.security.model.RoleQo;
 import com.github.lit.security.model.RoleVo;
 import com.github.lit.security.service.RoleService;
-import com.github.lit.spring.web.annotation.ViewName;
+import com.github.lit.support.annotation.ViewName;
+import com.github.lit.support.page.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,7 +28,7 @@ public class RoleController {
 
     @GetMapping
     @ViewName("role")
-    public List<Role> list(RoleQo roleQo) {
+    public Page<Role> list(RoleQo roleQo) {
         return roleService.findPageList(roleQo);
     }
 

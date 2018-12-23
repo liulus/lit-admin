@@ -5,9 +5,9 @@ import com.github.lit.menu.model.MenuVo;
 import com.github.lit.menu.tool.MenuTools;
 import com.github.lit.plugin.core.event.user.LoginEvent;
 import com.github.lit.plugin.core.util.PluginUtils;
-import com.github.lit.spring.event.AppStartedEvent;
-import com.github.lit.spring.event.EventComponent;
-import com.github.lit.spring.util.WebUtils;
+import com.github.lit.support.event.AppStartedEvent;
+import com.github.lit.support.event.EventComponent;
+import com.github.lit.support.util.WebUtils;
 import com.google.common.eventbus.Subscribe;
 
 import java.util.List;

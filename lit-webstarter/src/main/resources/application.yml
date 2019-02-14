@@ -22,7 +22,8 @@ lit:
 
 
 server:
-  context-path: /lit
+  servlet:
+    context-path: /lit
 
 
 ---

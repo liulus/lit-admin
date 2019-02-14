@@ -1,114 +1,104 @@
-<#import "layout/list-layout.ftl" as AdminLayout>
-<@AdminLayout.listLayout title='字典管理' importJs=['js/dictionary.js']>
-<!-- 导航条 -->
-<div class="row">
-    <ol class="breadcrumb">
-        <li><a href="#"><i class="glyphicon glyphicon-home"></i></a></li>
-        <li class="active">系统管理</li>
-        <li class="active">字典管理</li>
-    </ol>
-</div>
+<#import 'pages/layout-main.ftl' as Layout>
+<@Layout.adminLayout title='字典管理'>
+<script type="text/x-template" id="app-main-template">
+    <div>
+        <div class="aui-main__hd">
+            <el-breadcrumb separator="/">
+                <el-breadcrumb-item>
+                    <svg class="icon-svg aui-aside__menu-icon" aria-hidden="true">
+                        <use xlink:href="#icon-home"></use>
+                    </svg>
+                </el-breadcrumb-item>
+                <el-breadcrumb-item>字典管理</el-breadcrumb-item>
+            </el-breadcrumb>
+        </div>
 
-<!-- 查询表单 -->
-<div class="row">
-    <form class="form-horizontal " action="" method="get" id="query-form">
-        <div class="col-sm-12 col-md-10 form-group">
-            <div class="col-sm-8 text-right control-label">关键字:</div>
-            <div class="col-sm-16 ">
-                <input name="keyword" class="form-control input-sm" type="text" value="${dictionaryQo.keyword!}"
-                       placeholder="请输入">
+        <div class="aui-main__bd">
+            <div class="aui-page page-index">
+                <main class="aui-page-main">
+                    <div class="index-section">
+                        <el-row :gutter="20">
+                            <el-col :span="16">
+                                <el-input v-model="input" placeholder="请输入内容"></el-input>
+                            </el-col>
+                            <el-col :span="8">
+                                <el-button type="primary">主要按钮</el-button>
+                            </el-col>
+                        </el-row>
+                    </div>
+
+                    <!-- 管理助手 -->
+                    <div class="index-section">
+                        <div class="aui-panel index-assistant">
+                            <div class="aui-panel__bd">
+                                <el-row :gutter="20">
+                                    <el-col :span="5">
+                                        <div class="index-assistant__item">
+                                        <#--<div class="index-assistant__item-hd">-->
+                                        <#--<svg class="icon-svg" aria-hidden="true"><use xlink:href="#icon-robot"></use></svg>-->
+                                        <#--</div>-->
+                                            <div class="index-assistant__item-bd">
+                                                <h4 class="index-assistant__item-title">key: riskLevel</h4>
+                                                <p class="index-assistant__item-intro"></p>
+                                                <h4 class="index-assistant__item-title">value: 风险等级</h4>
+                                                <p class="index-assistant__item-intro"></p>
+                                                <el-button-group >
+                                                    <el-button type="primary" size="mini" icon="el-icon-edit"></el-button>
+                                                    <el-button type="primary" size="mini" icon="el-icon-share"></el-button>
+                                                    <el-button type="primary" size="mini" icon="el-icon-delete"></el-button>
+                                                </el-button-group>
+                                                <#--<el-button type="primary" plain size="mini">立即拼团</el-button>-->
+                                            </div>
+                                        </div>
+                                    </el-col>
+
+                                    <el-col :span="5">
+                                        <div class="index-assistant__item">
+                                            <div class="index-assistant__item-hd">
+                                                <svg class="icon-svg" aria-hidden="true">
+                                                    <use xlink:href="#icon-instagram"></use>
+                                                </svg>
+                                            </div>
+                                            <div class="index-assistant__item-bd">
+                                                <h4 class="index-assistant__item-title">2018广东云栖大会</h4>
+                                                <p class="index-assistant__item-intro">11月22日广州南丰朗豪酒店，报名进行中</p>
+                                                <el-button type="primary" plain size="mini">立即报名</el-button>
+                                            </div>
+                                        </div>
+                                    </el-col>
+
+                                    <el-col :span="5">
+                                        <div class="index-assistant__item">
+                                            <div class="index-assistant__item-hd">
+                                                <svg class="icon-svg" aria-hidden="true">
+                                                    <use xlink:href="#icon-apartment"></use>
+                                                </svg>
+                                            </div>
+                                            <div class="index-assistant__item-bd">
+                                                <h4 class="index-assistant__item-title">推荐好友送云服务器</h4>
+                                                <p class="index-assistant__item-intro">邀请好友7.1折起购短信包，即可获赠云服务器</p>
+                                                <el-button type="primary" plain size="mini">立即前往</el-button>
+                                            </div>
+                                        </div>
+                                    </el-col>
+                                </el-row>
+
+                            </div>
+                        </div>
+                    </div>
+                </main>
             </div>
         </div>
-        <div class="col-sm-12 col-md-4 text-center form-group">
-            <@AdminLayout.queryBtn/>
-        </div>
-    </form>
-</div>
-
-<!-- 数据列表 -->
-<div class="panel panel-default table-responsive">
-    <!-- 数据操作 -->
-    <div class="panel-heading">
-        <@AdminLayout.addBtn/>
-        <#if data?size &gt; 0>
-            <@AdminLayout.updateBtn/>
-            <@AdminLayout.deleteBtn/>
-        </#if>
-        <#if dictionaryQo.parentId != 0>
-            <a href="${rc.contextPath}/plugin/dictionary?parentId=${returnId?c}"
-               class="btn btn-sm btn-warning">
-                <i class="fa fa-reply"></i>&nbsp;&nbsp;返回上级
-            </a>
-        </#if>
-    </div>
-
-    <!-- 数据展示 -->
-    <table id="data-result" class="table table-hover">
-        <thead>
-        <tr>
-            <th class="text-center">
-                <input class="check-all" type="checkbox">
-            </th>
-            <th>行号</th>
-            <th>字典Key</th>
-            <th>字典值</th>
-            <th>顺序号</th>
-            <th>备注</th>
-        </tr>
-        </thead>
-
-        <tbody>
-            <#list data as item>
-            <tr>
-                <td class="text-center">
-                    <input class="check-ls" name="ids" type="checkbox" value="${item.id?c}">
-                </td>
-                <td>${item?counter}</td>
-                <td>
-                    <a href="${rc.contextPath}/plugin/dictionary?parentId=${item.id?c}">${item.dictKey!?html}</a>
-                </td>
-                <td>${item.dictValue!?html}</td>
-                <td>${item.orderNum!?c}</td>
-                <td>${item.remark!?html}</td>
-            </tr>
-            <#else>
-                <@AdminLayout.emptyData 6/>
-            </#list>
-        </tbody>
-    </table>
-</div>
-
-<script type="text/template" id="edit-tpl">
-    <div class="modal-body">
-        <form id="form-edit" class="form-horizontal">
-            <input type="hidden" name="parentId" value="${dictionaryQo.parentId?c}">
-            <input type="hidden" name="id" value="${r'${id}'}">
-            <div class="form-group">
-                <span class="control-label col-sm-6"><i class="text-danger">*&nbsp;</i>字典key :</span>
-                <div class="col-sm-16">
-                    <input type="text" name="dictKey" value="${r'${dictKey}'}" class="form-control">
-                </div>
-            </div>
-            <div class="form-group">
-                <span class="control-label col-sm-6"><i class="text-danger">*&nbsp;</i>字典值 :</span>
-                <div class="col-sm-16">
-                    <input type="text" name="dictValue" value="${r'${dictValue}'}" class="form-control">
-                </div>
-            </div>
-            <div class="form-group">
-                <span class="control-label col-sm-6"><i class="text-danger">*&nbsp;</i>顺序号 :</span>
-                <div class="col-sm-16">
-                    <input type="number" name="orderNum" value="${r'${orderNum}'}" class="form-control">
-                </div>
-            </div>
-            <div class="form-group">
-                <span class="control-label col-sm-6"><i class="text-danger">*&nbsp;</i>备注 :</span>
-                <div class="col-sm-16">
-                    <textarea name="remark" class="form-control" rows="3">${r'${remark}'}</textarea>
-                </div>
-            </div>
-        </form>
     </div>
 </script>
-
-</@AdminLayout.listLayout>
+<script>
+    VueUtils.registerComponent({
+        template: '#app-main-template',
+        data: function () {
+            return {
+                input: ''
+            }
+        }
+    })
+</script>
+</@Layout.adminLayout>

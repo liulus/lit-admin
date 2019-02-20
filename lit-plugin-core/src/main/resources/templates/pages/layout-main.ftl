@@ -9,8 +9,10 @@
     <meta http-equiv="content-type" content="text/html;charset=UTF-8">
 
     <link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
+    <#--<link href="https://cdn.bootcss.com/normalize/8.0.1/normalize.css" rel="stylesheet">-->
+    <link rel="stylesheet" href="${rc.contextPath}/styles/lit-common.css">
     <link rel="stylesheet" href="${rc.contextPath}/element-theme/cyan/index.css">
-    <link rel="stylesheet" href="${rc.contextPath}/styles/aui-cyan.min.css">
+    <link rel="stylesheet" href="${rc.contextPath}/styles/aui-cyan.css">
     <#if importCss??>
         <#list importCss as css>
 <link rel="stylesheet" href="${rc.contextPath}/${css}"/>
@@ -44,9 +46,9 @@
         </main>
 
         <!-- aui-footer -->
-        <footer class="aui-footer">
-            <p><a href="#" target="_blank">lit admin</a>2018 © lit admin</p>
-        </footer>
+        <#--<footer class="aui-footer">-->
+            <#--<p><a href="#" target="_blank">lit admin</a>2018 © lit admin</p>-->
+        <#--</footer>-->
     </template>
 </div>
 
@@ -75,11 +77,11 @@
                 // 头部, 皮肤 (white 白色 / colorful 鲜艳)
                 headerSkin: 'colorful',
                 // 头部, 固定状态
-                headerFixed: true,
+                headerFixed: false,
                 // 侧边, 皮肤 (white 白色 / dark 黑色)
                 asideSkin: 'white',
                 // 侧边, 固定状态
-                asideFixed: true,
+                asideFixed: false,
                 // 侧边, 折叠状态
                 asideFold: false,
                 // 侧边, 至头部状态

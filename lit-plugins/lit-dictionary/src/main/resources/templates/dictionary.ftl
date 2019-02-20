@@ -14,80 +14,95 @@
         </div>
 
         <div class="aui-main__bd">
-            <div class="aui-page page-index">
-                <main class="aui-page-main">
-                    <div class="index-section">
-                        <el-row :gutter="20">
-                            <el-col :span="16">
-                                <el-input v-model="input" placeholder="请输入内容"></el-input>
-                            </el-col>
-                            <el-col :span="8">
-                                <el-button type="primary">主要按钮</el-button>
-                            </el-col>
-                        </el-row>
-                    </div>
+            <el-card shadow="never">
+                <div slot="header">
+                    <el-row :gutter="20">
+                        <el-col :span="4"><el-button type="primary" plain icon="el-icon-plus" size="small"></el-button></el-col>
+                        <el-col :span="12" :offset="2">
+                            <el-input placeholder="请输入搜索内容">
+                                <el-button slot="append" type="primary" icon="el-icon-search"></el-button>
+                            </el-input>
+                        </el-col>
+                    </el-row>
+                </div>
 
-                    <!-- 管理助手 -->
-                    <div class="index-section">
-                        <div class="aui-panel index-assistant">
-                            <div class="aui-panel__bd">
-                                <el-row :gutter="20">
-                                    <el-col :span="5">
-                                        <div class="index-assistant__item">
-                                        <#--<div class="index-assistant__item-hd">-->
-                                        <#--<svg class="icon-svg" aria-hidden="true"><use xlink:href="#icon-robot"></use></svg>-->
-                                        <#--</div>-->
-                                            <div class="index-assistant__item-bd">
-                                                <h4 class="index-assistant__item-title">key: riskLevel</h4>
-                                                <p class="index-assistant__item-intro"></p>
-                                                <h4 class="index-assistant__item-title">value: 风险等级</h4>
-                                                <p class="index-assistant__item-intro"></p>
-                                                <el-button-group >
-                                                    <el-button type="primary" size="mini" icon="el-icon-edit"></el-button>
-                                                    <el-button type="primary" size="mini" icon="el-icon-share"></el-button>
-                                                    <el-button type="primary" size="mini" icon="el-icon-delete"></el-button>
-                                                </el-button-group>
-                                                <#--<el-button type="primary" plain size="mini">立即拼团</el-button>-->
-                                            </div>
-                                        </div>
+                <el-row :gutter="15" class="mg-b-15">
+                    <template v-for="(item, index) in 4">
+                        <el-col :span="6" >
+                            <el-card shadow="hover" class="mouse-pointer" :body-style="{'padding': '5px', 'background-color': '#F2F6FC'}">
+                                <div slot="header" class="t-center">
+                                    <span class="fz-lg">风险等级</span><p></p>
+                                    <span class="fz-lg">risk_level</span>
+                                </div>
+                                <el-row >
+                                    <el-col :span="8" class="t-center">
+                                        <el-button type="text" icon="el-icon-edit"></el-button>
                                     </el-col>
-
-                                    <el-col :span="5">
-                                        <div class="index-assistant__item">
-                                            <div class="index-assistant__item-hd">
-                                                <svg class="icon-svg" aria-hidden="true">
-                                                    <use xlink:href="#icon-instagram"></use>
-                                                </svg>
-                                            </div>
-                                            <div class="index-assistant__item-bd">
-                                                <h4 class="index-assistant__item-title">2018广东云栖大会</h4>
-                                                <p class="index-assistant__item-intro">11月22日广州南丰朗豪酒店，报名进行中</p>
-                                                <el-button type="primary" plain size="mini">立即报名</el-button>
-                                            </div>
-                                        </div>
+                                    <el-col :span="8" class="t-center">
+                                        <el-button type="text" icon="el-icon-search"></el-button>
                                     </el-col>
-
-                                    <el-col :span="5">
-                                        <div class="index-assistant__item">
-                                            <div class="index-assistant__item-hd">
-                                                <svg class="icon-svg" aria-hidden="true">
-                                                    <use xlink:href="#icon-apartment"></use>
-                                                </svg>
-                                            </div>
-                                            <div class="index-assistant__item-bd">
-                                                <h4 class="index-assistant__item-title">推荐好友送云服务器</h4>
-                                                <p class="index-assistant__item-intro">邀请好友7.1折起购短信包，即可获赠云服务器</p>
-                                                <el-button type="primary" plain size="mini">立即前往</el-button>
-                                            </div>
-                                        </div>
+                                    <el-col :span="8" class="t-center">
+                                        <el-button type="text" icon="el-icon-delete"></el-button>
                                     </el-col>
                                 </el-row>
-
-                            </div>
-                        </div>
-                    </div>
-                </main>
-            </div>
+                            </el-card>
+                        </el-col>
+                    </template>
+                </el-row>
+                <el-row :gutter="15" class="mg-b-15">
+                    <template v-for="(item, index) in 4">
+                        <el-col :span="6" >
+                            <el-card shadow="hover" class="mouse-pointer" :body-style="{'padding': '5px', 'background-color': '#F2F6FC'}">
+                                <div slot="header" class="t-center">
+                                    <span class="fz-lg">风险等级</span><p></p>
+                                    <span class="fz-lg">risk_level</span>
+                                </div>
+                                <el-row >
+                                    <el-col :span="8" class="t-center">
+                                        <el-button type="text" icon="el-icon-edit"></el-button>
+                                    </el-col>
+                                    <el-col :span="8" class="t-center">
+                                        <el-button type="text" icon="el-icon-search"></el-button>
+                                    </el-col>
+                                    <el-col :span="8" class="t-center">
+                                        <el-button type="text" icon="el-icon-delete"></el-button>
+                                    </el-col>
+                                </el-row>
+                            </el-card>
+                        </el-col>
+                    </template>
+                </el-row>
+                <el-row :gutter="15" class="mg-b-15">
+                    <template v-for="(item, index) in 4">
+                        <el-col :span="6" >
+                            <el-card shadow="hover" class="mouse-pointer" :body-style="{'padding': '5px', 'background-color': '#F2F6FC'}">
+                                <div slot="header" class="t-center">
+                                    <span class="fz-lg">风险等级</span><p></p>
+                                    <span class="fz-lg">risk_level</span>
+                                </div>
+                                <el-row >
+                                    <el-col :span="8" class="t-center">
+                                        <el-button type="text" icon="el-icon-edit"></el-button>
+                                    </el-col>
+                                    <el-col :span="8" class="t-center">
+                                        <el-button type="text" icon="el-icon-search"></el-button>
+                                    </el-col>
+                                    <el-col :span="8" class="t-center">
+                                        <el-button type="text" icon="el-icon-delete"></el-button>
+                                    </el-col>
+                                </el-row>
+                            </el-card>
+                        </el-col>
+                    </template>
+                </el-row>
+                <el-pagination
+                        background
+                        layout="prev, pager, next, total"
+                        :current-page="3"
+                        :page-size="12"
+                        :total="1000">
+                </el-pagination>
+            </el-card>
         </div>
     </div>
 </script>
@@ -101,4 +116,12 @@
         }
     })
 </script>
+<style>
+    .bg-hover:hover {
+        border-color: #0BB2D4;
+    }
+    /*.el-row {*/
+        /*padding-top: 20px;*/
+    /*}*/
+</style>
 </@Layout.adminLayout>

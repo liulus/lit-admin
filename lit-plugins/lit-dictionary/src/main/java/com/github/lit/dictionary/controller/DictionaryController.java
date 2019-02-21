@@ -33,6 +33,10 @@ public class DictionaryController {
     @Resource
     private DictionaryService dictionaryService;
 
+    public DictionaryController() {
+        System.out.println("DictionaryController");
+    }
+
     @GetMapping
     @ViewName("dictionary")
     @Secured(AuthorityConst.VIEW_DICTIONARY)

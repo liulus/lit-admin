@@ -23,7 +23,7 @@
                     <el-col :span="12" :offset="2">
                         <el-form :model="queryForm">
                             <el-input v-model="queryForm.keyword" placeholder="请输入搜索内容">
-                                <el-button slot="append" icon="el-icon-search" @click="initList"></el-button>
+                                <el-button slot="append" icon="el-icon-search" @click="handleQuery"></el-button>
                             </el-input>
                         </el-form>
                     </el-col>
@@ -51,8 +51,9 @@
                     </el-card>
                 </el-col>
             </el-row>
-            <el-pagination background layout="prev, pager, next, total"
-                           :current-page="page.pageNum" :page-size="page.pageSize" :total="page.totalRecord">
+            <el-pagination v-if="page.totalRecord > 0" background layout="prev, pager, next, total"
+                           :current-page="page.pageNum" :page-size="page.pageSize" :total="page.totalRecord"
+                           @current-change="handlePageChange">
             </el-pagination>
         </el-card>
     </div>
@@ -113,12 +114,15 @@
         methods: {
             initList() {
                 HttpRequest.get('/api/dictionary/root/list', this.queryForm).then(res => {
-                    console.log(res)
                     if (res.success) {
-                        this.dictionaryList = res.data.content
+                        this.dictionaryList = res.data.content || []
                         this.page = res.data.pageInfo
                     }
                 })
+            },
+            handleQuery() {
+                this.queryForm.pageNum = 1
+                this.initList()
             },
             openAddForm() {
                 this.editForm = {}
@@ -153,6 +157,10 @@
                         this.$message.error(res.message)
                     }
                 })
+            },
+            handlePageChange(pageNum) {
+                this.queryForm.pageNum = pageNum;
+                this.initList()
             }
         }
     })

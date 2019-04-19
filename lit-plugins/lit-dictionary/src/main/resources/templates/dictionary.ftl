@@ -13,69 +13,72 @@
     <#--</el-breadcrumb>-->
     <#--</div>-->
 
-        <div class="aui-main__bd">
-            <el-card shadow="never">
-                <div slot="header">
-                    <el-row :gutter="20">
-                        <el-col :span="4">
-                            <el-button type="primary" plain icon="el-icon-plus" size="small" @click="openAddForm"></el-button>
-                        </el-col>
-                        <el-col :span="12" :offset="2">
-                            <el-input placeholder="请输入搜索内容">
-                                <el-button slot="append" type="primary" icon="el-icon-search"></el-button>
+    <div class="aui-main__bd">
+        <el-card shadow="never">
+            <div slot="header">
+                <el-row :gutter="20">
+                    <el-col :span="4">
+                        <el-button type="primary" plain icon="el-icon-plus" size="small" @click="openAddForm"></el-button>
+                    </el-col>
+                    <el-col :span="12" :offset="2">
+                        <el-form :model="queryForm">
+                            <el-input v-model="queryForm.keyword" placeholder="请输入搜索内容">
+                                <el-button slot="append" icon="el-icon-search" @click="initList"></el-button>
                             </el-input>
-                        </el-col>
-                    </el-row>
-                </div>
-
-                <el-row :gutter="15">
-                    <el-col :span="6" class="mg-b-15" v-for="(item, index) in dictionaryList" :key="item.id">
-                        <el-card shadow="hover" :body-style="{'padding': '5px', 'background-color': '#F2F6FC'}">
-                            <div slot="header" class="t-center"">
-                                <span class="fz-lg">{{item.dictKey}}</span><p></p>
-                                <span class="fz-lg">{{item.dictValue}}</span>
-                            </div>
-                            <el-row type="flex" align="middle">
-                                <el-col :span="8" class="t-center">
-                                    <el-button type="text" icon="el-icon-edit" @click="handleEdit(index)"></el-button>
-                                </el-col>
-                                <el-col :span="8" class="t-center">
-                                    <a :href="`${rc.contextPath}/dictionary/${r'${item.id}'}`"><i class="el-icon-view"></i></a>
-                                </el-col>
-                                <el-col :span="8" class="t-center">
-                                    <el-button type="text" icon="el-icon-delete" @click="handleDelete(item.id)"></el-button>
-                                </el-col>
-                            </el-row>
-                        </el-card>
+                        </el-form>
                     </el-col>
                 </el-row>
-                <el-pagination background layout="prev, pager, next, total"
-                               :current-page="page.pageNum" :page-size="page.pageSize" :total="page.totalRecord">
-                </el-pagination>
-            </el-card>
-        </div>
+            </div>
+
+            <el-row :gutter="15">
+                <el-col :span="6" class="mg-b-15" v-for="(item, index) in dictionaryList" :key="item.id">
+                    <el-card shadow="hover" :body-style="{'padding': '5px', 'background-color': '#F2F6FC'}">
+                        <div slot="header" class="t-center"">
+                            <span class="fz-lg">{{item.dictKey}}</span><p></p>
+                            <span class="fz-lg">{{item.dictValue}}</span>
+                        </div>
+                        <el-row type="flex" align="middle">
+                            <el-col :span="8" class="t-center">
+                                <el-button type="text" icon="el-icon-edit" @click="handleEdit(index)"></el-button>
+                            </el-col>
+                            <el-col :span="8" class="t-center">
+                                <a :href="`${rc.contextPath}/dictionary/${r'${item.id}'}`"><i class="el-icon-view"></i></a>
+                            </el-col>
+                            <el-col :span="8" class="t-center">
+                                <el-button type="text" icon="el-icon-delete" @click="handleDelete(item.id)"></el-button>
+                            </el-col>
+                        </el-row>
+                    </el-card>
+                </el-col>
+            </el-row>
+            <el-pagination background layout="prev, pager, next, total"
+                           :current-page="page.pageNum" :page-size="page.pageSize" :total="page.totalRecord">
+            </el-pagination>
+        </el-card>
+    </div>
 
         <#-- 编辑字典 -->
-        <el-dialog :title="editFormConfig.title" :visible.sync="editFormConfig.visible" :close-on-click-modal="false" width="40%">
-            <el-form :model="editForm" label-width="100px" label-suffix=":">
-                <el-form-item label="字典key">
-                    <el-input v-model="editForm.dictKey"></el-input>
-                </el-form-item>
-                <el-form-item label="字典value">
-                    <el-input v-model="editForm.dictValue"></el-input>
-                </el-form-item>
-                <el-form-item label="顺序号">
-                    <el-input v-model="editForm.orderNum" type="number"></el-input>
-                </el-form-item>
-                <el-form-item label="备注">
-                    <el-input v-model="editForm.remark"></el-input>
-                </el-form-item>
-            </el-form>
-            <div slot="footer" class="dialog-footer">
-                <el-button type="primary" size="medium" @click="doEdit">确 定</el-button>
-                <el-button size="medium" @click="editFormConfig.visible = false">取 消</el-button>
-            </div>
-        </el-dialog>
+    <el-dialog :title="editFormConfig.title" :visible.sync="editFormConfig.visible" :close-on-click-modal="false"
+               width="40%">
+        <el-form :model="editForm" label-width="100px" label-suffix=":">
+            <el-form-item label="字典key">
+                <el-input v-model="editForm.dictKey"></el-input>
+            </el-form-item>
+            <el-form-item label="字典value">
+                <el-input v-model="editForm.dictValue"></el-input>
+            </el-form-item>
+            <el-form-item label="顺序号">
+                <el-input v-model="editForm.orderNum" type="number"></el-input>
+            </el-form-item>
+            <el-form-item label="备注">
+                <el-input v-model="editForm.remark"></el-input>
+            </el-form-item>
+        </el-form>
+        <div slot="footer" class="dialog-footer">
+            <el-button type="primary" size="medium" @click="doEdit">确 定</el-button>
+            <el-button size="medium" @click="editFormConfig.visible = false">取 消</el-button>
+        </div>
+    </el-dialog>
     </div>
 </script>
 <script>

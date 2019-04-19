@@ -1,5 +1,6 @@
 package com.github.lit.starter.config;
 
+import com.github.lit.support.web.EnableLitWeb;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -10,14 +11,18 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
  * date 2019-02-12 11:12
  */
 @Configuration
+@EnableLitWeb
 public class WebMvcConfigure implements WebMvcConfigurer {
+
+//    @Bean
+//    public ViewResolver jsonViewResolver() {
+//        return (viewName, locale) -> new MappingJackson2JsonView();
+//    }
+
 
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
         registry.addViewController("/index").setViewName("index");
-        registry.addViewController("/dictionary").setViewName("dictionary");
-        registry.addViewController("/dictionary/detail").setViewName("dictionary-detail");
-
     }
 
 

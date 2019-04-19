@@ -5,6 +5,7 @@ import com.github.lit.dictionary.model.DictionaryQo;
 import com.github.lit.dictionary.service.DictionaryService;
 import com.github.lit.support.exception.BizException;
 import com.github.lit.support.jdbc.JdbcRepository;
+import com.github.lit.support.page.OrderBy;
 import com.github.lit.support.page.Page;
 import com.github.lit.support.sql.SQL;
 import com.github.lit.support.sql.TableMetaDate;
@@ -83,6 +84,7 @@ public class DictionaryServiceImpl implements DictionaryService {
 
     @Override
     public Page<Dictionary> findPageList(DictionaryQo qo) {
+        qo.setOrderBy(OrderBy.init().asc(Dictionary::getOrderNum));
         return jdbcRepository.selectPageList(Dictionary.class, qo);
     }
 
@@ -165,11 +167,7 @@ public class DictionaryServiceImpl implements DictionaryService {
 
 
     private int countByParentId(Long parentId) {
-        TableMetaDate metaDate = TableMetaDate.forClass(Dictionary.class);
-        SQL sql = SQL.init().SELECT("count(*)")
-                .FROM(metaDate.getTableName())
-                .WHERE("parent_id = :parentId");
-        return jdbcRepository.selectForObject(sql, Collections.singletonMap("parentId", parentId), int.class);
+        return jdbcRepository.countByProperty(Dictionary::getParentId, parentId);
     }
 
 }

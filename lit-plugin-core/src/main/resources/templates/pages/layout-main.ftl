@@ -10,14 +10,17 @@
 
     <link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
     <#--<link href="https://cdn.bootcss.com/normalize/8.0.1/normalize.css" rel="stylesheet">-->
-    <link rel="stylesheet" href="${rc.contextPath}/styles/lit-common.css">
-    <link rel="stylesheet" href="${rc.contextPath}/element-theme/cyan/index.css">
-    <link rel="stylesheet" href="${rc.contextPath}/styles/aui-cyan.css">
+    <link rel="stylesheet" href="${springMacroRequestContext.contextPath}/styles/lit-common.css">
+    <link rel="stylesheet" href="${springMacroRequestContext.contextPath}/element-theme/cyan/index.css">
+    <link rel="stylesheet" href="${springMacroRequestContext.contextPath}/styles/aui-cyan.css">
     <#if importCss??>
         <#list importCss as css>
 <link rel="stylesheet" href="${rc.contextPath}/${css}"/>
         </#list>
     </#if>
+    <script type="text/javascript">
+        let contextPath = '${springMacroRequestContext.contextPath}'
+    </script>
 </head>
 <body>
 <div v-cloak ref="auiWrapper" id="app" class="aui-wrapper"
@@ -56,7 +59,7 @@
 <script src="https://cdn.bootcss.com/vue/2.6.3/vue.js"></script>
 <#--<script src="${rc.contextPath}/libs/element-2.4.5/index.js"></script>-->
 <script src="https://cdn.bootcss.com/element-ui/2.5.4/index.js"></script>
-<script src="${rc.contextPath}/icons/iconfont.js"></script>
+<script src="${rc.contextPath}/js/lit-common.js"></script>
 <script>Vue.prototype.$ELEMENT = {size: 'medium'};</script>
 <script>
     var VueUtils = {

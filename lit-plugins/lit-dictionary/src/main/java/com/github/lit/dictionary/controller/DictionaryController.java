@@ -7,6 +7,7 @@ import com.github.lit.dictionary.service.DictionaryService;
 import com.github.lit.plugin.core.constant.AuthorityConst;
 import com.github.lit.plugin.core.constant.PluginConst;
 import com.github.lit.support.annotation.ViewName;
+import com.github.lit.support.page.OrderBy;
 import com.github.lit.support.page.Page;
 import com.github.lit.support.page.PageUtils;
 import com.github.lit.support.util.BeanUtils;
@@ -30,11 +31,15 @@ public class DictionaryController {
     private static final String REDIRECT_PREFIX = "'" + PluginConst.REDIRECT + "/dictionary'";
 
     private static final String REDIRECT_EL = "+(#dictionary.parentId == 0L? '' : '?parentId=' + #dictionary.parentId)";
+
     @Resource
     private DictionaryService dictionaryService;
 
-    public DictionaryController() {
-        System.out.println("DictionaryController");
+    @GetMapping("/root/list")
+    public Page<DictionaryVo.Detail> findAllRootDict(DictionaryQo qo) {
+        qo.setOrderBy(OrderBy.init().asc(Dictionary::getOrderNum));
+        Page<Dictionary> pageList = dictionaryService.findPageList(qo);
+        return PageUtils.convert(pageList, DictionaryVo.Detail.class, null);
     }
 
     @GetMapping

@@ -52,7 +52,6 @@ public interface DictionaryService {
      */
     int deleteByIds(Long... ids);
 
-
     /**
      * 根据 根字典key 查询字典
      *

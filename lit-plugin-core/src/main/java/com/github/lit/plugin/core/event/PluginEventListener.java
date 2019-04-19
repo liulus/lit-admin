@@ -4,7 +4,6 @@ import com.github.lit.plugin.core.util.PluginUtils;
 import com.github.lit.support.event.AppStartedEvent;
 import com.github.lit.support.event.EventComponent;
 import com.github.lit.support.util.WebUtils;
-import com.google.common.eventbus.Subscribe;
 import org.springframework.beans.factory.annotation.Value;
 
 /**
@@ -27,7 +26,6 @@ public class PluginEventListener {
     @Value("${lit.page.left:/fragment/left-menu.ftl}")
     private String pageLeft;
 
-    @Subscribe
     public void appStartedEvent(AppStartedEvent event) {
         WebUtils.setContextAttribute("securityPresent", PluginUtils.isSecurityPresent());
 

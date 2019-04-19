@@ -2,16 +2,16 @@
 <@Layout.adminLayout title='字典管理'>
 <script type="text/x-template" id="app-main-template">
     <div>
-        <div class="aui-main__hd">
-            <el-breadcrumb separator="/">
-                <el-breadcrumb-item>
-                    <svg class="icon-svg aui-aside__menu-icon" aria-hidden="true">
-                        <use xlink:href="#icon-home"></use>
-                    </svg>
-                </el-breadcrumb-item>
-                <el-breadcrumb-item>字典管理</el-breadcrumb-item>
-            </el-breadcrumb>
-        </div>
+    <#--<div class="aui-main__hd">-->
+    <#--<el-breadcrumb separator="/">-->
+    <#--<el-breadcrumb-item>-->
+    <#--<svg class="icon-svg aui-aside__menu-icon" aria-hidden="true">-->
+    <#--<use xlink:href="#icon-home"></use>-->
+    <#--</svg>-->
+    <#--</el-breadcrumb-item>-->
+    <#--<el-breadcrumb-item>字典管理</el-breadcrumb-item>-->
+    <#--</el-breadcrumb>-->
+    <#--</div>-->
 
         <div class="aui-main__bd">
             <el-card shadow="never">
@@ -28,30 +28,29 @@
                     </el-row>
                 </div>
 
-                <el-row :gutter="15" class="mg-b-15">
-                    <template v-for="(item, index) in 4">
-                        <el-col :span="6">
-                            <el-card shadow="hover" :body-style="{'padding': '5px', 'background-color': '#F2F6FC'}">
-                                <div slot="header" class="t-center"">
-                                    <span class="fz-lg">风险等级</span><p></p>
-                                    <span class="fz-lg">risk_level</span>
-                                </div>
-                                <el-row >
-                                    <el-col :span="8" class="t-center">
-                                        <el-button type="text" icon="el-icon-edit" @click="handleEdit"></el-button>
-                                    </el-col>
-                                    <el-col :span="8" class="t-center">
-                                        <el-button type="text" icon="el-icon-view" @click="handleSearch"></el-button>
-                                    </el-col>
-                                    <el-col :span="8" class="t-center">
-                                        <el-button type="text" icon="el-icon-delete" @click="handleDetail"></el-button>
-                                    </el-col>
-                                </el-row>
-                            </el-card>
-                        </el-col>
-                    </template>
+                <el-row :gutter="15">
+                    <el-col :span="6" class="mg-b-15" v-for="(item, index) in dictionaryList" :key="item.id">
+                        <el-card shadow="hover" :body-style="{'padding': '5px', 'background-color': '#F2F6FC'}">
+                            <div slot="header" class="t-center"">
+                                <span class="fz-lg">{{item.dictKey}}</span><p></p>
+                                <span class="fz-lg">{{item.dictValue}}</span>
+                            </div>
+                            <el-row type="flex" align="middle">
+                                <el-col :span="8" class="t-center">
+                                    <el-button type="text" icon="el-icon-edit" @click="handleEdit(index)"></el-button>
+                                </el-col>
+                                <el-col :span="8" class="t-center">
+                                    <a :href="`${rc.contextPath}/dictionary/${r'${item.id}'}`"><i class="el-icon-view"></i></a>
+                                </el-col>
+                                <el-col :span="8" class="t-center">
+                                    <el-button type="text" icon="el-icon-delete" @click="handleDelete(item.id)"></el-button>
+                                </el-col>
+                            </el-row>
+                        </el-card>
+                    </el-col>
                 </el-row>
-                <el-pagination background layout="prev, pager, next, total" :current-page="3" :page-size="12" :total="1000">
+                <el-pagination background layout="prev, pager, next, total"
+                               :current-page="page.pageNum" :page-size="page.pageSize" :total="page.totalRecord">
                 </el-pagination>
             </el-card>
         </div>
@@ -73,7 +72,7 @@
                 </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
-                <el-button type="primary" size="medium" @click="doAddDict">确 定</el-button>
+                <el-button type="primary" size="medium" @click="doEdit">确 定</el-button>
                 <el-button size="medium" @click="editFormConfig.visible = false">取 消</el-button>
             </div>
         </el-dialog>
@@ -84,13 +83,20 @@
         template: '#app-main-template',
         data: function () {
             return {
-                input: '',
+                queryForm: {
+                    keyword: '',
+                    pageNum: 1,
+                    pageSize: 12
+                },
+                dictionaryList: [],
+                page: {},
                 editFormConfig: {
                     visible: false,
+                    isAdd: true,
                     title: '',
                 },
                 editForm: {
-                    parentId: 0,
+                    id: 0,
                     dictKey: '',
                     dictValue: '',
                     remark: '',
@@ -98,32 +104,52 @@
                 }
             }
         },
+        created() {
+            this.initList()
+        },
         methods: {
+            initList() {
+                HttpRequest.get('/api/dictionary/root/list', this.queryForm).then(res => {
+                    console.log(res)
+                    if (res.success) {
+                        this.dictionaryList = res.data.content
+                        this.page = res.data.pageInfo
+                    }
+                })
+            },
             openAddForm() {
+                this.editForm = {}
                 this.editFormConfig.title = '新增字典'
+                this.editFormConfig.isAdd = true
                 this.editFormConfig.visible = true
             },
-            doAddDict() {
-                this.editForm.parentId = 0
-                fetch('/lit/plugin/dictionary.json', {
-                    method: 'post',
-                    headers: {
-                        'Content-Type': 'application/json;charset=UTF-8'
-                    },
-                    body: JSON.stringify(this.editForm)
-                }).then(res => {
-                    console.log(res)
-                    return res.json()
-                }).then(res => console.log(res))
+            handleEdit: function (index) {
+                this.editForm = this.dictionaryList[index]
+                this.editFormConfig.title = '修改字典'
+                this.editFormConfig.isAdd = false
+                this.editFormConfig.visible = true
             },
-            handleDetail: function () {
-                console.log('to detail')
+            doEdit() {
+                let method = this.editFormConfig.isAdd ? 'post' : 'put'
+                HttpRequest.request(method, '/api/dictionary', this.editForm).then(res => {
+                    if (res.success) {
+                        this.$message.success(this.editFormConfig.title + '成功')
+                        this.initList()
+                    } else {
+                        this.$message.error(res.message)
+                    }
+                })
+                this.editFormConfig.visible = false
             },
-            handleEdit: function () {
-                console.log('handleEdit1')
-            },
-            handleSearch: function () {
-                console.log('handleSearch1')
+            handleDelete(id) {
+                HttpRequest.delete('/api/dictionary/' + id,).then(res => {
+                    if (res.success) {
+                        this.$message.success('删除字典成功')
+                        this.initList()
+                    } else {
+                        this.$message.error(res.message)
+                    }
+                })
             }
         }
     })

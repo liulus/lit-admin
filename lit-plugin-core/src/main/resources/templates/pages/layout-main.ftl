@@ -38,10 +38,10 @@
 
     <template v-if="!loading">
         <!-- aui-header -->
-        <#include "layout-header.ftl">
+        <app-header></app-header>
 
         <!-- aui-aside -->
-        <#include "layout-aside.ftl">
+        <app-aside></app-aside>
 
         <!-- aui-main -->
         <main class="aui-main">
@@ -60,15 +60,7 @@
 <#--<script src="${rc.contextPath}/libs/element-2.4.5/index.js"></script>-->
 <script src="https://cdn.bootcss.com/element-ui/2.5.4/index.js"></script>
 <script src="${rc.contextPath}/js/lit-common.js"></script>
-<script>Vue.prototype.$ELEMENT = {size: 'medium'};</script>
-<script>
-    var VueUtils = {
-        registerComponent: function (componentConfig) {
-            componentConfig = componentConfig || {};
-            Vue.component('app-main', componentConfig)
-        }
-    }
-</script>
+<#include "layout-component.ftl">
     <#nested>
 <script>
     var vm = new Vue({

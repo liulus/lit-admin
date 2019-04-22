@@ -16,21 +16,25 @@ let HttpRequest = {
     },
 
     request(method, url, params) {
+
+        var headers = new Headers()
+        headers.append('Accept', 'application/json, text/plain, */*')
+
         let requestConfig = {
             method: method,
-            headers: {
-                'Accept': 'application/json, text/plain, */*',
-            }
+            headers: headers
         }
         if (params) {
             if (method === 'get') {
                 let paramArray = [];
-                for (let k in params) {
-                    paramArray.push(k + '=' + params[k]);
+                for (let key in params) {
+                    if (params[key]) {
+                        paramArray.push(key + '=' + params[key]);
+                    }
                 }
                 url = url + '?' + paramArray.join('&')
             } else {
-                requestConfig.headers['Content-Type'] = 'application/json;charset=UTF-8'
+                headers.append('Content-Type', 'application/json;charset=UTF-8')
                 requestConfig.body = JSON.stringify(params)
             }
         }
@@ -38,16 +42,15 @@ let HttpRequest = {
     }
 }
 
-function convertUrlParams(parmas) {
-    if (parmas) {
-        var paramArray = [];
-        for (let k in params) {
-            paramArray.push(k + '=' + param[k]);
-        }
-        return paramArray.join('&')
+let VueUtils = {
+    registerComponent: function (componentConfig) {
+        componentConfig = componentConfig || {};
+        Vue.component('app-main', componentConfig)
     }
-    return ""
-}
+};
+Vue.prototype.$ELEMENT = {size: 'medium'};
+
+
 
 
 

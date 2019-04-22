@@ -149,14 +149,19 @@
                 this.editFormConfig.visible = false
             },
             handleDelete(id) {
-                HttpRequest.delete('/api/dictionary/' + id,).then(res => {
-                    if (res.success) {
-                        this.$message.success('删除字典成功')
-                        this.initList()
-                    } else {
-                        this.$message.error(res.message)
-                    }
-                })
+                this.$confirm('此操作将删除该字典数据, 是否继续?', '提示', {
+                    closeOnClickModal: false,
+                    type: 'warning'
+                }).then(() => {
+                    HttpRequest.delete('/api/dictionary/' + id,).then(res => {
+                        if (res.success) {
+                            this.$message.success('删除字典成功')
+                            this.initList()
+                        } else {
+                            this.$message.error(res.message)
+                        }
+                    })
+                }).catch(() => {})
             },
             handlePageChange(pageNum) {
                 this.queryForm.pageNum = pageNum;

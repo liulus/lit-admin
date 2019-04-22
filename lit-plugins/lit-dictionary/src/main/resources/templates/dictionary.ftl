@@ -2,16 +2,16 @@
 <@Layout.adminLayout title='字典管理'>
 <script type="text/x-template" id="app-main-template">
     <div>
-    <#--<div class="aui-main__hd">-->
-    <#--<el-breadcrumb separator="/">-->
-    <#--<el-breadcrumb-item>-->
-    <#--<svg class="icon-svg aui-aside__menu-icon" aria-hidden="true">-->
-    <#--<use xlink:href="#icon-home"></use>-->
-    <#--</svg>-->
-    <#--</el-breadcrumb-item>-->
-    <#--<el-breadcrumb-item>字典管理</el-breadcrumb-item>-->
-    <#--</el-breadcrumb>-->
-    <#--</div>-->
+        <#--<div class="aui-main__hd">-->
+            <#--<el-breadcrumb separator="/">-->
+                <#--<el-breadcrumb-item>-->
+                    <#--<svg class="icon-svg aui-aside__menu-icon" aria-hidden="true">-->
+                        <#--<use xlink:href="#icon-home"></use>-->
+                    <#--</svg>-->
+                <#--</el-breadcrumb-item>-->
+                <#--<el-breadcrumb-item>字典管理</el-breadcrumb-item>-->
+            <#--</el-breadcrumb>-->
+        <#--</div>-->
 
     <div class="aui-main__bd">
         <el-card shadow="never">
@@ -39,8 +39,8 @@
             <el-table v-if="dataModel==='table'" :data="dictionaryList">
                 <el-table-column prop="dictKey" label="字典key"></el-table-column>
                 <el-table-column prop="dictValue" label="字典value"></el-table-column>
-                <el-table-column prop="orderNum" label="顺序号" width="80px"></el-table-column>
                 <el-table-column prop="remark" label="备注"></el-table-column>
+                <el-table-column prop="orderNum" label="顺序号" width="100px"></el-table-column>
                 <el-table-column label="操作" width="150px">
                     <template slot-scope="scope">
                         <el-button type="text" icon="el-icon-edit" @click="handleEdit(scope.$index)"></el-button>&nbsp;&nbsp;&nbsp;&nbsp;
@@ -93,7 +93,7 @@
                 <el-input v-model="editForm.orderNum" type="number"></el-input>
             </el-form-item>
             <el-form-item label="备注">
-                <el-input v-model="editForm.remark"></el-input>
+                <el-input type="textarea" :rows="2" v-model="editForm.remark"></el-input>
             </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">

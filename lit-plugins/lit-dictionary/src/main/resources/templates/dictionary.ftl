@@ -17,8 +17,8 @@
         <el-card shadow="never">
             <div slot="header">
                 <el-row :gutter="20">
-                    <el-col :span="4">
-                        <el-button type="primary" plain icon="el-icon-plus" size="small" @click="openAddForm"></el-button>
+                    <el-col :span="3">
+                        <el-button type="primary" plain icon="el-icon-plus" size="medium" @click="openAddForm"></el-button>
                     </el-col>
                     <el-col :span="12" :offset="2">
                         <el-form :model="queryForm">
@@ -27,10 +27,31 @@
                             </el-input>
                         </el-form>
                     </el-col>
+                    <el-col :span="5" :offset="2" class="t-right">
+                        <el-radio-group v-model="dataModel">
+                            <el-radio-button label="card" size="medium"><i class="el-icon-menu"></i></el-radio-button>
+                            <el-radio-button label="table" size="medium"><i class="el-icon-tickets"></i></el-radio-button>
+                        </el-radio-group>
+                    </el-col>
                 </el-row>
             </div>
 
-            <el-row :gutter="15">
+            <el-table v-if="dataModel==='table'" :data="dictionaryList">
+                <el-table-column prop="dictKey" label="字典key"></el-table-column>
+                <el-table-column prop="dictValue" label="字典value"></el-table-column>
+                <el-table-column prop="orderNum" label="顺序号" width="80px"></el-table-column>
+                <el-table-column prop="remark" label="备注"></el-table-column>
+                <el-table-column label="操作" width="150px">
+                    <template slot-scope="scope">
+                        <el-button type="text" icon="el-icon-edit" @click="handleEdit(scope.$index)"></el-button>&nbsp;&nbsp;&nbsp;&nbsp;
+                        <a :href="`${rc.contextPath}/dictionary/${r'${scope.row.id}'}`"><i class="el-icon-view"></i></a>&nbsp;&nbsp;&nbsp;&nbsp;
+                        <el-button type="text" icon="el-icon-delete" @click="handleDelete(scope.row.id)"></el-button>
+                    </template>
+                </el-table-column>
+            </el-table>
+
+
+            <el-row :gutter="15" v-if="dataModel==='card'">
                 <el-col :span="6" class="mg-b-15" v-for="(item, index) in dictionaryList" :key="item.id">
                     <el-card shadow="hover" :body-style="{'padding': '5px', 'background-color': '#F2F6FC'}">
                         <div slot="header" class="t-center"">
@@ -92,6 +113,7 @@
                     pageNum: 1,
                     pageSize: 12
                 },
+                dataModel: 'card',
                 dictionaryList: [],
                 page: {},
                 editFormConfig: {

@@ -3,14 +3,14 @@ package com.github.lit.user.service.impl;
 import com.github.lit.plugin.core.model.LoginUser;
 import com.github.lit.support.exception.BizException;
 import com.github.lit.support.jdbc.JdbcRepository;
-import com.github.lit.support.page.Page;
+import com.github.lit.support.page.PageResult;
 import com.github.lit.user.model.User;
 import com.github.lit.user.model.UserQo;
 import com.github.lit.user.service.UserService;
 import com.github.lit.user.util.UserUtils;
-import com.google.common.base.Strings;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
 import java.util.Arrays;
@@ -40,12 +40,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Page<User> findPageList(UserQo qo) {
+    public PageResult<User> findPageList(UserQo qo) {
         LoginUser loginUser = UserUtils.getLoginUser();
 
         if (loginUser != null && loginUser.hasOrg()) {
             qo.setSerialNum(loginUser.getLevelIndex());
-            if (Strings.isNullOrEmpty(qo.getOrgCode())) {
+            if (StringUtils.isEmpty(qo.getOrgCode())) {
                 qo.setOrgCode(loginUser.getOrgCode());
             }
         }
@@ -86,7 +86,7 @@ public class UserServiceImpl implements UserService {
 
     private void checkUserName(String userName) {
 
-        if (Strings.isNullOrEmpty(userName)) {
+        if (StringUtils.isEmpty(userName)) {
             return;
         }
         int count = jdbcRepository.countByProperty(User::getUserName, userName);
@@ -96,7 +96,7 @@ public class UserServiceImpl implements UserService {
     }
 
     private void checkEmail(String email) {
-        if (Strings.isNullOrEmpty(email)) {
+        if (StringUtils.isEmpty(email)) {
             return;
         }
         int count = jdbcRepository.countByProperty(User::getEmail, email);
@@ -106,7 +106,7 @@ public class UserServiceImpl implements UserService {
     }
 
     private void checkMobilePhone(String mobileNum) {
-        if (Strings.isNullOrEmpty(mobileNum)) {
+        if (StringUtils.isEmpty(mobileNum)) {
             return;
         }
         int count = jdbcRepository.countByProperty(User::getMobileNum, mobileNum);

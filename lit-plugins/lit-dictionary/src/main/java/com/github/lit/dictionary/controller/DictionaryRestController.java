@@ -5,7 +5,7 @@ import com.github.lit.dictionary.model.DictionaryQo;
 import com.github.lit.dictionary.model.DictionaryVo;
 import com.github.lit.dictionary.service.DictionaryService;
 import com.github.lit.plugin.core.constant.AuthorityConst;
-import com.github.lit.support.page.Page;
+import com.github.lit.support.page.PageResult;
 import com.github.lit.support.page.PageUtils;
 import com.github.lit.support.util.BeanUtils;
 import org.springframework.security.access.annotation.Secured;
@@ -28,9 +28,15 @@ public class DictionaryRestController {
 
     @GetMapping("/root/list")
     @Secured(AuthorityConst.VIEW_DICTIONARY)
-    public Page<DictionaryVo.Detail> findAllRootDict(DictionaryQo qo) {
-        Page<Dictionary> pageList = dictionaryService.findPageList(qo);
+    public PageResult<DictionaryVo.Detail> findAllRootDict(DictionaryQo qo) {
+        qo.setParentId(0L);
+        PageResult<Dictionary> pageList = dictionaryService.findPageList(qo);
         return PageUtils.convert(pageList, DictionaryVo.Detail.class);
+    }
+
+    @GetMapping("/detail/{id}")
+    public DictionaryVo.Detail findAllById(@PathVariable Long id) {
+        return dictionaryService.buildDictLevelById(id);
     }
 
     @PostMapping

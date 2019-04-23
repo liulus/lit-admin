@@ -10,12 +10,12 @@ import com.github.lit.security.model.RoleAuthority;
 import com.github.lit.security.service.AuthorityService;
 import com.github.lit.support.exception.BizException;
 import com.github.lit.support.jdbc.JdbcRepository;
-import com.github.lit.support.page.Page;
+import com.github.lit.support.page.PageResult;
 import com.github.lit.support.util.BeanUtils;
-import com.google.common.base.Strings;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
 import java.util.*;
@@ -35,7 +35,7 @@ public class AuthorityServiceImpl implements AuthorityService {
 
 
     @Override
-    public Page<Authority> findPageList(AuthorityQo qo) {
+    public PageResult<Authority> findPageList(AuthorityQo qo) {
         return jdbcRepository.selectPageList(Authority.class, qo);
     }
 
@@ -52,7 +52,7 @@ public class AuthorityServiceImpl implements AuthorityService {
         List<AuthorityVo> result = new ArrayList<>();
 
         Map<String, List<AuthorityVo>> typeMap = authorities.stream()
-                .filter(authority -> !Strings.isNullOrEmpty(authority.getModule()))
+                .filter(authority -> StringUtils.hasText(authority.getModule()))
                 .map(authority -> BeanUtils.convert(authority, new AuthorityVo()))
                 .collect(Collectors.groupingBy(Authority::getModule));
 
@@ -71,7 +71,7 @@ public class AuthorityServiceImpl implements AuthorityService {
 
         // 过滤没有权限类型的
         List<AuthorityVo> other = authorities.stream()
-                .filter(authority -> Strings.isNullOrEmpty(authority.getModule()))
+                .filter(authority -> StringUtils.isEmpty(authority.getModule()))
                 .map(authority -> BeanUtils.convert(authority, new AuthorityVo()))
                 .collect(Collectors.toList());
         result.addAll(other);
@@ -136,7 +136,7 @@ public class AuthorityServiceImpl implements AuthorityService {
     }
 
     private void checkAuthorityCode(String code) {
-        if (Strings.isNullOrEmpty(code)) {
+        if (StringUtils.isEmpty(code)) {
             throw new BizException("权限码不能为空!");
         }
         int count = jdbcRepository.countByProperty(Authority::getCode, code);

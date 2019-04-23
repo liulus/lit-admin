@@ -2,19 +2,21 @@ package com.github.lit.dictionary.service.impl;
 
 import com.github.lit.dictionary.model.Dictionary;
 import com.github.lit.dictionary.model.DictionaryQo;
+import com.github.lit.dictionary.model.DictionaryVo;
 import com.github.lit.dictionary.service.DictionaryService;
 import com.github.lit.support.exception.BizException;
 import com.github.lit.support.jdbc.JdbcRepository;
-import com.github.lit.support.page.OrderBy;
-import com.github.lit.support.page.Page;
+import com.github.lit.support.page.PageResult;
 import com.github.lit.support.sql.SQL;
-import com.github.lit.support.sql.TableMetaDate;
+import com.github.lit.support.util.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * User : liulu
@@ -66,9 +68,7 @@ public class DictionaryServiceImpl implements DictionaryService {
         if (parentId == null) {
             parentId = 0L;
         }
-        TableMetaDate metaDate = TableMetaDate.forClass(Dictionary.class);
-        SQL sql = SQL.init().SELECT(metaDate.getAllColumns())
-                .FROM(metaDate.getTableName())
+        SQL sql = SQL.baseSelect(Dictionary.class)
                 .WHERE("parent_id = :parentId")
                 .WHERE("dict_key = :dictKey");
         Map<String, Object> params = new HashMap<>(2);
@@ -79,14 +79,65 @@ public class DictionaryServiceImpl implements DictionaryService {
 
     @Override
     public Dictionary findById(Long id) {
+        if (id == null || id == 0L) {
+            return null;
+        }
         return jdbcRepository.selectById(Dictionary.class, id);
     }
 
     @Override
-    public Page<Dictionary> findPageList(DictionaryQo qo) {
-        qo.setOrderBy(OrderBy.init().asc(Dictionary::getOrderNum));
-        return jdbcRepository.selectPageList(Dictionary.class, qo);
+    public PageResult<Dictionary> findPageList(DictionaryQo qo) {
+        SQL sql = SQL.baseSelect(Dictionary.class);
+        if (qo.getParentId() != null) {
+            sql.WHERE("parent_id = :parentId");
+        }
+        if (StringUtils.hasText(qo.getKeyword())) {
+            qo.setKeyword("%" + qo.getKeyword() + "%");
+            sql.WHERE("(dict_key like :keyword or dict_value like :keyword or remark like :keyword)");
+        }
+        sql.ORDER_BY("order_num");
+        return jdbcRepository.selectForPageList(sql, qo, Dictionary.class);
     }
+
+    @Override
+    public DictionaryVo.Detail buildDictLevelById(Long id) {
+        Dictionary dictionary = findById(id);
+        if (dictionary == null) {
+            return null;
+        }
+        DictionaryVo.Detail result = BeanUtils.convert(dictionary, new DictionaryVo.Detail());
+        buildLevel(Collections.singletonList(result));
+        return result;
+    }
+
+
+    private void buildLevel(List<DictionaryVo.Detail> result) {
+        if (CollectionUtils.isEmpty(result)) {
+            return;
+        }
+        List<Long> ids = result.stream().map(DictionaryVo.Detail::getId).collect(Collectors.toList());
+        List<Dictionary> dictionaries = findByParentIds(ids);
+        if (CollectionUtils.isEmpty(dictionaries)) {
+            return;
+        }
+        List<DictionaryVo.Detail> details = BeanUtils.convertList(DictionaryVo.Detail.class, dictionaries);
+        Map<Long, List<DictionaryVo.Detail>> childDicts = details.stream()
+                .collect(Collectors.groupingBy(DictionaryVo.Detail::getParentId));
+
+        for (DictionaryVo.Detail detail : result) {
+            detail.setChildren(childDicts.get(detail.getId()));
+        }
+        buildLevel(details);
+    }
+
+    private List<Dictionary> findByParentIds(Collection<Long> parentIds) {
+
+        SQL sql = SQL.baseSelect(Dictionary.class)
+                .WHERE("parent_id in (:parentIds)");
+
+        return jdbcRepository.selectForList(sql, Collections.singletonMap("parentIds", parentIds), Dictionary.class);
+    }
+
 
     @Override
     public int deleteByIds(Long... ids) {

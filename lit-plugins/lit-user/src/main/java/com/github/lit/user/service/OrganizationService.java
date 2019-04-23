@@ -1,6 +1,6 @@
 package com.github.lit.user.service;
 
-import com.github.lit.support.page.Page;
+import com.github.lit.support.page.PageResult;
 import com.github.lit.user.model.Organization;
 import com.github.lit.user.model.OrganizationQo;
 
@@ -16,7 +16,7 @@ public interface OrganizationService {
      * @param vo 查询条件
      * @return
      */
-    Page<Organization> findPageList(OrganizationQo vo);
+    PageResult<Organization> findPageList(OrganizationQo vo);
 
     /**
      * 查询单个机构

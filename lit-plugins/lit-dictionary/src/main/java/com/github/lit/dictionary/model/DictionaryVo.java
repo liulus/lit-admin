@@ -2,6 +2,8 @@ package com.github.lit.dictionary.model;
 
 import lombok.Data;
 
+import java.util.List;
+
 /**
  * User : liulu
  * Date : 2018/3/26 16:30
@@ -31,6 +33,10 @@ public abstract class DictionaryVo {
     @Data
     public static class Detail extends DictionaryVo {
         private Long id;
+
+        private Long parentId;
+
+        private List<Detail> children;
     }
 
 }

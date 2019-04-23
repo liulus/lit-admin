@@ -21,7 +21,8 @@ server:
 
 logging:
   level:
-    org.springframework: info
+    com.github: debug
+    org.springframework.jdbc: debug
 
 ---
 spring:

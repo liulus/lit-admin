@@ -72,7 +72,7 @@
                     </el-card>
                 </el-col>
             </el-row>
-            <el-pagination v-if="page.totalRecord > 0" background layout="prev, pager, next, total"
+            <el-pagination v-if="page" background layout="prev, pager, next, total"
                            :current-page="page.pageNum" :page-size="page.pageSize" :total="page.totalRecord"
                            @current-change="handlePageChange">
             </el-pagination>
@@ -137,8 +137,8 @@
             initList() {
                 HttpRequest.get('/api/dictionary/root/list', this.queryForm).then(res => {
                     if (res.success) {
-                        this.dictionaryList = res.data.content || []
-                        this.page = res.data.pageInfo
+                        this.dictionaryList = res.result.data || []
+                        this.page = res.result.pageInfo
                     }
                 })
             },

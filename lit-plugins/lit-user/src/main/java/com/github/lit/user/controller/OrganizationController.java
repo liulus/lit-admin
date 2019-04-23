@@ -2,7 +2,7 @@ package com.github.lit.user.controller;
 
 import com.github.lit.plugin.core.constant.PluginConst;
 import com.github.lit.support.annotation.ViewName;
-import com.github.lit.support.page.Page;
+import com.github.lit.support.page.PageResult;
 import com.github.lit.support.page.PageUtils;
 import com.github.lit.support.util.BeanUtils;
 import com.github.lit.user.model.Organization;
@@ -29,8 +29,8 @@ public class OrganizationController {
 
     @GetMapping
     @ViewName("organization")
-    public Page<OrganizationVo.List> orgList(OrganizationQo qo) {
-        Page<Organization> organizationPage = organizationService.findPageList(qo);
+    public PageResult<OrganizationVo.List> orgList(OrganizationQo qo) {
+        PageResult<Organization> organizationPage = organizationService.findPageList(qo);
         if (qo.getParentId() != 0L) {
             Organization org = organizationService.findById(qo.getParentId());
             organizationPage.add("returnId", org == null ? 0 : org.getParentId());

@@ -8,7 +8,6 @@ import com.github.lit.plugin.core.util.PluginUtils;
 import com.github.lit.support.event.AppStartedEvent;
 import com.github.lit.support.event.EventComponent;
 import com.github.lit.support.util.WebUtils;
-import com.google.common.eventbus.Subscribe;
 
 import java.util.List;
 
@@ -20,7 +19,7 @@ import java.util.List;
 @EventComponent
 public class MenuEventListener {
 
-    @Subscribe
+//    @Subscribe
     public void appStartedEvent(AppStartedEvent event) {
         if (PluginUtils.isSecurityPresent()) {
             return;
@@ -29,7 +28,7 @@ public class MenuEventListener {
         WebUtils.setContextAttribute(MenuConst.MENUS, menus);
     }
 
-    @Subscribe
+//    @Subscribe
     public void menuUpdateListener(MenuUpdateEvent event) {
         if (PluginUtils.isSecurityPresent()) {
             return;
@@ -39,7 +38,7 @@ public class MenuEventListener {
         WebUtils.setContextAttribute(MenuConst.MENUS, menus);
     }
 
-    @Subscribe
+//    @Subscribe
     public void userLoginListener(LoginEvent event){
         if (PluginUtils.isSecurityPresent()) {
             List<MenuVo.Detail> menus = MenuTools.findMyMenus();

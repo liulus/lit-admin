@@ -9,7 +9,7 @@ import com.github.lit.plugin.core.util.PluginUtils;
 import com.github.lit.support.event.Event;
 import com.github.lit.support.exception.BizException;
 import com.github.lit.support.jdbc.JdbcRepository;
-import com.github.lit.support.page.Page;
+import com.github.lit.support.page.PageResult;
 import com.github.lit.support.sql.SQL;
 import com.github.lit.support.sql.TableMetaDate;
 import org.springframework.stereotype.Service;
@@ -31,7 +31,7 @@ public class MenuServiceImpl implements MenuService {
     private JdbcRepository jdbcRepository;
 
     @Override
-    public Page<Menu> findPageList(MenuQo qo) {
+    public PageResult<Menu> findPageList(MenuQo qo) {
         return jdbcRepository.selectPageList(Menu.class, qo);
     }
 

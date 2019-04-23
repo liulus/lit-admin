@@ -5,7 +5,7 @@ import com.github.lit.param.model.SysParamQo;
 import com.github.lit.param.service.ParamService;
 import com.github.lit.support.exception.BizException;
 import com.github.lit.support.jdbc.JdbcRepository;
-import com.github.lit.support.page.Page;
+import com.github.lit.support.page.PageResult;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,7 +33,7 @@ public class ParamServiceImpl implements ParamService {
 
 
     @Override
-    public Page<SysParam> findPageList(SysParamQo qo) {
+    public PageResult<SysParam> findPageList(SysParamQo qo) {
         return jdbcRepository.selectPageList(SysParam.class, qo);
     }
 

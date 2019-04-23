@@ -5,7 +5,7 @@ import com.github.lit.param.model.SysParamQo;
 import com.github.lit.param.service.ParamService;
 import com.github.lit.plugin.core.constant.PluginConst;
 import com.github.lit.support.annotation.ViewName;
-import com.github.lit.support.page.Page;
+import com.github.lit.support.page.PageResult;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,7 +27,7 @@ public class ParamController {
 
     @GetMapping
     @ViewName("param")
-    public Page<SysParam> list(SysParamQo qo) {
+    public PageResult<SysParam> list(SysParamQo qo) {
         return paramService.findPageList(qo);
     }
 

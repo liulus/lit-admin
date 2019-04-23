@@ -1,6 +1,6 @@
 package com.github.lit.user.service;
 
-import com.github.lit.support.page.Page;
+import com.github.lit.support.page.PageResult;
 import com.github.lit.user.model.User;
 import com.github.lit.user.model.UserQo;
 
@@ -34,7 +34,7 @@ public interface UserService {
      * @param qo 查询条件
      * @return 用户列表
      */
-    Page<User> findPageList(UserQo qo);
+    PageResult<User> findPageList(UserQo qo);
 
     /**
      * 新增用户

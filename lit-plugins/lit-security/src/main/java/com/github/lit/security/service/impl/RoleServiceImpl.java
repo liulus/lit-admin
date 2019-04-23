@@ -5,11 +5,10 @@ import com.github.lit.security.service.RoleService;
 import com.github.lit.security.util.AuthorityUtils;
 import com.github.lit.support.exception.BizException;
 import com.github.lit.support.jdbc.JdbcRepository;
-import com.github.lit.support.page.Page;
+import com.github.lit.support.page.PageResult;
 import com.github.lit.support.sql.SQL;
 import com.github.lit.support.sql.TableMetaDate;
 import com.github.lit.support.util.BeanUtils;
-import com.google.common.base.Strings;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
@@ -30,7 +29,7 @@ public class RoleServiceImpl implements RoleService {
     private JdbcRepository jdbcRepository;
 
     @Override
-    public Page<Role> findPageList(RoleQo roleQo) {
+    public PageResult<Role> findPageList(RoleQo roleQo) {
         return jdbcRepository.selectPageList(Role.class, roleQo);
     }
 
@@ -63,7 +62,7 @@ public class RoleServiceImpl implements RoleService {
     }
 
     private void checkCode(String code) {
-        if (Strings.isNullOrEmpty(code)) {
+        if (StringUtils.isEmpty(code)) {
             return;
         }
         Role role = findByCode(code);

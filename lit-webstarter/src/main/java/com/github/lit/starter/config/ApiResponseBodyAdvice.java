@@ -36,7 +36,7 @@ public class ApiResponseBodyAdvice implements ResponseBodyAdvice<Object> {
         Map<String, Object> result = new HashMap<>(4);
 
         result.put("success", true);
-        result.put("data", body);
+        result.put("result", body);
         return result;
     }
 }

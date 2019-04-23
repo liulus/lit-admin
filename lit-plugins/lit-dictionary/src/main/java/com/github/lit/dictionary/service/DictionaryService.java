@@ -2,7 +2,8 @@ package com.github.lit.dictionary.service;
 
 import com.github.lit.dictionary.model.Dictionary;
 import com.github.lit.dictionary.model.DictionaryQo;
-import com.github.lit.support.page.Page;
+import com.github.lit.dictionary.model.DictionaryVo;
+import com.github.lit.support.page.PageResult;
 
 import java.util.List;
 
@@ -42,7 +43,15 @@ public interface DictionaryService {
      * @param qo 查询对象
      * @return Dictionary
      */
-    Page<Dictionary> findPageList(DictionaryQo qo);
+    PageResult<Dictionary> findPageList(DictionaryQo qo);
+
+    /**
+     * 构建字典的层级
+     *
+     * @param id id
+     * @return DictionaryVo.Detail list
+     */
+    DictionaryVo.Detail buildDictLevelById(Long id);
 
     /**
      * 根据 Id 删除字典对象

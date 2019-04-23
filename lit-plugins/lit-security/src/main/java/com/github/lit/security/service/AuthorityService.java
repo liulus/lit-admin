@@ -3,7 +3,7 @@ package com.github.lit.security.service;
 import com.github.lit.security.model.Authority;
 import com.github.lit.security.model.AuthorityQo;
 import com.github.lit.security.model.AuthorityVo;
-import com.github.lit.support.page.Page;
+import com.github.lit.support.page.PageResult;
 
 import java.util.List;
 
@@ -20,7 +20,7 @@ public interface AuthorityService {
      * @param qo 查询条件
      * @return 权限列表
      */
-    Page<Authority> findPageList(AuthorityQo qo);
+    PageResult<Authority> findPageList(AuthorityQo qo);
 
     List<AuthorityVo> findAuthorityTree();
 

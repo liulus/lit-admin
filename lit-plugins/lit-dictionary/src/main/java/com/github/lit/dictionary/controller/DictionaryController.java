@@ -1,15 +1,11 @@
 package com.github.lit.dictionary.controller;
 
 import com.github.lit.dictionary.model.Dictionary;
-import com.github.lit.dictionary.model.DictionaryQo;
 import com.github.lit.dictionary.model.DictionaryVo;
 import com.github.lit.dictionary.service.DictionaryService;
 import com.github.lit.plugin.core.constant.AuthorityConst;
 import com.github.lit.plugin.core.constant.PluginConst;
 import com.github.lit.support.annotation.ViewName;
-import com.github.lit.support.page.OrderBy;
-import com.github.lit.support.page.Page;
-import com.github.lit.support.page.PageUtils;
 import com.github.lit.support.util.BeanUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.annotation.Secured;
@@ -35,24 +31,24 @@ public class DictionaryController {
     @Resource
     private DictionaryService dictionaryService;
 
-    @GetMapping("/root/list")
-    public Page<DictionaryVo.Detail> findAllRootDict(DictionaryQo qo) {
-        qo.setOrderBy(OrderBy.init().asc(Dictionary::getOrderNum));
-        Page<Dictionary> pageList = dictionaryService.findPageList(qo);
-        return PageUtils.convert(pageList, DictionaryVo.Detail.class, null);
-    }
+//    @GetMapping("/root/list")
+//    public Page<DictionaryVo.Detail> findAllRootDict(DictionaryQo qo) {
+//        qo.setOrderBy(OrderBy.init().asc(Dictionary::getOrderNum));
+//        Page<Dictionary> pageList = dictionaryService.findPageList(qo, );
+//        return PageUtils.convert(pageList, DictionaryVo.Detail.class, null);
+//    }
 
-    @GetMapping
-    @ViewName("dictionary")
-    @Secured(AuthorityConst.VIEW_DICTIONARY)
-    public Page<DictionaryVo.Detail> childList(DictionaryQo qo) {
-        Page<Dictionary> pageList = dictionaryService.findPageList(qo);
-        if (qo.getParentId() != 0L) {
-            Dictionary dictionary = dictionaryService.findById(qo.getParentId());
-            pageList.add("returnId", dictionary == null ? 0 : dictionary.getParentId());
-        }
-        return PageUtils.convert(pageList, DictionaryVo.Detail.class, null);
-    }
+//    @GetMapping
+//    @ViewName("dictionary")
+//    @Secured(AuthorityConst.VIEW_DICTIONARY)
+//    public Page<DictionaryVo.Detail> childList(DictionaryQo qo) {
+//        Page<Dictionary> pageList = dictionaryService.findPageList(qo, );
+//        if (qo.getParentId() != 0L) {
+//            Dictionary dictionary = dictionaryService.findById(qo.getParentId());
+//            pageList.add("returnId", dictionary == null ? 0 : dictionary.getParentId());
+//        }
+//        return PageUtils.convert(pageList, DictionaryVo.Detail.class, null);
+//    }
 
     @GetMapping("/{id}")
     @Secured(AuthorityConst.VIEW_DICTIONARY)

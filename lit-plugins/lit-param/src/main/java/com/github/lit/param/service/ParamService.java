@@ -2,7 +2,7 @@ package com.github.lit.param.service;
 
 import com.github.lit.param.model.SysParam;
 import com.github.lit.param.model.SysParamQo;
-import com.github.lit.support.page.Page;
+import com.github.lit.support.page.PageResult;
 
 /**
  * User : liulu
@@ -11,7 +11,7 @@ import com.github.lit.support.page.Page;
  */
 public interface ParamService {
 
-    Page<SysParam> findPageList(SysParamQo qo);
+    PageResult<SysParam> findPageList(SysParamQo qo);
 
     SysParam findById(Long id);
 

@@ -6,7 +6,7 @@ import com.github.lit.menu.model.MenuVo;
 import com.github.lit.menu.service.MenuService;
 import com.github.lit.plugin.core.constant.PluginConst;
 import com.github.lit.support.annotation.ViewName;
-import com.github.lit.support.page.Page;
+import com.github.lit.support.page.PageResult;
 import com.github.lit.support.page.PageUtils;
 import com.github.lit.support.util.BeanUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -34,8 +34,8 @@ public class MenuController {
     
     @GetMapping
     @ViewName("menu")
-    public Page<MenuVo.Detail> menuList(MenuQo qo) {
-        Page<Menu> menuPage = menuService.findPageList(qo);
+    public PageResult<MenuVo.Detail> menuList(MenuQo qo) {
+        PageResult<Menu> menuPage = menuService.findPageList(qo);
         if (qo.getParentId() != 0L) {
             Menu menu = menuService.findById(qo.getParentId());
             menuPage.add("returnId", menu == null ? 0 : menu.getParentId());

@@ -1,13 +1,11 @@
 package com.github.lit.security.context;
 
-import com.google.common.io.Resources;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.core.io.support.ResourcePatternResolver;
 
 import java.io.IOException;
-import java.nio.charset.Charset;
 import java.util.*;
 
 /**
@@ -56,8 +54,8 @@ public class SecurityResourceLoader {
         try {
             Resource[] resources = patternResolver.getResources("classpath*:/security/ignoring-url.txt");
             for (Resource resource : resources) {
-                List<String> lines = Resources.readLines(resource.getURL(), Charset.defaultCharset());
-                IGNORING_URL.addAll(lines);
+//                List<String> lines = Resources.readLines(resource.getURL(), Charset.defaultCharset());
+//                IGNORING_URL.addAll(lines);
             }
         } catch (IOException e) {
             log.error("load ignoring url error ", e);

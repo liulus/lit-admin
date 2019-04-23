@@ -2,7 +2,7 @@ package com.github.lit.user.controller;
 
 import com.github.lit.plugin.core.constant.PluginConst;
 import com.github.lit.support.annotation.ViewName;
-import com.github.lit.support.page.Page;
+import com.github.lit.support.page.PageResult;
 import com.github.lit.support.page.PageUtils;
 import com.github.lit.support.util.BeanUtils;
 import com.github.lit.user.model.User;
@@ -28,8 +28,8 @@ public class UserController {
 
     @GetMapping
     @ViewName("user")
-    public Page<UserVo.List> userList(UserQo qo) {
-        Page<User> pageList = userService.findPageList(qo);
+    public PageResult<UserVo.List> userList(UserQo qo) {
+        PageResult<User> pageList = userService.findPageList(qo);
         return PageUtils.convert(pageList, UserVo.List.class, null);
     }
 

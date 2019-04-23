@@ -3,7 +3,7 @@ package com.github.lit.security.service;
 import com.github.lit.security.model.AuthorityVo;
 import com.github.lit.security.model.Role;
 import com.github.lit.security.model.RoleQo;
-import com.github.lit.support.page.Page;
+import com.github.lit.support.page.PageResult;
 
 import java.util.List;
 
@@ -20,7 +20,7 @@ public interface RoleService {
      * @param roleQo 查询条件
      * @return 角色列表
      */
-    Page<Role> findPageList(RoleQo roleQo);
+    PageResult<Role> findPageList(RoleQo roleQo);
 
     /**
      * 根据 roleId 查询角色

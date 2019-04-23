@@ -21,11 +21,9 @@
                         <el-button type="primary" plain icon="el-icon-plus" size="medium" @click="openAddForm"></el-button>
                     </el-col>
                     <el-col :span="12" :offset="2">
-                        <el-form :model="queryForm">
-                            <el-input v-model="queryForm.keyword" placeholder="请输入搜索内容">
-                                <el-button slot="append" icon="el-icon-search" @click="handleQuery"></el-button>
-                            </el-input>
-                        </el-form>
+                        <el-input v-model="queryForm.keyword" placeholder="请输入搜索内容">
+                            <el-button slot="append" icon="el-icon-search" @click="handleQuery"></el-button>
+                        </el-input>
                     </el-col>
                     <el-col :span="5" :offset="2" class="t-right">
                         <el-radio-group v-model="dataModel">

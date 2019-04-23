@@ -122,6 +122,7 @@ public class DictionaryServiceImpl implements DictionaryService {
         }
         List<DictionaryVo.Detail> details = BeanUtils.convertList(DictionaryVo.Detail.class, dictionaries);
         Map<Long, List<DictionaryVo.Detail>> childDicts = details.stream()
+                .sorted(Comparator.comparing(DictionaryVo::getOrderNum))
                 .collect(Collectors.groupingBy(DictionaryVo.Detail::getParentId));
 
         for (DictionaryVo.Detail detail : result) {

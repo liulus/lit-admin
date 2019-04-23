@@ -17,6 +17,10 @@ let HttpRequest = {
 
     request(method, url, params) {
 
+        if (url.indexOf('/') !== 0) {
+            url = '/' + url
+        }
+
         var headers = new Headers()
         headers.append('Accept', 'application/json, text/plain, */*')
 
@@ -49,6 +53,13 @@ let VueUtils = {
     }
 };
 Vue.prototype.$ELEMENT = {size: 'medium'};
+
+function getCurrentPathVariable() {
+    let path = window.location.pathname;
+    return path.substr(path.lastIndexOf('/') + 1)
+}
+
+
 
 
 

@@ -11,6 +11,7 @@
     <link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
     <#--<link href="https://cdn.bootcss.com/normalize/8.0.1/normalize.css" rel="stylesheet">-->
     <link rel="stylesheet" href="${springMacroRequestContext.contextPath}/styles/lit-common.css">
+    <link rel="stylesheet" href="http://at.alicdn.com/t/font_1156831_m6l90la5qsb.css">
     <link rel="stylesheet" href="${springMacroRequestContext.contextPath}/element-theme/cyan/index.css">
     <link rel="stylesheet" href="${springMacroRequestContext.contextPath}/styles/aui-cyan.css">
     <#if importCss??>

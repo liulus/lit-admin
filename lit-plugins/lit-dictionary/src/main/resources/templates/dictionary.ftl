@@ -29,8 +29,8 @@
                     </el-col>
                     <el-col :span="5" :offset="2" class="t-right">
                         <el-radio-group v-model="dataModel">
-                            <el-radio-button label="card" size="medium"><i class="el-icon-menu"></i></el-radio-button>
-                            <el-radio-button label="table" size="medium"><i class="el-icon-tickets"></i></el-radio-button>
+                            <el-radio-button label="card" size="medium"><i class="ic icall"></i></el-radio-button>
+                            <el-radio-button label="table" size="medium"><i class="ic icunorderedlist"></i></el-radio-button>
                         </el-radio-group>
                     </el-col>
                 </el-row>

@@ -39,7 +39,7 @@
                 <el-table-column prop="orderNum" label="顺序号" width="100px"></el-table-column>
                 <el-table-column label="操作" width="150px">
                     <template slot-scope="scope">
-                        <el-button type="text" icon="el-icon-edit" @click="handleEdit(scope.$index)"></el-button>
+                        <el-button type="text" icon="el-icon-edit" @click="handleEdit(scope.row)"></el-button>
                         <el-button type="text" icon="el-icon-view" @click="handleDetail(scope.row.id)"></el-button>
                         <el-button type="text" icon="el-icon-delete" @click="handleDelete(scope.row.id)"></el-button>
                     </template>
@@ -56,10 +56,10 @@
                         </div>
                         <el-row type="flex" align="middle">
                             <el-col :span="8" class="t-center">
-                                <el-button type="text" icon="el-icon-edit" @click="handleEdit(index)"></el-button>
+                                <el-button type="text" icon="el-icon-edit" @click="handleEdit(item)"></el-button>
                             </el-col>
                             <el-col :span="8" class="t-center">
-                                <a :href="`${rc.contextPath}/dictionary/${r'${item.id}'}`"><i class="el-icon-view"></i></a>
+                                <el-button type="text" icon="el-icon-view" @click="handleDetail(item.id)"></el-button>
                             </el-col>
                             <el-col :span="8" class="t-center">
                                 <el-button type="text" icon="el-icon-delete" @click="handleDelete(item.id)"></el-button>
@@ -147,8 +147,8 @@
                 this.editFormConfig.isAdd = true
                 this.editFormConfig.visible = true
             },
-            handleEdit: function (index) {
-                this.editForm = this.dictionaryList[index]
+            handleEdit: function (dict) {
+                this.editForm = dict
                 this.editFormConfig.title = '修改字典'
                 this.editFormConfig.isAdd = false
                 this.editFormConfig.visible = true
@@ -190,4 +190,9 @@
         }
     })
 </script>
+<style>
+    .el-table--medium td, .el-table--medium th {
+        padding: 3px 0;
+    }
+</style>
 </@Layout.adminLayout>

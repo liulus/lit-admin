@@ -159,7 +159,7 @@
 </script>
 <style>
     .el-tree-node__content{
-        height: 40px;
+        height: 45px;
         border-bottom: 1px solid #ebeef5;
     }
 </style>

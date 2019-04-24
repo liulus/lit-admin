@@ -39,10 +39,12 @@
 
     <template v-if="!loading">
         <!-- aui-header -->
-        <app-header></app-header>
+        <#--<#include "layout-header.ftl">-->
+        <app-header :aside-top="asideTop" @update:aside-fold="asideFold = !asideFold"></app-header>
 
         <!-- aui-aside -->
-        <app-aside></app-aside>
+        <#--<#include "layout-aside.ftl">-->
+        <app-aside :aside-fold="asideFold" :aside-top="asideTop" :aside-menu-visible="asideMenuVisible"></app-aside>
 
         <!-- aui-main -->
         <main class="aui-main">
@@ -62,6 +64,7 @@
 <#--<script src="https://cdn.bootcss.com/element-ui/2.5.4/index.js"></script>-->
 <script src="https://cdn.bootcss.com/element-ui/2.7.2/index.js"></script>
 <script src="${rc.contextPath}/js/lit-common.js"></script>
+<script src="${rc.contextPath}/icons/iconfont.js"></script>
 <#include "layout-component.ftl">
     <#nested>
 <script>
@@ -85,8 +88,6 @@
                 asideTop: false,
                 // 侧边, 菜单显示状态 (控制台“至头部”操作时, el-menu组件需根据mode属性重新渲染)
                 asideMenuVisible: true,
-                // 侧边, 菜单选中
-                asideMenuActive: 'chart',
                 // 主内容, 展示类型 (standard 标准 / tabs 标签页)
                 mainType: 'standard',
                 // 皮肤, 默认值

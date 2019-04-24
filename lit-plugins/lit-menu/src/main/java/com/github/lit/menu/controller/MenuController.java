@@ -97,7 +97,7 @@ public class MenuController {
      */
     @PostMapping("/enable")
     public String enable(Long id) {
-        menuService.changeStatus(id, true);
+//        menuService.changeStatus(id, true);
         return "";
     }
 
@@ -109,7 +109,7 @@ public class MenuController {
      */
     @PostMapping("/disable")
     public String disable(Long id) {
-        menuService.changeStatus(id, false);
+//        menuService.changeStatus(id, false);
         return "";
     }
 

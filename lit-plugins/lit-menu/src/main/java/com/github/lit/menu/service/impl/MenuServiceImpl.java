@@ -65,6 +65,7 @@ public class MenuServiceImpl implements MenuService {
         List<Menu> menus = jdbcRepository.selectForList(sql, null, Menu.class);
 
         Map<Long, List<MenuVo.Detail>> menuMap = menus.stream()
+                .sorted(Comparator.comparing(Menu::getOrderNum))
                 .map(menu -> BeanUtils.convert(menu, new MenuVo.Detail()))
                 .collect(Collectors.groupingBy(MenuVo.Detail::getParentId));
         List<MenuVo.Detail> rootMenus = menuMap.get(0L);
@@ -190,12 +191,15 @@ public class MenuServiceImpl implements MenuService {
     }
 
     @Override
-    @Event(MenuUpdateEvent.class)
-    public void changeStatus(Long id, boolean isEnable) {
-        Menu menu = new Menu();
-        menu.setId(id);
-        menu.setEnable(isEnable);
-        jdbcRepository.updateSelective(menu);
+    public void changeStatus(Long id) {
+        Menu menu = findById(id);
+        if (menu == null) {
+            return;
+        }
+        Menu upMenu = new Menu();
+        upMenu.setId(id);
+        upMenu.setEnable(!menu.getEnable());
+        jdbcRepository.updateSelective(upMenu);
     }
 
     @Override

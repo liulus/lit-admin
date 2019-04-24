@@ -18,13 +18,13 @@ import java.util.List;
  * date 2019-04-24
  */
 @RestController
-@RequestMapping("/api/menu")
+@RequestMapping("/api")
 public class MenuRestController {
 
     @Resource
     private MenuService menuService;
 
-    @GetMapping("/root/list")
+    @GetMapping("/menu/root/list")
     public PageResult<MenuVo.Detail> findAllRootDict(MenuQo qo) {
         qo.setParentId(0L);
         PageResult<Menu> pageList = menuService.findPageList(qo);
@@ -37,23 +37,33 @@ public class MenuRestController {
         return null;
     }
 
-    @GetMapping("/tree")
+    @GetMapping("/menu/tree")
     public List<MenuVo.Detail> menuTree() {
         return menuService.buildMenuTree(false, false);
     }
 
+    @GetMapping("/my/menu")
+    public List<MenuVo.Detail> myMenu() {
+        return menuService.buildMenuTree(true, true);
+    }
 
-    @PostMapping
+
+    @PostMapping("/menu")
     public Long add(@RequestBody MenuVo.Add add) {
         return menuService.insert(BeanUtils.convert(add, new Menu()));
     }
 
-    @PutMapping
+    @PutMapping("/menu")
     public int update(@RequestBody MenuVo.Update menuVo) {
         return menuService.update(BeanUtils.convert(menuVo, new Menu()));
     }
 
-    @DeleteMapping("/{id}")
+    @PostMapping("/menu/change/status/{id}")
+    public void changeStatus(@PathVariable Long id) {
+        menuService.changeStatus(id);
+    }
+
+    @DeleteMapping("/menu/{id}")
     public void delete(@PathVariable Long id) {
         menuService.delete(new Long[]{id});
     }

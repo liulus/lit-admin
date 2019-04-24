@@ -8,7 +8,7 @@
         <div class="aui-header__bd">
             <!-- aui-header__menu left -->
             <el-menu class="aui-header__menu aui-header__menu--left" mode="horizontal">
-                <el-menu-item v-if="!asideTop" index="1" @click="asideFold = !asideFold">
+                <el-menu-item v-if="!asideTop" index="1" @click="$emit('update:aside-fold', '')">
                     <svg class="icon-svg aui-header__icon-menu aui-header__icon-menu--rz180" aria-hidden="true">
                         <use xlink:href="#icon-outdent"></use>
                     </svg>
@@ -33,65 +33,36 @@
 <script type="text/html" id="app-aside-template">
     <aside class="aui-aside">
         <div class="aui-aside__inner">
-            <el-menu
-                    v-if="asideMenuVisible"
+            <el-menu v-if="asideMenuVisible"
                     class="aui-aside__menu"
-                    :default-active="asideMenuActive"
+                    :default-active="activeMenuIndex"
                     :collapse="asideFold"
-                    :unique-opened="true"
                     :collapse-transition="false"
-                    :mode="asideTop ? 'horizontal' : 'vertical'">
-                <el-menu-item index="home" @click="gotoPageHandle('@@path/index.html')">
+                    :mode="asideTop ? 'horizontal' : 'vertical'"
+                    @select="select">
+                <el-menu-item index="home">
                     <svg class="icon-svg aui-aside__menu-icon" aria-hidden="true"><use xlink:href="#icon-home"></use></svg>
                     <span slot="title">首页</span>
                 </el-menu-item>
 
-                <el-menu-item index="icon" @click="gotoPageHandle('@@path/pages/icon.html')">
-                    <svg class="icon-svg aui-aside__menu-icon" aria-hidden="true"><use xlink:href="#icon-gift"></use></svg>
-                    <span slot="title">图标</span>
-                </el-menu-item>
-
-                <el-submenu index="basic" :popper-append-to-body="false">
-                    <template slot="title">
-                        <svg class="icon-svg aui-aside__menu-icon" aria-hidden="true"><use xlink:href="#icon-crown"></use></svg>
-                        <span>基础页面</span>
-                    </template>
-                    <el-menu-item index="basic-login" @click="gotoPageHandle('@@path/pages/login.html')">
-                        <svg class="icon-svg aui-aside__menu-icon" aria-hidden="true"><use xlink:href="#icon-fire"></use></svg>
-                        <span>登录</span>
+                <template v-for="(item, index) in menuList">
+                    <el-submenu v-if="item.isParent" :index="String(item.id)" :popper-append-to-body="false">
+                        <template slot="title">
+                            <i :class="item.icon"></i>
+                            <span slot="title">{{item.name}}</span>
+                        </template>
+                        <template v-for="(subItem, subIndex) in item.children">
+                            <el-menu-item :index="String(subItem.id)">
+                                <i :class="subItem.icon"></i>
+                                <span slot="title">{{subItem.name}}</span>
+                            </el-menu-item>
+                        </template>
+                    </el-submenu>
+                    <el-menu-item v-else :index="String(item.id)">
+                        <i :class="item.icon"></i>
+                        <span slot="title">{{item.name}}</span>
                     </el-menu-item>
-                    <el-menu-item index="basic-login-v2" @click="gotoPageHandle('@@path/pages/login-v2.html')">
-                        <svg class="icon-svg aui-aside__menu-icon" aria-hidden="true"><use xlink:href="#icon-fire"></use></svg>
-                        <span>登录 - v2</span>
-                    </el-menu-item>
-                    <el-menu-item index="basic-register" @click="gotoPageHandle('@@path/pages/register.html')">
-                        <svg class="icon-svg aui-aside__menu-icon" aria-hidden="true"><use xlink:href="#icon-fire"></use></svg>
-                        <span>注册</span>
-                    </el-menu-item>
-                    <el-menu-item index="basic-register-v2" @click="gotoPageHandle('@@path/pages/register-v2.html')">
-                        <svg class="icon-svg aui-aside__menu-icon" aria-hidden="true"><use xlink:href="#icon-fire"></use></svg>
-                        <span>注册 - v2</span>
-                    </el-menu-item>
-                    <el-menu-item index="basic-forget" @click="gotoPageHandle('@@path/pages/forget.html')">
-                        <svg class="icon-svg aui-aside__menu-icon" aria-hidden="true"><use xlink:href="#icon-fire"></use></svg>
-                        <span>找回密码</span>
-                    </el-menu-item>
-                    <el-menu-item index="basic-forget-v2" @click="gotoPageHandle('@@path/pages/forget-v2.html')">
-                        <svg class="icon-svg aui-aside__menu-icon" aria-hidden="true"><use xlink:href="#icon-fire"></use></svg>
-                        <span>找回密码 - v2</span>
-                    </el-menu-item>
-                </el-submenu>
-
-                <el-submenu index="chart" :popper-append-to-body="false">
-                    <template slot="title">
-                        <svg class="icon-svg aui-aside__menu-icon" aria-hidden="true"><use xlink:href="#icon-barchart"></use></svg>
-                        <span>图表</span>
-                    </template>
-                    <el-menu-item index="chart-echarts" @click="gotoPageHandle('@@path/pages/echarts.html')">
-                        <svg class="icon-svg aui-aside__menu-icon" aria-hidden="true"><use xlink:href="#icon-fire"></use></svg>
-                        <span>Echarts</span>
-                    </el-menu-item>
-                </el-submenu>
+                </template>
             </el-menu>
         </div>
     </aside>
@@ -99,21 +70,50 @@
 <script>
     Vue.component('app-header', {
         template: '#app-header-template',
-        data: function () {
-            return {
-                asideTop: false,
-            }
+        props: {
+            asideTop: Boolean
         }
     })
     Vue.component('app-aside', {
         template: '#app-aside-template',
-        data: function () {
+        props: {
+            asideFold: Boolean,
+            asideTop: Boolean,
+            asideMenuVisible: Boolean,
+        },
+        data() {
             return {
-                asideFold: false,
-                // 侧边, 至头部状态
-                asideTop: false,
-                asideMenuVisible: true,
-                asideMenuActive: 'chart'
+                menuList: [],
+                activeMenuIndex: sessionStorage.getItem('activeMenuIndex')
+            }
+        },
+        created() {
+            this.initData()
+        },
+        methods: {
+            initData() {
+                HttpRequest.get('/api/my/menu').then(res => {
+                    if (res.success) {
+                        this.menuList = res.result
+                    }
+                })
+            },
+            select(index, indexPath) {
+                sessionStorage.setItem('activeMenuIndex', index)
+                this.menuList.forEach(menu => {
+                    if (String(menu.id) === index) {
+                        this.redirect(menu)
+                    } else if (menu.isParent) {
+                        menu.children.forEach( subMenu => {
+                            if (String(subMenu.id) === index) {
+                                this.redirect(subMenu)
+                            }
+                        })
+                    }
+                })
+            },
+            redirect(menu) {
+                window.location.href = contextPath + menu.url
             }
         }
     })

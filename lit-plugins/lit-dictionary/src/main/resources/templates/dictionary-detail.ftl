@@ -163,9 +163,9 @@
             },
             filterNode(value, data) {
                 if (value) {
-                    return data.dictKey.indexOf(value) !== -1
-                            || data.dictValue.indexOf(value) !== -1
-                            || data.remark.indexOf(value) !== -1
+                    return (data.dictKey && data.dictKey.indexOf(value) !== -1)
+                            || (data.dictValue && data.dictValue.indexOf(value) !== -1)
+                            || (data.remark && data.remark.indexOf(value) !== -1)
                 }
                 return true;
             }

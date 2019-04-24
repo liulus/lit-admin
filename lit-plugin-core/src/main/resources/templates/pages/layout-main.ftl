@@ -16,7 +16,7 @@
     <link rel="stylesheet" href="${springMacroRequestContext.contextPath}/styles/aui-cyan.css">
     <#if importCss??>
         <#list importCss as css>
-<link rel="stylesheet" href="${rc.contextPath}/${css}"/>
+<link rel="stylesheet" href="${springMacroRequestContext.contextPath}/${css}"/>
         </#list>
     </#if>
     <script type="text/javascript">
@@ -63,8 +63,8 @@
 <#--<script src="${rc.contextPath}/libs/element-2.4.5/index.js"></script>-->
 <#--<script src="https://cdn.bootcss.com/element-ui/2.5.4/index.js"></script>-->
 <script src="https://cdn.bootcss.com/element-ui/2.7.2/index.js"></script>
-<script src="${rc.contextPath}/js/lit-common.js"></script>
-<script src="${rc.contextPath}/icons/iconfont.js"></script>
+<script src="${springMacroRequestContext.contextPath}/js/lit-common.js"></script>
+<script src="${springMacroRequestContext.contextPath}/icons/iconfont.js"></script>
 <#include "layout-component.ftl">
     <#nested>
 <script>

@@ -2,51 +2,36 @@
 <@Layout.adminLayout title='字典详情'>
 <script type="text/x-template" id="app-main-template">
     <div>
-        <#--<div class="aui-main__hd">-->
-            <#--<el-breadcrumb separator="/">-->
-                <#--<el-breadcrumb-item>-->
-                    <#--<svg class="icon-svg aui-aside__menu-icon" aria-hidden="true">-->
-                        <#--<use xlink:href="#icon-home"></use>-->
-                    <#--</svg>-->
-                <#--</el-breadcrumb-item>-->
-                <#--<el-breadcrumb-item>字典详情</el-breadcrumb-item>-->
-            <#--</el-breadcrumb>-->
-        <#--</div>-->
+        <div class="aui-main__hd">
+            <el-breadcrumb separator="/">
+                <el-breadcrumb-item>
+                    <i class="ic ichome"></i>
+                </el-breadcrumb-item>
+                <el-breadcrumb-item>字典详情</el-breadcrumb-item>
+            </el-breadcrumb>
+        </div>
 
     <div class="aui-main__bd">
         <el-card shadow="never">
             <div slot="header">
                 <el-row>
-                    <#--<el-col :span="4"><el-button type="primary" plain icon="el-icon-plus" size="small"></el-button></el-col>-->
                     <el-col :span="12" :offset="6">
-                        <el-input v-model="keyword" placeholder="请输入搜索内容">
+                        <el-input v-model="keyword" placeholder="请输入搜索内容" @keyup.native.enter="handleSearch">
                             <el-button slot="append" icon="el-icon-search" @click="handleSearch"></el-button>
                         </el-input>
                     </el-col>
                 </el-row>
             </div>
-            <#--<el-row :gutter="20" style="height: 40px;border-bottom: 1px solid #ebeef5;">-->
-                <#--<el-col :span="5"><span class="fz-lg">{{data1[0].key}}</span></el-col>-->
-                <#--<el-col :span="5"><span class="fz-lg">{{data1[0].label}}</span></el-col>-->
-            <#--</el-row>-->
-            <el-tree :data="data"
-                     <#--:props="defaultProps"-->
-                     :expand-on-click-node="false"
-                     :filter-node-method="filterNode"
-                     default-expand-all
-                     ref="dictTree">
+            <el-tree :data="data" :expand-on-click-node="false" :filter-node-method="filterNode"
+                     default-expand-all ref="dictTree">
                 <div slot-scope="{ node, data }" style="width: 100%">
                     <el-row type="flex" align="middle">
                         <el-col :span="5"><span>{{ data.dictValue }}</span></el-col>
                         <el-col :span="5"><span> {{ data.dictKey }}</span></el-col>
                         <el-col :span="10"><span> {{ data.remark }}</span></el-col>
-                        <el-col :span="1">
+                        <el-col :span="4">
                             <el-button type="text" icon="el-icon-plus" @click="handleAdd(data)"></el-button>
-                        </el-col>
-                        <el-col :span="1">
                             <el-button type="text" icon="el-icon-edit" @click="handleEdit(data)"></el-button>
-                        </el-col>
-                        <el-col :span="1">
                             <el-button type="text" icon="el-icon-delete" @click="handleDelete(data.id)"></el-button>
                         </el-col>
                     </el-row>

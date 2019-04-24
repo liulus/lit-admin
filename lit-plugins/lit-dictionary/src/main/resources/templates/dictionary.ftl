@@ -2,16 +2,14 @@
 <@Layout.adminLayout title='字典管理'>
 <script type="text/x-template" id="app-main-template">
     <div>
-        <#--<div class="aui-main__hd">-->
-            <#--<el-breadcrumb separator="/">-->
-                <#--<el-breadcrumb-item>-->
-                    <#--<svg class="icon-svg aui-aside__menu-icon" aria-hidden="true">-->
-                        <#--<use xlink:href="#icon-home"></use>-->
-                    <#--</svg>-->
-                <#--</el-breadcrumb-item>-->
-                <#--<el-breadcrumb-item>字典管理</el-breadcrumb-item>-->
-            <#--</el-breadcrumb>-->
-        <#--</div>-->
+        <div class="aui-main__hd">
+            <el-breadcrumb separator="/">
+                <el-breadcrumb-item>
+                    <i class="ic ichome"></i>
+                </el-breadcrumb-item>
+                <el-breadcrumb-item>字典管理</el-breadcrumb-item>
+            </el-breadcrumb>
+        </div>
 
     <div class="aui-main__bd">
         <el-card shadow="never">
@@ -21,7 +19,7 @@
                         <el-button type="primary" plain icon="el-icon-plus" size="medium" @click="openAddForm"></el-button>
                     </el-col>
                     <el-col :span="12" :offset="2">
-                        <el-input v-model="queryForm.keyword" placeholder="请输入搜索内容">
+                        <el-input v-model="queryForm.keyword" placeholder="请输入搜索内容" @keyup.native.enter="handleQuery">
                             <el-button slot="append" icon="el-icon-search" @click="handleQuery"></el-button>
                         </el-input>
                     </el-col>
@@ -41,8 +39,8 @@
                 <el-table-column prop="orderNum" label="顺序号" width="100px"></el-table-column>
                 <el-table-column label="操作" width="150px">
                     <template slot-scope="scope">
-                        <el-button type="text" icon="el-icon-edit" @click="handleEdit(scope.$index)"></el-button>&nbsp;&nbsp;&nbsp;&nbsp;
-                        <a :href="`${rc.contextPath}/dictionary/${r'${scope.row.id}'}`"><i class="el-icon-view"></i></a>&nbsp;&nbsp;&nbsp;&nbsp;
+                        <el-button type="text" icon="el-icon-edit" @click="handleEdit(scope.$index)"></el-button>
+                        <el-button type="text" icon="el-icon-view" @click="handleDetail(scope.row.id)"></el-button>
                         <el-button type="text" icon="el-icon-delete" @click="handleDelete(scope.row.id)"></el-button>
                     </template>
                 </el-table-column>
@@ -78,8 +76,7 @@
     </div>
 
         <#-- 编辑字典 -->
-    <el-dialog :title="editFormConfig.title" :visible.sync="editFormConfig.visible" :close-on-click-modal="false"
-               width="40%">
+    <el-dialog :title="editFormConfig.title" :visible.sync="editFormConfig.visible" :close-on-click-modal="false">
         <el-form :model="editForm" label-width="100px" label-suffix=":">
             <el-form-item label="字典key">
                 <el-input v-model="editForm.dictKey"></el-input>
@@ -167,6 +164,9 @@
                     }
                 })
                 this.editFormConfig.visible = false
+            },
+            handleDetail(id) {
+                window.location.href = contextPath + '/dictionary/' + id
             },
             handleDelete(id) {
                 this.$confirm('此操作将删除该字典数据, 是否继续?', '提示', {

@@ -2,16 +2,14 @@
 <@Layout.adminLayout title='菜单管理'>
 <script type="text/x-template" id="app-main-template">
     <div>
-    <#--<div class="aui-main__hd">-->
-    <#--<el-breadcrumb separator="/">-->
-    <#--<el-breadcrumb-item>-->
-    <#--<svg class="icon-svg aui-aside__menu-icon" aria-hidden="true">-->
-    <#--<use xlink:href="#icon-home"></use>-->
-    <#--</svg>-->
-    <#--</el-breadcrumb-item>-->
-    <#--<el-breadcrumb-item>字典详情</el-breadcrumb-item>-->
-    <#--</el-breadcrumb>-->
-    <#--</div>-->
+        <div class="aui-main__hd">
+            <el-breadcrumb separator="/">
+                <el-breadcrumb-item>
+                    <i class="ic ichome"></i>
+                </el-breadcrumb-item>
+                <el-breadcrumb-item>菜单管理</el-breadcrumb-item>
+            </el-breadcrumb>
+        </div>
 
         <div class="aui-main__bd">
             <el-card shadow="never">
@@ -21,7 +19,7 @@
                             <el-button type="primary" plain icon="el-icon-plus" size="medium" @click="handleAdd('')"></el-button>
                         </el-col>
                         <el-col :span="12" :offset="2">
-                            <el-input v-model="keyword" placeholder="请输入搜索内容">
+                            <el-input v-model="keyword" placeholder="请输入搜索内容" v-on:keyup.native.enter="handleSearch">
                                 <el-button slot="append" icon="el-icon-search" @click="handleSearch"></el-button>
                             </el-input>
                         </el-col>
@@ -58,7 +56,7 @@
             </el-card>
         </div>
 
-        <el-dialog :title="editFormConfig.title" :visible.sync="editFormConfig.visible" width="40%" :close-on-click-modal="false">
+        <el-dialog :title="editFormConfig.title" :visible.sync="editFormConfig.visible" :close-on-click-modal="false">
             <el-form :model="editForm" label-width="100px" label-suffix=":">
                 <el-form-item label="父节点" v-if="editFormConfig.isAdd">
                     <span>{{editFormConfig.parent}}</span>

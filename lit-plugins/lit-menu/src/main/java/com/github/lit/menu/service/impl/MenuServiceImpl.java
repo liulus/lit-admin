@@ -3,6 +3,7 @@ package com.github.lit.menu.service.impl;
 import com.github.lit.menu.event.MenuUpdateEvent;
 import com.github.lit.menu.model.Menu;
 import com.github.lit.menu.model.MenuQo;
+import com.github.lit.menu.model.MenuVo;
 import com.github.lit.menu.service.MenuService;
 import com.github.lit.plugin.core.model.LoginUser;
 import com.github.lit.plugin.core.util.PluginUtils;
@@ -12,11 +13,15 @@ import com.github.lit.support.jdbc.JdbcRepository;
 import com.github.lit.support.page.PageResult;
 import com.github.lit.support.sql.SQL;
 import com.github.lit.support.sql.TableMetaDate;
+import com.github.lit.support.util.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * User : liulu
@@ -27,12 +32,23 @@ import java.util.*;
 @Transactional
 public class MenuServiceImpl implements MenuService {
 
+    private static final String PARENT_ID_CONDITION = "parent_id = :parentId";
+
     @Resource
     private JdbcRepository jdbcRepository;
 
     @Override
     public PageResult<Menu> findPageList(MenuQo qo) {
-        return jdbcRepository.selectPageList(Menu.class, qo);
+        SQL sql = SQL.baseSelect(com.github.lit.dictionary.model.Dictionary.class);
+        if (qo.getParentId() != null) {
+            sql.WHERE(PARENT_ID_CONDITION);
+        }
+        if (StringUtils.hasText(qo.getKeyword())) {
+            qo.setKeyword("%" + qo.getKeyword() + "%");
+            sql.WHERE("(code like :keyword or name like :keyword or remark like :keyword)");
+        }
+        sql.ORDER_BY("order_num");
+        return jdbcRepository.selectForPageList(sql, qo, Menu.class);
     }
 
     @Override
@@ -41,7 +57,46 @@ public class MenuServiceImpl implements MenuService {
     }
 
     @Override
-    @Event(MenuUpdateEvent.class)
+    public List<MenuVo.Detail> buildMenuTree(boolean filterDisabled, boolean filterEmpty) {
+        SQL sql = SQL.baseSelect(Menu.class);
+        if (filterDisabled) {
+            sql.WHERE("is_enable = 1");
+        }
+        List<Menu> menus = jdbcRepository.selectForList(sql, null, Menu.class);
+
+        Map<Long, List<MenuVo.Detail>> menuMap = menus.stream()
+                .map(menu -> BeanUtils.convert(menu, new MenuVo.Detail()))
+                .collect(Collectors.groupingBy(MenuVo.Detail::getParentId));
+        List<MenuVo.Detail> rootMenus = menuMap.get(0L);
+
+        setChildren(rootMenus, menuMap);
+
+        if(filterEmpty) {
+            return rootMenus.stream()
+                    .filter(detail -> StringUtils.hasText(detail.getUrl()) || detail.getIsParent())
+                    .collect(Collectors.toList());
+        }
+        return rootMenus;
+    }
+
+    private void setChildren(List<MenuVo.Detail> parentMenus, Map<Long, List<MenuVo.Detail>> menuMap) {
+        if (CollectionUtils.isEmpty(parentMenus)) {
+            return;
+        }
+        for (MenuVo.Detail menu : parentMenus) {
+            List<MenuVo.Detail> children = menuMap.get(menu.getId());
+            if (CollectionUtils.isEmpty(children)) {
+                menu.setIsParent(false);
+            } else {
+                menu.setIsParent(true);
+                menu.setChildren(children);
+                setChildren(children, menuMap);
+            }
+        }
+    }
+
+
+    @Override
     public Long insert(Menu menu) {
 
         checkMenuCode(menu.getCode(), menu.getParentId());
@@ -52,7 +107,6 @@ public class MenuServiceImpl implements MenuService {
     }
 
     @Override
-    @Event(MenuUpdateEvent.class)
     public int update(Menu menu) {
 
         Menu old = findById(menu.getId());
@@ -74,10 +128,8 @@ public class MenuServiceImpl implements MenuService {
     }
 
     private Menu findByCodeAndParentId(String code, Long parentId) {
-        TableMetaDate metaDate = TableMetaDate.forClass(Menu.class);
-        SQL sql = SQL.init().SELECT(metaDate.getAllColumns())
-                .FROM(metaDate.getTableName())
-                .WHERE("parent_id = :parentId")
+        SQL sql = SQL.baseSelect(Menu.class)
+                .WHERE(PARENT_ID_CONDITION)
                 .WHERE("code = :code");
 
         Map<String, Object> params = new HashMap<>(2);
@@ -111,7 +163,7 @@ public class MenuServiceImpl implements MenuService {
         TableMetaDate metaDate = TableMetaDate.forClass(Menu.class);
         SQL sql = SQL.init().SELECT("count(*)")
                 .FROM(metaDate.getTableName())
-                .WHERE("parent_id = :parentId");
+                .WHERE(PARENT_ID_CONDITION);
         Map<String, Long> params = Collections.singletonMap("parentId", parentId == null ? 0L : parentId);
         return jdbcRepository.selectForObject(sql, params, int.class);
     }
@@ -135,7 +187,6 @@ public class MenuServiceImpl implements MenuService {
             menu = findById(menu.getParentId());
         }
 
-//        menuDao.move(parentId, ids);
     }
 
     @Override

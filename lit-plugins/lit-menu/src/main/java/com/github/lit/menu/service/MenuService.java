@@ -2,6 +2,7 @@ package com.github.lit.menu.service;
 
 import com.github.lit.menu.model.Menu;
 import com.github.lit.menu.model.MenuQo;
+import com.github.lit.menu.model.MenuVo;
 import com.github.lit.support.page.PageResult;
 
 import java.util.List;
@@ -28,6 +29,15 @@ public interface MenuService {
      * @return 菜单
      */
     Menu findById(Long id);
+
+    /**
+     * 构建菜单树
+     *
+     * @param filterDisabled 是否过滤禁用菜单
+     * @param filterEmpty 是否过滤子菜单为空并且没有url
+     * @return Detail
+     */
+    List<MenuVo.Detail> buildMenuTree(boolean filterDisabled, boolean filterEmpty);
 
     /**
      * 增加菜单

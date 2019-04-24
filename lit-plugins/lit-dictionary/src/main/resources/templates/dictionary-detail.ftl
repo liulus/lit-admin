@@ -16,7 +16,7 @@
     <div class="aui-main__bd">
         <el-card shadow="never">
             <div slot="header">
-                <el-row :gutter="20">
+                <el-row>
                     <#--<el-col :span="4"><el-button type="primary" plain icon="el-icon-plus" size="small"></el-button></el-col>-->
                     <el-col :span="12" :offset="6">
                         <el-input v-model="keyword" placeholder="请输入搜索内容">
@@ -55,7 +55,7 @@
         </el-card>
     </div>
 
-    <el-dialog :title="editFormConfig.title" :visible.sync="editFormConfig.visible" width="40%" :close-on-click-modal="false">
+    <el-dialog :title="editFormConfig.title" :visible.sync="editFormConfig.visible" :close-on-click-modal="false">
         <el-form :model="editForm" label-width="100px" label-suffix=":">
             <el-form-item label="父节点" v-if="editFormConfig.isAdd">
                 <span>{{editFormConfig.parent}}</span>
@@ -73,7 +73,7 @@
                 <el-input type="textarea" :rows="2" v-model="editForm.remark"></el-input>
             </el-form-item>
         </el-form>
-        <div slot="footer" class="dialog-footer">
+        <div slot="footer">
             <el-button type="primary" size="medium" @click="doEdit">确 定</el-button>
             <el-button size="medium" @click="editFormConfig.visible = false">取 消</el-button>
         </div>

@@ -16,7 +16,7 @@
     <div class="aui-main__bd">
         <el-card shadow="never">
             <div slot="header">
-                <el-row :gutter="20">
+                <el-row>
                     <el-col :span="3">
                         <el-button type="primary" plain icon="el-icon-plus" size="medium" @click="openAddForm"></el-button>
                     </el-col>
@@ -94,7 +94,7 @@
                 <el-input type="textarea" :rows="2" v-model="editForm.remark"></el-input>
             </el-form-item>
         </el-form>
-        <div slot="footer" class="dialog-footer">
+        <div slot="footer">
             <el-button type="primary" size="medium" @click="doEdit">确 定</el-button>
             <el-button size="medium" @click="editFormConfig.visible = false">取 消</el-button>
         </div>

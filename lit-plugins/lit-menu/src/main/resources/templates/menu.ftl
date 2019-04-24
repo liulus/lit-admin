@@ -1,151 +1,180 @@
-<#import "layout/list-layout.ftl" as AdminLayout>
-<@AdminLayout.listLayout title='菜单管理'
-importCss=['libs/zTree/3.5/css/metroStyle/metroStyle.css']
-importJs=['libs/zTree/3.5/js/ztree.all.min.js', "js/menu.js"]>
-<!-- 导航条 -->
-    <div class="row">
-        <ol class="breadcrumb">
-            <li><a href="#"><i class="glyphicon glyphicon-home"></i></a></li>
-            <li class="active">系统管理</li>
-            <li class="active">菜单管理</li>
-        </ol>
-    </div>
+<#import 'pages/layout-main.ftl' as Layout>
+<@Layout.adminLayout title='菜单管理'>
+<script type="text/x-template" id="app-main-template">
+    <div>
+    <#--<div class="aui-main__hd">-->
+    <#--<el-breadcrumb separator="/">-->
+    <#--<el-breadcrumb-item>-->
+    <#--<svg class="icon-svg aui-aside__menu-icon" aria-hidden="true">-->
+    <#--<use xlink:href="#icon-home"></use>-->
+    <#--</svg>-->
+    <#--</el-breadcrumb-item>-->
+    <#--<el-breadcrumb-item>字典详情</el-breadcrumb-item>-->
+    <#--</el-breadcrumb>-->
+    <#--</div>-->
 
-<!-- 数据列表 -->
-<div class="panel panel-default table-responsive">
-    <!-- 数据操作 -->
-    <div class="panel-heading">
-        <@AdminLayout.addBtn/>
-        <#if data?size &gt; 0>
-            <@AdminLayout.updateBtn/>
-            <@AdminLayout.deleteBtn/>
-        </#if>
-        <#if menuQo.parentId != 0>
-            <a href="${rc.contextPath}/plugin/menu?parentId=${returnId?c}"
-               class="btn btn-sm btn-warning">
-                <i class="fa fa-reply"></i>&nbsp;&nbsp;返回上级
-            </a>
-        </#if>
-    </div>
+        <div class="aui-main__bd">
+            <el-card shadow="never">
+                <div slot="header">
+                    <el-row>
+                        <el-col :span="4">
+                            <el-button type="primary" plain icon="el-icon-plus" size="medium" @click="handleAddChild"></el-button>
+                        </el-col>
+                        <el-col :span="12" :offset="2">
+                            <el-input v-model="keyword" placeholder="请输入搜索内容">
+                                <el-button slot="append" icon="el-icon-search" @click="handleSearch"></el-button>
+                            </el-input>
+                        </el-col>
+                    </el-row>
+                </div>
 
-    <!-- 数据展示 -->
-    <table id="data-result" class="table table-hover">
-        <thead>
-        <tr>
-            <th class="text-center">
-                <input class="check-all" type="checkbox">
-            </th>
-            <!--<th>行号</th>-->
-            <th>编码</th>
-            <th>名称</th>
-            <th>图标</th>
-            <th>URL</th>
-            <th>类型</th>
-            <th>顺序号</th>
-            <th>状态</th>
-        <#--<th>备注</th>-->
-            <th>操作</th>
-        </tr>
-        </thead>
-
-        <tbody>
-            <#list data as item>
-            <tr>
-                <td class="text-center">
-                    <input class="check-ls" name="ids" type="checkbox" value="${item.id?c}">
-                </td>
-            <#--<td text="${item?counter}"></td>-->
-                <td>
-                    <a href="${rc.contextPath}/plugin/menu?parentId=${item.id?c}">${item.code!?html}</a>
-                </td>
-                <td>${item.name!?html}</td>
-                <td><i class="fa ${item.icon}"></i></td>
-                <td>${item.url!?html}</td>
-                <td>${item.type!?html}</td>
-                <td>${item.orderNum?c}</td>
-                <td>
-                    <div class="btn-group btn-group-xs" role="group">
-                        <a class="data-enable btn ${item.enable?string('btn-success', 'btn-default')}">
-                            <span class="${item.enable?string('', 'invisible')}">启用</span>
-                        </a>
-                        <a class="data-disable btn ${item.enable?string('btn-default', 'btn-danger')}">
-                            <span class="${item.enable?string('invisible', '')}">禁用</span>
-                        </a>
+                <el-row style="height: 40px;border-bottom: 1px solid #ebeef5;">
+                    <el-col :span="5"><span class="mg-l-25 fz-lg">编码</span></el-col>
+                    <el-col :span="5"><span class="mg-l-25 fz-lg">名称</span></el-col>
+                    <el-col :span="10"><span class="mg-l-25 fz-lg">备注</span></el-col>
+                </el-row>
+                <el-tree :data="data"
+                <#--:props="defaultProps"-->
+                         :expand-on-click-node="false"
+                         :filter-node-method="filterNode"
+                         default-expand-all
+                         ref="menuTree">
+                    <div slot-scope="{ node, data }" style="width: 100%">
+                        <el-row type="flex" align="middle">
+                            <el-col :span="5"><span>{{ data.code }}</span></el-col>
+                            <el-col :span="5"><span> {{ data.name }}</span></el-col>
+                            <el-col :span="10"><span> {{ data.remark }}</span></el-col>
+                            <el-col :span="3">
+                                <el-button type="text" icon="el-icon-plus" @click="handleAddChild(data)"></el-button>
+                                <el-button type="text" icon="el-icon-edit" @click="handleEdit(data)"></el-button>
+                                <el-button type="text" icon="el-icon-delete" @click="handleDelete(data.id)"></el-button>
+                            </el-col>
+                        </el-row>
                     </div>
-                </td>
-            <#--<td>${item.remark!?html}</td>-->
-                <td>
-                    <a class="data-move btn btn-xs btn-primary">
-                        <i class="fa fa-random"></i>&nbsp;移动
-                    </a>
-                </td>
-            </tr>
-            <#else>
-                <@AdminLayout.emptyData 8/>
-            </#list>
-        </tbody>
-    </table>
-</div>
+                </el-tree>
+            </el-card>
+        </div>
 
-<div id="menu-tree" class="modal-body text-center" style="display: none">
-    <ul class="ztree"></ul>
-</div>
-
-<script type="text/template" id="edit-tpl">
-    <div class="modal-body">
-        <form id="form-edit" class="form-horizontal" action="">
-            <input type="hidden" name="parentId" value="${menuQo.parentId?c}">
-            <input type="hidden" name="id" value="${r'${id}'}">
-            <div class="form-group">
-                <span class="control-label col-sm-6"><i class="text-danger">*&nbsp;</i>菜单编码 :</span>
-                <div class="col-sm-16">
-                    <input type="text" name="code" value="${r'${code}'}" class="form-control">
-                </div>
+        <el-dialog :title="editFormConfig.title" :visible.sync="editFormConfig.visible" width="40%" :close-on-click-modal="false">
+            <el-form :model="editForm" label-width="100px" label-suffix=":">
+                <el-form-item label="父节点" v-if="editFormConfig.isAdd">
+                    <span>{{editFormConfig.parent}}</span>
+                </el-form-item>
+                <el-form-item label="字典key">
+                    <el-input v-model="editForm.dictKey"></el-input>
+                </el-form-item>
+                <el-form-item label="字典value">
+                    <el-input v-model="editForm.dictValue"></el-input>
+                </el-form-item>
+                <el-form-item label="顺序号">
+                    <el-input v-model="editForm.orderNum" type="number"></el-input>
+                </el-form-item>
+                <el-form-item label="备注">
+                    <el-input type="textarea" :rows="2" v-model="editForm.remark"></el-input>
+                </el-form-item>
+            </el-form>
+            <div slot="footer" class="dialog-footer">
+                <el-button type="primary" size="medium" @click="doEdit">确 定</el-button>
+                <el-button size="medium" @click="editFormConfig.visible = false">取 消</el-button>
             </div>
-            <div class="form-group">
-                <span class="control-label col-sm-6"><i class="text-danger">*&nbsp;</i>菜单名称 :</span>
-                <div class="col-sm-16">
-                    <input type="text" name="name" value="${r'${name}'}" class="form-control">
-                </div>
-            </div>
-            <div class="form-group">
-                <span class="control-label col-sm-6"><i class="text-danger">*&nbsp;</i>菜单图标 :</span>
-                <div class="col-sm-16">
-                    <input type="text" name="icon" value="${r'${icon}'}" class="form-control">
-                </div>
-            </div>
-            <div class="form-group">
-                <span class="control-label col-sm-6">菜单URL :</span>
-                <div class="col-sm-16">
-                    <input type="text" name="url" value="${r'${url}'}" class="form-control">
-                </div>
-            </div>
-            <div class="form-group">
-                <span class="control-label col-sm-6">顺序号 :</span>
-                <div class="col-sm-16">
-                    <input type="number" name="orderNum" value="${r'${orderNum}'}" class="form-control">
-                </div>
-            </div>
-            <div class="form-group">
-                <span class="control-label col-sm-6"><i class="text-danger">*&nbsp;</i>菜单类型 :</span>
-                <div class="col-sm-16">
-                    <select name="type" class="form-control">
-                        <@dictTools dictKey='menu_type'>
-                            <#list dictionaries as item>
-                        <option value="${item.dictKey!}" {@if type==='${item.dictKey!}'}selected {@/if}>${item.dictValue!}</option>
-                            </#list>
-                        </@dictTools>
-                    </select>
-                </div>
-            </div>
-            <div class="form-group">
-                <span class="control-label col-sm-6"><i class="text-danger">*&nbsp;</i>备注 :</span>
-                <div class="col-sm-16">
-                    <textarea name="remark" class="form-control" rows="3">${r'${remark}'}</textarea>
-                </div>
-            </div>
-        </form>
+        </el-dialog>
     </div>
 </script>
+<script>
+    VueUtils.registerComponent({
+        template: '#app-main-template',
+        data: function () {
+            return {
+                data:[],
+                keyword: '',
+                editFormConfig: {
+                    visible: false,
+                    isAdd: true,
+                    title: '',
+                    parent: ""
+                },
+                editForm: {
+                    id: 0,
+                    dictKey: '',
+                    dictValue: '',
+                    remark: '',
+                    orderNum: ''
+                }
+            }
+        },
+        created() {
+            this.initData()
+        },
+        methods: {
+            initData() {
+                HttpRequest.get('/api/menu/tree').then(res => {
+                    this.data = res.result || []
+                })
+            },
+            handleAddChild(parentNode) {
+                this.editForm = {}
+                this.editFormConfig.title = '新增菜单'
+                this.editFormConfig.parent = parentNode.dictKey + ' -- ' + parentNode.dictValue
+                this.editFormConfig.isAdd = true
+                this.editFormConfig.visible = true
+                this.editForm.parentId = parentNode.id
+            },
+            handleEdit(node) {
+                this.editForm.id = node.id
+                this.editForm.dictKey = node.dictKey
+                this.editForm.dictValue = node.dictValue
+                this.editForm.orderNum = node.orderNum
+                this.editForm.remark = node.remark
 
-</@AdminLayout.listLayout>
+                this.editFormConfig.title = '修改菜单'
+                this.editFormConfig.isAdd = false
+                this.editFormConfig.visible = true
+            },
+            doEdit() {
+                let method = this.editFormConfig.isAdd ? 'post' : 'put'
+                HttpRequest.request(method, '/api/menu', this.editForm).then(res => {
+                    if (res.success) {
+                        this.$message.success(this.editFormConfig.title + '成功')
+                        this.initData()
+                    } else {
+                        this.$message.error(res.message)
+                    }
+                })
+                this.editFormConfig.visible = false
+            },
+            handleDelete(id) {
+                this.$confirm('此操作将删除该菜单数据, 是否继续?', '提示', {
+                    closeOnClickModal: false,
+                    type: 'warning'
+                }).then(() => {
+                    HttpRequest.delete('/api/dictionary/' + id,).then(res => {
+                        if (res.success) {
+                            this.$message.success('删除菜单成功')
+                            this.initData()
+                        } else {
+                            this.$message.error(res.message)
+                        }
+                    })
+                }).catch(() => {})
+            },
+            handleSearch() {
+                this.$refs.dictTree.filter(this.keyword);
+            },
+            filterNode(value, data) {
+                if (value) {
+                    return data.dictKey.indexOf(value) !== -1
+                            || data.dictValue.indexOf(value) !== -1
+                            || data.remark.indexOf(value) !== -1
+                }
+                return true;
+            }
+        }
+    })
+</script>
+<style>
+    .el-tree-node__content{
+        height: 40px;
+        border-bottom: 1px solid #ebeef5;
+    }
+</style>
+</@Layout.adminLayout>

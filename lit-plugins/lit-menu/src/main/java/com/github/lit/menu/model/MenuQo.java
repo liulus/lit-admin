@@ -25,5 +25,7 @@ public class MenuQo extends PageRequest {
 
     private String menuCode;
 
+    private String keyword;
+
 
 }

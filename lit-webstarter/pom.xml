@@ -33,6 +33,11 @@
             <artifactId>lit-dictionary</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+            <groupId>com.github.liulus</groupId>
+            <artifactId>lit-menu</artifactId>
+            <version>${project.version}</version>
+        </dependency>
 
         <!--<dependency>-->
             <!--<groupId>org.springframework</groupId>-->

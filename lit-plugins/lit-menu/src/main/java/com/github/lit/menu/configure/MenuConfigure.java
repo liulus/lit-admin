@@ -1,29 +1,29 @@
-package com.github.lit.dictionary.config;
+package com.github.lit.menu.configure;
 
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 /**
  * @author liulu
  * @version v1.0
- * date 2019-02-22 13:29
+ * date 2019-04-23
  */
-//@Configuration
-public class WebConfigure {
+@Configuration
+public class MenuConfigure {
 
     @Bean
-    public WebMvcConfigurer dictionaryWebConfigure() {
+    public WebMvcConfigurer menuWebMvcConfigure() {
         return new WebMvcConfigurer() {
             @Override
             public void addViewControllers(ViewControllerRegistry registry) {
-                registry.addViewController("/dictionary/list").setViewName("dictionary");
-                registry.addViewController("/dictionary/{id}").setViewName("dictionary-detail");
+                registry.addViewController("/menu/list").setViewName("menu");
+                registry.addViewController("/menu/{id}").setViewName("menu-detail");
             }
         };
     }
 
-//    public WebSecu
-
-
 }
+
+

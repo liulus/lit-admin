@@ -9,9 +9,7 @@
             <!-- aui-header__menu left -->
             <el-menu class="aui-header__menu aui-header__menu--left" mode="horizontal">
                 <el-menu-item v-if="!asideTop" index="1" @click="$emit('update:aside-fold', '')">
-                    <svg class="icon-svg aui-header__icon-menu aui-header__icon-menu--rz180" aria-hidden="true">
-                        <use xlink:href="#icon-outdent"></use>
-                    </svg>
+                    <i class="ic icoutdent aui-header__icon-menu aui-header__icon-menu--rz180" aria-hidden="true"></i>
                 </el-menu-item>
             </el-menu>
             <!-- aui-header__menu right -->
@@ -24,6 +22,9 @@
                     <el-menu-item index="3-1">修改密码</el-menu-item>
                     <el-menu-item index="3-2">退出</el-menu-item>
                 </el-submenu>
+                <el-menu-item index="1" @click="$emit('update:control-open', '')">
+                    <i class="el-icon-setting aui-header__icon-menu"></i>
+                </el-menu-item>
             </el-menu>
         </div>
     </header>
@@ -41,7 +42,7 @@
                     :mode="asideTop ? 'horizontal' : 'vertical'"
                     @select="select">
                 <el-menu-item index="home">
-                    <svg class="icon-svg aui-aside__menu-icon" aria-hidden="true"><use xlink:href="#icon-home"></use></svg>
+                    <i class="ic ichome"></i>
                     <span slot="title">首页</span>
                 </el-menu-item>
 

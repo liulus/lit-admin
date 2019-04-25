@@ -47,9 +47,7 @@
         <app-aside :aside-fold="asideFold" :aside-top="asideTop" :aside-menu-visible="asideMenuVisible"></app-aside>
 
         <!-- aui-main -->
-        <main class="aui-main">
-            <app-main></app-main>
-        </main>
+        <app-main></app-main>
 
         <!-- aui-footer -->
         <#--<footer class="aui-footer">-->

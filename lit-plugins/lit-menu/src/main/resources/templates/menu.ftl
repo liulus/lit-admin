@@ -1,22 +1,16 @@
 <#import 'pages/layout-main.ftl' as Layout>
 <@Layout.adminLayout title='菜单管理'>
 <script type="text/x-template" id="app-main-template">
-    <div>
-        <div class="aui-main__hd">
-            <el-breadcrumb separator="/">
-                <el-breadcrumb-item>
-                    <i class="ic ichome"></i>
-                </el-breadcrumb-item>
-                <el-breadcrumb-item>菜单管理</el-breadcrumb-item>
-            </el-breadcrumb>
-        </div>
+    <main class="aui-main">
+        <app-breadcrumb title="菜单管理"></app-breadcrumb>
 
         <div class="aui-main__bd">
             <el-card shadow="never">
                 <div slot="header">
                     <el-row>
                         <el-col :span="4">
-                            <el-button type="primary" plain icon="el-icon-plus" size="medium" @click="handleAdd('')"></el-button>
+                            <el-button type="primary" plain icon="el-icon-plus" size="medium"
+                                       @click="handleAdd('')"></el-button>
                         </el-col>
                         <el-col :span="12" :offset="2">
                             <el-input v-model="keyword" placeholder="请输入搜索内容" v-on:keyup.native.enter="handleSearch">
@@ -44,7 +38,9 @@
                             <el-col :span="4"><span> {{ data.name }}</span></el-col>
                             <el-col :span="2"><i :class="data.icon"></i></el-col>
                             <el-col :span="7"><span>{{ data.url }}</span></el-col>
-                            <el-col :span="4"><el-switch v-model="data.enable" @change="handleChange(data.id)"></el-switch></el-col>
+                            <el-col :span="4">
+                                <el-switch v-model="data.enable" @change="handleChange(data.id)"></el-switch>
+                            </el-col>
                             <el-col :span="3">
                                 <el-button type="text" icon="el-icon-plus" @click="handleAdd(data)"></el-button>
                                 <el-button type="text" icon="el-icon-edit" @click="handleEdit(data)"></el-button>
@@ -85,14 +81,14 @@
                 <el-button size="medium" @click="editFormConfig.visible = false">取 消</el-button>
             </div>
         </el-dialog>
-    </div>
+    </main>
 </script>
 <script>
     VueUtils.registerComponent({
         template: '#app-main-template',
         data: function () {
             return {
-                data:[],
+                data: [],
                 keyword: '',
                 editFormConfig: {
                     visible: false,
@@ -166,7 +162,8 @@
                             this.$message.error(res.message)
                         }
                     })
-                }).catch(() => {})
+                }).catch(() => {
+                })
             },
             handleChange(id) {
                 HttpRequest.post("/api/menu/change/status/" + id).then(res => {
@@ -188,7 +185,7 @@
     })
 </script>
 <style>
-    .el-tree-node__content{
+    .el-tree-node__content {
         height: 45px;
         border-bottom: 1px solid #ebeef5;
     }

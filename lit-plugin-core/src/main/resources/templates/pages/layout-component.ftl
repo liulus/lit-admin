@@ -67,7 +67,26 @@
         </div>
     </aside>
 </script>
+
+<script type="text/html" id="app-breadcrumb-template">
+    <div class="aui-main__hd">
+        <el-breadcrumb separator="/">
+            <el-breadcrumb-item>
+                <i class="ic ichome"></i>
+            </el-breadcrumb-item>
+            <el-breadcrumb-item>{{title}}</el-breadcrumb-item>
+        </el-breadcrumb>
+    </div>
+</script>
+
+
 <script>
+    Vue.component('app-breadcrumb', {
+        template: '#app-breadcrumb-template',
+        props: {
+            title: String
+        }
+    })
     Vue.component('app-header', {
         template: '#app-header-template',
         props: {

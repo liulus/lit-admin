@@ -1,6 +1,6 @@
 package com.github.lit.test.config;
 
-import com.github.lit.event.guava.EventConfig;
+import com.github.lit.spring.event.guava.GuavaEventConfig;
 import com.mchange.v2.c3p0.ComboPooledDataSource;
 import org.springframework.context.annotation.*;
 import org.springframework.core.env.Environment;
@@ -22,7 +22,7 @@ import java.beans.PropertyVetoException;
 @Configuration
 @PropertySource("config.properties")
 @ComponentScan("com.github.lit")
-@Import(EventConfig.class)
+@Import(GuavaEventConfig.class)
 public class SpringConfig {
 
     private static final String DB = "mysql.";

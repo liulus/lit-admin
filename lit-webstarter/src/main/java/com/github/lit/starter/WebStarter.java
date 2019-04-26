@@ -4,6 +4,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.support.SpringBootServletInitializer;
+import org.springframework.context.annotation.ComponentScan;
 
 /**
  * User : liulu
@@ -11,6 +12,7 @@ import org.springframework.boot.web.support.SpringBootServletInitializer;
  * version $Id: WebStarter.java, v 0.1 Exp $
  */
 @SpringBootApplication
+@ComponentScan("com.github.lit")
 public class WebStarter extends SpringBootServletInitializer {
 
     public static void main(String[] args) {

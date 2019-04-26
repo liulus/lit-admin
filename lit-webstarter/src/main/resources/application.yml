@@ -17,8 +17,8 @@ spring:
     default-property-inclusion: non_empty
 lit:
   render:
-    header: false
-    left: false
+    header: true
+    left: true
 
 
 server:

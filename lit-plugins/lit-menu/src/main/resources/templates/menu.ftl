@@ -1,4 +1,4 @@
-<#import 'pages/layout-main.ftl' as Layout>
+<#import 'layout/layout-main.ftl' as Layout>
 <@Layout.adminLayout title='菜单管理'>
 <script type="text/x-template" id="app-main-template">
     <main class="aui-main">
@@ -21,10 +21,10 @@
                 </div>
 
                 <el-row style="height: 40px;border-bottom: 1px solid #ebeef5;">
-                    <el-col :span="4"><span class="mg-l-25 fz-lg">编码</span></el-col>
-                    <el-col :span="4"><span class="mg-l-25 fz-lg">名称</span></el-col>
-                    <el-col :span="2"><span class="mg-l-15 fz-lg">图标</span></el-col>
-                    <el-col :span="7"><span class="mg-l-15 fz-lg">url</span></el-col>
+                    <el-col :span="4"><span class="ml-25 fz-lg">编码</span></el-col>
+                    <el-col :span="4"><span class="ml-25 fz-lg">名称</span></el-col>
+                    <el-col :span="2"><span class="ml-15 fz-lg">图标</span></el-col>
+                    <el-col :span="7"><span class="ml-15 fz-lg">url</span></el-col>
                     <el-col :span="4"><span class="fz-lg">启用状态</span></el-col>
                     <el-col :span="3"><span class="fz-lg">操作</span></el-col>
                 </el-row>

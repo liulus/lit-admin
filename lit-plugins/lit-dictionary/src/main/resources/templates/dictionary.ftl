@@ -1,4 +1,4 @@
-<#import 'pages/layout-main.ftl' as Layout>
+<#import 'layout/layout-main.ftl' as Layout>
 <@Layout.adminLayout title='字典管理'>
 <script type="text/x-template" id="app-main-template">
     <main class="aui-main">
@@ -45,7 +45,7 @@
 
 
                 <el-row :gutter="15" v-if="dataModel==='card'">
-                    <el-col :span="6" class="mg-b-15" v-for="(item, index) in dictionaryList" :key="item.id">
+                    <el-col :span="6" class="mb-15" v-for="(item, index) in dictionaryList" :key="item.id">
                         <el-card shadow="hover" :body-style="{'padding': '5px', 'background-color': '#F2F6FC'}">
                             <div slot="header" class="t-center">
                                 <span class="fz-lg">{{item.dictKey}}</span>

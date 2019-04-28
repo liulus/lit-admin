@@ -1,4 +1,4 @@
-<#import 'pages/layout-main.ftl' as Layout>
+<#import 'layout/layout-main.ftl' as Layout>
 <@Layout.adminLayout title='字典详情'>
 <script type="text/x-template" id="app-main-template">
     <main class="aui-main">

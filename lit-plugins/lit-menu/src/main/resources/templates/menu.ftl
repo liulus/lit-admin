@@ -167,7 +167,9 @@
             },
             handleChange(id) {
                 HttpRequest.post("/api/menu/change/status/" + id).then(res => {
-                    console.log('改变状态结果: ', res.success)
+                    if(!res.success) {
+                        this.$message.error(res.message)
+                    }
                 })
             },
             handleSearch() {

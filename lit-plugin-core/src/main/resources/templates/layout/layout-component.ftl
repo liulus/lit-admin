@@ -112,11 +112,17 @@
         },
         methods: {
             initData() {
-                HttpRequest.get('/api/my/menu').then(res => {
-                    if (res.success) {
-                        this.menuList = res.result
-                    }
-                })
+                let myMenu = sessionStorage.getItem('myMenu');
+                if (myMenu) {
+                    this.menuList = JSON.parse(myMenu)
+                } else {
+                    HttpRequest.get('/api/my/menu').then(res => {
+                        if (res.success) {
+                            this.menuList = res.result || []
+                            sessionStorage.setItem('myMenu', JSON.stringify(this.menuList))
+                        }
+                    })
+                }
             },
             select(index, indexPath) {
                 sessionStorage.setItem('activeMenuIndex', index)

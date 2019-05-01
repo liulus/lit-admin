@@ -17,7 +17,7 @@ public interface ParamService {
 
     SysParam findByCode(String code);
 
-    void insert(SysParam param);
+    Long insert(SysParam param);
 
     void update(SysParam param);
 

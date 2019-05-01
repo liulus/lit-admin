@@ -60,13 +60,6 @@ public interface MenuService {
      */
     int delete(Long[] ids);
 
-    /**
-     * 移动菜单
-     *
-     * @param parentId 新的parentId
-     * @param ids      要移动的菜单 id
-     */
-    void moveMenu(Long parentId, Long[] ids);
 
     /**
      * 改变菜单状态, 启用->禁用, 禁用->启用
@@ -79,20 +72,5 @@ public interface MenuService {
      * @return List<Menu>
      */
     List<Menu> findAll();
-
-    /**
-     * 根据权限码查询菜单
-     *
-     * @param authorities 权限码
-     * @return List<Menu>
-     */
-    List<Menu> findByAuthorities(List<String> authorities);
-
-    /**
-     * 查询当前登录用户的菜单
-     *
-     * @return List<Menu>
-     */
-    List<Menu> findMyMenus();
 
 }

@@ -6,8 +6,10 @@ import com.github.lit.param.service.ParamService;
 import com.github.lit.support.exception.BizException;
 import com.github.lit.support.jdbc.JdbcRepository;
 import com.github.lit.support.page.PageResult;
+import com.github.lit.support.sql.SQL;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
@@ -24,17 +26,18 @@ import java.util.Objects;
 @Transactional
 public class ParamServiceImpl implements ParamService {
 
-
-//    @Resource
-//    private JdbcTools jdbcTools;
-
     @Resource
     private JdbcRepository jdbcRepository;
 
 
     @Override
     public PageResult<SysParam> findPageList(SysParamQo qo) {
-        return jdbcRepository.selectPageList(SysParam.class, qo);
+        SQL sql = SQL.baseSelect(SysParam.class);
+        if (StringUtils.hasText(qo.getKeyword())) {
+            qo.setKeyword("%" + qo.getKeyword() + "%");
+            sql.WHERE("(code like :keyword or value like :keyword or remark like :keyword)");
+        }
+        return jdbcRepository.selectForPageList(sql, qo, SysParam.class);
     }
 
     @Override
@@ -48,16 +51,17 @@ public class ParamServiceImpl implements ParamService {
     }
 
     @Override
-    public void insert(SysParam param) {
+    public Long insert(SysParam param) {
         checkCode(param.getCode());
         param.setSystem(false);
 
         jdbcRepository.insert(param);
+        return param.getId();
     }
 
     @Override
     public void update(SysParam param) {
-        SysParam oldParam = findById(param.getParamId());
+        SysParam oldParam = findById(param.getId());
         if (oldParam == null) {
             return;
         }
@@ -92,7 +96,7 @@ public class ParamServiceImpl implements ParamService {
             if (param.getSystem()) {
                 throw new BizException(String.format("%s 是系统级参数, 不允许删除", param.getCode()));
             }
-            validIds.add(param.getParamId());
+            validIds.add(param.getId());
         }
         jdbcRepository.deleteByIds(SysParam.class, validIds);
     }

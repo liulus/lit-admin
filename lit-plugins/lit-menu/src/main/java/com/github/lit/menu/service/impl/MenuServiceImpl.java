@@ -1,18 +1,13 @@
 package com.github.lit.menu.service.impl;
 
-import com.github.lit.menu.event.MenuUpdateEvent;
 import com.github.lit.menu.model.Menu;
 import com.github.lit.menu.model.MenuQo;
 import com.github.lit.menu.model.MenuVo;
 import com.github.lit.menu.service.MenuService;
-import com.github.lit.plugin.core.model.LoginUser;
-import com.github.lit.plugin.core.util.PluginUtils;
-import com.github.lit.support.event.Event;
 import com.github.lit.support.exception.BizException;
 import com.github.lit.support.jdbc.JdbcRepository;
 import com.github.lit.support.page.PageResult;
 import com.github.lit.support.sql.SQL;
-import com.github.lit.support.sql.TableMetaDate;
 import com.github.lit.support.util.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -141,7 +136,6 @@ public class MenuServiceImpl implements MenuService {
     }
 
     @Override
-    @Event(MenuUpdateEvent.class)
     public int delete(Long[] ids) {
         if (ids == null || ids.length == 0) {
             return 0;
@@ -161,33 +155,7 @@ public class MenuServiceImpl implements MenuService {
     }
 
     private int countByParentId(Long parentId) {
-        TableMetaDate metaDate = TableMetaDate.forClass(Menu.class);
-        SQL sql = SQL.init().SELECT("count(*)")
-                .FROM(metaDate.getTableName())
-                .WHERE(PARENT_ID_CONDITION);
-        Map<String, Long> params = Collections.singletonMap("parentId", parentId == null ? 0L : parentId);
-        return jdbcRepository.selectForObject(sql, params, int.class);
-    }
-
-    @Override
-    @Event(MenuUpdateEvent.class)
-    public void moveMenu(Long parentId, Long[] ids) {
-
-        Arrays.sort(ids);
-        // 验证新的 parentId 不是 被移动菜单本身
-        if (parentId != null && Arrays.binarySearch(ids, parentId) >= 0) {
-            throw new BizException("父菜单不能是自己 !");
-        }
-
-        // 验证新的 parentId 不是 被移动菜单的子菜单
-        Menu menu = findById(parentId);
-        while (menu != null) {
-            if (menu.getParentId() != null && Arrays.binarySearch(ids, menu.getParentId()) >= 0) {
-                throw new BizException("无法移动到子菜单下 !");
-            }
-            menu = findById(menu.getParentId());
-        }
-
+        return jdbcRepository.countByProperty(Menu::getParentId, parentId == null ? 0L : parentId);
     }
 
     @Override
@@ -205,22 +173,6 @@ public class MenuServiceImpl implements MenuService {
     @Override
     public List<Menu> findAll() {
         return jdbcRepository.selectAll(Menu.class);
-    }
-
-    @Override
-    public List<Menu> findByAuthorities(List<String> authorities) {
-        TableMetaDate metaDate = TableMetaDate.forClass(Menu.class);
-        SQL sql = SQL.init().SELECT(metaDate.getAllColumns())
-                .FROM(metaDate.getTableName())
-                .WHERE("auth_code = '' or auth_code in (:authorities)");
-
-        return jdbcRepository.selectForList(sql, Collections.singletonMap("authorities", authorities), Menu.class);
-    }
-
-    @Override
-    public List<Menu> findMyMenus() {
-        LoginUser loginUser = PluginUtils.getLoginUser();
-        return findByAuthorities(loginUser.getAuths());
     }
 
 }

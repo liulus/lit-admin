@@ -27,7 +27,7 @@ public class SysParam implements Serializable {
      * 参数 Id
      */
     @Id
-    private Long paramId;
+    private Long id;
 
     /**
      * 参数编码

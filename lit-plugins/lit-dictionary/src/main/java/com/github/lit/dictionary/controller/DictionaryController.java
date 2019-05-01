@@ -41,18 +41,18 @@ public class DictionaryController {
 
     @PostMapping
     @Secured(AuthorityConst.ADD_DICTIONARY)
-    public Long addDictionary(@RequestBody DictionaryVo.Add dictionary) {
+    public Long add(@RequestBody DictionaryVo.Add dictionary) {
         return dictionaryService.insert(BeanUtils.convert(dictionary, new Dictionary()));
     }
 
     @PutMapping
     @Secured(AuthorityConst.ADD_DICTIONARY)
-    public int addDictionary(@RequestBody DictionaryVo.Update dictionary) {
+    public int update(@RequestBody DictionaryVo.Update dictionary) {
         return dictionaryService.update(BeanUtils.convert(dictionary, new Dictionary()));
     }
 
     @DeleteMapping("/{id}")
-    public void deleteDictionary(@PathVariable Long id) {
+    public void delete(@PathVariable Long id) {
         dictionaryService.deleteByIds(id);
     }
 

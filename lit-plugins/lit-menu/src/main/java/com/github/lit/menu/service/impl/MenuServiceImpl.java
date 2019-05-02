@@ -75,18 +75,18 @@ public class MenuServiceImpl implements MenuService {
         return rootMenus;
     }
 
-    private void setChildren(List<MenuVo.Detail> parentMenus, Map<Long, List<MenuVo.Detail>> menuMap) {
-        if (CollectionUtils.isEmpty(parentMenus)) {
+    private void setChildren(List<MenuVo.Detail> parents, Map<Long, List<MenuVo.Detail>> nodeMap) {
+        if (CollectionUtils.isEmpty(parents)) {
             return;
         }
-        for (MenuVo.Detail menu : parentMenus) {
-            List<MenuVo.Detail> children = menuMap.get(menu.getId());
+        for (MenuVo.Detail menu : parents) {
+            List<MenuVo.Detail> children = nodeMap.get(menu.getId());
             if (CollectionUtils.isEmpty(children)) {
                 menu.setIsParent(false);
             } else {
                 menu.setIsParent(true);
                 menu.setChildren(children);
-                setChildren(children, menuMap);
+                setChildren(children, nodeMap);
             }
         }
     }

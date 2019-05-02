@@ -1,57 +1,45 @@
 package com.github.lit.user.controller;
 
-import com.github.lit.plugin.core.constant.PluginConst;
-import com.github.lit.support.annotation.ViewName;
 import com.github.lit.support.page.PageResult;
-import com.github.lit.support.page.PageUtils;
-import com.github.lit.support.util.BeanUtils;
-import com.github.lit.user.model.User;
 import com.github.lit.user.model.UserQo;
 import com.github.lit.user.model.UserVo;
 import com.github.lit.user.service.UserService;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 
 /**
- * User : liulu
- * Date : 2017/8/12 11:16
- * version $Id: UserController.java, v 0.1 Exp $
+ * @author liulu
+ * @version v1.0
+ * date 2019-05-01
  */
-@Controller
-@RequestMapping(PluginConst.URL_PREFIX + "/user")
+@RestController
+@RequestMapping("/api/user")
 public class UserController {
 
     @Resource
     private UserService userService;
 
-    @GetMapping
-    @ViewName("user")
-    public PageResult<UserVo.List> userList(UserQo qo) {
-        PageResult<User> pageList = userService.findPageList(qo);
-        return PageUtils.convert(pageList, UserVo.List.class, null);
-    }
+    @GetMapping("/list")
+    public PageResult<UserVo.List> findUserPage(UserQo userQo) {
 
-    @GetMapping("/{id}")
-    public User get(@PathVariable Long id) {
-        return userService.findById(id);
+        return userService.findPageList(userQo);
     }
 
     @PostMapping
     public Long add(UserVo.Add add) {
-        return userService.insert(BeanUtils.convert(add, new User()));
+        return userService.insert(add);
     }
+
 
     @PutMapping
-    public void update(UserVo.Update update) {
-        userService.update(BeanUtils.convert(update, new User()));
+    public void update (UserVo.Update update) {
+        userService.update(update);
     }
 
-    @DeleteMapping
-    public void delete(Long[] ids) {
-        userService.delete(ids);
-    }
+
+
+
 
 
 }

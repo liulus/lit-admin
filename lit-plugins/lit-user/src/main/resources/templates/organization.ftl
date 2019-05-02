@@ -1,106 +1,187 @@
-<#import "layout/list-layout.ftl" as AdminLayout>
-<@AdminLayout.listLayout title='组织管理' importJs=['js/organization.js']>
-<!-- 导航条 -->
-<div class="row">
-    <ol class="breadcrumb">
-        <li><a href="#"><i class="glyphicon glyphicon-home"></i></a></li>
-        <li class="active">系统管理</li>
-        <li class="active">组织管理</li>
-    </ol>
-</div>
+<#import 'layout/layout-main.ftl' as Layout>
+<@Layout.adminLayout title='组织管理'>
+<script type="text/x-template" id="app-main-template">
+    <main class="aui-main">
+        <app-breadcrumb title="组织管理"></app-breadcrumb>
 
-<!-- 数据列表 -->
-<div class="panel panel-default table-responsive">
-    <!-- 数据操作 -->
-    <div class="panel-heading">
-        <@AdminLayout.addBtn/>
-        <#if data?size &gt; 0>
-            <@AdminLayout.updateBtn/>
-            <@AdminLayout.deleteBtn/>
-        </#if>
-        <#if organizationQo.parentId != 0>
-            <a href="${rc.contextPath}/plugin/org?parentId=${returnId?c}"
-               class="btn btn-sm btn-warning">
-                <i class="fa fa-reply"></i>&nbsp;&nbsp;返回上级
-            </a>
-        </#if>
-    </div>
+        <div class="aui-main__bd">
+            <el-card shadow="never">
+                <div slot="header" class="t-center">
+                    <el-button v-if="data.fullName" class="fz-xxl" type="text" @click="handleCorporation">
+                        {{data.fullName}}
+                    </el-button>
+                <#--<span v-if="data.fullName" class="fz-xxl">{{data.fullName}}</span>-->
+                    <template v-else>
+                        <p class="fz-xl">企业信息尚未完善</p>
+                        <el-button type="primary" @click="handleCorporation">去完善企业信息</el-button>
+                    </template>
+                </div>
 
-    <!-- 数据展示 -->
-    <table id="data-result" class="table table-hover">
-        <thead>
-        <tr>
-            <th class="text-center">
-                <input class="check-all" type="checkbox">
-            </th>
-            <th>机构号</th>
-            <th>机构名</th>
-            <th>简称</th>
-            <th>类型</th>
-            <th>地址</th>
-            <th>备注</th>
-        </tr>
-        </thead>
+                <el-row v-if="data.fullName" class="b-bottom-1" style="height: 60px;">
+                    <el-col :span="4">
+                        <el-button type="primary" plain icon="el-icon-plus" size="medium"
+                                   @click="handleAdd('')"></el-button>
+                    </el-col>
+                    <el-col :span="12" :offset="2">
+                        <el-input v-model="keyword" placeholder="请输入搜索内容" v-on:keyup.native.enter="handleSearch">
+                            <el-button slot="append" icon="el-icon-search" @click="handleSearch"></el-button>
+                        </el-input>
+                    </el-col>
+                </el-row>
+                <el-row v-if="data.children" class="mt-15 b-bottom-1" style="height: 30px;">
+                    <el-col :span="4"><span class="ml-25 fz-lg">编码</span></el-col>
+                    <el-col :span="4"><span class="ml-25 fz-lg">名称</span></el-col>
+                    <el-col :span="2"><span class="ml-15 fz-lg">图标</span></el-col>
+                    <el-col :span="7"><span class="ml-15 fz-lg">url</span></el-col>
+                    <el-col :span="3"><span class="fz-lg">操作</span></el-col>
+                </el-row>
+                <#--<el-tree :data="data"-->
+                         <#--:expand-on-click-node="false"-->
+                         <#--:filter-node-method="filterNode"-->
+                         <#--ref="orgTree">-->
+                    <#--<div slot-scope="{ node, data }" style="width: 100%">-->
+                        <#--<el-row type="flex" align="middle">-->
+                            <#--<el-col :span="4"><span>{{ data.code }}</span></el-col>-->
+                            <#--<el-col :span="4"><span> {{ data.name }}</span></el-col>-->
+                            <#--<el-col :span="2"><i :class="data.icon"></i></el-col>-->
+                            <#--<el-col :span="7"><span>{{ data.url }}</span></el-col>-->
+                            <#--<el-col :span="3">-->
+                                <#--<el-button type="text" icon="el-icon-plus" @click="handleAdd(data)"></el-button>-->
+                                <#--<el-button type="text" icon="el-icon-edit" @click="handleEdit(data)"></el-button>-->
+                                <#--<el-button type="text" icon="el-icon-delete" @click="handleDelete(data.id)"></el-button>-->
+                            <#--</el-col>-->
+                        <#--</el-row>-->
+                    <#--</div>-->
+                <#--</el-tree>-->
+            </el-card>
+        </div>
 
-        <tbody>
-            <#list data as item>
-            <tr>
-                <td class="text-center">
-                    <input class="check-ls" name="ids" type="checkbox" value="${item.id?c}">
-                </td>
-                <td>
-                    <a href="${rc.contextPath}/plugin/org?parentId=${item.id?c}">${item.code!?html}</a>
-                </td>
-                <td>${item.fullName!?html}</td>
-                <td>${item.shortName!?html}</td>
-                <td>${item.type!?html}</td>
-                <td>${item.address!?html}</td>
-                <td>${item.remark!?html}</td>
-            </tr>
-            <#else>
-                <@AdminLayout.emptyData 6/>
-            </#list>
-        </tbody>
-    </table>
-</div>
-
-<script type="text/template" id="edit-tpl">
-    <div class="modal-body">
-        <form id="form-edit" class="form-horizontal" action="">
-            <input type="hidden" name="parentId" value="${organizationQo.parentId?c}">
-            <input type="hidden" name="id" value="${r'${id}'}">
-            <div class="form-group">
-                <span class="control-label col-sm-6"><i class="text-danger">*&nbsp;</i>编号 :</span>
-                <div class="col-sm-16">
-                    <input type="text" name="code" value="${r'${code}'}" class="form-control">
-                </div>
+        <el-dialog :title="editFormConfig.title" :visible.sync="editFormConfig.visible" :close-on-click-modal="false">
+            <el-form :model="editForm" label-width="100px" label-suffix=":">
+                <el-form-item label="父节点" v-if="editFormConfig.isAdd">
+                    <span>{{editFormConfig.parent}}</span>
+                </el-form-item>
+                <el-form-item label="编码">
+                    <el-input v-model="editForm.code"></el-input>
+                </el-form-item>
+                <el-form-item label="名称">
+                    <el-input v-model="editForm.fullName"></el-input>
+                </el-form-item>
+                <el-form-item label="顺序号">
+                    <el-input v-model="editForm.orderNum" type="number"></el-input>
+                </el-form-item>
+                <el-form-item label="备注">
+                    <el-input type="textarea" :rows="2" v-model="editForm.remark"></el-input>
+                </el-form-item>
+            </el-form>
+            <div slot="footer" class="dialog-footer">
+                <el-button type="primary" size="medium" @click="doEdit">确 定</el-button>
+                <el-button size="medium" @click="editFormConfig.visible = false">取 消</el-button>
             </div>
-            <div class="form-group">
-                <span class="control-label col-sm-6"><i class="text-danger">*&nbsp;</i>名称 :</span>
-                <div class="col-sm-16">
-                    <input type="text" name="fullName" value="${r'${fullName}'}" class="form-control">
-                </div>
-            </div>
-            <div class="form-group">
-                <span class="control-label col-sm-6">简称 :</span>
-                <div class="col-sm-16">
-                    <input type="text" name="shortName" value="${r'${shortName}'}" class="form-control">
-                </div>
-            </div>
-            <div class="form-group">
-                <span class="control-label col-sm-6"><i class="text-danger">*&nbsp;</i>地址 :</span>
-                <div class="col-sm-16">
-                    <textarea name="address" class="form-control" rows="2">${r'${address}'}</textarea>
-                </div>
-            </div>
-            <div class="form-group">
-                <span class="control-label col-sm-6"><i class="text-danger">*&nbsp;</i>备注 :</span>
-                <div class="col-sm-16">
-                    <textarea name="remark" class="form-control" rows="3">${r'${remark}'}</textarea>
-                </div>
-            </div>
-        </form>
-    </div>
+        </el-dialog>
+    </main>
 </script>
+<script>
+    VueUtils.registerComponent({
+        template: '#app-main-template',
+        data: function () {
+            return {
+                data: {},
+                keyword: '',
+                editFormConfig: {
+                    visible: false,
+                    isAdd: true,
+                    title: '',
+                    parent: ""
+                },
+                editForm: {
+                    id: 0,
+                    code: '',
+                    fullName: '',
+                    orderNum: '',
+                    remark: ''
+                }
+            }
+        },
+        created() {
+            this.initData()
+        },
+        methods: {
+            initData() {
+                HttpRequest.get('/api/org/list').then(res => {
+                    this.data = res.result || {}
+                })
+            },
+            handleCorporation() {
+                window.location.href = contextPath + '/corporation/info'
+            },
+            handleAdd(parentNode) {
+                this.editForm = {}
+                this.editFormConfig.title = '新增组织'
+                this.editFormConfig.parent = parentNode ? parentNode.code + ' -- ' + parentNode.name : '--'
+                this.editFormConfig.isAdd = true
+                this.editFormConfig.visible = true
+                this.editForm.parentId = parentNode ? parentNode.id : 0
+            },
+            handleEdit(node) {
+                this.editForm.id = node.id
+                this.editForm.code = node.code
+                this.editForm.name = node.name
+                this.editForm.url = node.url
+                this.editForm.icon = node.icon
+                this.editForm.orderNum = node.orderNum
+                this.editForm.remark = node.remark
 
-</@AdminLayout.listLayout>
+                this.editFormConfig.title = '修改组织'
+                this.editFormConfig.isAdd = false
+                this.editFormConfig.visible = true
+            },
+            doEdit() {
+                let method = this.editFormConfig.isAdd ? 'post' : 'put'
+                HttpRequest.request(method, '/api/org', this.editForm).then(res => {
+                    if (res.success) {
+                        this.$message.success(this.editFormConfig.title + '成功')
+                        this.initData()
+                    } else {
+                        this.$message.error(res.message)
+                    }
+                })
+                this.editFormConfig.visible = false
+            },
+            handleDelete(id) {
+                this.$confirm('此操作将删除该菜单数据, 是否继续?', '提示', {
+                    closeOnClickModal: false,
+                    type: 'warning'
+                }).then(() => {
+                    HttpRequest.delete('/api/org/' + id,).then(res => {
+                        if (res.success) {
+                            this.$message.success('删除菜单成功')
+                            this.initData()
+                        } else {
+                            this.$message.error(res.message)
+                        }
+                    })
+                }).catch(() => {
+                })
+            },
+            handleSearch() {
+                this.$refs.orgTree.filter(this.keyword);
+            },
+            filterNode(value, data) {
+                if (value) {
+                    return (data.code && data.code.indexOf(value) !== -1)
+                            || (data.name && data.name.indexOf(value) !== -1)
+                            || (data.remark && data.remark.indexOf(value) !== -1)
+                }
+                return true;
+            }
+        }
+    })
+</script>
+<style>
+    .el-tree-node__content {
+        height: 45px;
+        border-bottom: 1px solid #ebeef5;
+    }
+</style>
+</@Layout.adminLayout>

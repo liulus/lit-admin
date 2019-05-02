@@ -4,8 +4,11 @@ import com.github.lit.plugin.core.model.LoginUser;
 import com.github.lit.support.exception.BizException;
 import com.github.lit.support.jdbc.JdbcRepository;
 import com.github.lit.support.page.PageResult;
+import com.github.lit.support.page.PageUtils;
+import com.github.lit.support.util.BeanUtils;
 import com.github.lit.user.model.User;
 import com.github.lit.user.model.UserQo;
+import com.github.lit.user.model.UserVo;
 import com.github.lit.user.service.UserService;
 import com.github.lit.user.util.UserUtils;
 import org.springframework.stereotype.Service;
@@ -40,7 +43,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public PageResult<User> findPageList(UserQo qo) {
+    public PageResult<UserVo.List> findPageList(UserQo qo) {
         LoginUser loginUser = UserUtils.getLoginUser();
 
         if (loginUser != null && loginUser.hasOrg()) {
@@ -49,25 +52,28 @@ public class UserServiceImpl implements UserService {
                 qo.setOrgCode(loginUser.getOrgCode());
             }
         }
-        return jdbcRepository.selectPageList(User.class, qo);
+        PageResult<User> pageList = jdbcRepository.selectPageList(User.class, qo);
+        return PageUtils.convert(pageList, UserVo.List.class);
     }
 
     @Override
-    public Long insert(User user) {
+    public Long insert(UserVo.Add user) {
         checkUserName(user.getUserName());
         checkEmail(user.getEmail());
         checkMobilePhone(user.getMobileNum());
 
+        User addUser = BeanUtils.convert(user, new User());
+
         // 设置默认值
-        user.setLock(false);
-        user.setCreator(UserUtils.getLoginUser().getUserName());
-        user.setPassword(UserUtils.encode("123456"));
-        jdbcRepository.insert(user);
-        return user.getId();
+        addUser.setLock(false);
+        addUser.setCreator(UserUtils.getLoginUser().getUserName());
+        addUser.setPassword(UserUtils.encode("123456"));
+        jdbcRepository.insert(addUser);
+        return addUser.getId();
     }
 
     @Override
-    public void update(User user) {
+    public void update(UserVo.Update user) {
 
         User oldUser = findById(user.getId());
 
@@ -80,8 +86,8 @@ public class UserServiceImpl implements UserService {
         if (!Objects.equals(oldUser.getMobileNum(), user.getMobileNum())) {
             checkMobilePhone(user.getMobileNum());
         }
-
-        jdbcRepository.updateSelective(user);
+        User upUser = BeanUtils.convert(user, new User());
+        jdbcRepository.updateSelective(upUser);
     }
 
     private void checkUserName(String userName) {

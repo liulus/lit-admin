@@ -75,7 +75,10 @@
             <el-breadcrumb-item>
                 <i class="ic ichome"></i>
             </el-breadcrumb-item>
-            <el-breadcrumb-item>{{title}}</el-breadcrumb-item>
+            <el-breadcrumb-item v-if="title">{{title}}</el-breadcrumb-item>
+            <template v-if="titles" v-for="item in titles">
+                <el-breadcrumb-item>{{item}}</el-breadcrumb-item>
+            </template>
         </el-breadcrumb>
     </div>
 </script>
@@ -85,7 +88,8 @@
     Vue.component('app-breadcrumb', {
         template: '#app-breadcrumb-template',
         props: {
-            title: String
+            title: String,
+            titles: Array
         }
     })
     Vue.component('app-header', {

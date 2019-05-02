@@ -3,6 +3,7 @@ package com.github.lit.user.service;
 import com.github.lit.support.page.PageResult;
 import com.github.lit.user.model.User;
 import com.github.lit.user.model.UserQo;
+import com.github.lit.user.model.UserVo;
 
 /**
  * User : liulu
@@ -34,21 +35,21 @@ public interface UserService {
      * @param qo 查询条件
      * @return 用户列表
      */
-    PageResult<User> findPageList(UserQo qo);
+    PageResult<UserVo.List> findPageList(UserQo qo);
 
     /**
      * 新增用户
      *
      * @param user user
      */
-    Long insert(User user);
+    Long insert(UserVo.Add user);
 
     /**
      * 修改用户
      *
      * @param user user
      */
-    void update(User user);
+    void update(UserVo.Update user);
 
     /**
      * 删除用户

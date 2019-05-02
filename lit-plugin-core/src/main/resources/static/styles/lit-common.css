@@ -620,6 +620,10 @@ template {
     border-bottom: 0 !important;
 }
 
+.b-bottom-1 {
+    border-bottom: 1px solid #ebeef5;
+}
+
 .b-left-0 {
     border-left: 0 !important;
 }

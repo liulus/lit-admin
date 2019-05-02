@@ -3,12 +3,15 @@ package com.github.lit.user.service.impl;
 import com.github.lit.support.exception.BizException;
 import com.github.lit.support.jdbc.JdbcRepository;
 import com.github.lit.support.page.PageResult;
+import com.github.lit.support.util.BeanUtils;
 import com.github.lit.user.model.Organization;
 import com.github.lit.user.model.OrganizationQo;
+import com.github.lit.user.model.OrganizationVo;
 import com.github.lit.user.service.OrganizationService;
 import com.github.lit.user.util.UserUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
 import java.util.*;
@@ -30,6 +33,37 @@ public class OrganizationServiceImpl implements OrganizationService {
     @Override
     public PageResult<Organization> findPageList(OrganizationQo qo) {
         return jdbcRepository.selectPageList(Organization.class, qo);
+    }
+
+    @Override
+    public OrganizationVo.Detail buildOrgTree() {
+        List<Organization> organizations = jdbcRepository.selectAll(Organization.class);
+        if (CollectionUtils.isEmpty(organizations)) {
+            return null;
+        }
+        Map<Long, List<OrganizationVo.Detail>> orgLevelMap = organizations.stream()
+                .map(org -> BeanUtils.convert(org, new OrganizationVo.Detail()))
+                .collect(Collectors.groupingBy(OrganizationVo.Detail::getParentId));
+        // 企业信息, 作为根节点只有一个
+        List<OrganizationVo.Detail> rootOrg = orgLevelMap.get(0L);
+        if (CollectionUtils.isEmpty(rootOrg)) {
+            return null;
+        }
+        setChildren(rootOrg, orgLevelMap);
+        return rootOrg.iterator().next();
+    }
+
+    private void setChildren(List<OrganizationVo.Detail> parents, Map<Long, List<OrganizationVo.Detail>> nodeMap) {
+        if (CollectionUtils.isEmpty(parents)) {
+            return;
+        }
+        for (OrganizationVo.Detail detail : parents) {
+            List<OrganizationVo.Detail> children = nodeMap.get(detail.getId());
+            if (!CollectionUtils.isEmpty(children)) {
+                detail.setChildren(children);
+                setChildren(children, nodeMap);
+            }
+        }
     }
 
     @Override

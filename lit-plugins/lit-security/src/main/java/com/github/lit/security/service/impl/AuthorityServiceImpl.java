@@ -1,7 +1,7 @@
 package com.github.lit.security.service.impl;
 
 import com.github.lit.dictionary.model.Dictionary;
-import com.github.lit.dictionary.tool.DictionaryTools;
+import com.github.lit.dictionary.service.DictionaryService;
 import com.github.lit.security.context.SecurityConst;
 import com.github.lit.security.model.Authority;
 import com.github.lit.security.model.AuthorityQo;
@@ -33,6 +33,9 @@ public class AuthorityServiceImpl implements AuthorityService {
     @Resource
     private JdbcRepository jdbcRepository;
 
+    @Resource
+    private DictionaryService dictionaryService;
+
 
     @Override
     public PageResult<Authority> findPageList(AuthorityQo qo) {
@@ -44,7 +47,7 @@ public class AuthorityServiceImpl implements AuthorityService {
 
         List<Authority> authorities = jdbcRepository.selectAll(Authority.class);
 
-        List<Dictionary> authorityTypes = DictionaryTools.findChildByRootKey(SecurityConst.AUTHORITY_TYPE);
+        List<Dictionary> authorityTypes = dictionaryService.findChildByRootKey(SecurityConst.AUTHORITY_TYPE);
         if (CollectionUtils.isEmpty(authorityTypes)) {
             return BeanUtils.convertList(AuthorityVo.class, authorities);
         }

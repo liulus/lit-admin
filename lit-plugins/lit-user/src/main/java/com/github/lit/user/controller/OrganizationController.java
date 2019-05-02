@@ -29,18 +29,18 @@ public class OrganizationController {
 
     @GetMapping
     @ViewName("organization")
-    public PageResult<OrganizationVo.List> orgList(OrganizationQo qo) {
+    public PageResult<OrganizationVo.ListRes> orgList(OrganizationQo qo) {
         PageResult<Organization> organizationPage = organizationService.findPageList(qo);
         if (qo.getParentId() != 0L) {
             Organization org = organizationService.findById(qo.getParentId());
             organizationPage.add("returnId", org == null ? 0 : org.getParentId());
         }
-        return PageUtils.convert(organizationPage, OrganizationVo.List.class, null);
+        return PageUtils.convert(organizationPage, OrganizationVo.ListRes.class, null);
     }
 
     @GetMapping("/{id}")
-    public OrganizationVo.List get(@PathVariable Long id) {
-        return BeanUtils.convert(organizationService.findById(id), new OrganizationVo.List());
+    public OrganizationVo.ListRes get(@PathVariable Long id) {
+        return BeanUtils.convert(organizationService.findById(id), new OrganizationVo.ListRes());
     }
 
     @PostMapping

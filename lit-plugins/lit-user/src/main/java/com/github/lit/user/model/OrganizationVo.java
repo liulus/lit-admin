@@ -2,6 +2,8 @@ package com.github.lit.user.model;
 
 import lombok.Data;
 
+import java.util.List;
+
 /**
  * User : liulu
  * Date : 2018/4/11 20:34
@@ -23,7 +25,7 @@ public abstract class OrganizationVo {
     private String remark;
 
     @Data
-    public static class List extends OrganizationVo {
+    public static class ListRes extends OrganizationVo {
         private Long id;
     }
 
@@ -34,6 +36,13 @@ public abstract class OrganizationVo {
     @Data
     public static class Update extends OrganizationVo {
         private Long id;
+    }
+
+    @Data
+    public static class Detail extends OrganizationVo {
+        private Long id;
+        private Long parentId;
+        private List<Detail> children;
     }
 
 

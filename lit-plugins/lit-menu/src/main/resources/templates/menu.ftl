@@ -20,7 +20,7 @@
                     </el-row>
                 </div>
 
-                <el-row style="height: 40px;border-bottom: 1px solid #ebeef5;">
+                <el-row class="b-bottom-1" style="height: 30px;">
                     <el-col :span="4"><span class="ml-25 fz-lg">编码</span></el-col>
                     <el-col :span="4"><span class="ml-25 fz-lg">名称</span></el-col>
                     <el-col :span="2"><span class="ml-15 fz-lg">图标</span></el-col>

@@ -28,7 +28,7 @@ public abstract class UserVo {
         private Long id;
         private String userName;
         private String mobileNum;
-        private Boolean gender;
+        private Short gender;
         private Boolean lock;
     }
 

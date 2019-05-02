@@ -29,30 +29,28 @@
                     </el-col>
                 </el-row>
                 <el-row v-if="data.children" class="mt-15 b-bottom-1" style="height: 30px;">
+                    <el-col :span="7"><span class="ml-25 fz-lg">名称</span></el-col>
                     <el-col :span="4"><span class="ml-25 fz-lg">编码</span></el-col>
-                    <el-col :span="4"><span class="ml-25 fz-lg">名称</span></el-col>
-                    <el-col :span="2"><span class="ml-15 fz-lg">图标</span></el-col>
-                    <el-col :span="7"><span class="ml-15 fz-lg">url</span></el-col>
+                    <el-col :span="10"><span class="ml-15 fz-lg">地址</span></el-col>
                     <el-col :span="3"><span class="fz-lg">操作</span></el-col>
                 </el-row>
-                <#--<el-tree :data="data"-->
-                         <#--:expand-on-click-node="false"-->
-                         <#--:filter-node-method="filterNode"-->
-                         <#--ref="orgTree">-->
-                    <#--<div slot-scope="{ node, data }" style="width: 100%">-->
-                        <#--<el-row type="flex" align="middle">-->
-                            <#--<el-col :span="4"><span>{{ data.code }}</span></el-col>-->
-                            <#--<el-col :span="4"><span> {{ data.name }}</span></el-col>-->
-                            <#--<el-col :span="2"><i :class="data.icon"></i></el-col>-->
-                            <#--<el-col :span="7"><span>{{ data.url }}</span></el-col>-->
-                            <#--<el-col :span="3">-->
-                                <#--<el-button type="text" icon="el-icon-plus" @click="handleAdd(data)"></el-button>-->
-                                <#--<el-button type="text" icon="el-icon-edit" @click="handleEdit(data)"></el-button>-->
-                                <#--<el-button type="text" icon="el-icon-delete" @click="handleDelete(data.id)"></el-button>-->
-                            <#--</el-col>-->
-                        <#--</el-row>-->
-                    <#--</div>-->
-                <#--</el-tree>-->
+                <el-tree v-if="data.children" :data="data.children"
+                         :expand-on-click-node="false"
+                         :filter-node-method="filterNode"
+                         ref="orgTree">
+                    <div slot-scope="{ node, data }" style="width: 100%">
+                        <el-row type="flex" align="middle">
+                            <el-col :span="7"><span>{{ data.fullName }}</span></el-col>
+                            <el-col :span="4"><span>{{ data.code }}</span></el-col>
+                            <el-col :span="10"><span>{{ data.address }}</span></el-col>
+                            <el-col :span="3">
+                                <el-button type="text" icon="el-icon-plus" @click="handleAdd(data)"></el-button>
+                                <el-button type="text" icon="el-icon-edit" @click="handleEdit(data)"></el-button>
+                                <el-button type="text" icon="el-icon-delete" @click="handleDelete(data.id)"></el-button>
+                            </el-col>
+                        </el-row>
+                    </div>
+                </el-tree>
             </el-card>
         </div>
 
@@ -69,6 +67,9 @@
                 </el-form-item>
                 <el-form-item label="顺序号">
                     <el-input v-model="editForm.orderNum" type="number"></el-input>
+                </el-form-item>
+                <el-form-item label="地址">
+                    <el-input v-model="editForm.address"></el-input>
                 </el-form-item>
                 <el-form-item label="备注">
                     <el-input type="textarea" :rows="2" v-model="editForm.remark"></el-input>
@@ -98,6 +99,7 @@
                     id: 0,
                     code: '',
                     fullName: '',
+                    address: '',
                     orderNum: '',
                     remark: ''
                 }
@@ -118,17 +120,16 @@
             handleAdd(parentNode) {
                 this.editForm = {}
                 this.editFormConfig.title = '新增组织'
-                this.editFormConfig.parent = parentNode ? parentNode.code + ' -- ' + parentNode.name : '--'
+                this.editFormConfig.parent = parentNode ? parentNode.fullName : this.data.fullName
                 this.editFormConfig.isAdd = true
                 this.editFormConfig.visible = true
-                this.editForm.parentId = parentNode ? parentNode.id : 0
+                this.editForm.parentId = parentNode ? parentNode.id : this.data.id
             },
             handleEdit(node) {
                 this.editForm.id = node.id
                 this.editForm.code = node.code
-                this.editForm.name = node.name
-                this.editForm.url = node.url
-                this.editForm.icon = node.icon
+                this.editForm.fullName = node.fullName
+                this.editForm.address = node.address
                 this.editForm.orderNum = node.orderNum
                 this.editForm.remark = node.remark
 
@@ -149,7 +150,7 @@
                 this.editFormConfig.visible = false
             },
             handleDelete(id) {
-                this.$confirm('此操作将删除该菜单数据, 是否继续?', '提示', {
+                this.$confirm('此操作将删除该组织数据, 是否继续?', '提示', {
                     closeOnClickModal: false,
                     type: 'warning'
                 }).then(() => {
@@ -170,7 +171,7 @@
             filterNode(value, data) {
                 if (value) {
                     return (data.code && data.code.indexOf(value) !== -1)
-                            || (data.name && data.name.indexOf(value) !== -1)
+                            || (data.fullName && data.fullName.indexOf(value) !== -1)
                             || (data.remark && data.remark.indexOf(value) !== -1)
                 }
                 return true;

@@ -29,8 +29,9 @@ public abstract class OrganizationVo {
         private Long id;
     }
 
+    @Data
     public static class Add extends OrganizationVo {
-
+        private Long parentId;
     }
 
     @Data

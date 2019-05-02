@@ -12,6 +12,7 @@ import com.github.lit.user.util.UserUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
 import java.util.*;
@@ -76,22 +77,27 @@ public class OrganizationServiceImpl implements OrganizationService {
         return jdbcRepository.selectByProperty(Organization::getCode, orgCode);
     }
 
+    private Organization findRootOrg() {
+        return jdbcRepository.selectByProperty(Organization::getParentId, 0L);
+    }
+
     @Override
     public Long insert(Organization organization) {
 
         checkOrgCode(organization.getCode());
 
-        String parentLevelIndex = Optional.ofNullable(organization.getParentId())
-                .filter(parentId -> parentId > 0L)
-                .map(this::findById)
-                .map(Organization::getLevelIndex)
-                .orElse("");
+        Organization parentOrg = organization.getParentId() == null || organization.getParentId() == 0L ?
+                findRootOrg() : findById(organization.getParentId());
+        if (parentOrg == null) {
+            throw new BizException("不存在父节点" + organization.getParentId());
+        }
 
         // 处理 levelIndex
-        List<Organization> organizations = jdbcRepository.selectListByProperty(Organization::getParentId, organization.getParentId());
+        List<Organization> organizations = jdbcRepository.selectListByProperty(Organization::getParentId, parentOrg.getId());
         List<String> levelIndexes = organizations.stream().map(Organization::getLevelIndex).collect(Collectors.toList());
 
-        organization.setLevelIndex(UserUtils.nextLevelIndex(parentLevelIndex, levelIndexes));
+        organization.setParentId(parentOrg.getId());
+        organization.setLevelIndex(UserUtils.nextLevelIndex(parentOrg.getLevelIndex(), levelIndexes));
         jdbcRepository.insert(organization);
         return organization.getId();
     }
@@ -110,6 +116,9 @@ public class OrganizationServiceImpl implements OrganizationService {
     }
 
     private void checkOrgCode(String orgCode) {
+        if (StringUtils.isEmpty(orgCode)) {
+            return;
+        }
         Organization org = findByCode(orgCode);
         if (org != null) {
             throw new BizException("机构号已经存在");

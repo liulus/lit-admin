@@ -28,6 +28,7 @@
                         </el-input>
                     </el-col>
                 </el-row>
+
                 <el-row v-if="data.children" class="mt-15 b-bottom-1" style="height: 30px;">
                     <el-col :span="7"><span class="ml-25 fz-lg">名称</span></el-col>
                     <el-col :span="4"><span class="ml-25 fz-lg">编码</span></el-col>

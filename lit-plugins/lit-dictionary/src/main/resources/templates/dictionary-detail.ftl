@@ -8,20 +8,32 @@
             <el-card shadow="never">
                 <div slot="header">
                     <el-row>
-                        <el-col :span="12" :offset="6">
+                        <el-col :span="4">
+                            <el-button type="primary" plain icon="el-icon-plus" size="medium"
+                                       @click="handleAdd('')"></el-button>
+                        </el-col>
+                        <el-col :span="12" :offset="2">
                             <el-input v-model="keyword" placeholder="请输入搜索内容" @keyup.native.enter="handleSearch">
                                 <el-button slot="append" icon="el-icon-search" @click="handleSearch"></el-button>
                             </el-input>
                         </el-col>
                     </el-row>
                 </div>
-                <el-tree :data="data" :expand-on-click-node="false" :filter-node-method="filterNode"
+
+                <el-row v-if="data" class="b-bottom-1" style="height: 30px;">
+                    <el-col :span="5"><span class="ml-25 fz-lg">{{ data.dictKey }}</span></el-col>
+                    <el-col :span="5"><span class="ml-25 fz-lg">{{ data.dictValue }}</span></el-col>
+                    <el-col :span="10"><span class="ml-15 fz-lg">{{ data.remark }}</span></el-col>
+                    <el-col :span="4"><span class="fz-lg">操作</span></el-col>
+                </el-row>
+                <el-tree v-if="data.children" :data="data.children"
+                         :expand-on-click-node="false" :filter-node-method="filterNode"
                          default-expand-all ref="dictTree">
                     <div slot-scope="{ node, data }" style="width: 100%">
                         <el-row type="flex" align="middle">
+                            <el-col :span="5"><span>{{ data.dictKey }}</span></el-col>
                             <el-col :span="5"><span>{{ data.dictValue }}</span></el-col>
-                            <el-col :span="5"><span> {{ data.dictKey }}</span></el-col>
-                            <el-col :span="10"><span> {{ data.remark }}</span></el-col>
+                            <el-col :span="10"><span>{{ data.remark }}</span></el-col>
                             <el-col :span="4">
                                 <el-button type="text" icon="el-icon-plus" @click="handleAdd(data)"></el-button>
                                 <el-button type="text" icon="el-icon-edit" @click="handleEdit(data)"></el-button>
@@ -64,7 +76,7 @@
         data: function () {
             return {
                 dictId: getCurrentPathVariable(),
-                data: [],
+                data: {},
                 keyword: '',
                 editFormConfig: {
                     visible: false,
@@ -87,11 +99,14 @@
         methods: {
             initData() {
                 HttpRequest.get('/api/dictionary/detail/' + this.dictId).then(res => {
-                    this.data = [res.result]
+                    this.data = res.result || {}
                 })
             },
             handleAdd(parentNode) {
                 this.editForm = {}
+                if (!parentNode) {
+                    parentNode = this.data
+                }
                 this.editFormConfig.title = '新增字典'
                 this.editFormConfig.parent = parentNode.dictKey + ' -- ' + parentNode.dictValue
                 this.editFormConfig.isAdd = true

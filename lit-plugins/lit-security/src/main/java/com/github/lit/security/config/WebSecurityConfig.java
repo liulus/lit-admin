@@ -2,15 +2,14 @@ package com.github.lit.security.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.config.annotation.web.configuration.ResourceServerConfigurer;
+import org.springframework.security.oauth2.config.annotation.web.configuration.ResourceServerConfigurerAdapter;
+import org.springframework.security.oauth2.config.annotation.web.configurers.ResourceServerSecurityConfigurer;
 
 /**
  * User : liulu
@@ -38,30 +37,23 @@ public class WebSecurityConfig {
     }
 
 
-    @Bean
-    public WebSecurityConfigurerAdapter customerWebSecurityConfigurer(UserDetailsService userDetailsService) {
-        return new WebSecurityConfigurerAdapter() {
+
+//    @Bean
+    public ResourceServerConfigurer resourceServerConfigurer() {
+        return new ResourceServerConfigurerAdapter(){
+
             @Override
-            protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-                auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
+            public void configure(ResourceServerSecurityConfigurer resources) throws Exception {
+
             }
 
             @Override
-            public void configure(WebSecurity web) throws Exception {
-                web.ignoring().antMatchers("/**/*.css", "/**/*.js", "/libs/**", "/images/**");
-            }
-
-            @Override
-            protected void configure(HttpSecurity http) throws Exception {
-                //        http.authorizeRequests().antMatchers("/libs/**").permitAll();
-
-                http.formLogin().loginPage("/user/login").permitAll()
-                        .usernameParameter("userName").passwordParameter("password")
-                        .successHandler(new SessionAuthenticationSuccessHandler())
-                        .and().csrf().disable()
-                        .authorizeRequests().anyRequest().authenticated();
+            public void configure(HttpSecurity http) throws Exception {
+                http.httpBasic().disable();
             }
         };
     }
+
+
 
 }

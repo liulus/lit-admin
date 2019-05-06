@@ -45,7 +45,7 @@
         </dependency>
         <dependency>
             <groupId>com.github.liulus</groupId>
-            <artifactId>lit-user</artifactId>
+            <artifactId>lit-security</artifactId>
             <version>${project.version}</version>
         </dependency>
         <!--<dependency>-->

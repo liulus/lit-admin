@@ -15,14 +15,12 @@ spring:
     default-property-inclusion: non_empty
 
 
-server:
-  servlet:
-    context-path: /lit
 
 logging:
   level:
     com.github: debug
     org.springframework.jdbc: debug
+    org.springframework.security: debug
 
 ---
 spring:

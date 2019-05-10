@@ -84,13 +84,6 @@
 
     <dependencyManagement>
         <dependencies>
-
-            <dependency>
-                <groupId>commons-io</groupId>
-                <artifactId>commons-io</artifactId>
-                <version>2.5</version>
-            </dependency>
-            
             <dependency>
                 <groupId>mysql</groupId>
                 <artifactId>mysql-connector-java</artifactId>
@@ -114,6 +107,17 @@
             
         </dependencies>
     </dependencyManagement>
+
+    <distributionManagement>
+        <repository>
+            <id>aliyun_code</id>
+            <url>http://code.aliyun.com/maven_/repository/raw/public</url>
+        </repository>
+        <snapshotRepository>
+            <id>aliyun_code</id>
+            <url>http://localhost:8081/nexus/content/repositories/thirdparty</url>
+        </snapshotRepository>
+    </distributionManagement>
 
 
     <developers>

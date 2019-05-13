@@ -1,4 +1,4 @@
-<#import 'layout/layout-main.ftl' as Layout>
+<#import '/pages/layout-main.ftl' as Layout>
 <@Layout.adminLayout title='企业信息'>
 <script type="text/x-template" id="app-main-template">
     <main class="aui-main">

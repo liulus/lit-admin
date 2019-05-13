@@ -33,6 +33,18 @@ public class UserServiceImpl implements UserService {
     private JdbcRepository jdbcRepository;
 
     @Override
+    public Long register(UserVo.Register register) {
+        if (!Objects.equals(register.getPassword(), register.getConfirmPassword())) {
+            throw new BizException("密码和确认密码不一致");
+        }
+        if (!Objects.equals(register.getSmsCaptcha(), "1234")) {
+            throw new BizException("手机验证码不正确");
+        }
+
+        return insert(BeanUtils.convert(register, new UserVo.Add()));
+    }
+
+    @Override
     public User findById(Long id) {
         return jdbcRepository.selectById(User.class, id);
     }
@@ -60,14 +72,14 @@ public class UserServiceImpl implements UserService {
     public Long insert(UserVo.Add user) {
         checkUserName(user.getUserName());
         checkEmail(user.getEmail());
-        checkMobilePhone(user.getMobileNum());
+        checkMobileNum(user.getMobileNum());
 
         User addUser = BeanUtils.convert(user, new User());
 
         // 设置默认值
         addUser.setLock(false);
         addUser.setCreator(UserUtils.getLoginUser().getUserName());
-        addUser.setPassword(UserUtils.encode("123456"));
+        addUser.setPassword(UserUtils.encode(user.getPassword()));
         jdbcRepository.insert(addUser);
         return addUser.getId();
     }
@@ -84,7 +96,7 @@ public class UserServiceImpl implements UserService {
             checkEmail(user.getEmail());
         }
         if (!Objects.equals(oldUser.getMobileNum(), user.getMobileNum())) {
-            checkMobilePhone(user.getMobileNum());
+            checkMobileNum(user.getMobileNum());
         }
         User upUser = BeanUtils.convert(user, new User());
         jdbcRepository.updateSelective(upUser);
@@ -111,7 +123,7 @@ public class UserServiceImpl implements UserService {
         }
     }
 
-    private void checkMobilePhone(String mobileNum) {
+    private void checkMobileNum(String mobileNum) {
         if (StringUtils.isEmpty(mobileNum)) {
             return;
         }

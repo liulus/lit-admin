@@ -1,4 +1,4 @@
-package com.github.lit.starter.config;
+package com.github.lit.plugin.core.configuration;
 
 import org.springframework.core.MethodParameter;
 import org.springframework.core.annotation.AnnotationUtils;

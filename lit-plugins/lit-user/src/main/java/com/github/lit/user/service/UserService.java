@@ -13,6 +13,14 @@ import com.github.lit.user.model.UserVo;
 public interface UserService {
 
     /**
+     * 用户注册
+     *
+     * @param register register
+     * @return Long
+     */
+    Long register(UserVo.Register register);
+
+    /**
      * 根据用户 Id 查询用户
      *
      * @param id 用户Id
@@ -57,5 +65,6 @@ public interface UserService {
      * @param ids ids
      */
     void delete(Long[] ids);
+
 
 }

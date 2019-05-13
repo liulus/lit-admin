@@ -20,11 +20,20 @@ public class UserController {
     @Resource
     private UserService userService;
 
+
+    @PostMapping("/register")
+    public Long register(@RequestBody UserVo.Register register) {
+
+        return userService.register(register);
+    }
+
+
     @GetMapping("/list")
     public PageResult<UserVo.List> findUserPage(UserQo userQo) {
 
         return userService.findPageList(userQo);
     }
+
 
     @PostMapping
     public Long add(UserVo.Add add) {

@@ -70,17 +70,18 @@
 </script>
 
 <script type="text/html" id="app-breadcrumb-template">
-    <div class="aui-main__hd">
-        <el-breadcrumb separator="/">
-            <el-breadcrumb-item>
-                <i class="ic ichome"></i>
-            </el-breadcrumb-item>
-            <el-breadcrumb-item v-if="title">{{title}}</el-breadcrumb-item>
-            <template v-if="titles" v-for="item in titles">
-                <el-breadcrumb-item>{{item}}</el-breadcrumb-item>
-            </template>
-        </el-breadcrumb>
-    </div>
+    <div></div>
+    <#--<div class="aui-main__hd">-->
+        <#--<el-breadcrumb separator="/">-->
+            <#--<el-breadcrumb-item>-->
+                <#--<i class="ic ichome"></i>-->
+            <#--</el-breadcrumb-item>-->
+            <#--<el-breadcrumb-item v-if="title">{{title}}</el-breadcrumb-item>-->
+            <#--<template v-if="titles" v-for="item in titles">-->
+                <#--<el-breadcrumb-item>{{item}}</el-breadcrumb-item>-->
+            <#--</template>-->
+        <#--</el-breadcrumb>-->
+    <#--</div>-->
 </script>
 
 

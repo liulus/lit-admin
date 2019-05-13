@@ -1,4 +1,4 @@
-package com.github.lit.security.configure;
+package com.github.lit.security.configuration;
 
 import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.security.access.AccessDecisionManager;

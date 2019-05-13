@@ -3,23 +3,8 @@
 <html lang="en">
 <head>
     <title>${title}</title>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="content-type" content="text/html;charset=UTF-8">
+    <#include "html-header.ftl"/>
 
-    <link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
-    <link rel="stylesheet" href="http://at.alicdn.com/t/font_1156831_xn4orqpa3ee.css">
-    <link rel="stylesheet" href="${springMacroRequestContext.contextPath}/styles/lit-common.css">
-    <link rel="stylesheet"
-          href="${springMacroRequestContext.contextPath}/libs/element/2.4.5/themes/${Application.skin!'cyan'}/index.css">
-    <link rel="stylesheet"
-          href="${springMacroRequestContext.contextPath}/styles/themes/aui-${Application.skin!'cyan'}.css">
-    <link id="J_elementTheme" rel="stylesheet">
-    <link rel="stylesheet" href="${springMacroRequestContext.contextPath}/styles/aui-index.css">
-    <script type="text/javascript">
-        let contextPath = '${springMacroRequestContext.contextPath}'
-    </script>
 </head>
 <body>
 <div v-cloak ref="auiWrapper" id="app" class="aui-wrapper"
@@ -83,7 +68,6 @@
             </div>
         </aside>
 
-
         <!-- aui-main -->
         <app-main></app-main>
 
@@ -94,12 +78,7 @@
     </template>
 </div>
 
-<#--<script src="${rc.contextPath}/libs/vue-2.5.17/vue.js"></script>-->
-<script src="https://cdn.bootcss.com/vue/2.6.3/vue.js"></script>
-<#--<script src="${rc.contextPath}/libs/element-2.4.5/index.js"></script>-->
-<script src="https://cdn.bootcss.com/element-ui/2.5.4/index.js"></script>
-<#--<script src="https://cdn.bootcss.com/element-ui/2.7.2/index.js"></script>-->
-<script src="${springMacroRequestContext.contextPath}/js/lit-common.js"></script>
+<#include "html-script.ftl"/>
 <#include "layout-component.ftl">
     <#nested>
 <script>

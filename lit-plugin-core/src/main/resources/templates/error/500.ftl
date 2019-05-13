@@ -6,12 +6,11 @@
 </head>
 <body>
 
-这是默认404页面
+这是默认500页面
 
 <div></div>
 
 
-</div>
 
 </body>
 </html>

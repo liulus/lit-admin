@@ -1,4 +1,4 @@
-<#import 'layout/layout-main.ftl' as Layout>
+<#import '/pages/layout-main.ftl' as Layout>
 <@Layout.adminLayout title='用户管理'>
 <script type="text/x-template" id="app-main-template">
     <main class="aui-main">
@@ -97,7 +97,7 @@
             },
             doEdit() {
                 let method = this.editFormConfig.isAdd ? 'post' : 'put'
-                HttpRequest.request(method, '/api/param', this.editForm).then(res => {
+                HttpRequest.request(method, '/api/user', this.editForm).then(res => {
                     if (res.success) {
                         this.$message.success(this.editFormConfig.title + '成功')
                         this.initData()

@@ -21,8 +21,16 @@ let HttpRequest = {
             url = '/' + url
         }
 
-        var headers = new Headers()
+        let headers = new Headers();
         headers.append('Accept', 'application/json, text/plain, */*')
+        if (url.startsWith('/oauth/token')) {
+            headers.append('Authorization', 'Basic ' + window.btoa('lit:lit'))
+        } else {
+            let accessToken = localStorage.getItem('access_token');
+            if (accessToken) {
+                headers.append('Authorization', 'bearer ' + accessToken)
+            }
+        }
 
         let requestConfig = {
             method: method,

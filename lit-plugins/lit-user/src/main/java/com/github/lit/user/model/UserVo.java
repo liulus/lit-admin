@@ -20,6 +20,7 @@ public abstract class UserVo {
     private String email;
     private String mobileNum;
     private String telephone;
+    private String password;
     private Boolean gender;
 
 
@@ -46,6 +47,14 @@ public abstract class UserVo {
     @Data
     public static class Update extends UserVo {
         private Long id;
+    }
+
+    @Data
+    public static class Register {
+        private String mobileNum;
+        private String password;
+        private String confirmPassword;
+        private String smsCaptcha;
     }
 
 

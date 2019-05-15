@@ -27,7 +27,7 @@
 <script src="https://cdn.bootcss.com/require.js/2.3.6/require.min.js"></script>
 <script>
     require.config({
-        baseUrl: '',
+        baseUrl: contextPath,
         // urlArgs: 'v=' + (window.APP_CONFIG.env === 'dev' ? new Date().getTime() : window.APP_CONFIG.version),
         waitSeconds: 0,
         paths: {
@@ -58,7 +58,7 @@
     })
 
     require(['vue', 'ELEMENT', '/js/router/index.js'], function (Vue, ELEMENT, router) {
-        Vue.use(ELEMENT)
+        Vue.use(ELEMENT, {size: 'medium '})
         window.vm = new Vue({
             router: router,
             // store: store,

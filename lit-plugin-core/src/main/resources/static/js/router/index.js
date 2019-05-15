@@ -1,4 +1,4 @@
-define(['vue', 'vueRouter', 'asyncImport'], function (Vue, Router, _import) {
+define(['vue', 'vueRouter', 'asyncImport', 'text!/api/plugin/route'], function (Vue, Router, _import, pluginRouteText) {
     Vue.use(Router);
 
     // 页面路由
@@ -7,26 +7,30 @@ define(['vue', 'vueRouter', 'asyncImport'], function (Vue, Router, _import) {
     //     {path: '/login', component: _import('views/pages/login'), name: 'login', meta: {title: '登录'}},
     // ]
 
-
     // 模块路由
-    var moduleRoutes = {
+    let mainRoutes = {
         name: 'index',
         path: '',
         component: _import('/js/views/layout-admin.js'),
-        redirect: {name: 'home'},
-        meta: {title: '布局'},
-        children: [
-            {path: '/home', component: _import('/js/views/home.js'), name: 'home', meta: {title: '首页', isTab: true}},
-            {path: '/menu', component: _import('/js/menu.js'), name: 'menu', meta: {title: '首页', isTab: true}},
-        ],
+        redirect: {name: 'home'}
     }
-    var router = new Router({
+    let pluginRoute = JSON.parse(pluginRouteText);
+    if (pluginRoute.success) {
+        let pluginRouteArray = Array.isArray(pluginRoute.result)?pluginRoute.result:[pluginRoute.result]
+        pluginRouteArray.forEach(route => {
+            route.component = _import(route.component)
+        })
+        mainRoutes.children = pluginRoute.result
+    } else {
+        console.warn('未能加载所有页面路由, 请检查配置')
+        mainRoutes.children = [{name: 'home', path: '/home', component: _import('/js/views/home.js')}]
+    }
+
+    return new Router({
         mode: 'hash',
         scrollBehavior: function () {
             return {y: 0}
         },
-        routes: [moduleRoutes],
+        routes: [mainRoutes]
     });
-
-    return router;
 });

@@ -1,10 +1,14 @@
 package com.github.lit.plugin.core.configuration;
 
+import com.github.lit.plugin.core.context.PluginRouteContext;
+import com.github.lit.plugin.core.model.Route;
 import com.jfinal.template.ext.spring.JFinalViewResolver;
 import com.jfinal.template.source.ClassPathSourceFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.event.ContextRefreshedEvent;
+import org.springframework.context.event.EventListener;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -49,6 +53,11 @@ public class PluginCoreConfiguration {
         };
     }
 
+    @EventListener
+    public void appStartListener(ContextRefreshedEvent contextRefreshedEvent) {
+        Route route = new Route("home", "/home", "/js/views/home.js");
+        PluginRouteContext.addRoute(route);
+    }
 
 
 

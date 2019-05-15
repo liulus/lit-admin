@@ -1,7 +1,11 @@
 package com.github.lit.menu.configuration;
 
+import com.github.lit.plugin.core.context.PluginRouteContext;
+import com.github.lit.plugin.core.model.Route;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.event.ContextRefreshedEvent;
+import org.springframework.context.event.EventListener;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -21,6 +25,12 @@ public class MenuConfiguration {
                 registry.addViewController("/menu/list").setViewName("menu");
             }
         };
+    }
+
+    @EventListener
+    public void appStartListener(ContextRefreshedEvent contextRefreshedEvent) {
+        Route route = new Route("menu", "/menu", "/js/menu.js");
+        PluginRouteContext.addRoute(route);
     }
 
 }

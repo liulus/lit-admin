@@ -18,8 +18,8 @@ public class DictionaryConfiguration {
         return new WebMvcConfigurer() {
             @Override
             public void addViewControllers(ViewControllerRegistry registry) {
-                registry.addViewController("/dictionary/list").setViewName("dictionary");
-                registry.addViewController("/dictionary/{id}").setViewName("dictionary-detail");
+                registry.addViewController("/dictionary/list").setViewName("/dictionary");
+                registry.addViewController("/dictionary/{id}").setViewName("/dictionary-detail");
             }
         };
     }

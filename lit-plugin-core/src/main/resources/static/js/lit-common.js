@@ -57,10 +57,12 @@ let HttpRequest = {
 let VueUtils = {
     registerComponent: function (componentConfig) {
         componentConfig = componentConfig || {};
+        if(!componentConfig.template) {
+            componentConfig.template = '#app-main-template'
+        }
         Vue.component('app-main', componentConfig)
     }
 };
-Vue.prototype.$ELEMENT = {size: 'medium'};
 
 function getCurrentPathVariable() {
     let path = window.location.pathname;

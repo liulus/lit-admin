@@ -1,0 +1,122 @@
+<div v-cloak ref="auiWrapper" class="aui-wrapper" v-loading.fullscreen.lock="loading" element-loading-text="拼命加载中"
+     :class="['aui-header--' + headerSkin,'aui-aside--' + asideSkin,
+        {
+          'aui-header--fixed': headerFixed,
+          'aui-aside--fixed': asideFixed,
+          'aui-aside--fold': asideFold,
+          'aui-aside--top': asideTop,
+          'aui-control--open': controlOpen,
+          'aui-control--fixed': controlFixed
+        }]">
+
+    <template v-if="!loading">
+        <!-- aui-header -->
+        <header class="aui-header">
+            <div class="aui-header__hd">
+                <a class="aui-brand aui-brand--lg" href="#">Lit-Admin</a>
+                <a class="aui-brand aui-brand--sm" href="#">Lit</a>
+            </div>
+            <div class="aui-header__bd">
+                <!-- aui-header__menu left -->
+                <el-menu class="aui-header__menu aui-header__menu--left" mode="horizontal">
+                    <el-menu-item v-if="!asideTop" index="1" @click="asideFold = !asideFold">
+                        <i class="ic icoutdent aui-header__icon-menu aui-header__icon-menu--rz180" aria-hidden="true"></i>
+                    </el-menu-item>
+                </el-menu>
+                <!-- aui-header__menu right -->
+                <el-menu class="aui-header__menu aui-header__menu--right" mode="horizontal">
+                    <el-submenu index="3" :popper-append-to-body="false">
+                        <template slot="title">
+                            <img class="aui-avatar" src="/images/avatar.png">
+                            <span>admin</span>
+                        </template>
+                        <el-menu-item index="3-1">修改密码</el-menu-item>
+                        <el-menu-item index="3-2">退出</el-menu-item>
+                    </el-submenu>
+                    <el-menu-item index="1" @click="controlOpen = !controlOpen">
+                        <i class="el-icon-setting aui-header__icon-menu"></i>
+                    </el-menu-item>
+                </el-menu>
+            </div>
+        </header>
+
+        <!-- aside menu -->
+        <aside class="aui-aside">
+            <div class="aui-aside__inner">
+                <el-menu v-if="asideMenuVisible"
+                         class="aui-aside__menu"
+                         :collapse="asideFold"
+                         :default-active="activeMenuIndex"
+                         :collapse-transition="false"
+                         :mode="asideTop ? 'horizontal' : 'vertical'"
+                         @select="select">
+                    <el-menu-item index="home">
+                        <i class="ic ichome"></i>
+                        <span slot="title">首页</span>
+                    </el-menu-item>
+
+                    <template v-for="(item, index) in menuList">
+                        <el-submenu v-if="item.isParent" :index="String(item.id)" :popper-append-to-body="false">
+                            <template slot="title">
+                                <i :class="item.icon"></i>
+                                <span slot="title">{{item.name}}</span>
+                            </template>
+                            <template v-for="(subItem, subIndex) in item.children">
+                                <el-menu-item :index="String(subItem.id)">
+                                    <i :class="subItem.icon"></i>
+                                    <span slot="title">{{subItem.name}}</span>
+                                </el-menu-item>
+                            </template>
+                        </el-submenu>
+                        <el-menu-item v-else :index="String(item.id)">
+                            <i :class="item.icon"></i>
+                            <span slot="title">{{item.name}}</span>
+                        </el-menu-item>
+                    </template>
+                </el-menu>
+            </div>
+        </aside>
+
+        <!-- aui-control -->
+        <aside class="aui-control">
+            <div class="aui-control__inner">
+                <div class="aui-control__bd">
+                    <el-tabs class="aui-tabs aui-tabs--flex" v-model="controlTabsActive">
+                        <el-tab-pane label="Layout" name="layout">
+                            <dl class="aui-control__setting">
+                                <dt>Header</dt>
+                                <dd><el-checkbox v-model="headerFixed">Fixed 固定</el-checkbox></dd>
+                                <dd><el-checkbox v-model="headerSkin" true-label="colorful" false-label="white">Colorful 鲜艳</el-checkbox></dd>
+                            </dl>
+                            <dl class="aui-control__setting">
+                                <dt>Aside</dt>
+                                <dd><el-checkbox v-model="asideFixed">Fixed 固定</el-checkbox></dd>
+                                <dd><el-checkbox v-model="asideSkin" true-label="dark" false-label="white">Dark 鲜艳</el-checkbox></dd>
+                                <dd><el-checkbox v-model="asideTop">Top 至头部</el-checkbox></dd>
+                            </dl>
+                            <dl class="aui-control__setting">
+                                <dt>Control</dt>
+                                <dd><el-checkbox v-model="controlFixed">Fixed 固定</el-checkbox></dd>
+                            </dl>
+                        </el-tab-pane>
+                        <el-tab-pane label="Skins" name="skins">
+                            <dl class="aui-control__setting">
+                                <dt>Skins</dt>
+                                <dd v-for="item in skinList" :key="item.name">
+                                    <el-radio v-model="skin" :label="item.name" @change="handleSkinChange">
+                                        <span class="t-capitalize">{{ item.name }}</span> {{ item.remark }}
+                                    </el-radio>
+                                </dd>
+                            </dl>
+                        </el-tab-pane>
+                    </el-tabs>
+                </div>
+            </div>
+        </aside>
+
+        <!-- main -->
+        <main class="aui-main">
+            <router-view/>
+        </main>
+    </template>
+</div>

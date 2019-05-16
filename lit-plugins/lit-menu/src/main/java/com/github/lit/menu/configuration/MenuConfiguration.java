@@ -22,14 +22,14 @@ public class MenuConfiguration {
         return new WebMvcConfigurer() {
             @Override
             public void addViewControllers(ViewControllerRegistry registry) {
-                registry.addViewController("/menu/list").setViewName("menu");
+                registry.addViewController("/menu/index").setViewName("menu");
             }
         };
     }
 
     @EventListener
     public void appStartListener(ContextRefreshedEvent contextRefreshedEvent) {
-        Route route = new Route("menu", "/menu", "/js/menu.js");
+        Route route = new Route("menu", "/menu/index", "/js/menu.js");
         PluginRouteContext.addRoute(route);
     }
 

@@ -35,7 +35,7 @@ public class PluginCoreConfiguration {
         JFinalViewResolver.engine.setBaseTemplatePath("/templates");
 
         jfr.setSuffix(".html");
-//        jfr.addSharedFunction("/templates/pages/layout-admin.html");
+        jfr.addSharedFunction("/pages/layout-admin.html");
         jfr.setSessionInView(false);
         jfr.addSharedObject("contextPath", "");
         return jfr;
@@ -47,8 +47,8 @@ public class PluginCoreConfiguration {
         return new WebMvcConfigurer() {
             @Override
             public void addViewControllers(ViewControllerRegistry registry) {
-                registry.addViewController("/").setViewName("index");
-                registry.addViewController("/index").setViewName("index");
+                registry.addViewController("/").setViewName("index-multi");
+                registry.addViewController("/index").setViewName("index-multi");
             }
         };
     }

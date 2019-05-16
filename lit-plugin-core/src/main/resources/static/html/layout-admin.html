@@ -116,7 +116,9 @@
 
         <!-- main -->
         <main class="aui-main">
-            <router-view/>
+            <el-collapse-transition>
+                <router-view/>
+            </el-collapse-transition>
         </main>
     </template>
 </div>

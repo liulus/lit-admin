@@ -125,6 +125,7 @@ define(['text!/html/layout-admin.html',], function (tmpl) {
                 sessionStorage.setItem('activeMenuIndex', index)
                 if(index === 'home') {
                     this.redirect({url: '/home'})
+                    return
                 }
                 this.menuList.forEach(menu => {
                     if (String(menu.id) === index) {

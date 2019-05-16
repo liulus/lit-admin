@@ -1,4 +1,4 @@
-define(['text!/html/layout-admin.html',], function (tmpl) {
+define(['text!/views/layout-admin.html',], function (tmpl) {
     return {
         template: tmpl,
         data: function () {
@@ -123,8 +123,8 @@ define(['text!/html/layout-admin.html',], function (tmpl) {
             },
             select(index, indexPath) {
                 sessionStorage.setItem('activeMenuIndex', index)
-                if(index === 'home') {
-                    this.redirect({url: '/home'})
+                if (index === 'home') {
+                    this.redirect({url: '/'})
                     return
                 }
                 this.menuList.forEach(menu => {
@@ -140,8 +140,11 @@ define(['text!/html/layout-admin.html',], function (tmpl) {
                 })
             },
             redirect(menu) {
-                this.$router.push(menu.url)
-                // window.location.href = contextPath + menu.url
+                if (singlePage) {
+                    this.$router.push(menu.url)
+                } else {
+                    window.location.href = contextPath + menu.url
+                }
             }
         }
     };

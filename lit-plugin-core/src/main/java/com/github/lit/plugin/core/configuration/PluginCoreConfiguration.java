@@ -1,16 +1,27 @@
 package com.github.lit.plugin.core.configuration;
 
+import com.github.lit.plugin.core.constant.PluginConst;
 import com.github.lit.plugin.core.context.PluginRouteContext;
 import com.github.lit.plugin.core.model.Route;
+import com.github.lit.plugin.core.util.PluginUtils;
 import com.jfinal.template.ext.spring.JFinalViewResolver;
 import com.jfinal.template.source.ClassPathSourceFactory;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.context.event.EventListener;
-import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.context.WebApplicationContext;
+
+import javax.annotation.Resource;
+import javax.servlet.ServletContext;
+import javax.servlet.http.HttpSession;
+import java.util.Optional;
 
 /**
  * @author liulu
@@ -19,7 +30,11 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
  */
 @ComponentScan("com.github.lit")
 @Configuration
+@EnableConfigurationProperties(PluginProperties.class)
 public class PluginCoreConfiguration {
+
+    @Resource
+    private PluginProperties pluginProperties;
 
     @Bean
     public JFinalViewResolver getJFinalViewResolver() {
@@ -35,31 +50,43 @@ public class PluginCoreConfiguration {
         JFinalViewResolver.engine.setBaseTemplatePath("/templates");
 
         jfr.setSuffix(".html");
-        jfr.addSharedFunction("/pages/layout-admin.html");
-        jfr.setSessionInView(false);
-        jfr.addSharedObject("contextPath", "");
+        jfr.setSessionInView(true);
         return jfr;
     }
 
-
-    @Bean
-    public WebMvcConfigurer pluginCoreWebMvcConfiguration() {
-        return new WebMvcConfigurer() {
-            @Override
-            public void addViewControllers(ViewControllerRegistry registry) {
-                registry.addViewController("/").setViewName("index-multi");
-                registry.addViewController("/index").setViewName("index-multi");
-            }
-        };
-    }
+    private static final String HOME_VIEW = "/views/home.js";
 
     @EventListener
     public void appStartListener(ContextRefreshedEvent contextRefreshedEvent) {
-        Route route = new Route("home", "/home", "/js/views/home.js");
+
+        ApplicationContext context = contextRefreshedEvent.getApplicationContext();
+        JFinalViewResolver viewResolver = context.getBean(JFinalViewResolver.class);
+        viewResolver.addSharedObject("singlePage", pluginProperties.getSinglePage());
+        viewResolver.addSharedObject("theme", pluginProperties.getTheme());
+
+        if (context instanceof WebApplicationContext) {
+            ServletContext servletContext = ((WebApplicationContext) context).getServletContext();
+            String contextPath = Optional.ofNullable(servletContext)
+                    .map(ServletContext::getContextPath).orElse("");
+            viewResolver.addSharedObject("contextPath", contextPath);
+        }
+
+        Route route = new Route("home", "/", HOME_VIEW);
         PluginRouteContext.addRoute(route);
     }
 
+    @Controller
+    public static class PluginRouteController {
 
+
+        @GetMapping({"/", "/index"})
+        public String index(ModelMap model, HttpSession session) {
+            model.put(PluginConst.VIEW, HOME_VIEW);
+
+            return PluginUtils.addView(model, HOME_VIEW);
+        }
+
+    }
 
 
 }

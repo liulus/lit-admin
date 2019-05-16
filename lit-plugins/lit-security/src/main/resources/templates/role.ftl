@@ -9,7 +9,7 @@
                     <div slot="header">
                         <el-row>
                             <el-col :span="3">
-                                <el-button type="primary" plain icon="el-icon-plus" size="medium"
+                                <el-button type="primary" plain icon="el-icon-plus"
                                            @click="handleAdd"></el-button>
                             </el-col>
                             <el-col :span="12" :offset="2">
@@ -20,8 +20,8 @@
                             </el-col>
                             <el-col :span="5" :offset="2" class="t-right">
                                 <el-radio-group v-model="dataModel" @change="handleModelChange">
-                                    <el-radio-button label="card" size="medium"><i class="ic icall"></i></el-radio-button>
-                                    <el-radio-button label="table" size="medium"><i class="ic icunorderedlist"></i>
+                                    <el-radio-button label="card"><i class="ic icall"></i></el-radio-button>
+                                    <el-radio-button label="table"><i class="ic icunorderedlist"></i>
                                     </el-radio-button>
                                 </el-radio-group>
                             </el-col>
@@ -91,8 +91,8 @@
                     </el-form-item>
                 </el-form>
                 <div slot="footer">
-                    <el-button type="primary" size="medium" @click="doEdit">确 定</el-button>
-                    <el-button size="medium" @click="editFormConfig.visible = false">取 消</el-button>
+                    <el-button type="primary" @click="doEdit">确 定</el-button>
+                    <el-button @click="editFormConfig.visible = false">取 消</el-button>
                 </div>
             </el-dialog>
         </main>

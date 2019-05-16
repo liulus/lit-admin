@@ -52,8 +52,8 @@
                     <el-row>
                         <el-col :span="20" class="t-center">
                             <el-form-item>
-                                <el-button type="primary" size="medium" @click="handleSubmit">确 定</el-button>
-                                <el-button size="medium" @click="handleCancel">返回</el-button>
+                                <el-button type="primary" @click="handleSubmit">确 定</el-button>
+                                <el-button @click="handleCancel">返回</el-button>
                             </el-form-item>
                         </el-col>
                     </el-row>

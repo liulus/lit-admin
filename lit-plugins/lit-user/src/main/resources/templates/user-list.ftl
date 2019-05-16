@@ -9,7 +9,7 @@
                 <div slot="header">
                     <el-row>
                         <el-col :span="4">
-                            <el-button type="primary" plain icon="el-icon-plus" size="medium"
+                            <el-button type="primary" plain icon="el-icon-plus"
                                        @click="handleAdd"></el-button>
                         </el-col>
                         <el-col :span="12" :offset="2">

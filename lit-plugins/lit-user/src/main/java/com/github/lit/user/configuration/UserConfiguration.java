@@ -32,10 +32,10 @@ public class UserConfiguration implements WebMvcConfigurer {
                     registry.addViewController("/register").setViewName(userProperties.getRegisterPage());
                 }
 
-                registry.addViewController("/user/list").setViewName("user-list");
+                registry.addViewController("/user/index").setViewName("user-list");
                 registry.addViewController("/user/add").setViewName("user-add");
 
-                registry.addViewController("/organization").setViewName("organization");
+                registry.addViewController("/organization/index").setViewName("organization");
                 registry.addViewController("/corporation/info").setViewName("corporation-info");
             }
         };

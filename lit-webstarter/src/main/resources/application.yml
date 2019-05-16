@@ -20,6 +20,7 @@ logging:
   level:
     com.github: debug
     org.springframework.jdbc: debug
+    org.springframework.web: debug
     org.springframework.security: debug
 
 ---

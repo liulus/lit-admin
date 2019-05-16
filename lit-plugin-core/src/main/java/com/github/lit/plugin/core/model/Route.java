@@ -25,6 +25,11 @@ public class Route implements Serializable {
     private Map<String, Object> meta;
     private List<String> children;
 
+    public Route(String path, String component) {
+        this.path = path;
+        this.component = component;
+    }
+
     public Route(String name, String path, String component) {
         this.name = name;
         this.path = path;

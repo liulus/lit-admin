@@ -69,8 +69,17 @@ function getCurrentPathVariable() {
     return path.substr(path.lastIndexOf('/') + 1)
 }
 
+function appendStyle(sylteCode, id) {
+    let style = document.createElement('style');
+    style.id = id + '-style'
+    style.appendChild(document.createTextNode(sylteCode))
+    document.getElementsByTagName("head")[0].appendChild(style);
+}
 
-
+function removeStyle(id) {
+    var styleEle = document.getElementById(id + '-style');
+    styleEle.remove()
+}
 
 
 

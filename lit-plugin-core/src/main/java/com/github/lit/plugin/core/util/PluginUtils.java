@@ -5,6 +5,8 @@ import com.github.lit.plugin.core.model.LoginUser;
 import com.github.lit.support.util.ClassUtils;
 import com.github.lit.support.util.WebUtils;
 
+import java.util.Map;
+
 /**
  * User : liulu
  * Date : 2018/4/14 22:34
@@ -46,4 +48,13 @@ public abstract class PluginUtils {
     public static LoginUser getLoginUser() {
         return (LoginUser) WebUtils.getSessionAttribute(PluginConst.LOGIN_USER);
     }
+
+
+    public static String addView(Map<String, Object> model, String view ) {
+        model.put(PluginConst.VIEW, view);
+        return PluginConst.INDEX_MULTI;
+    }
+
+
+
 }

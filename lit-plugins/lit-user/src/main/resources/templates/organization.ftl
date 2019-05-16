@@ -19,7 +19,7 @@
 
                 <el-row v-if="data.fullName" class="b-bottom-1" style="height: 60px;">
                     <el-col :span="4">
-                        <el-button type="primary" plain icon="el-icon-plus" size="medium"
+                        <el-button type="primary" plain icon="el-icon-plus"
                                    @click="handleAdd('')"></el-button>
                     </el-col>
                     <el-col :span="12" :offset="2">
@@ -77,8 +77,8 @@
                 </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
-                <el-button type="primary" size="medium" @click="doEdit">确 定</el-button>
-                <el-button size="medium" @click="editFormConfig.visible = false">取 消</el-button>
+                <el-button type="primary" @click="doEdit">确 定</el-button>
+                <el-button @click="editFormConfig.visible = false">取 消</el-button>
             </div>
         </el-dialog>
     </main>

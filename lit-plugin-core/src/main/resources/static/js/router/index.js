@@ -11,7 +11,7 @@ define(['vue', 'vueRouter', 'asyncImport', 'text!/api/plugin/route'], function (
     let mainRoutes = {
         name: 'index',
         path: '',
-        component: _import('/js/views/layout-admin.js'),
+        component: _import('/views/layout-admin.js'),
         redirect: {name: 'home'}
     }
     let pluginRoute = JSON.parse(pluginRouteText);
@@ -23,7 +23,7 @@ define(['vue', 'vueRouter', 'asyncImport', 'text!/api/plugin/route'], function (
         mainRoutes.children = pluginRoute.result
     } else {
         console.warn('未能加载所有页面路由, 请检查配置')
-        mainRoutes.children = [{name: 'home', path: '/home', component: _import('/js/views/home.js')}]
+        mainRoutes.children = [{name: 'home', path: '/', component: _import('/views/home.js')}]
     }
 
     return new Router({

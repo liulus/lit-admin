@@ -1,5 +1,5 @@
 define(function () {
     return {
-        template: '<main class="aui-main"><h3>this is app main</h3></main>'
+        template: '<main class="aui-main"><app-breadcrumb title="首页"></app-breadcrumb><div class="aui-main__bd">this is body</div></main>'
     }
 })

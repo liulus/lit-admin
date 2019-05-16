@@ -2,7 +2,22 @@
 <html lang="en">
 <head>
     <title>lit admin</title>
-    #include("/pages/html-header.html")
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="content-type" content="text/html;charset=UTF-8">
+
+    <link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
+    <link rel="stylesheet" href="http://at.alicdn.com/t/font_1156831_xn4orqpa3ee.css">
+    <link rel="stylesheet" href="#(contextPath)/styles/lit-common.css">
+    <link rel="stylesheet" href="#(contextPath)/libs/element/2.4.5/themes/#(theme??'cyan')/index.css">
+    <link rel="stylesheet" href="#(contextPath)/styles/themes/aui-#(theme??'cyan').css">
+    <link id="J_elementTheme" rel="stylesheet">
+    <link rel="stylesheet" href="#(contextPath)/styles/aui-index.css">
+    <script type="text/javascript">
+        let contextPath = '#(contextPath)'
+        let singlePage = false
+    </script>
 </head>
 <body>
 <div id="app">
@@ -10,9 +25,23 @@
 </div>
 
 <script src="https://cdn.bootcss.com/require.js/2.3.6/require.min.js"></script>
+<script src="#(contextPath)/js/lit-common.js"></script>
+<!-- 面包屑 -->
+<script type="text/html" id="app-breadcrumb-template">
+    <!--<div></div>-->
+    <div class="aui-main__hd">
+        <el-breadcrumb separator="/">
+            <el-breadcrumb-item>
+                <i class="ic ichome"></i>
+                </el-breadcrumb-item>
+            <el-breadcrumb-item v-if="title">{{title}}</el-breadcrumb-item>
+            <template v-if="titles" v-for="item in titles">
+                <el-breadcrumb-item>{{item}}</el-breadcrumb-item>
+                </template>
+            </el-breadcrumb>
+        </div>
+</script>
 <script>
-    let s = "#(session.servletContext.skin??'2312312')"
-
     require.config({
         baseUrl: contextPath,
         // urlArgs: 'v=' + (window.APP_CONFIG.env === 'dev' ? new Date().getTime() : window.APP_CONFIG.version),
@@ -29,10 +58,21 @@
 
         Vue.use(ELEMENT, {size: 'medium'})
 
+        Vue.component('app-breadcrumb', {
+            template: '#app-breadcrumb-template',
+            props: {
+                title: String,
+                titles: Array
+            }
+        })
+        Vue.component('router-view', {template: '<i></i>'})
         Vue.component('app-main', component)
         Vue.component('app', app)
         new Vue({el: '#app'});
     })
+    function redirect(url) {
+        window.location.href = contextPath + url
+    }
 </script>
 </body>
 </html>

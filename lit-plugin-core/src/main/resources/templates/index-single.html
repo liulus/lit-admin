@@ -9,13 +9,14 @@
 
     <link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
     <link rel="stylesheet" href="http://at.alicdn.com/t/font_1156831_xn4orqpa3ee.css">
-    <link rel="stylesheet" href="/styles/lit-common.css">
-    <link rel="stylesheet" href="/libs/element/2.4.5/themes/cyan/index.css">
-    <link rel="stylesheet" href="/styles/themes/aui-cyan.css">
+    <link rel="stylesheet" href="#(contextPath)/styles/lit-common.css">
+    <link rel="stylesheet" href="#(contextPath)/libs/element/2.4.5/themes/#(theme??'cyan')/index.css">
+    <link rel="stylesheet" href="#(contextPath)/styles/themes/aui-#(theme??'cyan').css">
     <link id="J_elementTheme" rel="stylesheet">
-    <link rel="stylesheet" href="/styles/aui-index.css">
+    <link rel="stylesheet" href="#(contextPath)/styles/aui-index.css">
     <script type="text/javascript">
-        let contextPath = ''
+        let contextPath = '#(contextPath)'
+        let singlePage = true
     </script>
 </head>
 <body>
@@ -23,8 +24,23 @@
     <router-view></router-view>
 </div>
 
-<script src="/js/lit-common.js"></script>
 <script src="https://cdn.bootcss.com/require.js/2.3.6/require.min.js"></script>
+<script src="#(contextPath)/js/lit-common.js"></script>
+<!-- 面包屑 -->
+<script type="text/html" id="app-breadcrumb-template">
+    <!--<div></div>-->
+    <div class="aui-main__hd">
+        <el-breadcrumb separator="/">
+            <el-breadcrumb-item>
+                <i class="ic ichome"></i>
+            </el-breadcrumb-item>
+            <el-breadcrumb-item v-if="title">{{title}}</el-breadcrumb-item>
+            <template v-if="titles" v-for="item in titles">
+                <el-breadcrumb-item>{{item}}</el-breadcrumb-item>
+            </template>
+        </el-breadcrumb>
+    </div>
+</script>
 <script>
     require.config({
         baseUrl: contextPath,
@@ -37,11 +53,7 @@
             text: 'https://cdn.bootcss.com/require-text/2.0.12/text.min',
             // vue: (window.APP_CONFIG.env === 'dev' ? 'assets/libs/vue-2.5.17/vue' : 'assets/libs/vue-2.5.17/vue.min'),
             'vue-i18n': 'assets/libs/vue-i18n-8.1.0/vue-i18n.min',
-        },
-        shim: {
-            ELEMENT: {deps: ['vue']},
-            vueRouter: {deps: ['vue']}
-        },
+        }
     })
 
     // 定义延迟加载模块
@@ -59,6 +71,16 @@
 
     require(['vue', 'ELEMENT', '/js/router/index.js'], function (Vue, ELEMENT, router) {
         Vue.use(ELEMENT, {size: 'medium '})
+
+        Vue.component('app-breadcrumb', {
+            template: '#app-breadcrumb-template',
+            props: {
+                title: String,
+                titles: Array
+            }
+        })
+        Vue.component('app-main', {template: '<i></i>'})
+
         window.vm = new Vue({
             router: router,
             // store: store,
@@ -68,6 +90,9 @@
         }).$mount('#app')
     })
 
+    function redirect(url) {
+        window.vm.$router.push(url)
+    }
 </script>
 
 </body>

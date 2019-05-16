@@ -24,5 +24,7 @@ public abstract class PluginConst {
 
     public static final String INDEX_MULTI = "index-multi";
 
+    public static final String INDEX_SINGLE = "index-single";
+
 
 }

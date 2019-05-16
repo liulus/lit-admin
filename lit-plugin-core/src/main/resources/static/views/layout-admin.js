@@ -124,27 +124,20 @@ define(['text!/views/layout-admin.html',], function (tmpl) {
             select(index, indexPath) {
                 sessionStorage.setItem('activeMenuIndex', index)
                 if (index === 'home') {
-                    this.redirect({url: '/'})
+                    redirect('/')
                     return
                 }
                 this.menuList.forEach(menu => {
                     if (String(menu.id) === index) {
-                        this.redirect(menu)
+                        redirect(menu.url)
                     } else if (menu.isParent) {
                         menu.children.forEach(subMenu => {
                             if (String(subMenu.id) === index) {
-                                this.redirect(subMenu)
+                                redirect(subMenu.url)
                             }
                         })
                     }
                 })
-            },
-            redirect(menu) {
-                if (singlePage) {
-                    this.$router.push(menu.url)
-                } else {
-                    window.location.href = contextPath + menu.url
-                }
             }
         }
     };

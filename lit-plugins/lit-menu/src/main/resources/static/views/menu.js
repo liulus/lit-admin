@@ -1,4 +1,4 @@
-define(['text!/html/menu.html'], function (tmpl) {
+define(['text!/views/menu.html'], function (tmpl) {
     return {
         template: tmpl,
         data: function () {

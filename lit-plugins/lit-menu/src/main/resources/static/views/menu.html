@@ -1,11 +1,12 @@
-<div>
+<main class="aui-main">
+    <app-breadcrumb title="菜单管理"></app-breadcrumb>
+
     <div class="aui-main__bd">
         <el-card shadow="never">
             <div slot="header">
                 <el-row>
                     <el-col :span="4">
-                        <el-button type="primary" plain icon="el-icon-plus"
-                                   @click="handleAdd('')"></el-button>
+                        <el-button type="primary" plain icon="el-icon-plus" @click="handleAdd('')"></el-button>
                     </el-col>
                     <el-col :span="12" :offset="2">
                         <el-input v-model="keyword" placeholder="请输入搜索内容" v-on:keyup.native.enter="handleSearch">
@@ -27,7 +28,7 @@
                      :expand-on-click-node="false"
                      :filter-node-method="filterNode"
                      ref="menuTree">
-                <div slot-scope="{ node, data }" class="w-100">
+                <div slot-scope="{ node, data }" style="width: 100%">
                     <el-row type="flex" align="middle">
                         <el-col :span="4"><span>{{ data.code }}</span></el-col>
                         <el-col :span="4"><span> {{ data.name }}</span></el-col>
@@ -76,4 +77,4 @@
             <el-button @click="editFormConfig.visible = false">取 消</el-button>
         </div>
     </el-dialog>
-</div>
+</main>

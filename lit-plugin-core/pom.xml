@@ -49,17 +49,17 @@
         </dependency>
 
         <!-- freemarker -->
-        <!--<dependency>-->
-            <!--<groupId>org.freemarker</groupId>-->
-            <!--<artifactId>freemarker</artifactId>-->
-            <!--<version>${freemarker.version}</version>-->
-        <!--</dependency>-->
-
         <dependency>
-            <groupId>com.jfinal</groupId>
-            <artifactId>enjoy</artifactId>
-            <version>3.4</version>
+            <groupId>org.freemarker</groupId>
+            <artifactId>freemarker</artifactId>
+            <version>${freemarker.version}</version>
         </dependency>
+
+        <!--<dependency>-->
+            <!--<groupId>com.jfinal</groupId>-->
+            <!--<artifactId>enjoy</artifactId>-->
+            <!--<version>3.4</version>-->
+        <!--</dependency>-->
 
 
         <!-- lit -->

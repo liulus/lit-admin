@@ -74,7 +74,7 @@ define(['text!/views/dictionary.html'], function (tmpl) {
                 this.editFormConfig.visible = false
             },
             handleDetail(id) {
-                window.location.href = contextPath + '/dictionary/' + id
+                redirect('/dictionary/' + id)
             },
             handleDelete(id) {
                 this.$confirm('此操作将删除该字典数据, 是否继续?', '提示', {

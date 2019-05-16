@@ -3,7 +3,7 @@ define(['text!/views/dictionary-detail.html'], function (tmpl) {
         template: tmpl,
         data: function () {
             return {
-                dictId: getCurrentPathVariable(),
+                dictId: singlePage ? this.$route.params.id : getCurrentPathVariable(),
                 data: {},
                 keyword: '',
                 editFormConfig: {
@@ -22,7 +22,11 @@ define(['text!/views/dictionary-detail.html'], function (tmpl) {
             }
         },
         created() {
+            appendStyle('.el-tree-node__content {height: 45px;border-bottom: 1px solid #ebeef5;}', 'dict-detail')
             this.initData()
+        },
+        destroyed: function () {
+            removeStyle('dict-detail')
         },
         methods: {
             initData() {

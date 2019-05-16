@@ -2,12 +2,13 @@ package com.github.lit.menu.configuration;
 
 import com.github.lit.plugin.core.context.PluginRouteContext;
 import com.github.lit.plugin.core.model.Route;
-import org.springframework.context.annotation.Bean;
+import com.github.lit.plugin.core.util.PluginUtils;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.context.event.EventListener;
-import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.GetMapping;
 
 /**
  * @author liulu
@@ -17,20 +18,24 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Configuration
 public class MenuConfiguration {
 
-    @Bean
-    public WebMvcConfigurer menuWebMvcConfigure() {
-        return new WebMvcConfigurer() {
-            @Override
-            public void addViewControllers(ViewControllerRegistry registry) {
-                registry.addViewController("/menu/index").setViewName("menu");
-            }
-        };
-    }
+    private static final String INDEX_PATH = "/menu/index";
+    private static final String INDEX_VIEW = "/views/menu.js";
 
     @EventListener
     public void appStartListener(ContextRefreshedEvent contextRefreshedEvent) {
-        Route route = new Route("menu", "/menu/index", "/js/menu.js");
+        Route route = new Route(INDEX_PATH, INDEX_VIEW);
         PluginRouteContext.addRoute(route);
+    }
+
+    @Controller
+    public static class DictionaryRouteController {
+
+        @GetMapping(INDEX_PATH)
+        public String index(ModelMap map) {
+            return PluginUtils.addView(map, INDEX_VIEW);
+        }
+
+
     }
 
 }

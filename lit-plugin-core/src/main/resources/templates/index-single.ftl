@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>lit admin</title>
+    <title>首页</title>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -18,12 +18,12 @@
     <link rel="stylesheet" href="${springMacroRequestContext.contextPath}/styles/aui-index.css">
     <script type="text/javascript">
         let contextPath = '${springMacroRequestContext.contextPath}'
-        let singlePage = false
+        let singlePage = true
     </script>
 </head>
 <body>
-<div id="app">
-    <app></app>
+<div id="app" v-cloak>
+    <router-view></router-view>
 </div>
 
 <script src="https://cdn.bootcss.com/require.js/2.3.6/require.min.js"></script>
@@ -50,15 +50,29 @@
         waitSeconds: 0,
         paths: {
             vue: '/libs/vue/2.6.10/vue',
+            vueRouter: '/libs/vue-router/3.0.6/vue-router.min',
             ELEMENT: '/libs/element/2.4.5/index',
             text: 'https://cdn.bootcss.com/require-text/2.0.12/text.min',
             // vue: (window.APP_CONFIG.env === 'dev' ? 'assets/libs/vue-2.5.17/vue' : 'assets/libs/vue-2.5.17/vue.min'),
             'vue-i18n': 'assets/libs/vue-i18n-8.1.0/vue-i18n.min',
         }
     })
-    require(['vue', 'ELEMENT', '/views/layout-admin.js', '${view}'], function (Vue, ELEMENT, app, component) {
 
-        Vue.use(ELEMENT, {size: 'medium'})
+    // 定义延迟加载模块
+    define('asyncImport', ['require'], function (require) {
+        return function (dep) {
+            return function () {
+                return new Promise(function (resolve, reject) {
+                    require(Array.isArray(dep) ? dep : [dep], function (res) {
+                        resolve(res)
+                    })
+                })
+            }
+        }
+    })
+
+    require(['vue', 'ELEMENT', '/js/router/index.js'], function (Vue, ELEMENT, router) {
+        Vue.use(ELEMENT, {size: 'medium '})
 
         Vue.component('app-breadcrumb', {
             template: '#app-breadcrumb-template',
@@ -67,15 +81,21 @@
                 titles: Array
             }
         })
-        Vue.component('router-view', {template: '<i></i>'})
-        Vue.component('app-main', component)
-        Vue.component('app', app)
-        new Vue({el: '#app'});
+        Vue.component('app-main', {template: '<i></i>'})
+
+        window.vm = new Vue({
+            router: router,
+            // store: store,
+            // components: {
+            //     App: App
+            // },
+        }).$mount('#app')
     })
 
     function redirect(url) {
-        window.location.href = contextPath + url
+        window.vm.$router.push(url)
     }
 </script>
+
 </body>
 </html>

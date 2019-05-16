@@ -9,10 +9,10 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  * date 2019-05-16
  */
 @Data
-@ConfigurationProperties(prefix = "lit.admin.configure")
+@ConfigurationProperties(prefix = "lit.configure")
 public class PluginProperties {
 
-    private Boolean singlePage = Boolean.TRUE;
+    private Boolean singlePage = Boolean.FALSE;
 
     private String theme = "cyan";
 

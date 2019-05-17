@@ -1,5 +1,7 @@
 package com.github.lit.plugin.core.configuration;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.lit.plugin.core.constant.PluginConst;
 import com.github.lit.plugin.core.context.PluginRouteContext;
 import com.github.lit.plugin.core.model.Route;
@@ -12,11 +14,8 @@ import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
-import javax.servlet.http.HttpSession;
-import java.util.List;
 
 /**
  * @author liulu
@@ -76,17 +75,18 @@ public class PluginCoreConfiguration {
         @Resource
         private PluginProperties pluginProperties;
 
+        @Resource
+        private ObjectMapper objectMapper;
+
         @GetMapping({"/", "/index"})
-        public String index(ModelMap model, HttpSession session) {
+        public String index(ModelMap model) throws JsonProcessingException {
             model.put(PluginConst.VIEW, HOME_VIEW);
-
-            return pluginProperties.getSinglePage() ? PluginConst.INDEX_SINGLE : PluginConst.INDEX_MULTI;
-        }
-
-        @ResponseBody
-        @GetMapping("/api/plugin/route")
-        public List<Route> getPluginRoutes() {
-            return PluginRouteContext.getPluginRoutes();
+            if (pluginProperties.getSinglePage()) {
+                // 单页应用路由配置
+                model.put("pluginRoutes", objectMapper.writeValueAsString(PluginRouteContext.getPluginRoutes()));
+                return PluginConst.INDEX_SINGLE;
+            }
+            return PluginConst.INDEX_MULTI;
         }
 
     }

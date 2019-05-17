@@ -28,7 +28,7 @@ public class MenuConfiguration {
     }
 
     @Controller
-    public static class DictionaryRouteController {
+    public static class MenuRouteController {
 
         @GetMapping(INDEX_PATH)
         public String index(ModelMap map) {

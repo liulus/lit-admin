@@ -1,4 +1,86 @@
-define(['text!/views/menu.html'], function (tmpl) {
+define(function () {
+    let tmpl = `
+<main class="aui-main">
+    <app-breadcrumb title="菜单管理"></app-breadcrumb>
+
+    <div class="aui-main__bd">
+        <el-card shadow="never">
+            <div slot="header">
+                <el-row>
+                    <el-col :span="4">
+                        <el-button type="primary" plain icon="el-icon-plus" @click="handleAdd('')"></el-button>
+                    </el-col>
+                    <el-col :span="12" :offset="2">
+                        <el-input v-model="keyword" placeholder="请输入搜索内容" v-on:keyup.native.enter="handleSearch">
+                            <el-button slot="append" icon="el-icon-search" @click="handleSearch"></el-button>
+                        </el-input>
+                    </el-col>
+                </el-row>
+            </div>
+
+            <el-row class="b-bottom-1" style="height: 30px;">
+                <el-col :span="4"><span class="ml-25 fz-lg">编码</span></el-col>
+                <el-col :span="4"><span class="ml-25 fz-lg">名称</span></el-col>
+                <el-col :span="2"><span class="ml-15 fz-lg">图标</span></el-col>
+                <el-col :span="7"><span class="ml-15 fz-lg">url</span></el-col>
+                <el-col :span="4"><span class="fz-lg">启用状态</span></el-col>
+                <el-col :span="3"><span class="fz-lg">操作</span></el-col>
+            </el-row>
+            <el-tree :data="data"
+                     :expand-on-click-node="false"
+                     :filter-node-method="filterNode"
+                     ref="menuTree">
+                <div slot-scope="{ node, data }" style="width: 100%">
+                    <el-row type="flex" align="middle">
+                        <el-col :span="4"><span>{{ data.code }}</span></el-col>
+                        <el-col :span="4"><span> {{ data.name }}</span></el-col>
+                        <el-col :span="2"><i :class="data.icon"></i></el-col>
+                        <el-col :span="7"><span>{{ data.url }}</span></el-col>
+                        <el-col :span="4">
+                            <el-switch v-model="data.enable" @change="handleChange(data.id)"></el-switch>
+                        </el-col>
+                        <el-col :span="3">
+                            <el-button type="text" icon="el-icon-plus" @click="handleAdd(data)"></el-button>
+                            <el-button type="text" icon="el-icon-edit" @click="handleEdit(data)"></el-button>
+                            <el-button type="text" icon="el-icon-delete" @click="handleDelete(data.id)"></el-button>
+                        </el-col>
+                    </el-row>
+                </div>
+            </el-tree>
+        </el-card>
+    </div>
+
+    <el-dialog :title="editFormConfig.title" :visible.sync="editFormConfig.visible" :close-on-click-modal="false">
+        <el-form :model="editForm" label-width="100px" label-suffix=":">
+            <el-form-item label="父节点" v-if="editFormConfig.isAdd">
+                <span>{{editFormConfig.parent}}</span>
+            </el-form-item>
+            <el-form-item label="编码">
+                <el-input v-model="editForm.code"></el-input>
+            </el-form-item>
+            <el-form-item label="名称">
+                <el-input v-model="editForm.name"></el-input>
+            </el-form-item>
+            <el-form-item label="图标">
+                <el-input v-model="editForm.icon"></el-input>
+            </el-form-item>
+            <el-form-item label="url">
+                <el-input v-model="editForm.url"></el-input>
+            </el-form-item>
+            <el-form-item label="顺序号">
+                <el-input v-model="editForm.orderNum" type="number"></el-input>
+            </el-form-item>
+            <el-form-item label="备注">
+                <el-input type="textarea" :rows="2" v-model="editForm.remark"></el-input>
+            </el-form-item>
+        </el-form>
+        <div slot="footer" class="dialog-footer">
+            <el-button type="primary" @click="doEdit">确 定</el-button>
+            <el-button @click="editFormConfig.visible = false">取 消</el-button>
+        </div>
+    </el-dialog>
+</main>
+    `
     return {
         template: tmpl,
         data: function () {

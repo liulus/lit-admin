@@ -16,7 +16,7 @@ spring:
 
 lit:
   configure:
-    single-page: false
+    single-page: true
 
 
 

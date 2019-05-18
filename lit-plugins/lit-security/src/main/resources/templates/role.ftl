@@ -129,7 +129,7 @@
             methods: {
                 initList() {
                     this.queryForm.pageSize = this.dataModel === 'card' ? 12 : 10
-                    HttpRequest.get('/api/dictionary/root/list', this.queryForm).then(res => {
+                    Lit.httpRequest.get('/api/dictionary/root/list', this.queryForm).then(res => {
                         if (res.success) {
                             this.dictionaryList = res.result.data || []
                             this.page = res.result.pageInfo
@@ -158,7 +158,7 @@
                 },
                 doEdit() {
                     let method = this.editFormConfig.isAdd ? 'post' : 'put'
-                    HttpRequest.request(method, '/api/dictionary', this.editForm).then(res => {
+                    Lit.httpRequest.request(method, '/api/dictionary', this.editForm).then(res => {
                         if (res.success) {
                             this.$message.success(this.editFormConfig.title + '成功')
                             this.initList()
@@ -176,7 +176,7 @@
                         closeOnClickModal: false,
                         type: 'warning'
                     }).then(() => {
-                        HttpRequest.delete('/api/dictionary/' + id,).then(res => {
+                        Lit.httpRequest.delete('/api/dictionary/' + id,).then(res => {
                             if (res.success) {
                                 this.$message.success('删除字典成功')
                                 this.initList()

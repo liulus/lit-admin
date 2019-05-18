@@ -66,7 +66,7 @@
         },
         methods: {
             initData() {
-                HttpRequest.get('/api/corporation/info').then(res => {
+                Lit.httpRequest.get('/api/corporation/info').then(res => {
                     if (res.success) {
                         this.editForm = res.result || {}
                     } else {
@@ -75,7 +75,7 @@
                 })
             },
             handleSubmit() {
-                HttpRequest.post('/api/corporation/info', this.editForm).then(res => {
+                Lit.httpRequest.post('/api/corporation/info', this.editForm).then(res => {
                     if (res.success) {
                         this.$message.success('保存企业信息成功')
                     } else {

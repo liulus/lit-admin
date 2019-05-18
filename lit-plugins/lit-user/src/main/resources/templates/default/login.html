@@ -134,7 +134,7 @@
                 },
                 doLogin() {
                     let params = 'grant_type=password&username=' + this.dataForm.username + '&password=' + this.dataForm.password
-                    HttpRequest.post('/oauth/token?' + params).then(res => {
+                    Lit.httpRequest.post('/oauth/token?' + params).then(res => {
                         if (res.access_token) {
                             localStorage.setItem('access_token', res.access_token)
                             document.cookie = 'access_token=' + res.access_token

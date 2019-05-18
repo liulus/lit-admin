@@ -130,7 +130,7 @@
                     })
                 },
                 registerUser() {
-                    HttpRequest.post('/api/user/register', this.dataForm).then(res => {
+                    Lit.httpRequest.post('/api/user/register', this.dataForm).then(res => {
                         if (res.success) {
                             this.$message.success('注册成功')
                         } else {

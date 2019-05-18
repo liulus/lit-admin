@@ -1,4 +1,4 @@
-define(function () {
+define(['Lit'], function (Lit) {
     let tmpl = `
 <main class="aui-main">
     <app-breadcrumb title="字典详情"></app-breadcrumb>
@@ -91,15 +91,12 @@ define(function () {
             }
         },
         created() {
-            appendStyle('.el-tree-node__content {height: 45px;border-bottom: 1px solid #ebeef5;}', 'dict-detail')
+            Lit.appendStyle('.el-tree-node__content {height: 45px;border-bottom: 1px solid #ebeef5;}')
             this.initData()
-        },
-        destroyed: function () {
-            removeStyle('dict-detail')
         },
         methods: {
             initData() {
-                HttpRequest.get('/api/dictionary/detail/' + this.dictId).then(res => {
+                Lit.httpRequest.get('/api/dictionary/detail/' + this.dictId).then(res => {
                     this.data = res.result || {}
                 })
             },
@@ -127,7 +124,7 @@ define(function () {
             },
             doEdit() {
                 let method = this.editFormConfig.isAdd ? 'post' : 'put'
-                HttpRequest.request(method, '/api/dictionary', this.editForm).then(res => {
+                Lit.httpRequest.request(method, '/api/dictionary', this.editForm).then(res => {
                     if (res.success) {
                         this.$message.success(this.editFormConfig.title + '成功')
                         this.initData()
@@ -142,7 +139,7 @@ define(function () {
                     closeOnClickModal: false,
                     type: 'warning'
                 }).then(() => {
-                    HttpRequest.delete('/api/dictionary/' + id,).then(res => {
+                    Lit.httpRequest.delete('/api/dictionary/' + id,).then(res => {
                         if (res.success) {
                             this.$message.success('删除字典成功')
                             this.initData()

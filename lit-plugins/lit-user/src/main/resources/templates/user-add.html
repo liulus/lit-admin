@@ -86,7 +86,7 @@
         },
         methods: {
             handleSubmit() {
-                HttpRequest.post('/api/user', this.editForm).then(res => {
+                Lit.httpRequest.post('/api/user', this.editForm).then(res => {
                     if (res.success) {
                         this.$message.success('新增用户成功')
                         window.history.back()

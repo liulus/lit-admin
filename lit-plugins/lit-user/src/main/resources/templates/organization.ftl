@@ -111,7 +111,7 @@
         },
         methods: {
             initData() {
-                HttpRequest.get('/api/org/list').then(res => {
+                Lit.httpRequest.get('/api/org/list').then(res => {
                     this.data = res.result || {}
                 })
             },
@@ -140,7 +140,7 @@
             },
             doEdit() {
                 let method = this.editFormConfig.isAdd ? 'post' : 'put'
-                HttpRequest.request(method, '/api/org', this.editForm).then(res => {
+                Lit.httpRequest.request(method, '/api/org', this.editForm).then(res => {
                     if (res.success) {
                         this.$message.success(this.editFormConfig.title + '成功')
                         this.initData()
@@ -155,7 +155,7 @@
                     closeOnClickModal: false,
                     type: 'warning'
                 }).then(() => {
-                    HttpRequest.delete('/api/org/' + id,).then(res => {
+                    Lit.httpRequest.delete('/api/org/' + id,).then(res => {
                         if (res.success) {
                             this.$message.success('删除菜单成功')
                             this.initData()

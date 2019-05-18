@@ -1,4 +1,4 @@
-define(function () {
+define(['Lit'], function (Lit) {
     let tmpl = `
 <main class="aui-main">
     <app-breadcrumb :titles="['用户管理','新增用户']"></app-breadcrumb>
@@ -84,7 +84,7 @@ define(function () {
         },
         methods: {
             handleSubmit() {
-                HttpRequest.post('/api/user', this.editForm).then(res => {
+                Lit.httpRequest.post('/api/user', this.editForm).then(res => {
                     if (res.success) {
                         this.$message.success('新增用户成功')
                         window.history.back()

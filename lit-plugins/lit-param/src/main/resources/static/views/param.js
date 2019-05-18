@@ -1,4 +1,4 @@
-define(function () {
+define(['Lit'], function (Lit) {
     let tmpl = `
 <main class="aui-main">
     <app-breadcrumb title="参数管理"></app-breadcrumb>
@@ -82,15 +82,12 @@ define(function () {
             }
         },
         created() {
-            appendStyle('.el-table--medium td, .el-table--medium th {padding: 3px 0;}', 'param')
+            Lit.appendStyle('.el-table--medium td, .el-table--medium th {padding: 3px 0;}', 'param')
             this.initData()
-        },
-        destroyed: function() {
-            removeStyle('param')
         },
         methods: {
             initData() {
-                HttpRequest.get('/api/param/list', this.queryForm).then(res => {
+                Lit.httpRequest.get('/api/param/list', this.queryForm).then(res => {
                     this.dataList = res.result.data || []
                     this.page = res.result.pageInfo
                 })
@@ -114,7 +111,7 @@ define(function () {
             },
             doEdit() {
                 let method = this.editFormConfig.isAdd ? 'post' : 'put'
-                HttpRequest.request(method, '/api/param', this.editForm).then(res => {
+                Lit.httpRequest.request(method, '/api/param', this.editForm).then(res => {
                     if (res.success) {
                         this.$message.success(this.editFormConfig.title + '成功')
                         this.initData()
@@ -129,7 +126,7 @@ define(function () {
                     closeOnClickModal: false,
                     type: 'warning'
                 }).then(() => {
-                    HttpRequest.delete('/api/param/' + id,).then(res => {
+                    Lit.httpRequest.delete('/api/param/' + id,).then(res => {
                         if (res.success) {
                             this.$message.success('删除参数成功')
                             this.initData()

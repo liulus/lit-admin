@@ -76,7 +76,7 @@
         },
         methods: {
             initData() {
-                HttpRequest.get('/api/user/list', this.queryForm).then(res => {
+                Lit.httpRequest.get('/api/user/list', this.queryForm).then(res => {
                     this.dataList = res.result.data || []
                     this.page = res.result.pageInfo
                 })
@@ -97,7 +97,7 @@
             },
             doEdit() {
                 let method = this.editFormConfig.isAdd ? 'post' : 'put'
-                HttpRequest.request(method, '/api/user', this.editForm).then(res => {
+                Lit.httpRequest.request(method, '/api/user', this.editForm).then(res => {
                     if (res.success) {
                         this.$message.success(this.editFormConfig.title + '成功')
                         this.initData()

@@ -1,4 +1,4 @@
-define(function () {
+define(['Lit'], function (Lit) {
     let tmpl = `
 <main class="aui-main">
     <app-breadcrumb title="菜单管理"></app-breadcrumb>
@@ -20,8 +20,8 @@ define(function () {
 
             <el-row class="b-bottom-1" style="height: 30px;">
                 <el-col :span="4"><span class="ml-25 fz-lg">编码</span></el-col>
-                <el-col :span="4"><span class="ml-25 fz-lg">名称</span></el-col>
                 <el-col :span="2"><span class="ml-15 fz-lg">图标</span></el-col>
+                <el-col :span="4"><span class="ml-25 fz-lg">名称</span></el-col>
                 <el-col :span="7"><span class="ml-15 fz-lg">url</span></el-col>
                 <el-col :span="4"><span class="fz-lg">启用状态</span></el-col>
                 <el-col :span="3"><span class="fz-lg">操作</span></el-col>
@@ -33,8 +33,8 @@ define(function () {
                 <div slot-scope="{ node, data }" style="width: 100%">
                     <el-row type="flex" align="middle">
                         <el-col :span="4"><span>{{ data.code }}</span></el-col>
-                        <el-col :span="4"><span> {{ data.name }}</span></el-col>
                         <el-col :span="2"><i :class="data.icon"></i></el-col>
+                        <el-col :span="4"><span> {{ data.name }}</span></el-col>
                         <el-col :span="7"><span>{{ data.url }}</span></el-col>
                         <el-col :span="4">
                             <el-switch v-model="data.enable" @change="handleChange(data.id)"></el-switch>
@@ -105,15 +105,12 @@ define(function () {
             }
         },
         created() {
-            appendStyle('.el-tree-node__content {height: 45px;border-bottom: 1px solid #ebeef5;}', 'menu')
+            Lit.appendStyle('.el-tree-node__content {height: 45px;border-bottom: 1px solid #ebeef5;}')
             this.initData()
-        },
-        destroyed: function() {
-            removeStyle('menu')
         },
         methods: {
             initData() {
-                HttpRequest.get('/api/menu/tree').then(res => {
+                Lit.httpRequest.get('/api/menu/tree').then(res => {
                     this.data = res.result || []
                 })
             },
@@ -140,7 +137,7 @@ define(function () {
             },
             doEdit() {
                 let method = this.editFormConfig.isAdd ? 'post' : 'put'
-                HttpRequest.request(method, '/api/menu', this.editForm).then(res => {
+                Lit.httpRequest.request(method, '/api/menu', this.editForm).then(res => {
                     if (res.success) {
                         this.$message.success(this.editFormConfig.title + '成功')
                         this.initData()
@@ -155,7 +152,7 @@ define(function () {
                     closeOnClickModal: false,
                     type: 'warning'
                 }).then(() => {
-                    HttpRequest.delete('/api/menu/' + id,).then(res => {
+                    Lit.httpRequest.delete('/api/menu/' + id,).then(res => {
                         if (res.success) {
                             this.$message.success('删除菜单成功')
                             this.initData()
@@ -167,7 +164,7 @@ define(function () {
                 })
             },
             handleChange(id) {
-                HttpRequest.post("/api/menu/change/status/" + id).then(res => {
+                Lit.httpRequest.post("/api/menu/change/status/" + id).then(res => {
                     if(!res.success) {
                         this.$message.error(res.message)
                     }

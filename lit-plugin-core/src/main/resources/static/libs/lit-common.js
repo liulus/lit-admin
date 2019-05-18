@@ -68,7 +68,7 @@
                 styleElement.id = styleId
                 document.getElementsByTagName("head")[0].appendChild(styleElement)
             }
-            styleElement.replaceWith(document.createTextNode(styleCode))
+            styleElement.innerText = styleCode
         }
     }
 }))

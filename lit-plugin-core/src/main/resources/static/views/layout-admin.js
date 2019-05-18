@@ -1,4 +1,4 @@
-define(function () {
+define(['Lit'], function (Lit) {
     let tmpl = `
 <div v-cloak ref="auiWrapper" class="aui-wrapper" v-loading.fullscreen.lock="loading" element-loading-text="拼命加载中"
      :class="['aui-header--' + headerSkin,'aui-aside--' + asideSkin,
@@ -236,7 +236,7 @@ define(function () {
                 if (myMenu) {
                     this.menuList = JSON.parse(myMenu)
                 } else {
-                    HttpRequest.get('/api/my/menu').then(res => {
+                    Lit.httpRequest.get('/api/my/menu').then(res => {
                         if (res.success) {
                             this.menuList = res.result || []
                             sessionStorage.setItem('myMenu', JSON.stringify(this.menuList))

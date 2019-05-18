@@ -28,7 +28,6 @@
 </div>
 
 <script src="https://cdn.bootcss.com/require.js/2.3.6/require.min.js"></script>
-<script src="${springMacroRequestContext.contextPath}/js/lit-common.js"></script>
 <!-- 面包屑 -->
 <script type="text/html" id="app-breadcrumb-template">
     <!--<div></div>-->
@@ -54,6 +53,7 @@
             vueRouter: '/libs/vue-router/3.0.6/vue-router.min',
             ELEMENT: '/libs/element/2.4.5/index',
             text: 'https://cdn.bootcss.com/require-text/2.0.12/text.min',
+            Lit: '/libs/lit-common',
             // vue: (window.APP_CONFIG.env === 'dev' ? 'assets/libs/vue-2.5.17/vue' : 'assets/libs/vue-2.5.17/vue.min'),
             'vue-i18n': 'assets/libs/vue-i18n-8.1.0/vue-i18n.min',
         }

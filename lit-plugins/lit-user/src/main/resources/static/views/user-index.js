@@ -29,8 +29,8 @@ define(['Lit'], function (Lit) {
                 </el-table-column>
                 <el-table-column label="操作" width="150px">
                     <template slot-scope="scope">
-                        <el-button type="text" icon="el-icon-edit" @click="handleEdit(scope.row)"></el-button>
-                        <el-button type="text" icon="el-icon-delete" @click="handleDelete(scope.row.id)"></el-button>
+                        <el-button type="text" icon="el-icon-edit" @click="handleEdit(scope.row.id)"></el-button>
+                        <el-button type="text" icon="el-icon-delete" @click="handleDelete(scope.row)"></el-button>
                     </template>
                 </el-table-column>
             </el-table>
@@ -68,6 +68,7 @@ define(['Lit'], function (Lit) {
             }
         },
         created() {
+            Lit.appendStyle('.el-table--medium td, .el-table--medium th {padding: 3px 0;}')
             this.initData()
         },
         methods: {
@@ -82,26 +83,27 @@ define(['Lit'], function (Lit) {
                 this.initData()
             },
             handleAdd() {
-                window.location.href = contextPath + '/user/add'
+                redirect('/user/add')
             },
-            handleEdit(node) {
-                this.editForm = node
-
-                this.editFormConfig.title = '修改参数'
-                this.editFormConfig.isAdd = false
-                this.editFormConfig.visible = true
+            handleEdit(id) {
+                redirect('user/edit/' + id)
             },
-            doEdit() {
-                let method = this.editFormConfig.isAdd ? 'post' : 'put'
-                Lit.httpRequest.request(method, '/api/user', this.editForm).then(res => {
-                    if (res.success) {
-                        this.$message.success(this.editFormConfig.title + '成功')
-                        this.initData()
-                    } else {
-                        this.$message.error(res.message)
-                    }
+            handleDelete(row) {
+                this.$confirm(`确定删除用户 ${row.userName} ?`, '提示', {
+                    closeOnClickModal: false,
+                    type: 'warning'
+                }).then(() => {
+                    console.log('233323')
+                    Lit.httpRequest.delete('/api/user/' + row.id).then(res => {
+                        if (res.success) {
+                            this.$message.success('删除用户成功')
+                            this.initData()
+                        } else {
+                            this.$message.error(res.message)
+                        }
+                    })
+                }).catch(() => {
                 })
-                this.editFormConfig.visible = false
             },
             handlePageChange(pageNum) {
                 this.queryForm.pageNum = pageNum;

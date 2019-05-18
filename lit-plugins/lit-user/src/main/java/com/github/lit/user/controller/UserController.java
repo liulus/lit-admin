@@ -36,7 +36,7 @@ public class UserController {
 
 
     @PostMapping
-    public Long add(UserVo.Add add) {
+    public Long add(@RequestBody UserVo.Add add) {
         return userService.insert(add);
     }
 
@@ -44,6 +44,11 @@ public class UserController {
     @PutMapping
     public void update (UserVo.Update update) {
         userService.update(update);
+    }
+
+    @DeleteMapping("/{userId}")
+    public void delete (@PathVariable("userId") Long userId) {
+        userService.delete(userId);
     }
 
 

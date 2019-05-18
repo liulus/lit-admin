@@ -16,7 +16,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
-import java.util.Arrays;
 import java.util.Objects;
 
 /**
@@ -134,8 +133,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void delete(Long[] ids) {
-        jdbcRepository.deleteByIds(User.class, Arrays.asList(ids));
+    public void delete(Long id) {
+        jdbcRepository.deleteById(User.class, id);
     }
 
 

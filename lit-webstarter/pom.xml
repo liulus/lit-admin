@@ -43,11 +43,11 @@
             <artifactId>lit-param</artifactId>
             <version>${project.version}</version>
         </dependency>
-        <!--<dependency>-->
-            <!--<groupId>com.github.liulus</groupId>-->
-            <!--<artifactId>lit-security</artifactId>-->
-            <!--<version>${project.version}</version>-->
-        <!--</dependency>-->
+        <dependency>
+            <groupId>com.github.liulus</groupId>
+            <artifactId>lit-security</artifactId>
+            <version>${project.version}</version>
+        </dependency>
         <!--<dependency>-->
             <!--<groupId>org.springframework</groupId>-->
             <!--<artifactId>spring-webmvc</artifactId>-->

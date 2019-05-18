@@ -22,8 +22,9 @@ define(['Lit'], function (Lit) {
                 <el-col :span="4"><span class="ml-25 fz-lg">编码</span></el-col>
                 <el-col :span="2"><span class="ml-15 fz-lg">图标</span></el-col>
                 <el-col :span="4"><span class="ml-25 fz-lg">名称</span></el-col>
-                <el-col :span="7"><span class="ml-15 fz-lg">url</span></el-col>
-                <el-col :span="4"><span class="fz-lg">启用状态</span></el-col>
+                <el-col :span="6"><span class="ml-15 fz-lg">url</span></el-col>
+                <el-col :span="2"><span class="fz-lg">顺序号</span></el-col>
+                <el-col :span="3"><span class="fz-lg">启用状态</span></el-col>
                 <el-col :span="3"><span class="fz-lg">操作</span></el-col>
             </el-row>
             <el-tree :data="data"
@@ -35,8 +36,9 @@ define(['Lit'], function (Lit) {
                         <el-col :span="4"><span>{{ data.code }}</span></el-col>
                         <el-col :span="2"><i :class="data.icon"></i></el-col>
                         <el-col :span="4"><span> {{ data.name }}</span></el-col>
-                        <el-col :span="7"><span>{{ data.url }}</span></el-col>
-                        <el-col :span="4">
+                        <el-col :span="6"><span>{{ data.url }}</span></el-col>
+                        <el-col :span="2"><span>{{ data.orderNum }}</span></el-col>
+                        <el-col :span="3">
                             <el-switch v-model="data.enable" @change="handleChange(data.id)"></el-switch>
                         </el-col>
                         <el-col :span="3">

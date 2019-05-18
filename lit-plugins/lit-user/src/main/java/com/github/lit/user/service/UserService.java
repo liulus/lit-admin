@@ -62,9 +62,9 @@ public interface UserService {
     /**
      * 删除用户
      *
-     * @param ids ids
+     * @param id ids
      */
-    void delete(Long[] ids);
+    void delete(Long id);
 
 
 }

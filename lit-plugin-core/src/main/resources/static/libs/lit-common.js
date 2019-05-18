@@ -36,6 +36,7 @@
 
                 var requestConfig = {
                     method: method,
+                    credentials: 'omit',
                     headers: headers
                 }
                 if (params) {

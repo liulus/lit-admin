@@ -37,7 +37,7 @@ public class ApiExceptionHandler {
                     traceElement.getClassName(), traceElement.getMethodName(), traceElement.getLineNumber(),
                     bizException.getCode(), bizException.getMessage());
         } else {
-            result.put("code", "9999");
+            result.put("code", "-1");
             result.put("message", "系统异常");
             result.put("error", ex.getMessage());
             log.error("unchecked exception", ex);

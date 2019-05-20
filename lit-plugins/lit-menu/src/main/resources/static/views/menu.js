@@ -31,7 +31,7 @@ define(['Lit'], function (Lit) {
                      :expand-on-click-node="false"
                      :filter-node-method="filterNode"
                      ref="menuTree">
-                <div slot-scope="{ node, data }" style="width: 100%">
+                <div slot-scope="{ node, data }" style="width: 100%;height: 45px;border-bottom: 1px solid #ebeef5;">
                     <el-row type="flex" align="middle">
                         <el-col :span="4"><span>{{ data.code }}</span></el-col>
                         <el-col :span="2"><i :class="data.icon"></i></el-col>

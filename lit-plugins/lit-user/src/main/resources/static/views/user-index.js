@@ -22,12 +22,13 @@ define(['Lit'], function (Lit) {
             <el-table :data="dataList">
                 <el-table-column prop="userName" label="用户名"></el-table-column>
                 <el-table-column prop="mobileNum" label="手机号"></el-table-column>
+                <el-table-column prop="email" label="邮箱"></el-table-column>
                 <el-table-column prop="gender" label="性别">
                     <template slot-scope="scope">
                         <span>{{scope.row.gender === 1 ? '男' : '女'}}</span>
                     </template>
                 </el-table-column>
-                <el-table-column label="操作" width="150px">
+                <el-table-column label="操作" width="100px">
                     <template slot-scope="scope">
                         <el-button type="text" icon="el-icon-edit" @click="handleEdit(scope.row.id)"></el-button>
                         <el-button type="text" icon="el-icon-delete" @click="handleDelete(scope.row)"></el-button>
@@ -68,7 +69,6 @@ define(['Lit'], function (Lit) {
             }
         },
         created() {
-            Lit.appendStyle('.el-table--medium td, .el-table--medium th {padding: 3px 0;}')
             this.initData()
         },
         methods: {

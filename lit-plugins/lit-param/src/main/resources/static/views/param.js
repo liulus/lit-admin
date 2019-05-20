@@ -82,7 +82,6 @@ define(['Lit'], function (Lit) {
             }
         },
         created() {
-            Lit.appendStyle('.el-table--medium td, .el-table--medium th {padding: 3px 0;}')
             this.initData()
         },
         methods: {

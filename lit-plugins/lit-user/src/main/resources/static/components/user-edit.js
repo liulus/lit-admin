@@ -1,19 +1,46 @@
-define(['Lit'], function (Lit) {
+define(['vue', 'Lit'], function (Vue, Lit) {
     let tmpl = `
 <main class="aui-main">
-    <app-breadcrumb :titles="['用户管理',editFormConfig.title]"></app-breadcrumb>
+    <app-breadcrumb :titles="['用户管理', title]"></app-breadcrumb>
 
     <div class="aui-main__bd">
-        <el-form ref="editForm" :model="editForm" label-width="100px" label-suffix=":">
-            <div class="bg-white">
-                <div class="pl-15 pt-15">
-                    <span>基本信息</span>
-                </div>
-                <div class="sp-line sp-line--horizontal"></div>
+        <el-card shadow="never">
+            <el-form ref="editForm" :model="editForm" label-width="100px" label-suffix=":">
+                <el-row>
+                    <el-col :span="22" class="t-center">
+                        <span></span>
+                    </el-col>
+                </el-row>
                 <el-row>
                     <el-col :span="11">
                         <el-form-item label="用户名">
                             <el-input v-model="editForm.userName"></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="11">
+                        <el-form-item label="昵称">
+                            <el-input v-model="editForm.nickName"></el-input>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+
+                <el-row>
+                    <el-col :span="11">
+                        <el-form-item label="工号">
+                            <el-input v-model="editForm.jobNum"></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="11">
+                        <el-form-item label="手机号">
+                            <el-input v-model="editForm.mobileNum"></el-input>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+
+                <el-row>
+                    <el-col :span="11">
+                        <el-form-item label="邮箱">
+                            <el-input v-model="editForm.email"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="11">
@@ -25,18 +52,7 @@ define(['Lit'], function (Lit) {
                         </el-form-item>
                     </el-col>
                 </el-row>
-                <el-row>
-                    <el-col :span="11">
-                        <el-form-item label="手机号">
-                            <el-input v-model="editForm.mobileNum"></el-input>
-                        </el-form-item>
-                    </el-col>
-                    <el-col :span="11">
-                        <el-form-item label="邮箱">
-                            <el-input v-model="editForm.email"></el-input>
-                        </el-form-item>
-                    </el-col>
-                </el-row>
+
                 <el-row>
                     <el-col :span="20" class="t-center">
                         <el-form-item>
@@ -45,19 +61,22 @@ define(['Lit'], function (Lit) {
                         </el-form-item>
                     </el-col>
                 </el-row>
-            </div>
-        </el-form>
+            </el-form>
+        </el-card>
     </div>
 </main>
     `
-    return {
+    return Vue.component('user-edit', {
         template: tmpl,
+        props: {
+            isAdd: Boolean
+        },
         data: function () {
             return {
                 editFormConfig: {
                     visible: false,
                     isAdd: true,
-                    title: '新增用户'
+                    title: this.isAdd ? '新增用户' : '修改用户信息'
                 },
                 editForm: {
                     id: 0,
@@ -86,5 +105,5 @@ define(['Lit'], function (Lit) {
                 window.history.back()
             }
         }
-    }
+    })
 })

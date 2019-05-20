@@ -27,7 +27,7 @@ define(['Lit'], function (Lit) {
             <el-tree v-if="data.children" :data="data.children"
                      :expand-on-click-node="false" :filter-node-method="filterNode"
                      default-expand-all ref="dictTree">
-                <div slot-scope="{ node, data }" style="width: 100%">
+                <div slot-scope="{ node, data }" class="w-100">
                     <el-row type="flex" align="middle">
                         <el-col :span="5"><span>{{ data.dictKey }}</span></el-col>
                         <el-col :span="5"><span>{{ data.dictValue }}</span></el-col>

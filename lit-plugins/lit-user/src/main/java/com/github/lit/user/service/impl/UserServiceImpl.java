@@ -78,7 +78,8 @@ public class UserServiceImpl implements UserService {
         // 设置默认值
         addUser.setLock(false);
         addUser.setCreator(UserUtils.getLoginUser().getUserName());
-        addUser.setPassword(UserUtils.encode(user.getPassword()));
+        String password = StringUtils.hasText(user.getPassword()) ? user.getPassword() : "123456";
+        addUser.setPassword(UserUtils.encode(password));
         jdbcRepository.insert(addUser);
         return addUser.getId();
     }

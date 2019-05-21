@@ -4,12 +4,12 @@ define(['Lit'], function (Lit) {
     <app-breadcrumb :titles="['用户管理',editFormConfig.title]"></app-breadcrumb>
 
     <div class="aui-main__bd">
-        <el-form ref="editForm" :model="editForm" label-width="100px" label-suffix=":">
-            <div class="bg-white">
-                <div class="pl-15 pt-15">
-                    <span>基本信息</span>
-                </div>
-                <div class="sp-line sp-line--horizontal"></div>
+        <div class="bg-white">
+            <div class="pl-15 pt-15">
+                <span>基本信息</span>
+            </div>
+            <div class="sp-line sp-line--horizontal"></div>
+            <el-form ref="editForm" :model="editForm" label-width="100px" label-suffix=":">
                 <el-row>
                     <el-col :span="11">
                         <el-form-item label="用户名">
@@ -45,8 +45,8 @@ define(['Lit'], function (Lit) {
                         </el-form-item>
                     </el-col>
                 </el-row>
-            </div>
-        </el-form>
+            </el-form>
+        </div>
     </div>
 </main>
     `
@@ -88,3 +88,6 @@ define(['Lit'], function (Lit) {
         }
     }
 })
+
+
+

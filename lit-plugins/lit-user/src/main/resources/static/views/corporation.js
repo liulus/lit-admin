@@ -1,10 +1,10 @@
-#@adminLayout("首页")
-#define template()
+define(['Lit'], function (Lit) {
+    var tmpl = `
 <main class="aui-main">
     <app-breadcrumb :titles="['组织管理','企业信息']"></app-breadcrumb>
 
     <div class="aui-main__bd">
-        <el-card shadow="never">
+        <div class="bg-white pt-15">
             <el-form ref="editForm" :model="editForm" label-width="100px" label-suffix=":">
                 <el-row>
                     <el-col :span="11">
@@ -42,14 +42,12 @@
                     </el-col>
                 </el-row>
             </el-form>
-        </el-card>
+        </div>
     </div>
 </main>
-#end
-
-#define script()
-<script>
-    VueUtils.registerComponent({
+    `
+    return {
+        template: tmpl,
         data: function () {
             return {
                 editForm: {
@@ -84,9 +82,11 @@
                 })
             },
             handleCancel() {
-                window.location.href = contextPath + '/organization'
+                redirect('/organization/index')
             }
         }
-    })
-</script>
-#end
+    }
+
+
+
+})

@@ -1,57 +1,61 @@
-#@adminLayout("首页")
-#define template()
+define(['Lit'], function (Lit) {
+    var tmpl = `
 <main class="aui-main">
     <app-breadcrumb title="组织管理"></app-breadcrumb>
 
     <div class="aui-main__bd">
-        <el-card shadow="never">
-            <div slot="header" class="t-center">
+        <div class="bg-white">
+            <div class="pt-15 t-center">
                 <el-button v-if="data.fullName" class="fz-xxl" type="text" @click="handleCorporation">
                     {{data.fullName}}
                 </el-button>
-                <#--<span v-if="data.fullName" class="fz-xxl">{{data.fullName}}</span>-->
+                <!--<span v-if="data.fullName" class="fz-xxl">{{data.fullName}}</span>-->
                 <template v-else>
                     <p class="fz-xl">企业信息尚未完善</p>
                     <el-button type="primary" @click="handleCorporation">去完善企业信息</el-button>
                 </template>
             </div>
-
-            <el-row v-if="data.fullName" class="b-bottom-1" style="height: 60px;">
-                <el-col :span="4">
-                    <el-button type="primary" plain icon="el-icon-plus"
-                               @click="handleAdd('')"></el-button>
-                </el-col>
-                <el-col :span="12" :offset="2">
-                    <el-input v-model="keyword" placeholder="请输入搜索内容" v-on:keyup.native.enter="handleSearch">
-                        <el-button slot="append" icon="el-icon-search" @click="handleSearch"></el-button>
-                    </el-input>
-                </el-col>
-            </el-row>
-
-            <el-row v-if="data.children" class="mt-15 b-bottom-1" style="height: 30px;">
-                <el-col :span="7"><span class="ml-25 fz-lg">名称</span></el-col>
-                <el-col :span="4"><span class="ml-25 fz-lg">编码</span></el-col>
-                <el-col :span="10"><span class="ml-15 fz-lg">地址</span></el-col>
-                <el-col :span="3"><span class="fz-lg">操作</span></el-col>
-            </el-row>
-            <el-tree v-if="data.children" :data="data.children"
-                     :expand-on-click-node="false"
-                     :filter-node-method="filterNode"
-                     ref="orgTree">
-                <div slot-scope="{ node, data }" style="width: 100%">
-                    <el-row type="flex" align="middle">
-                        <el-col :span="7"><span>{{ data.fullName }}</span></el-col>
-                        <el-col :span="4"><span>{{ data.code }}</span></el-col>
-                        <el-col :span="10"><span>{{ data.address }}</span></el-col>
-                        <el-col :span="3">
-                            <el-button type="text" icon="el-icon-plus" @click="handleAdd(data)"></el-button>
-                            <el-button type="text" icon="el-icon-edit" @click="handleEdit(data)"></el-button>
-                            <el-button type="text" icon="el-icon-delete" @click="handleDelete(data.id)"></el-button>
-                        </el-col>
-                    </el-row>
-                </div>
-            </el-tree>
-        </el-card>
+            <div class="sp-line sp-line--horizontal"></div> 
+            
+            <div class="padding-15">
+                <el-row v-if="data.fullName" class="b-bottom-1" style="height: 60px;">
+                    <el-col :span="4">
+                        <el-button type="primary" plain icon="el-icon-plus" @click="handleAdd('')"></el-button>
+                    </el-col>
+                    <el-col :span="12" :offset="2">
+                        <el-input v-model="keyword" placeholder="请输入搜索内容" v-on:keyup.native.enter="handleSearch">
+                            <el-button slot="append" icon="el-icon-search" @click="handleSearch"></el-button>
+                        </el-input>
+                    </el-col>
+                </el-row>
+    
+                <el-row v-if="data.children" class="mt-15 b-bottom-1" style="height: 30px;">
+                    <el-col :span="6"><span class="ml-25 fz-lg">名称</span></el-col>
+                    <el-col :span="4"><span class="ml-25 fz-lg">编码</span></el-col>
+                    <el-col :span="3"><span class="ml-15 fz-lg">顺序号</span></el-col>
+                    <el-col :span="8"><span class="ml-15 fz-lg">地址</span></el-col>
+                    <el-col :span="3"><span class="fz-lg">操作</span></el-col>
+                </el-row>
+                <el-tree v-if="data.children" :data="data.children"
+                         :expand-on-click-node="false"
+                         :filter-node-method="filterNode"
+                         ref="orgTree">
+                    <div slot-scope="{ node, data }" style="width: 100%">
+                        <el-row type="flex" align="middle">
+                            <el-col :span="6"><span>{{ data.fullName }}</span></el-col>
+                            <el-col :span="4"><span>{{ data.code }}</span></el-col>
+                            <el-col :span="3"><span>{{ data.orderNum }}</span></el-col>
+                            <el-col :span="8"><span>{{ data.address }}</span></el-col>
+                            <el-col :span="3">
+                                <el-button type="text" icon="el-icon-plus" @click="handleAdd(data)"></el-button>
+                                <el-button type="text" icon="el-icon-edit" @click="handleEdit(data)"></el-button>
+                                <el-button type="text" icon="el-icon-delete" @click="handleDelete(data.id)"></el-button>
+                            </el-col>
+                        </el-row>
+                    </div>
+                </el-tree>
+            </div>
+        </div>
     </div>
 
     <el-dialog :title="editFormConfig.title" :visible.sync="editFormConfig.visible" :close-on-click-modal="false">
@@ -81,11 +85,9 @@
         </div>
     </el-dialog>
 </main>
-#end
-
-#define script()
-<script>
-    VueUtils.registerComponent({
+    `
+    return {
+        template: tmpl,
         data: function () {
             return {
                 data: {},
@@ -107,6 +109,7 @@
             }
         },
         created() {
+            Lit.appendStyle('.el-tree-node__content {height: 45px;border-bottom: 1px solid #ebeef5;}')
             this.initData()
         },
         methods: {
@@ -116,7 +119,7 @@
                 })
             },
             handleCorporation() {
-                window.location.href = contextPath + '/corporation/info'
+                redirect('/corporation/index')
             },
             handleAdd(parentNode) {
                 this.editForm = {}
@@ -151,13 +154,13 @@
                 this.editFormConfig.visible = false
             },
             handleDelete(id) {
-                this.$confirm('此操作将删除该组织数据, 是否继续?', '提示', {
+                this.$confirm('此操作将删除该部门数据, 是否继续?', '提示', {
                     closeOnClickModal: false,
                     type: 'warning'
                 }).then(() => {
                     Lit.httpRequest.delete('/api/org/' + id,).then(res => {
                         if (res.success) {
-                            this.$message.success('删除菜单成功')
+                            this.$message.success('删除部门成功')
                             this.initData()
                         } else {
                             this.$message.error(res.message)
@@ -178,15 +181,5 @@
                 return true;
             }
         }
-    })
-</script>
-#end
-
-#define style()
-<style>
-    .el-tree-node__content {
-        height: 45px;
-        border-bottom: 1px solid #ebeef5;
     }
-</style>
-#end
+})

@@ -55,10 +55,14 @@ public class UserConfiguration implements WebMvcConfigurer {
 
     @EventListener
     public void appStartListener(ContextRefreshedEvent contextRefreshedEvent) {
-        Route index = new Route(USER_INDEX_PATH, USER_INDEX_VIEW);
-        PluginRouteContext.addRoute(index);
-        Route add = new Route(USER_ADD_PATH, USER_ADD_VIEW);
-        PluginRouteContext.addRoute(add);
+        // 用户列表
+        PluginRouteContext.addRoute(new Route(USER_INDEX_PATH, USER_INDEX_VIEW));
+        // 新增用户
+        PluginRouteContext.addRoute(new Route(USER_ADD_PATH, USER_ADD_VIEW));
+        // 企业管理
+        PluginRouteContext.addRoute(new Route(CORP_INDEX_PATH, CORP_INDEX_VIEW));
+        // 部门管理
+        PluginRouteContext.addRoute(new Route(ORG_INDEX_PATH, ORG_INDEX_VIEW));
     }
 
     @Controller

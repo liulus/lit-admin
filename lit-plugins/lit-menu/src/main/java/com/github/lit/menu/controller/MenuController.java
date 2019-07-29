@@ -3,7 +3,7 @@ package com.github.lit.menu.controller;
 import com.github.lit.menu.model.Menu;
 import com.github.lit.menu.model.MenuVo;
 import com.github.lit.menu.service.MenuService;
-import com.github.lit.support.util.BeanUtils;
+import com.github.lit.support.util.bean.BeanUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;

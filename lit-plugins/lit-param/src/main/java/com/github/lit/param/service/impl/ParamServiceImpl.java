@@ -3,10 +3,10 @@ package com.github.lit.param.service.impl;
 import com.github.lit.param.model.SysParam;
 import com.github.lit.param.model.SysParamQo;
 import com.github.lit.param.service.ParamService;
+import com.github.lit.support.data.SQL;
+import com.github.lit.support.data.domain.Page;
+import com.github.lit.support.data.jdbc.JdbcRepository;
 import com.github.lit.support.exception.BizException;
-import com.github.lit.support.jdbc.JdbcRepository;
-import com.github.lit.support.page.PageResult;
-import com.github.lit.support.sql.SQL;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -31,7 +31,7 @@ public class ParamServiceImpl implements ParamService {
 
 
     @Override
-    public PageResult<SysParam> findPageList(SysParamQo qo) {
+    public Page<SysParam> findPageList(SysParamQo qo) {
         SQL sql = SQL.baseSelect(SysParam.class);
         if (StringUtils.hasText(qo.getKeyword())) {
             qo.setKeyword("%" + qo.getKeyword() + "%");

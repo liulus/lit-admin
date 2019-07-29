@@ -3,7 +3,7 @@ package com.github.lit.dictionary.service;
 import com.github.lit.dictionary.model.Dictionary;
 import com.github.lit.dictionary.model.DictionaryQo;
 import com.github.lit.dictionary.model.DictionaryVo;
-import com.github.lit.support.page.PageResult;
+import com.github.lit.support.data.domain.Page;
 
 import java.util.List;
 
@@ -43,7 +43,7 @@ public interface DictionaryService {
      * @param qo 查询对象
      * @return Dictionary
      */
-    PageResult<Dictionary> findPageList(DictionaryQo qo);
+    Page<Dictionary> findPageList(DictionaryQo qo);
 
     /**
      * 构建字典的层级

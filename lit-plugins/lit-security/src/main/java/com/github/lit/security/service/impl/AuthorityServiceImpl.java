@@ -8,10 +8,10 @@ import com.github.lit.security.model.AuthorityQo;
 import com.github.lit.security.model.AuthorityVo;
 import com.github.lit.security.model.RoleAuthority;
 import com.github.lit.security.service.AuthorityService;
+import com.github.lit.support.data.domain.Page;
+import com.github.lit.support.data.jdbc.JdbcRepository;
 import com.github.lit.support.exception.BizException;
-import com.github.lit.support.jdbc.JdbcRepository;
-import com.github.lit.support.page.PageResult;
-import com.github.lit.support.util.BeanUtils;
+import com.github.lit.support.util.bean.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
@@ -38,7 +38,7 @@ public class AuthorityServiceImpl implements AuthorityService {
 
 
     @Override
-    public PageResult<Authority> findPageList(AuthorityQo qo) {
+    public Page<Authority> findPageList(AuthorityQo qo) {
         return jdbcRepository.selectPageList(Authority.class, qo);
     }
 

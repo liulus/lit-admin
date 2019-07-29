@@ -1,8 +1,8 @@
 package com.github.lit.security.model;
 
-import com.github.lit.support.annotation.Condition;
-import com.github.lit.support.page.PageRequest;
-import com.github.lit.support.sql.Logic;
+import com.github.lit.support.data.Condition;
+import com.github.lit.support.data.Logic;
+import com.github.lit.support.data.domain.PageRequest;
 import lombok.*;
 
 import java.util.List;

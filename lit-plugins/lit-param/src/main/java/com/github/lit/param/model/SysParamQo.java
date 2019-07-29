@@ -1,6 +1,6 @@
 package com.github.lit.param.model;
 
-import com.github.lit.support.page.PageRequest;
+import com.github.lit.support.data.domain.PageRequest;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;

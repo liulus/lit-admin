@@ -1,6 +1,6 @@
 package com.github.lit.user.controller;
 
-import com.github.lit.support.util.BeanUtils;
+import com.github.lit.support.util.bean.BeanUtils;
 import com.github.lit.user.model.Organization;
 import com.github.lit.user.model.OrganizationVo;
 import com.github.lit.user.service.OrganizationService;

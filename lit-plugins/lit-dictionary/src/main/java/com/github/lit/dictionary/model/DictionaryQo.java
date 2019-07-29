@@ -1,6 +1,6 @@
 package com.github.lit.dictionary.model;
 
-import com.github.lit.support.page.PageRequest;
+import com.github.lit.support.data.domain.PageRequest;
 import lombok.Data;
 
 /**

@@ -4,7 +4,7 @@ import com.github.lit.security.model.Authority;
 import com.github.lit.security.model.Role;
 import com.github.lit.security.service.AuthorityService;
 import com.github.lit.security.service.RoleService;
-import com.github.lit.support.util.BeanUtils;
+import com.github.lit.support.util.bean.BeanUtils;
 import com.github.lit.user.model.User;
 import com.github.lit.user.service.OrganizationService;
 import com.github.lit.user.service.UserService;

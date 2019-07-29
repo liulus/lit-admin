@@ -4,11 +4,11 @@ import com.github.lit.menu.model.Menu;
 import com.github.lit.menu.model.MenuQo;
 import com.github.lit.menu.model.MenuVo;
 import com.github.lit.menu.service.MenuService;
+import com.github.lit.support.data.SQL;
+import com.github.lit.support.data.domain.Page;
+import com.github.lit.support.data.jdbc.JdbcRepository;
 import com.github.lit.support.exception.BizException;
-import com.github.lit.support.jdbc.JdbcRepository;
-import com.github.lit.support.page.PageResult;
-import com.github.lit.support.sql.SQL;
-import com.github.lit.support.util.BeanUtils;
+import com.github.lit.support.util.bean.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
@@ -33,7 +33,7 @@ public class MenuServiceImpl implements MenuService {
     private JdbcRepository jdbcRepository;
 
     @Override
-    public PageResult<Menu> findPageList(MenuQo qo) {
+    public Page<Menu> findPageList(MenuQo qo) {
         SQL sql = SQL.baseSelect(com.github.lit.dictionary.model.Dictionary.class);
         if (qo.getParentId() != null) {
             sql.WHERE(PARENT_ID_CONDITION);

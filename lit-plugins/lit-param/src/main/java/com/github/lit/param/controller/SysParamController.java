@@ -4,7 +4,7 @@ import com.github.lit.param.model.SysParam;
 import com.github.lit.param.model.SysParamQo;
 import com.github.lit.param.service.ParamService;
 import com.github.lit.plugin.core.constant.AuthorityConst;
-import com.github.lit.support.page.PageResult;
+import com.github.lit.support.data.domain.Page;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,7 +23,7 @@ public class SysParamController {
     private ParamService paramService;
 
     @GetMapping("/list")
-    public PageResult<SysParam> findParamPage(SysParamQo qo) {
+    public Page<SysParam> findParamPage(SysParamQo qo) {
         return paramService.findPageList(qo);
     }
 

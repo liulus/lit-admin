@@ -5,8 +5,7 @@ import com.github.lit.security.model.Authority;
 import com.github.lit.security.model.AuthorityQo;
 import com.github.lit.security.model.AuthorityVo;
 import com.github.lit.security.service.AuthorityService;
-import com.github.lit.support.annotation.ViewName;
-import com.github.lit.support.page.PageResult;
+import com.github.lit.support.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,8 +26,7 @@ public class AuthorityController {
 
 
     @GetMapping
-    @ViewName("authority")
-    public PageResult<Authority> list(AuthorityQo qo) {
+    public Page<Authority> list(AuthorityQo qo) {
         return authorityService.findPageList(qo);
     }
 

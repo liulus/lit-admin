@@ -1,6 +1,6 @@
 package com.github.lit.user.controller;
 
-import com.github.lit.support.page.PageResult;
+import com.github.lit.support.data.domain.Page;
 import com.github.lit.user.model.UserQo;
 import com.github.lit.user.model.UserVo;
 import com.github.lit.user.service.UserService;
@@ -29,7 +29,7 @@ public class UserController {
 
 
     @GetMapping("/list")
-    public PageResult<UserVo.List> findUserPage(UserQo userQo) {
+    public Page<UserVo.List> findUserPage(UserQo userQo) {
 
         return userService.findPageList(userQo);
     }

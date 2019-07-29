@@ -113,10 +113,6 @@
             <id>aliyun_code</id>
             <url>https://code.aliyun.com/content/repository/raw/maven</url>
         </repository>
-        <snapshotRepository>
-            <id>aliyun_code</id>
-            <url>http://localhost:8081/nexus/content/repositories/thirdparty</url>
-        </snapshotRepository>
     </distributionManagement>
 
 

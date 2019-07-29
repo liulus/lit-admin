@@ -4,11 +4,11 @@ import com.github.lit.dictionary.model.Dictionary;
 import com.github.lit.dictionary.model.DictionaryQo;
 import com.github.lit.dictionary.model.DictionaryVo;
 import com.github.lit.dictionary.service.DictionaryService;
+import com.github.lit.support.data.SQL;
+import com.github.lit.support.data.domain.Page;
+import com.github.lit.support.data.jdbc.JdbcRepository;
 import com.github.lit.support.exception.BizException;
-import com.github.lit.support.jdbc.JdbcRepository;
-import com.github.lit.support.page.PageResult;
-import com.github.lit.support.sql.SQL;
-import com.github.lit.support.util.BeanUtils;
+import com.github.lit.support.util.bean.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
@@ -86,7 +86,7 @@ public class DictionaryServiceImpl implements DictionaryService {
     }
 
     @Override
-    public PageResult<Dictionary> findPageList(DictionaryQo qo) {
+    public Page<Dictionary> findPageList(DictionaryQo qo) {
         SQL sql = SQL.baseSelect(Dictionary.class);
         if (qo.getParentId() != null) {
             sql.WHERE("parent_id = :parentId");

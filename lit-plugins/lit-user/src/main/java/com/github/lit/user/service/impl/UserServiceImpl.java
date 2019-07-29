@@ -1,11 +1,11 @@
 package com.github.lit.user.service.impl;
 
 import com.github.lit.plugin.core.model.LoginUser;
+import com.github.lit.support.data.domain.Page;
+import com.github.lit.support.data.domain.PageUtils;
+import com.github.lit.support.data.jdbc.JdbcRepository;
 import com.github.lit.support.exception.BizException;
-import com.github.lit.support.jdbc.JdbcRepository;
-import com.github.lit.support.page.PageResult;
-import com.github.lit.support.page.PageUtils;
-import com.github.lit.support.util.BeanUtils;
+import com.github.lit.support.util.bean.BeanUtils;
 import com.github.lit.user.model.User;
 import com.github.lit.user.model.UserQo;
 import com.github.lit.user.model.UserVo;
@@ -54,7 +54,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public PageResult<UserVo.List> findPageList(UserQo qo) {
+    public Page<UserVo.List> findPageList(UserQo qo) {
         LoginUser loginUser = UserUtils.getLoginUser();
 
         if (loginUser != null && loginUser.hasOrg()) {
@@ -63,7 +63,7 @@ public class UserServiceImpl implements UserService {
                 qo.setOrgCode(loginUser.getOrgCode());
             }
         }
-        PageResult<User> pageList = jdbcRepository.selectPageList(User.class, qo);
+        Page<User> pageList = jdbcRepository.selectPageList(User.class, qo);
         return PageUtils.convert(pageList, UserVo.List.class);
     }
 

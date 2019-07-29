@@ -3,12 +3,10 @@ package com.github.lit.security.service.impl;
 import com.github.lit.security.model.*;
 import com.github.lit.security.service.RoleService;
 import com.github.lit.security.util.AuthorityUtils;
+import com.github.lit.support.data.domain.Page;
+import com.github.lit.support.data.jdbc.JdbcRepository;
 import com.github.lit.support.exception.BizException;
-import com.github.lit.support.jdbc.JdbcRepository;
-import com.github.lit.support.page.PageResult;
-import com.github.lit.support.sql.SQL;
-import com.github.lit.support.sql.TableMetaDate;
-import com.github.lit.support.util.BeanUtils;
+import com.github.lit.support.util.bean.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
@@ -29,7 +27,7 @@ public class RoleServiceImpl implements RoleService {
     private JdbcRepository jdbcRepository;
 
     @Override
-    public PageResult<Role> findPageList(RoleQo roleQo) {
+    public Page<Role> findPageList(RoleQo roleQo) {
         return jdbcRepository.selectPageList(Role.class, roleQo);
     }
 
@@ -96,13 +94,10 @@ public class RoleServiceImpl implements RoleService {
         if (role == null) {
             return;
         }
-        TableMetaDate authMetaData = TableMetaDate.forClass(Authority.class);
+
         // 需要新增的有效 authId
-        SQL newAuthIdsSql = SQL.init().SELECT(authMetaData.getColumn(Authority::getId))
-                .FROM(authMetaData.getTableName())
-                .WHERE("id in (:ids)");
-        List<Long> newAuthIds = jdbcRepository
-                .selectForList(newAuthIdsSql, Collections.singletonMap("ids", authorityIds), Long.class);
+        List<Authority> authorities = jdbcRepository.selectByIds(Authority.class, Arrays.asList(authorityIds));
+        List<Long> newAuthIds = authorities.stream().map(Authority::getId).collect(Collectors.toList());
 
         // 当前角色下的 旧的权限
         List<RoleAuthority> oldAuths = jdbcRepository.selectListByProperty(RoleAuthority::getRoleId, roleId);
@@ -133,12 +128,8 @@ public class RoleServiceImpl implements RoleService {
     @Override
     public void bindUser(Long userId, Long[] roleIds) {
         // 需要新增的有效 roleId
-        TableMetaDate roleMetaData = TableMetaDate.forClass(Role.class);
-        SQL newAuthIdsSql = SQL.init().SELECT(roleMetaData.getColumn(Role::getId))
-                .FROM(roleMetaData.getTableName())
-                .WHERE("id in (:ids)");
-        List<Long> newRoleIds = jdbcRepository
-                .selectForList(newAuthIdsSql, Collections.singletonMap("ids", roleIds), Long.class);
+        List<Role> roles = jdbcRepository.selectByIds(Role.class, Arrays.asList(roleIds));
+        List<Long> newRoleIds = roles.stream().map(Role::getId).collect(Collectors.toList());
 
         // 当前用户下的 旧的角色
         List<UserRole> oldRoles = jdbcRepository.selectListByProperty(UserRole::getUserId, userId);

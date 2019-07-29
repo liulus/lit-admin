@@ -1,6 +1,6 @@
 package com.github.lit.menu.model;
 
-import com.github.lit.support.page.PageRequest;
+import com.github.lit.support.data.domain.PageRequest;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

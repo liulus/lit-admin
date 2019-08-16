@@ -1,10 +1,8 @@
 package com.github.lit.security.context;
 
-import com.github.lit.support.util.WebUtils;
 import com.github.lit.user.context.LoginMessageProvider;
 import org.springframework.security.authentication.*;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.web.WebAttributes;
 import org.springframework.security.web.authentication.session.SessionAuthenticationException;
 import org.springframework.stereotype.Component;
 
@@ -19,7 +17,7 @@ public class SecurityMessageProvider implements LoginMessageProvider {
     @Override
     public String getMessage() {
 
-        Exception loginException = (Exception) WebUtils.getSessionAttribute(WebAttributes.AUTHENTICATION_EXCEPTION);
+        Exception loginException = null;
         if (loginException == null) {
             return null;
         }

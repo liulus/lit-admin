@@ -22,6 +22,8 @@ public abstract class PluginConst {
 
     public static final String VIEW = "view";
 
+    public static final String HOME_VIEW = "/views/home.js";
+
     public static final String INDEX_MULTI = "index-multi";
 
     public static final String INDEX_SINGLE = "index-single";

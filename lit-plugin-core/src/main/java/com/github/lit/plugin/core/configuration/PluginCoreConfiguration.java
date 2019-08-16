@@ -3,7 +3,6 @@ package com.github.lit.plugin.core.configuration;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.lit.plugin.core.constant.PluginConst;
-import com.github.lit.plugin.core.context.PluginRouteContext;
 import com.github.lit.plugin.core.model.Route;
 import com.jfinal.template.ext.spring.JFinalViewResolver;
 import com.jfinal.template.source.ClassPathSourceFactory;
@@ -21,6 +20,7 @@ import org.springframework.web.context.WebApplicationContext;
 
 import javax.annotation.Resource;
 import javax.servlet.ServletContext;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -54,8 +54,6 @@ public class PluginCoreConfiguration {
         return jfr;
     }
 
-    private static final String HOME_VIEW = "/views/home.js";
-
     @EventListener
     public void appStartListener(ContextRefreshedEvent contextRefreshedEvent) {
 
@@ -70,9 +68,11 @@ public class PluginCoreConfiguration {
                     .map(ServletContext::getContextPath).orElse("");
             viewResolver.addSharedObject("contextPath", contextPath);
         }
+    }
 
-        Route route = new Route("home", "/", HOME_VIEW);
-        PluginRouteContext.addRoute(route);
+    @Bean
+    public Route index() {
+        return new Route("home", "/", PluginConst.HOME_VIEW);
     }
 
     @Controller
@@ -84,12 +84,15 @@ public class PluginCoreConfiguration {
         @Resource
         private ObjectMapper objectMapper;
 
+        @Resource
+        private List<Route> routes;
+
         @GetMapping({"/", "/index"})
         public String index(ModelMap model) throws JsonProcessingException {
-            model.put(PluginConst.VIEW, HOME_VIEW);
+            model.put(PluginConst.VIEW, PluginConst.HOME_VIEW);
             if (pluginProperties.getSinglePage()) {
                 // 单页应用路由配置
-                model.put("pluginRoutes", objectMapper.writeValueAsString(PluginRouteContext.getPluginRoutes()));
+                model.put("pluginRoutes", objectMapper.writeValueAsString(routes));
                 return PluginConst.INDEX_SINGLE;
             }
             return PluginConst.INDEX_MULTI;

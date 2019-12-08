@@ -18,13 +18,9 @@ lit:
   configure:
     single-page: true
 
-
-
 logging:
   level:
-    com.github: debug
-    org.springframework.web: debug
-    org.springframework.security: debug
+    com.github.lit: debug
 
 ---
 spring:

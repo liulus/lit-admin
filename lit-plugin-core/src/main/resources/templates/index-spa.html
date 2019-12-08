@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en" class="has-navbar-fixed-top">
+<head>
+    <title>首页</title>
+    <meta charset="UTF-8">
+    <meta name="referrer" content="no-referrer"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="content-type" content="text/html;charset=UTF-8">
+
+    <link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
+    <link rel="stylesheet" href="http://at.alicdn.com/t/font_1156831_n6nd4xojqpi.css">
+    <link rel="stylesheet" href="#(contextPath)/libs/bulma/0.8/bulma.css">
+    <link rel="stylesheet" href="#(contextPath)/styles/lit-admin.css">
+    <script type="text/javascript">
+        window.APP_CONFIG = {
+            env: '#(env)' || 'dev',
+            cdnHost: 'libs',
+            contextPath: '#(contextPath)',
+            pluginRouteText: '#(pluginRoutes??)',
+            isSpa: true,
+            version: '1.0'
+        }
+    </script>
+</head>
+<body>
+<lit-admin id="app" v-cloak></lit-admin>
+
+<script src="http://liulus.gitee.io/blog/requirejs/2.3.6/require.min.js"></script>
+<script>
+    require.config({
+        baseUrl: window.APP_CONFIG.contextPath,
+        urlArgs: 'v=' + (window.APP_CONFIG.env === 'dev' ? new Date().getTime() : window.APP_CONFIG.version),
+        waitSeconds: 0,
+        paths: {
+            vue: window.APP_CONFIG.cdnHost + '/vue/2.6.10/vue' + (window.APP_CONFIG.env === 'dev' ? '' : '.min'),
+            vueRouter: window.APP_CONFIG.cdnHost + '/vue-router/3.0.6/vue-router.min',
+            ELEMENT: window.APP_CONFIG.cdnHost + '/element/2.11.1/index',
+            text: window.APP_CONFIG.cdnHost + '/requirejs/text.min',
+            litAdmin: '/libs/lit-admin',
+            'vue-i18n': 'assets/libs/vue-i18n-8.1.0/vue-i18n.min',
+        }
+    })
+
+    require(['vue', 'vueRouter', 'litAdmin'], function (Vue, vueRouter, litAdmin) {
+        Vue.use(litAdmin)
+        Vue.use(vueRouter)
+        let pluginRoute = JSON.parse(window.APP_CONFIG.pluginRouteText);
+        let pluginRouteArray = Array.isArray(pluginRoute) ? pluginRoute : [pluginRoute]
+        pluginRouteArray.forEach(route => {
+            route.component = Vue.prototype._import(route.component)
+        })
+        // moduleRoutes.children = pluginRouteArray
+
+        window.vm = new Vue({
+            router: new vueRouter({routes: pluginRouteArray})
+        }).$mount('#app')
+    })
+
+    function redirect(url) {
+        window.vm.$router.push(url)
+    }
+</script>
+
+</body>
+</html>

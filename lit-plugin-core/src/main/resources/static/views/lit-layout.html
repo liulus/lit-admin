@@ -1,0 +1,125 @@
+<div>
+    <!-- header -->
+    <nav class="navbar is-fixed-top is-info" role="navigation" aria-label="main navigation">
+        <div class="navbar-brand w-64">
+            <a v-if="!menuTop" class="navbar-item" @click="asideHide = !asideHide">
+                <i class="is-size-4 mx-2 ic icmenu"></i>
+            </a>
+            <div class="navbar-item mx-auto">
+                <h3 class="is-uppercase is-size-4 has-text-weight-medium">lit-admin</h3>
+            </div>
+        </div>
+
+        <div id="navbarBasicExample" class="navbar-menu">
+            <div v-if="menuTop" class="navbar-start">
+                <template v-for="item in menuList">
+                    <div v-if="item.children && item.children.length > 0" class="navbar-item has-dropdown is-hoverable"
+                         :key="item.id">
+                        <a class="navbar-link"><i class="mr-1" :class="item.icon"></i>{{item.name}}</a>
+                        <div class="navbar-dropdown">
+                            <a v-for="childItem in item.children" :key="childItem.id" class="navbar-item"
+                               :class="{'is-active': childItem.id==5}" href="#">
+                                <i class="mr-1" :class="childItem.icon"></i>{{childItem.name}}
+                            </a>
+                        </div>
+                    </div>
+                    <a v-else :key="item.id" class="navbar-item" href="#" :class="{'is-active': item.id==1}">
+                        <i class="mr-1" :class="item.icon"></i>{{item.name}}
+                    </a>
+                </template>
+            </div>
+
+            <div class="navbar-end">
+                <div class="navbar-item has-dropdown is-hoverable">
+                    <a class="navbar-link">
+                        <figure class="image is-32x32" style="margin-right:.5em">
+                            <img class="is-rounded" :src="`${contextPath}/images/avatar.png`">
+                        </figure>
+                        管理员
+                    </a>
+                    <div class="navbar-dropdown is-boxed is-right">
+                        <a class="navbar-item">
+                            <span class="icon is-small"><i class="fa fa-user-o"></i></span>&nbsp; Profile
+                        </a>
+                        <hr class="navbar-divider">
+                        <a class="navbar-item">
+                            <span class="icon is-small"><i class="fa fa-power-off"></i></span>&nbsp; Logout
+                        </a>
+                    </div>
+                </div>
+                <!-- layout config -->
+                <a class="navbar-item">
+                    <i class="is-size-5 mx-1 ic icshezhi"></i>
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="columns is-gapless is-marginless">
+        <div v-if="!menuTop" class="column aside is-narrow border-r is-hidden-mobile"
+             :class="{'is-hidden': asideHide, 'fixed':asideFloat}">
+            <!-- aside -->
+            <aside class="menu w-64" :class="{'fixed': asideFixed}">
+                <ul class="menu-list">
+                    <li v-for="(item, index) in menuList" :key="item.id">
+                        <a class="has-text-weight-medium" :class="{'is-active': item.id === activeMenuId}"
+                           @click="handleMenuClick(index)">
+                            <i class="mr-1" :class="item.icon"></i>{{item.name}}
+                            <span v-if="item.children && item.children.length > 0" class="is-pulled-right">
+                                <i class="ic" :class="item.expand ? 'icarrowdown' : 'icarrowleft'"></i>
+                            </span>
+                        </a>
+
+                        <template v-if="item.children && item.children.length">
+                            <ul v-show="item.expand">
+                                <li v-for="(childItem, childIndex) in item.children" :key="childItem.id">
+                                    <a :class="{'is-active': childItem.id === activeMenuId}"
+                                       @click="handleMenuClick(index, childIndex)">
+                                        <i class="mr-1" :class="childItem.icon"></i>{{childItem.name}}
+                                    </a>
+                                </li>
+                            </ul>
+                        </template>
+                    </li>
+                </ul>
+            </aside>
+            <div class="w-64"></div>
+        </div>
+
+        <!-- main content -->
+        <main class="column main has-background-light">
+            <router-view></router-view>
+        </main>
+
+        <!-- config pannel -->
+        <div class="column is-narrow is-hidden">
+            <div class="tabs w-48">
+                <ul>
+                    <li class="is-active"><a>Layout</a></li>
+                </ul>
+            </div>
+            <div class="content px-3">
+                <h4>Header</h4>
+                <div class="field">
+                    <label class="checkbox">
+                        <input type="checkbox">&nbsp;&nbsp;fixed 固定
+                    </label>
+                </div>
+
+                <hr>
+                <h4>Aside</h4>
+                <div class="field">
+                    <label class="checkbox">
+                        <input type="checkbox">&nbsp;&nbsp;fixed 固定
+                    </label>
+                </div>
+                <div class="field">
+                    <label class="checkbox">
+                        <input type="checkbox">&nbsp;&nbsp;top 至头部
+                    </label>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

@@ -18,37 +18,48 @@ define(['Lit'], function (Lit) {
                 </el-row>
             </div>
 
-            <el-row class="b-bottom-1" style="height: 30px;">
-                <el-col :span="4"><span class="ml-25 fz-lg">编码</span></el-col>
-                <el-col :span="2"><span class="ml-15 fz-lg">图标</span></el-col>
-                <el-col :span="4"><span class="ml-25 fz-lg">名称</span></el-col>
-                <el-col :span="6"><span class="ml-15 fz-lg">url</span></el-col>
-                <el-col :span="2"><span class="fz-lg">顺序号</span></el-col>
-                <el-col :span="3"><span class="fz-lg">启用状态</span></el-col>
-                <el-col :span="3"><span class="fz-lg">操作</span></el-col>
-            </el-row>
-            <el-tree :data="data"
-                     :expand-on-click-node="false"
-                     :filter-node-method="filterNode"
-                     ref="menuTree">
-                <div slot-scope="{ node, data }" style="width: 100%;height: 45px;border-bottom: 1px solid #ebeef5;">
-                    <el-row type="flex" align="middle">
-                        <el-col :span="4"><span>{{ data.code }}</span></el-col>
-                        <el-col :span="2"><i :class="data.icon"></i></el-col>
-                        <el-col :span="4"><span> {{ data.name }}</span></el-col>
-                        <el-col :span="6"><span>{{ data.url }}</span></el-col>
-                        <el-col :span="2"><span>{{ data.orderNum }}</span></el-col>
-                        <el-col :span="3">
-                            <el-switch v-model="data.enable" @change="handleChange(data.id)"></el-switch>
-                        </el-col>
-                        <el-col :span="3">
-                            <el-button type="text" icon="el-icon-plus" @click="handleAdd(data)"></el-button>
-                            <el-button type="text" icon="el-icon-edit" @click="handleEdit(data)"></el-button>
-                            <el-button type="text" icon="el-icon-delete" @click="handleDelete(data.id)"></el-button>
-                        </el-col>
-                    </el-row>
-                </div>
-            </el-tree>
+            <!--<el-row class="b-bottom-1" style="height: 30px;">-->
+                <!--<el-col :span="4"><span class="ml-25 fz-lg">编码</span></el-col>-->
+                <!--<el-col :span="2"><span class="ml-15 fz-lg">图标</span></el-col>-->
+                <!--<el-col :span="4"><span class="ml-25 fz-lg">名称</span></el-col>-->
+                <!--<el-col :span="6"><span class="ml-15 fz-lg">url</span></el-col>-->
+                <!--<el-col :span="2"><span class="fz-lg">顺序号</span></el-col>-->
+                <!--<el-col :span="3"><span class="fz-lg">启用状态</span></el-col>-->
+                <!--<el-col :span="3"><span class="fz-lg">操作</span></el-col>-->
+            <!--</el-row>-->
+            <!--<el-tree :data="data"-->
+                     <!--:expand-on-click-node="false"-->
+                     <!--:filter-node-method="filterNode"-->
+                     <!--ref="menuTree">-->
+                <!--<div slot-scope="{ node, data }" style="width: 100%;height: 45px;border-bottom: 1px solid #ebeef5;">-->
+                    <!--<el-row type="flex" align="middle">-->
+                        <!--<el-col :span="4"><span>{{ data.code }}</span></el-col>-->
+                        <!--<el-col :span="2"><i :class="data.icon"></i></el-col>-->
+                        <!--<el-col :span="4"><span> {{ data.name }}</span></el-col>-->
+                        <!--<el-col :span="6"><span>{{ data.url }}</span></el-col>-->
+                        <!--<el-col :span="2"><span>{{ data.orderNum }}</span></el-col>-->
+                        <!--<el-col :span="3">-->
+                            <!--<el-switch v-model="data.enable" @change="handleChange(data.id)"></el-switch>-->
+                        <!--</el-col>-->
+                        <!--<el-col :span="3">-->
+                            <!--<el-button type="text" icon="el-icon-plus" @click="handleAdd(data)"></el-button>-->
+                            <!--<el-button type="text" icon="el-icon-edit" @click="handleEdit(data)"></el-button>-->
+                            <!--<el-button type="text" icon="el-icon-delete" @click="handleDelete(data.id)"></el-button>-->
+                        <!--</el-col>-->
+                    <!--</el-row>-->
+                <!--</div>-->
+            <!--</el-tree>-->
+            
+            <el-table :data="data" row-key="id" default-expand-all>
+                <el-table-column prop="code" label="编码"></el-table-column>
+                <el-table-column prop="icon" label="图标"></el-table-column>
+                <el-table-column prop="name" label="名称"></el-table-column>
+                <el-table-column prop="url" label="url"></el-table-column>
+                <el-table-column prop="orderNum" label="顺序号"></el-table-column>
+                <el-table-column prop="enable" label="启用状态"></el-table-column>
+                <el-table-column prop="" label="操作"></el-table-column>
+              </el-table>
+            
         </el-card>
     </div>
 

@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>首页</title>
+    <meta charset="UTF-8">
+    <meta name="referrer" content="no-referrer"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="content-type" content="text/html;charset=UTF-8">
+
+    <link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
+    <link rel="stylesheet" href="http://at.alicdn.com/t/font_1156831_n6nd4xojqpi.css">
+    <link rel="stylesheet" href="http://cdn.skeyurt.net/lit-ui/lit-ui.css">
+    <!--    <link rel="stylesheet" href="#(contextPath)/styles/lit-admin.css">-->
+    <script type="text/javascript">
+        window.APP_CONFIG = {
+            env: '#(env)' || 'dev2',
+            cdn: 'http://cdn.skeyurt.net',
+            contextPath: '#(contextPath)',
+            pluginRouteText: '#(pluginRoutes??)',
+            isSpa: true,
+            version: '1.0'
+        }
+    </script>
+</head>
+<body>
+<admin-layout id="app" v-cloak :menu-data="menuList">
+    <router-view></router-view>
+</admin-layout>
+<script src="http://cdn.skeyurt.net/requirejs/2.3.6/require.min.js"></script>
+<script>
+    var cdn = window.APP_CONFIG.cdn
+    require.config({
+        baseUrl: window.APP_CONFIG.contextPath,
+        // urlArgs: 'v=' + (window.APP_CONFIG.env === 'dev' ? new Date().getTime() : window.APP_CONFIG.version),
+        waitSeconds: 0,
+        paths: {
+            vue: cdn + '/vue/2.6.10/vue' + (window.APP_CONFIG.env === 'dev' ? '' : '.min'),
+            vueRouter: cdn + '/vue-router/3.0.7/vue-router.min',
+            ELEMENT: cdn + '/element/2.11.1/index',
+            text: cdn + '/require-text/2.0.12/text',
+            litUi: cdn + '/lit-ui/lit-ui.umd',
+            litAdmin: '/libs/lit-admin',
+            'vue-i18n': 'assets/libs/vue-i18n-8.1.0/vue-i18n.min',
+        }
+    })
+
+    // 异步加载页面
+    function _import(dep) {
+        return function () {
+            return new Promise(function (resolve, reject) {
+                require(Array.isArray(dep) ? dep : [dep], function (res) {
+                    resolve(res)
+                })
+            })
+        }
+    }
+
+    require(['vue', 'vueRouter', 'litUi'], function (Vue, vueRouter, litUi) {
+        Vue.use(litUi)
+        Vue.use(vueRouter)
+        let pluginRoute = JSON.parse(window.APP_CONFIG.pluginRouteText);
+        let pluginRouteArray = Array.isArray(pluginRoute) ? pluginRoute : [pluginRoute]
+        pluginRouteArray.forEach(route => {
+            route.component = _import(route.component)
+        })
+        // moduleRoutes.children = pluginRouteArray
+
+        window.vm = new Vue({
+            data: {
+                menuList: []
+            },
+            beforeCreate() {
+                this.$http.get('/api/my/menu').then(res => {
+                    if (res.success) {
+                        this.menuList = res.result || []
+                    }
+                })
+            },
+            router: new vueRouter({routes: pluginRouteArray})
+        }).$mount('#app')
+    })
+
+
+</script>
+
+</body>
+</html>

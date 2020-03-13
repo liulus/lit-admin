@@ -2,7 +2,6 @@ package com.github.lit.plugin.core.configuration;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.github.lit.plugin.core.constant.PluginConst;
 import com.github.lit.plugin.core.model.Route;
 import com.jfinal.template.ext.spring.JFinalViewResolver;
 import com.jfinal.template.source.ClassPathSourceFactory;
@@ -13,14 +12,13 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.context.event.EventListener;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import javax.annotation.Resource;
 import javax.servlet.ServletContext;
-import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 /**
@@ -28,13 +26,20 @@ import java.util.Optional;
  * @version v1.0
  * date 2019-05-13
  */
-@ComponentScan("com.github.lit")
 @Configuration
+@ComponentScan("com.github.lit")
 @EnableConfigurationProperties(PluginProperties.class)
-public class PluginCoreConfiguration {
+public class PluginCoreConfiguration implements WebMvcConfigurer {
 
     @Resource
     private PluginProperties pluginProperties;
+    @Resource
+    private ObjectMapper objectMapper;
+
+    @Bean
+    public Route index() {
+        return new Route("home", "/", "/views/home.js");
+    }
 
     @Bean
     public JFinalViewResolver getJFinalViewResolver() {
@@ -54,50 +59,35 @@ public class PluginCoreConfiguration {
         return jfr;
     }
 
+    @Bean
+    public WebMvcConfigurer litAdminWebMvcConfigurer() {
+        return new WebMvcConfigurer() {
+            @Override
+            public void addViewControllers(ViewControllerRegistry registry) {
+                registry.addViewController("/").setViewName("index");
+                registry.addViewController("/index").setViewName("index");
+            }
+        };
+    }
+
     @EventListener
-    public void appStartListener(ContextRefreshedEvent contextRefreshedEvent) {
+    public void appStartListener(ContextRefreshedEvent contextRefreshedEvent) throws JsonProcessingException {
 
         ApplicationContext context = contextRefreshedEvent.getApplicationContext();
         JFinalViewResolver viewResolver = context.getBean(JFinalViewResolver.class);
         viewResolver.addSharedObject("singlePage", pluginProperties.getSinglePage());
         viewResolver.addSharedObject("theme", pluginProperties.getTheme());
-
+        if (pluginProperties.getSinglePage()) {
+            // 单页应用路由配置
+            Map<String, Route> routeMap = context.getBeansOfType(Route.class);
+            viewResolver. addSharedObject("pluginRoutes", objectMapper.writeValueAsString(routeMap.values()));
+        }
         if (context instanceof WebApplicationContext) {
             ServletContext servletContext = ((WebApplicationContext) context).getServletContext();
             String contextPath = Optional.ofNullable(servletContext)
                     .map(ServletContext::getContextPath).orElse("");
             viewResolver.addSharedObject("contextPath", contextPath);
         }
-    }
-
-    @Bean
-    public Route index() {
-        return new Route("home", "/", PluginConst.HOME_VIEW);
-    }
-
-    @Controller
-    public static class PluginRouteController {
-
-        @Resource
-        private PluginProperties pluginProperties;
-
-        @Resource
-        private ObjectMapper objectMapper;
-
-        @Resource
-        private List<Route> routes;
-
-        @GetMapping({"/", "/index"})
-        public String index(ModelMap model) throws JsonProcessingException {
-            model.put(PluginConst.VIEW, PluginConst.HOME_VIEW);
-            if (pluginProperties.getSinglePage()) {
-                // 单页应用路由配置
-                model.put("pluginRoutes", objectMapper.writeValueAsString(routes));
-                return PluginConst.INDEX_SINGLE;
-            }
-            return PluginConst.INDEX_MULTI;
-        }
-
     }
 
 

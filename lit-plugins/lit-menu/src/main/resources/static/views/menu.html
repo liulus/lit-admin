@@ -1,0 +1,142 @@
+<div>
+    <div class="columns">
+        <div class="column is-3">
+            <button class="button is-link is-outlined is-light" @click="handleAdd('')"><i class="ic icadd"></i></button>
+        </div>
+        <div class="column is-6">
+            <div class="field has-addons">
+                <div class="control is-expanded">
+                    <input class="input" v-model="keyword" type="text" placeholder=""/>
+                </div>
+                <div class="control">
+                    <a class="button is-link is-outlined is-light">
+                        <i class="ic icsousuo mx-2"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <tree-table ref="tree" :data="data" :columns="columns" :show-index="false" :filter-node="filterNode">
+        <table-column label="图标" prop="icon" width="100px" v-slot="{ row }">
+            <i :class="row.icon"></i>
+        </table-column>
+        <table-column label="状态" prop="enable" width="100px" v-slot="{ row }">
+            <div class="field">
+                <input :id="'switch-' + row.id" type="checkbox" class="switch is-rounded is-outlined is-link"
+                       :checked="row.enable" @change="handleChange(row.id)">
+                <label :for="'switch-' + row.id"></label>
+            </div>
+        </table-column>
+        <table-column label="操作" width="120px" v-slot="{ row }">
+            <a @click="handleAdd(row)"><i class="ic icadd"></i></a>
+            <a class="ml-3"><i class="ic icxiugai"></i></a>
+        </table-column>
+    </tree-table>
+
+
+    <div class="modal" :class="{'is-active': editFormConfig.visible}">
+        <div class="modal-background"></div>
+        <div class="modal-card">
+            <header class="modal-card-head">
+                <p class="modal-card-title">{{editFormConfig.title}}</p>
+                <button class="delete" aria-label="close"></button>
+            </header>
+            <section class="modal-card-body">
+                <div class="field is-horizontal">
+                    <div class="field-label is-normal">
+                        <label class="label">父节点</label>
+                    </div>
+                    <div class="field-body">
+                        <div class="field">
+                            <div class="control">
+                                <input class="input is-static" type="text" :value="editFormConfig.parent" readonly>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Content ... -->
+                <div class="field is-horizontal">
+                    <div class="field-label is-normal">
+                        <label class="label">名称</label>
+                    </div>
+                    <div class="field-body">
+                        <div class="field">
+                            <div class="control">
+                                <input class="input" type="text" v-model="editForm.name">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Content ... -->
+                <div class="field is-horizontal">
+                    <div class="field-label is-normal">
+                        <label class="label">编码</label>
+                    </div>
+                    <div class="field-body">
+                        <div class="field">
+                            <div class="control">
+                                <input class="input" type="text" v-model="editForm.code">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Content ... -->
+                <div class="field is-horizontal">
+                    <div class="field-label is-normal">
+                        <label class="label">图标</label>
+                    </div>
+                    <div class="field-body">
+                        <div class="field">
+                            <div class="control">
+                                <input class="input" type="text" v-model="editForm.icon">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Content ... -->
+                <div class="field is-horizontal">
+                    <div class="field-label is-normal">
+                        <label class="label">url</label>
+                    </div>
+                    <div class="field-body">
+                        <div class="field">
+                            <div class="control">
+                                <input class="input" type="text" v-model="editForm.url">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Content ... -->
+                <div class="field is-horizontal">
+                    <div class="field-label is-normal">
+                        <label class="label">顺序号</label>
+                    </div>
+                    <div class="field-body">
+                        <div class="field">
+                            <div class="control">
+                                <input class="input" type="number" v-model="editForm.orderNum">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Content ... -->
+                <div class="field is-horizontal">
+                    <div class="field-label is-normal">
+                        <label class="label">备注</label>
+                    </div>
+                    <div class="field-body">
+                        <div class="field">
+                            <div class="control">
+                                <textarea class="textarea" v-model="editForm.remark" placeholder="Explain how we can help you"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <footer class="modal-card-foot">
+                <button class="button is-success">Save changes</button>
+                <button class="button">Cancel</button>
+            </footer>
+        </div>
+    </div>
+</div>

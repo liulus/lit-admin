@@ -10,9 +10,9 @@
     <version>1.0.1-SNAPSHOT</version>
 
     <modules>
-        <module>lit-plugins</module>
+        <module>lit-services</module>
         <module>lit-webstarter</module>
-        <module>lit-plugin-core</module>
+        <module>lit-service-core</module>
     </modules>
 
     <properties>

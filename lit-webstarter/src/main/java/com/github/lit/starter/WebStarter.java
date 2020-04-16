@@ -23,8 +23,8 @@ public class WebStarter extends SpringBootServletInitializer {
     /**
      * 覆盖此方法 是为了打成的 war包能直接放到web容器中运行
      *
-     * @param builder
-     * @return
+     * @param builder SpringApplicationBuilder
+     * @return SpringApplicationBuilder
      */
     @Override
     protected SpringApplicationBuilder configure(SpringApplicationBuilder builder) {

@@ -23,8 +23,10 @@ lit:
 logging:
   level:
     com.github: debug
-    org.springframework.web: debug
-    org.springframework.security: debug
+    org:
+      springframework: debug
+#        web: debug
+#        security: debug
 
 ---
 spring:

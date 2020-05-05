@@ -22,7 +22,7 @@
     <dependencies>
         <dependency>
             <groupId>com.github.liulus</groupId>
-            <artifactId>lit-plugin-core</artifactId>
+            <artifactId>lit-service-core</artifactId>
             <version>${project.version}</version>
         </dependency>
 

@@ -2,14 +2,12 @@ package com.lit.service.param.service.impl;
 
 import com.lit.service.param.model.SysParam;
 import com.lit.service.param.model.SysParamQo;
+import com.lit.service.param.repository.ParamRepository;
 import com.lit.service.param.service.ParamService;
-import com.lit.support.data.SQL;
 import com.lit.support.data.domain.Page;
-import com.lit.support.data.jdbc.JdbcRepository;
 import com.lit.support.exception.BizException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
@@ -27,27 +25,21 @@ import java.util.Objects;
 public class ParamServiceImpl implements ParamService {
 
     @Resource
-    private JdbcRepository jdbcRepository;
-
+    private ParamRepository paramRepository;
 
     @Override
     public Page<SysParam> findPageList(SysParamQo qo) {
-        SQL sql = SQL.baseSelect(SysParam.class);
-        if (StringUtils.hasText(qo.getKeyword())) {
-            qo.setKeyword("%" + qo.getKeyword() + "%");
-            sql.WHERE("(code like :keyword or value like :keyword or remark like :keyword)");
-        }
-        return jdbcRepository.selectForPageList(sql, qo, SysParam.class);
+        return paramRepository.selectPageList(qo);
     }
 
     @Override
     public SysParam findById(Long id) {
-        return jdbcRepository.selectById(SysParam.class, id);
+        return paramRepository.selectById(id);
     }
 
     @Override
     public SysParam findByCode(String code) {
-        return jdbcRepository.selectByProperty(SysParam::getCode, code);
+        return paramRepository.selectByProperty(SysParam::getCode, code);
     }
 
     @Override
@@ -55,7 +47,7 @@ public class ParamServiceImpl implements ParamService {
         checkCode(param.getCode());
         param.setSystem(false);
 
-        jdbcRepository.insert(param);
+        paramRepository.insert(param);
         return param.getId();
     }
 
@@ -72,7 +64,7 @@ public class ParamServiceImpl implements ParamService {
             checkCode(param.getCode());
         }
         param.setSystem(null);
-        jdbcRepository.updateSelective(param);
+        paramRepository.updateSelective(param);
     }
 
     private void checkCode(String code) {
@@ -88,7 +80,7 @@ public class ParamServiceImpl implements ParamService {
             return;
         }
 
-        List<SysParam> params = jdbcRepository.selectByIds(SysParam.class, Arrays.asList(ids));
+        List<SysParam> params = paramRepository.selectByIds(Arrays.asList(ids));
 
         List<Long> validIds = new ArrayList<>(params.size());
 
@@ -98,6 +90,6 @@ public class ParamServiceImpl implements ParamService {
             }
             validIds.add(param.getId());
         }
-        jdbcRepository.deleteByIds(SysParam.class, validIds);
+        paramRepository.deleteByIds(validIds);
     }
 }

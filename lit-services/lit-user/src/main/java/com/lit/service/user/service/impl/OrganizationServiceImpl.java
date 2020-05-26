@@ -3,10 +3,10 @@ package com.lit.service.user.service.impl;
 import com.lit.service.user.model.Organization;
 import com.lit.service.user.model.OrganizationQo;
 import com.lit.service.user.model.OrganizationVo;
+import com.lit.service.user.repository.OrgRepository;
 import com.lit.service.user.service.OrganizationService;
 import com.lit.service.user.util.UserUtils;
 import com.lit.support.data.domain.Page;
-import com.lit.support.data.jdbc.JdbcRepository;
 import com.lit.support.exception.BizException;
 import com.lit.support.util.bean.BeanUtils;
 import org.springframework.stereotype.Service;
@@ -33,17 +33,17 @@ import java.util.stream.Collectors;
 public class OrganizationServiceImpl implements OrganizationService {
 
     @Resource
-    private JdbcRepository jdbcRepository;
+    private OrgRepository orgRepository;
 
 
     @Override
     public Page<Organization> findPageList(OrganizationQo qo) {
-        return jdbcRepository.selectPageList(Organization.class, qo);
+        return orgRepository.selectPageList(qo);
     }
 
     @Override
     public OrganizationVo.Detail buildOrgTree() {
-        List<Organization> organizations = jdbcRepository.selectAll(Organization.class);
+        List<Organization> organizations = orgRepository.selectAll();
         if (CollectionUtils.isEmpty(organizations)) {
             return null;
         }
@@ -74,16 +74,16 @@ public class OrganizationServiceImpl implements OrganizationService {
 
     @Override
     public Organization findById(Long id) {
-        return jdbcRepository.selectById(Organization.class, id);
+        return orgRepository.selectById(id);
     }
 
     @Override
     public Organization findByCode(String orgCode) {
-        return jdbcRepository.selectByProperty(Organization::getCode, orgCode);
+        return orgRepository.selectByProperty(Organization::getCode, orgCode);
     }
 
     private Organization findRootOrg() {
-        return jdbcRepository.selectByProperty(Organization::getParentId, 0L);
+        return orgRepository.selectByProperty(Organization::getParentId, 0L);
     }
 
     @Override
@@ -98,12 +98,12 @@ public class OrganizationServiceImpl implements OrganizationService {
         }
 
         // 处理 levelIndex
-        List<Organization> organizations = jdbcRepository.selectListByProperty(Organization::getParentId, parentOrg.getId());
+        List<Organization> organizations = orgRepository.selectListByProperty(Organization::getParentId, parentOrg.getId());
         List<String> levelIndexes = organizations.stream().map(Organization::getLevelIndex).collect(Collectors.toList());
 
         organization.setParentId(parentOrg.getId());
         organization.setLevelIndex(UserUtils.nextLevelIndex(parentOrg.getLevelIndex(), levelIndexes));
-        jdbcRepository.insert(organization);
+        orgRepository.insert(organization);
         return organization.getId();
     }
 
@@ -117,7 +117,7 @@ public class OrganizationServiceImpl implements OrganizationService {
                 .filter(code -> !Objects.equals(code, organization.getCode()))
                 .ifPresent(this::checkOrgCode);
 
-        jdbcRepository.updateSelective(organization);
+        orgRepository.updateSelective(organization);
     }
 
     private void checkOrgCode(String orgCode) {
@@ -135,16 +135,16 @@ public class OrganizationServiceImpl implements OrganizationService {
         if (ids == null || ids.length == 0) {
             return;
         }
-        List<Organization> orgs = jdbcRepository.selectByIds(Organization.class, Arrays.asList(ids));
+        List<Organization> orgs = orgRepository.selectByIds(Arrays.asList(ids));
         List<Long> validIds = new ArrayList<>(orgs.size());
         for (Organization org : orgs) {
-            int count = jdbcRepository.countByProperty(Organization::getParentId, org.getParentId());
+            int count = orgRepository.countByProperty(Organization::getParentId, org.getParentId());
             if (count > 0) {
                 throw new BizException(String.format("请先删除 %s 的子机构数据 ", org.getFullName()));
             }
             validIds.add(org.getId());
         }
-        jdbcRepository.deleteByIds(Organization.class, validIds);
+        orgRepository.deleteByIds(validIds);
     }
 
 

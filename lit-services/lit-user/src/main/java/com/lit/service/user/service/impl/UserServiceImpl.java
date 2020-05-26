@@ -4,11 +4,11 @@ import com.lit.service.core.model.LoginUser;
 import com.lit.service.user.model.User;
 import com.lit.service.user.model.UserQo;
 import com.lit.service.user.model.UserVo;
+import com.lit.service.user.repository.UserRepository;
 import com.lit.service.user.service.UserService;
 import com.lit.service.user.util.UserUtils;
 import com.lit.support.data.domain.Page;
 import com.lit.support.data.domain.PageUtils;
-import com.lit.support.data.jdbc.JdbcRepository;
 import com.lit.support.exception.BizException;
 import com.lit.support.util.bean.BeanUtils;
 import org.springframework.stereotype.Service;
@@ -29,7 +29,7 @@ public class UserServiceImpl implements UserService {
 
 
     @Resource
-    private JdbcRepository jdbcRepository;
+    private UserRepository userRepository;
 
     @Override
     public Long register(UserVo.Register register) {
@@ -45,12 +45,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User findById(Long id) {
-        return jdbcRepository.selectById(User.class, id);
+        return userRepository.selectById(id);
     }
 
     @Override
     public User findByName(String username) {
-        return jdbcRepository.selectByProperty(User::getUserName, username);
+        return userRepository.selectByProperty(User::getUserName, username);
     }
 
     @Override
@@ -63,7 +63,7 @@ public class UserServiceImpl implements UserService {
                 qo.setOrgCode(loginUser.getOrgCode());
             }
         }
-        Page<User> pageList = jdbcRepository.selectPageList(User.class, qo);
+        Page<User> pageList = userRepository.selectPageList(qo);
         return PageUtils.convert(pageList, UserVo.List.class);
     }
 
@@ -80,7 +80,7 @@ public class UserServiceImpl implements UserService {
         addUser.setCreator(UserUtils.getLoginUser().getUserName());
         String password = StringUtils.hasText(user.getPassword()) ? user.getPassword() : "123456";
         addUser.setPassword(UserUtils.encode(password));
-        jdbcRepository.insert(addUser);
+        userRepository.insert(addUser);
         return addUser.getId();
     }
 
@@ -99,7 +99,7 @@ public class UserServiceImpl implements UserService {
             checkMobileNum(user.getMobileNum());
         }
         User upUser = BeanUtils.convert(user, new User());
-        jdbcRepository.updateSelective(upUser);
+        userRepository.updateSelective(upUser);
     }
 
     private void checkUserName(String userName) {
@@ -107,7 +107,7 @@ public class UserServiceImpl implements UserService {
         if (StringUtils.isEmpty(userName)) {
             return;
         }
-        int count = jdbcRepository.countByProperty(User::getUserName, userName);
+        int count = userRepository.countByProperty(User::getUserName, userName);
         if (count >= 1) {
             throw new BizException("该用户名被使用");
         }
@@ -117,7 +117,7 @@ public class UserServiceImpl implements UserService {
         if (StringUtils.isEmpty(email)) {
             return;
         }
-        int count = jdbcRepository.countByProperty(User::getEmail, email);
+        int count = userRepository.countByProperty(User::getEmail, email);
         if (count >= 1) {
             throw new BizException("该邮箱已被使用");
         }
@@ -127,7 +127,7 @@ public class UserServiceImpl implements UserService {
         if (StringUtils.isEmpty(mobileNum)) {
             return;
         }
-        int count = jdbcRepository.countByProperty(User::getMobileNum, mobileNum);
+        int count = userRepository.countByProperty(User::getMobileNum, mobileNum);
         if (count >= 1) {
             throw new BizException("该手机号已被使用");
         }
@@ -135,7 +135,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void delete(Long id) {
-        jdbcRepository.deleteById(User.class, id);
+        userRepository.deleteById(id);
     }
 
 

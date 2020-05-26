@@ -1,10 +1,10 @@
-package com.lit.service.menu.configuration;
+package com.lit.service.menu.config;
 
 import com.lit.service.core.model.Route;
 import com.lit.service.core.util.PluginUtils;
-import org.springframework.context.annotation.Bean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 
@@ -14,17 +14,18 @@ import org.springframework.web.bind.annotation.GetMapping;
  * date 2019-04-23
  */
 @Configuration
+@ComponentScan(basePackages = "com.lit.service.menu", excludeFilters = @ComponentScan.Filter(Configuration.class))
 public class MenuConfiguration {
 
     private static final String INDEX_PATH = "/menu/index";
     private static final String INDEX_VIEW = "/views/menu.js";
 
-    @Bean
+    @ConditionalOnMissingBean(name = "menuIndex")
     public Route menuIndex(){
         return new Route(INDEX_PATH, INDEX_VIEW);
     }
 
-    @Controller
+//    @Controller
     public static class MenuRouteController {
 
         @GetMapping(INDEX_PATH)

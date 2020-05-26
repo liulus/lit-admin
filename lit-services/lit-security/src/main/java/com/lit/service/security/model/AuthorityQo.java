@@ -28,5 +28,5 @@ public class AuthorityQo extends PageRequest {
     private String authorityType;
 
     @Condition(logic = Logic.IN, property = "userId")
-    private List<Long> userIds;
+    private List<Long> roleIds;
 }

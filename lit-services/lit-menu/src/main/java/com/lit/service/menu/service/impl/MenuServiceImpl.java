@@ -3,10 +3,9 @@ package com.lit.service.menu.service.impl;
 import com.lit.service.menu.model.Menu;
 import com.lit.service.menu.model.MenuQo;
 import com.lit.service.menu.model.MenuVo;
+import com.lit.service.menu.repository.MenuRepository;
 import com.lit.service.menu.service.MenuService;
-import com.lit.support.data.SQL;
 import com.lit.support.data.domain.Page;
-import com.lit.support.data.jdbc.JdbcRepository;
 import com.lit.support.exception.BizException;
 import com.lit.support.util.bean.BeanUtils;
 import org.springframework.stereotype.Service;
@@ -18,8 +17,6 @@ import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
-import java.util.Dictionary;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -37,34 +34,25 @@ public class MenuServiceImpl implements MenuService {
     private static final String PARENT_ID_CONDITION = "parent_id = :parentId";
 
     @Resource
-    private JdbcRepository jdbcRepository;
+    private MenuRepository menuRepository;
 
     @Override
     public Page<Menu> findPageList(MenuQo qo) {
-        SQL sql = SQL.baseSelect(Dictionary.class);
-        if (qo.getParentId() != null) {
-            sql.WHERE(PARENT_ID_CONDITION);
-        }
-        if (StringUtils.hasText(qo.getKeyword())) {
-            qo.setKeyword("%" + qo.getKeyword() + "%");
-            sql.WHERE("(code like :keyword or name like :keyword or remark like :keyword)");
-        }
-        sql.ORDER_BY("order_num");
-        return jdbcRepository.selectForPageList(sql, qo, Menu.class);
+        return menuRepository.selectPageList(qo);
     }
 
     @Override
     public Menu findById(Long id) {
-        return jdbcRepository.selectById(Menu.class, id);
+        return menuRepository.selectById(id);
     }
 
     @Override
     public List<MenuVo.Detail> buildMenuTree(boolean filterDisabled, boolean filterEmpty) {
-        SQL sql = SQL.baseSelect(Menu.class);
+        Menu params = new Menu();
         if (filterDisabled) {
-            sql.WHERE("is_enable = 1");
+            params.setEnable(Boolean.TRUE);
         }
-        List<Menu> menus = jdbcRepository.selectForList(sql, null, Menu.class);
+        List<Menu> menus = menuRepository.selectList(params);
 
         Map<Long, List<MenuVo.Detail>> menuMap = menus.stream()
                 .sorted(Comparator.comparing(Menu::getOrderNum))
@@ -74,7 +62,7 @@ public class MenuServiceImpl implements MenuService {
 
         setChildren(rootMenus, menuMap);
 
-        if(filterEmpty) {
+        if (filterEmpty) {
             return rootMenus.stream()
                     .filter(detail -> StringUtils.hasText(detail.getUrl()) || detail.getIsParent())
                     .collect(Collectors.toList());
@@ -105,7 +93,7 @@ public class MenuServiceImpl implements MenuService {
         checkMenuCode(menu.getCode(), menu.getParentId());
         menu.setEnable(true);
 
-        jdbcRepository.insert(menu);
+        menuRepository.insert(menu);
         return menu.getId();
     }
 
@@ -120,26 +108,14 @@ public class MenuServiceImpl implements MenuService {
             checkMenuCode(menu.getCode(), menu.getParentId());
         }
 
-        return jdbcRepository.updateSelective(menu);
+        return menuRepository.updateSelective(menu);
     }
 
     private void checkMenuCode(String code, Long parentId) {
-        Menu menu = findByCodeAndParentId(code, parentId);
+        Menu menu = menuRepository.findByCodeAndParentId(code, parentId);
         if (menu != null) {
             throw new BizException("菜单编码已经存在");
         }
-    }
-
-    private Menu findByCodeAndParentId(String code, Long parentId) {
-        SQL sql = SQL.baseSelect(Menu.class)
-                .WHERE(PARENT_ID_CONDITION)
-                .WHERE("code = :code");
-
-        Map<String, Object> params = new HashMap<>(2);
-        params.put("parentId", parentId == null ? 0L : parentId);
-        params.put("code", code);
-
-        return jdbcRepository.selectForObject(sql, params, Menu.class);
     }
 
     @Override
@@ -148,7 +124,7 @@ public class MenuServiceImpl implements MenuService {
             return 0;
         }
 
-        List<Menu> menus = jdbcRepository.selectByIds(Menu.class, Arrays.asList(ids));
+        List<Menu> menus = menuRepository.selectByIds(Arrays.asList(ids));
         List<Long> validIds = new ArrayList<>(menus.size());
 
         for (Menu menu : menus) {
@@ -158,11 +134,11 @@ public class MenuServiceImpl implements MenuService {
             }
             validIds.add(menu.getId());
         }
-        return jdbcRepository.deleteByIds(Menu.class, validIds);
+        return menuRepository.deleteByIds(validIds);
     }
 
     private int countByParentId(Long parentId) {
-        return jdbcRepository.countByProperty(Menu::getParentId, parentId == null ? 0L : parentId);
+        return menuRepository.countByProperty(Menu::getParentId, parentId == null ? 0L : parentId);
     }
 
     @Override
@@ -174,12 +150,12 @@ public class MenuServiceImpl implements MenuService {
         Menu upMenu = new Menu();
         upMenu.setId(id);
         upMenu.setEnable(!menu.getEnable());
-        jdbcRepository.updateSelective(upMenu);
+        menuRepository.updateSelective(upMenu);
     }
 
     @Override
     public List<Menu> findAll() {
-        return jdbcRepository.selectAll(Menu.class);
+        return menuRepository.selectAll();
     }
 
 }

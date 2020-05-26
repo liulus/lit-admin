@@ -1,14 +1,12 @@
-package com.lit.service.core.configuration;
+package com.lit.service.core.config;
 
+import com.lit.service.core.model.ApiResponse;
 import com.lit.support.exception.BizException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.HandlerMethod;
-
-import java.util.HashMap;
-import java.util.Map;
 
 
 /**
@@ -21,25 +19,25 @@ import java.util.Map;
 public class ApiExceptionHandler {
 
     @ExceptionHandler(Exception.class)
-    public Map exception(HandlerMethod handlerMethod, Exception ex) {
-         Map<String, Object> result = new HashMap<>();
-         result.put("success", false);
+    public ApiResponse exception(HandlerMethod handlerMethod, Exception ex) {
+         ApiResponse result = new ApiResponse();
+         result.setSuccess(Boolean.FALSE);
 
         BizException bizException = findBizException(ex);
         if (bizException != null) {
             if (StringUtils.hasText(bizException.getCode())) {
-                result.put("code", bizException.getCode());
+                result.setCode(bizException.getCode());
             }
-            result.put("message", bizException.getMessage());
+            result.setMessage(bizException.getMessage());
 
             StackTraceElement traceElement = ex.getStackTrace()[0];
             log.warn("\n biz exception --> class: [{}], method: [{}], line: [{}], code: [{}],  message: [{}]",
                     traceElement.getClassName(), traceElement.getMethodName(), traceElement.getLineNumber(),
                     bizException.getCode(), bizException.getMessage());
         } else {
-            result.put("code", "-1");
-            result.put("message", "系统异常");
-            result.put("error", ex.getMessage());
+            result.setCode("-1");
+            result.setMessage("系统异常");
+//            result.put("error", ex.getMessage());
             log.error("unchecked exception", ex);
         }
         return result;

@@ -1,4 +1,4 @@
-package com.lit.service.core.configuration;
+package com.lit.service.core.config;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -9,11 +9,11 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  * date 2019-05-16
  */
 @Data
-@ConfigurationProperties(prefix = "lit.configure")
-public class PluginProperties {
+@ConfigurationProperties(prefix = "lit.core")
+public class CoreProperties {
 
     private Boolean singlePage = Boolean.FALSE;
-
     private String theme = "cyan";
+    private String indexPath = "/";
 
 }

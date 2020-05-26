@@ -3,24 +3,20 @@ package com.lit.service.dictionary.service.impl;
 import com.lit.service.dictionary.model.Dictionary;
 import com.lit.service.dictionary.model.DictionaryQo;
 import com.lit.service.dictionary.model.DictionaryVo;
+import com.lit.service.dictionary.repository.DictionaryRepository;
 import com.lit.service.dictionary.service.DictionaryService;
-import com.lit.support.data.SQL;
 import com.lit.support.data.domain.Page;
-import com.lit.support.data.jdbc.JdbcRepository;
 import com.lit.support.exception.BizException;
 import com.lit.support.util.bean.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
-import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -36,7 +32,7 @@ import java.util.stream.Collectors;
 public class DictionaryServiceImpl implements DictionaryService {
 
     @Resource
-    private JdbcRepository jdbcRepository;
+    private DictionaryRepository dictionaryRepository;
 
     @Override
     public Long insert(Dictionary dict) {
@@ -46,7 +42,7 @@ public class DictionaryServiceImpl implements DictionaryService {
         if (dict.getOrderNum() == null) {
             dict.setOrderNum(0);
         }
-        jdbcRepository.insert(dict);
+        dictionaryRepository.insert(dict);
         return dict.getId();
     }
 
@@ -62,27 +58,14 @@ public class DictionaryServiceImpl implements DictionaryService {
             }
             checkDictKey(dictionary.getDictKey(), dictionary.getParentId());
         }
-        return jdbcRepository.updateSelective(dictionary);
+        return dictionaryRepository.updateSelective(dictionary);
     }
 
     private void checkDictKey(String dictKey, Long parentId) {
-        Dictionary dict = findByKeyAndParentId(dictKey, parentId);
+        Dictionary dict = dictionaryRepository.findByKeyAndParentId(dictKey, parentId);
         if (dict != null) {
             throw new BizException("字典Key已经存在");
         }
-    }
-
-    private Dictionary findByKeyAndParentId(String dictKey, Long parentId) {
-        if (parentId == null) {
-            parentId = 0L;
-        }
-        SQL sql = SQL.baseSelect(Dictionary.class)
-                .WHERE("parent_id = :parentId")
-                .WHERE("dict_key = :dictKey");
-        Map<String, Object> params = new HashMap<>(2);
-        params.put("parentId", parentId);
-        params.put("dictKey", dictKey);
-        return jdbcRepository.selectForObject(sql, params, Dictionary.class);
     }
 
     @Override
@@ -90,21 +73,12 @@ public class DictionaryServiceImpl implements DictionaryService {
         if (id == null || id == 0L) {
             return null;
         }
-        return jdbcRepository.selectById(Dictionary.class, id);
+        return dictionaryRepository.selectById(id);
     }
 
     @Override
     public Page<Dictionary> findPageList(DictionaryQo qo) {
-        SQL sql = SQL.baseSelect(Dictionary.class);
-        if (qo.getParentId() != null) {
-            sql.WHERE("parent_id = :parentId");
-        }
-        if (StringUtils.hasText(qo.getKeyword())) {
-            qo.setKeyword("%" + qo.getKeyword() + "%");
-            sql.WHERE("(dict_key like :keyword or dict_value like :keyword or remark like :keyword)");
-        }
-        sql.ORDER_BY("order_num");
-        return jdbcRepository.selectForPageList(sql, qo, Dictionary.class);
+        return dictionaryRepository.selectPageList(qo);
     }
 
     @Override
@@ -124,7 +98,7 @@ public class DictionaryServiceImpl implements DictionaryService {
             return;
         }
         List<Long> ids = result.stream().map(DictionaryVo.Detail::getId).collect(Collectors.toList());
-        List<Dictionary> dictionaries = findByParentIds(ids);
+        List<Dictionary> dictionaries = dictionaryRepository.findByParentIds(ids);
         if (CollectionUtils.isEmpty(dictionaries)) {
             return;
         }
@@ -139,21 +113,12 @@ public class DictionaryServiceImpl implements DictionaryService {
         buildLevel(details);
     }
 
-    private List<Dictionary> findByParentIds(Collection<Long> parentIds) {
-
-        SQL sql = SQL.baseSelect(Dictionary.class)
-                .WHERE("parent_id in (:parentIds)");
-
-        return jdbcRepository.selectForList(sql, Collections.singletonMap("parentIds", parentIds), Dictionary.class);
-    }
-
-
     @Override
     public int deleteByIds(Long... ids) {
         if (ids == null || ids.length == 0) {
             return 0;
         }
-        List<Dictionary> dictionaries = jdbcRepository.selectByIds(Dictionary.class, Arrays.asList(ids));
+        List<Dictionary> dictionaries = dictionaryRepository.selectByIds(Arrays.asList(ids));
         if (CollectionUtils.isEmpty(dictionaries)) {
             return 0;
         }
@@ -168,7 +133,7 @@ public class DictionaryServiceImpl implements DictionaryService {
             }
             validIds.add(dictionary.getId());
         }
-        return jdbcRepository.deleteByIds(Dictionary.class, validIds);
+        return dictionaryRepository.deleteByIds(validIds);
     }
 
 
@@ -181,7 +146,7 @@ public class DictionaryServiceImpl implements DictionaryService {
 
     @Override
     public Dictionary findByRootKey(String key) {
-        return findByKeyAndParentId(key, 0L);
+        return dictionaryRepository.findByKeyAndParentId(key, 0L);
     }
 
     @Override
@@ -194,7 +159,7 @@ public class DictionaryServiceImpl implements DictionaryService {
         result.setId(0L);
 
         for (String key : keys) {
-            result = findByKeyAndParentId(key, result.getId());
+            result = dictionaryRepository.findByKeyAndParentId(key, result.getId());
         }
         return result;
     }
@@ -222,12 +187,12 @@ public class DictionaryServiceImpl implements DictionaryService {
 
     @Override
     public List<Dictionary> findChildByParentId(Long parentId) {
-        return jdbcRepository.selectListByProperty(Dictionary::getParentId, parentId);
+        return dictionaryRepository.selectListByProperty(Dictionary::getParentId, parentId);
     }
 
 
     private int countByParentId(Long parentId) {
-        return jdbcRepository.countByProperty(Dictionary::getParentId, parentId);
+        return dictionaryRepository.countByProperty(Dictionary::getParentId, parentId);
     }
 
 }

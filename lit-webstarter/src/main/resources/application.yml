@@ -24,8 +24,8 @@ logging:
   level:
     com.github: debug
     org:
-      springframework: debug
-#        web: debug
+      springframework:
+        web: trace
 #        security: debug
 
 ---

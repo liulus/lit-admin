@@ -1,5 +1,6 @@
-package com.lit.service.core.configuration;
+package com.lit.service.core.config;
 
+import com.lit.service.core.model.ApiResponse;
 import org.springframework.core.MethodParameter;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.core.io.InputStreamResource;
@@ -11,9 +12,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
-
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * @author liulu
@@ -34,11 +32,9 @@ public class ApiResponseBodyAdvice implements ResponseBodyAdvice<Object> {
         if(body instanceof InputStreamResource) {
             return body;
         }
-
-        Map<String, Object> result = new HashMap<>(4);
-
-        result.put("success", true);
-        result.put("result", body);
+        ApiResponse result = new ApiResponse();
+        result.setSuccess(Boolean.TRUE);
+        result.setResult(body);
         return result;
     }
 }

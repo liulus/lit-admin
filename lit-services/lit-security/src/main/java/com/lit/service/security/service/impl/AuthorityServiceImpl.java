@@ -7,9 +7,10 @@ import com.lit.service.security.model.Authority;
 import com.lit.service.security.model.AuthorityQo;
 import com.lit.service.security.model.AuthorityVo;
 import com.lit.service.security.model.RoleAuthority;
+import com.lit.service.security.repository.AuthorityRepository;
+import com.lit.service.security.repository.RoleAuthorityRepository;
 import com.lit.service.security.service.AuthorityService;
 import com.lit.support.data.domain.Page;
-import com.lit.support.data.jdbc.JdbcRepository;
 import com.lit.support.exception.BizException;
 import com.lit.support.util.bean.BeanUtils;
 import org.springframework.stereotype.Service;
@@ -37,7 +38,9 @@ import java.util.stream.Collectors;
 public class AuthorityServiceImpl implements AuthorityService {
 
     @Resource
-    private JdbcRepository jdbcRepository;
+    private AuthorityRepository authorityRepository;
+    @Resource
+    private RoleAuthorityRepository roleAuthorityRepository;
 
     @Resource
     private DictionaryService dictionaryService;
@@ -45,13 +48,13 @@ public class AuthorityServiceImpl implements AuthorityService {
 
     @Override
     public Page<Authority> findPageList(AuthorityQo qo) {
-        return jdbcRepository.selectPageList(Authority.class, qo);
+        return authorityRepository.selectPageList(qo);
     }
 
     @Override
     public List<AuthorityVo> findAuthorityTree() {
 
-        List<Authority> authorities = jdbcRepository.selectAll(Authority.class);
+        List<Authority> authorities = authorityRepository.selectAll();
 
         List<Dictionary> authorityTypes = dictionaryService.findChildByRootKey(SecurityConst.AUTHORITY_TYPE);
         if (CollectionUtils.isEmpty(authorityTypes)) {
@@ -89,48 +92,47 @@ public class AuthorityServiceImpl implements AuthorityService {
 
     @Override
     public List<Authority> findAll() {
-        return jdbcRepository.selectAll(Authority.class);
+        return authorityRepository.selectAll();
     }
 
 
     @Override
     public List<Authority> findByRoleId(Long roleId) {
-        List<RoleAuthority> roleAuthorities = jdbcRepository.selectListByProperty(RoleAuthority::getRoleId, roleId);
+        List<RoleAuthority> roleAuthorities = roleAuthorityRepository
+                .selectListByProperty(RoleAuthority::getRoleId, roleId);
         if (CollectionUtils.isEmpty(roleAuthorities)) {
             return Collections.emptyList();
         }
         List<Long> authIds = roleAuthorities.stream().map(RoleAuthority::getAuthorityId).collect(Collectors.toList());
-        return jdbcRepository.selectByIds(Authority.class, authIds);
+        return authorityRepository.selectByIds(authIds);
     }
 
     @Override
     public List<Authority> findByRoleIds(List<Long> roleIds) {
 
-        AuthorityQo authorityQo = new AuthorityQo();
-        authorityQo.setUserIds(roleIds);
-        List<RoleAuthority> roleAuthorities = jdbcRepository.selectList(RoleAuthority.class, authorityQo);
+        List<RoleAuthority> roleAuthorities = roleAuthorityRepository.selectListByProperty(RoleAuthority::getRoleId, roleIds);
 
         if (CollectionUtils.isEmpty(roleAuthorities)) {
             return Collections.emptyList();
         }
         List<Long> authIds = roleAuthorities.stream().map(RoleAuthority::getAuthorityId).collect(Collectors.toList());
-        return jdbcRepository.selectByIds(Authority.class, authIds);
+        return authorityRepository.selectByIds(authIds);
     }
 
     @Override
     public Authority findById(Long id) {
-        return jdbcRepository.selectById(Authority.class, id);
+        return authorityRepository.selectById(id);
     }
 
     @Override
     public Authority findByCode(String code) {
-        return jdbcRepository.selectByProperty(Authority::getCode, code);
+        return authorityRepository.selectByProperty(Authority::getCode, code);
     }
 
     @Override
     public Long insert(Authority authority) {
         checkAuthorityCode(authority.getCode());
-        jdbcRepository.insert(authority);
+        authorityRepository.insert(authority);
         return authority.getId();
     }
 
@@ -141,14 +143,14 @@ public class AuthorityServiceImpl implements AuthorityService {
                 .map(Authority::getCode)
                 .filter(code -> !Objects.equals(code, authority.getCode()))
                 .ifPresent(this::checkAuthorityCode);
-        jdbcRepository.updateSelective(authority);
+        authorityRepository.updateSelective(authority);
     }
 
     private void checkAuthorityCode(String code) {
         if (StringUtils.isEmpty(code)) {
             throw new BizException("权限码不能为空!");
         }
-        int count = jdbcRepository.countByProperty(Authority::getCode, code);
+        int count = authorityRepository.countByProperty(Authority::getCode, code);
         if (count > 0) {
             throw new BizException("权限码已经存在!");
         }
@@ -159,7 +161,7 @@ public class AuthorityServiceImpl implements AuthorityService {
         if (ids == null || ids.length == 0) {
             return 0;
         }
-        return jdbcRepository.deleteByIds(Authority.class, Arrays.asList(ids));
+        return authorityRepository.deleteByIds(Arrays.asList(ids));
     }
 
 

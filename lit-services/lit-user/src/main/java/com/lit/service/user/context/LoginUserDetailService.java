@@ -1,4 +1,4 @@
-package com.lit.service.security.context;
+package com.lit.service.user.context;
 
 import com.lit.service.security.model.Authority;
 import com.lit.service.security.model.Role;

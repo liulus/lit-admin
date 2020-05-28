@@ -3,7 +3,6 @@ package com.lit.service.menu.config;
 import com.lit.service.core.model.Route;
 import com.lit.service.core.util.PluginUtils;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,7 +13,6 @@ import org.springframework.web.bind.annotation.GetMapping;
  * date 2019-04-23
  */
 @Configuration
-@ComponentScan(basePackages = "com.lit.service.menu", excludeFilters = @ComponentScan.Filter(Configuration.class))
 public class MenuConfiguration {
 
     private static final String INDEX_PATH = "/menu/index";

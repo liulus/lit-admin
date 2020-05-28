@@ -1,4 +1,4 @@
-package com.lit.service.security.context;
+package com.lit.service.security.config;
 
 /**
  * User : liulu

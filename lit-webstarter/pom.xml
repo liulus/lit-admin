@@ -23,14 +23,19 @@
             <!--<artifactId>c3p0</artifactId>-->
         <!--</dependency>-->
 
+<!--        <dependency>-->
+<!--            <groupId>com.github.liulus</groupId>-->
+<!--            <artifactId>lit-service-core</artifactId>-->
+<!--            <version>${project.version}</version>-->
+<!--        </dependency>-->
         <dependency>
             <groupId>com.github.liulus</groupId>
-            <artifactId>lit-service-core</artifactId>
+            <artifactId>lit-menu</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>com.github.liulus</groupId>
-            <artifactId>lit-menu</artifactId>
+            <artifactId>lit-user</artifactId>
             <version>${project.version}</version>
         </dependency>
 

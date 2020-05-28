@@ -2,7 +2,7 @@ package com.lit.service.security.service.impl;
 
 import com.lit.service.dictionary.model.Dictionary;
 import com.lit.service.dictionary.service.DictionaryService;
-import com.lit.service.security.context.SecurityConst;
+import com.lit.service.security.config.SecurityConst;
 import com.lit.service.security.model.Authority;
 import com.lit.service.security.model.AuthorityQo;
 import com.lit.service.security.model.AuthorityVo;

@@ -11,7 +11,7 @@ import com.lit.service.security.repository.RoleAuthorityRepository;
 import com.lit.service.security.repository.RoleRepository;
 import com.lit.service.security.repository.UserRoleRepository;
 import com.lit.service.security.service.RoleService;
-import com.lit.service.security.util.AuthorityUtils;
+import com.lit.service.user.util.AuthorityUtils;
 import com.lit.support.data.domain.Page;
 import com.lit.support.exception.BizException;
 import com.lit.support.util.bean.BeanUtils;

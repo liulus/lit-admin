@@ -1,4 +1,4 @@
-package com.lit.service.security.util;
+package com.lit.service.user.util;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;

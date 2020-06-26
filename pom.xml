@@ -17,6 +17,7 @@
         <module>lit-services</module>
         <module>lit-webstarter</module>
         <module>lit-service-core</module>
+        <module>lit-system</module>
     </modules>
 
     <dependencies>

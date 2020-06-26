@@ -1,1 +1,1 @@
-org.springframework.boot.autoconfigure.EnableAutoConfiguration=com.lit.service.core.config.CoreConfiguration
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=com.github.lit.config.CoreConfiguration

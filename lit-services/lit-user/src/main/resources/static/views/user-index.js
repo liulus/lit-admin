@@ -20,7 +20,7 @@ define(['Lit'], function (Lit) {
             </div>
 
             <el-table :data="dataList">
-                <el-table-column prop="userName" label="用户名"></el-table-column>
+                <el-table-column prop="username" label="用户名"></el-table-column>
                 <el-table-column prop="mobileNum" label="手机号"></el-table-column>
                 <el-table-column prop="email" label="邮箱"></el-table-column>
                 <el-table-column prop="gender" label="性别">
@@ -89,7 +89,7 @@ define(['Lit'], function (Lit) {
                 redirect('user/edit/' + id)
             },
             handleDelete(row) {
-                this.$confirm(`确定删除用户 ${row.userName} ?`, '提示', {
+                this.$confirm(`确定删除用户 ${row.username} ?`, '提示', {
                     closeOnClickModal: false,
                     type: 'warning'
                 }).then(() => {

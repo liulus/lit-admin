@@ -20,12 +20,17 @@
     </modules>
 
     <dependencies>
+<!--        <dependency>-->
+<!--            <groupId>com.github.liulus</groupId>-->
+<!--            <artifactId>lit-service-core</artifactId>-->
+<!--            <version>${project.version}</version>-->
+<!--        </dependency>-->
+
         <dependency>
             <groupId>com.github.liulus</groupId>
-            <artifactId>lit-service-core</artifactId>
+            <artifactId>lit-system-server</artifactId>
             <version>${project.version}</version>
         </dependency>
-
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-core</artifactId>

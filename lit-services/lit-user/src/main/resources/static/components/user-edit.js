@@ -14,7 +14,7 @@ define(['vue', 'Lit'], function (Vue, Lit) {
                 <el-row>
                     <el-col :span="11">
                         <el-form-item label="用户名">
-                            <el-input v-model="editForm.userName"></el-input>
+                            <el-input v-model="editForm.username"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="11">
@@ -81,7 +81,7 @@ define(['vue', 'Lit'], function (Vue, Lit) {
                 editForm: {
                     id: 0,
                     code: '',
-                    userName: '',
+                    username: '',
                     value: '',
                     gender: 1,
                     remark: ''

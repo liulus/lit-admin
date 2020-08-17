@@ -13,12 +13,12 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 public class UserProperties {
 
 
-    private String loginPage = "/default/login";
+    private String loginPage = "default/login";
 
     private Boolean enableRegister = false;
 
-    private String registerPage = "/default/register";
+    private String registerPage = "default/register";
 
-    private String forgetPage = "/default/forget";
+    private String forgetPage = "default/forget";
 
 }

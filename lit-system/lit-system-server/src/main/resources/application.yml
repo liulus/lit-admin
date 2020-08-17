@@ -1,9 +1,10 @@
+
 spring:
   profiles:
     active: default
   datasource:
     url: jdbc:mysql://localhost:3306/lit?useSSL=false&useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&allowMultiQueries=true
-    driver-class-name: com.mysql.jdbc.Driver
+    driver-class-name: com.mysql.cj.jdbc.Driver
     username: root
     password: 123456
   freemarker:
@@ -13,6 +14,10 @@ spring:
     prefer-file-system-access: false
   jackson:
     default-property-inclusion: non_empty
+  mustache:
+    suffix: .html
+    expose-spring-macro-helpers: false
+
 
 
 lit:

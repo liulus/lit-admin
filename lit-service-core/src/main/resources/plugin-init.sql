@@ -20,6 +20,8 @@ CREATE TABLE lit_dictionary
     ON UPDATE CURRENT_TIMESTAMP
 )
     ENGINE = InnoDB
+    CHARACTER set utf8
+    COLLATE utf8_general_ci
     COMMENT = '字典表';
 
 CREATE UNIQUE INDEX uk_pid_key

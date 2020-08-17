@@ -3,6 +3,7 @@ package com.github.lit.config;
 import com.github.lit.context.LoginUserService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -22,7 +23,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true, proxyTargetClass = true)
-public class Oauth2WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
+public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Bean
     public UserDetailsService loginUserService() {
@@ -44,9 +45,8 @@ public class Oauth2WebSecurityConfiguration extends WebSecurityConfigurerAdapter
         web.ignoring()
                 .antMatchers("/**/*.css", "/**/*.js", "/images/**", "/libs/**")
                 .antMatchers("/error/**")
-//                .antMatchers("/index")
-                .antMatchers("/user")
-//                .antMatchers("/login", "/register", "/forget")
+                .antMatchers("/index")
+                .antMatchers(HttpMethod.GET, "/login", "/register", "/forget")
                 .antMatchers("/api/user/register")
         ;
     }
@@ -59,7 +59,7 @@ public class Oauth2WebSecurityConfiguration extends WebSecurityConfigurerAdapter
         // 对于前台页面请求, 禁用一些不必要的拦截器
         http
                 .formLogin()
-                .loginPage("/login")
+//                .loginPage("/login")
                 .successHandler(handler)
                 .failureHandler(handler)
                 .and()
@@ -71,9 +71,10 @@ public class Oauth2WebSecurityConfiguration extends WebSecurityConfigurerAdapter
                 .anonymous().disable()
                 .requestCache().disable()
                 .csrf().disable()
-                .antMatcher("/api/**")
                 .authorizeRequests()
-                .anyRequest().authenticated()
+                .antMatchers("/api/**")
+                .authenticated()
+                .anyRequest().permitAll();
         ;
 
     }

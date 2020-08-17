@@ -25,7 +25,7 @@ public class UserConfiguration implements WebMvcConfigurer {
     @Resource
     private UserProperties userProperties;
 
-    @Bean
+//    @Bean
     public WebMvcConfigurer userWebMvcConfiguration() {
         return new WebMvcConfigurer() {
             @Override
